@@ -1,6 +1,7 @@
 package com.a505.hobbyit.user.domain;
 
 import com.a505.hobbyit.application.Application;
+import com.a505.hobbyit.groupuser.GroupUser;
 import com.a505.hobbyit.user.enums.UserPrivilege;
 import com.a505.hobbyit.user.enums.UserState;
 import jakarta.persistence.*;
@@ -63,5 +64,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Application> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupUser> groupUsers = new ArrayList<>();
 
 }
