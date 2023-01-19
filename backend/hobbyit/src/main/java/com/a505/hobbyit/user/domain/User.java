@@ -1,5 +1,8 @@
-package com.a505.hobbyit.user;
+package com.a505.hobbyit.user.domain;
 
+import com.a505.hobbyit.application.Application;
+import com.a505.hobbyit.user.enums.UserPrivilege;
+import com.a505.hobbyit.user.enums.UserState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -55,4 +60,8 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserState state = UserState.ACTIVE;
+
+    @OneToMany(mappedBy = "user")
+    private List<Application> applications = new ArrayList<>();
+
 }

@@ -1,6 +1,7 @@
-package com.a505.hobbyit.group;
+package com.a505.hobbyit.group.domain;
 
 
+import com.a505.hobbyit.application.Application;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,4 +51,7 @@ public class Group {
 
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private int freeRegistration;
+
+    @OneToMany(mappedBy = "group")
+    private List<Application> applications = new ArrayList<>();
 }
