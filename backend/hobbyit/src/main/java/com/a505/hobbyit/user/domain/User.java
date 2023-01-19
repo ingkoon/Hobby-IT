@@ -1,6 +1,8 @@
 package com.a505.hobbyit.user.domain;
 
 import com.a505.hobbyit.application.Application;
+import com.a505.hobbyit.grouparticle.GroupArticle;
+import com.a505.hobbyit.groupcomment.GroupComment;
 import com.a505.hobbyit.groupuser.GroupUser;
 import com.a505.hobbyit.user.enums.UserPrivilege;
 import com.a505.hobbyit.user.enums.UserState;
@@ -67,5 +69,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<GroupUser> groupUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupArticle> groupArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupComment> groupComments = new ArrayList<>();
 
 }

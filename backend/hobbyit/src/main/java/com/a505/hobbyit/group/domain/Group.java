@@ -2,6 +2,7 @@ package com.a505.hobbyit.group.domain;
 
 
 import com.a505.hobbyit.application.Application;
+import com.a505.hobbyit.grouparticle.GroupArticle;
 import com.a505.hobbyit.groupuser.GroupUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -58,4 +59,7 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<GroupUser> groupUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupArticle> groupArticles = new ArrayList<>();
 }
