@@ -1,4 +1,4 @@
-package com.a505.hobbyit.groupuser;
+package com.a505.hobbyit.groupuser.domain;
 
 import com.a505.hobbyit.group.domain.Group;
 import com.a505.hobbyit.groupuser.enums.GroupUserPrivilege;

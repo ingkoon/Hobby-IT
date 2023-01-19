@@ -1,9 +1,12 @@
 package com.a505.hobbyit.user.domain;
 
-import com.a505.hobbyit.application.Application;
-import com.a505.hobbyit.grouparticle.GroupArticle;
-import com.a505.hobbyit.groupcomment.GroupComment;
-import com.a505.hobbyit.groupuser.GroupUser;
+import com.a505.hobbyit.application.domain.Application;
+import com.a505.hobbyit.article.domain.Article;
+import com.a505.hobbyit.comment.domain.Comment;
+import com.a505.hobbyit.grouparticle.domain.GroupArticle;
+import com.a505.hobbyit.groupcomment.domain.GroupComment;
+import com.a505.hobbyit.groupuser.domain.GroupUser;
+import com.a505.hobbyit.postit.domain.Postit;
 import com.a505.hobbyit.user.enums.UserPrivilege;
 import com.a505.hobbyit.user.enums.UserState;
 import jakarta.persistence.*;
@@ -76,4 +79,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<GroupComment> groupComments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Postit> postits = new ArrayList<>();
 }

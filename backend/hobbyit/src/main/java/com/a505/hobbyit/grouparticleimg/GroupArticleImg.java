@@ -1,6 +1,6 @@
 package com.a505.hobbyit.grouparticleimg;
 
-import com.a505.hobbyit.grouparticle.GroupArticle;
+import com.a505.hobbyit.grouparticle.domain.GroupArticle;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

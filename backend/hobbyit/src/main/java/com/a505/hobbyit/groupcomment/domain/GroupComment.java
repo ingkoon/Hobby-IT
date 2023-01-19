@@ -1,7 +1,7 @@
-package com.a505.hobbyit.groupcomment;
+package com.a505.hobbyit.groupcomment.domain;
 
 
-import com.a505.hobbyit.grouparticle.GroupArticle;
+import com.a505.hobbyit.grouparticle.domain.GroupArticle;
 import com.a505.hobbyit.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

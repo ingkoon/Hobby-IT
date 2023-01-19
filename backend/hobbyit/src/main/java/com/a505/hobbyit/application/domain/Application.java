@@ -1,4 +1,4 @@
-package com.a505.hobbyit.application;
+package com.a505.hobbyit.application.domain;
 
 import com.a505.hobbyit.group.domain.Group;
 import com.a505.hobbyit.user.domain.User;
