@@ -1,4 +1,4 @@
-package com.a505.hobbyit.application;
+package com.a505.hobbyit.application.domain;
 
 import com.a505.hobbyit.group.domain.Group;
 import com.a505.hobbyit.user.domain.User;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Application {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "a_id", nullable = false)
-    private Long id;
+    private Long applicationId;
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "group_id")

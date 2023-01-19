@@ -1,7 +1,10 @@
 package com.a505.hobbyit.group.domain;
 
 
-import com.a505.hobbyit.application.Application;
+import com.a505.hobbyit.application.domain.Application;
+import com.a505.hobbyit.grouparticle.domain.GroupArticle;
+import com.a505.hobbyit.groupuser.domain.GroupUser;
+import com.a505.hobbyit.postit.domain.Postit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,4 +57,13 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<Application> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupUser> groupUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupArticle> groupArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<Postit> postits = new ArrayList<>();
 }
