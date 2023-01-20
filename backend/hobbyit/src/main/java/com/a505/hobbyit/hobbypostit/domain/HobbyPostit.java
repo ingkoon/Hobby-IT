@@ -1,7 +1,7 @@
-package com.a505.hobbyit.postit.domain;
+package com.a505.hobbyit.hobbypostit.domain;
 
-import com.a505.hobbyit.group.domain.Group;
-import com.a505.hobbyit.user.domain.User;
+import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,20 +15,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-@Table(name = "postit")
-public class Postit {
+@Table(name = "hobby_postit")
+public class HobbyPostit {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "p_id", nullable = false)
-    private Long postitId;
+    @Column(name = "hp_id", nullable = false)
+    private Long hobbyPostitId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private Group group;
+    @JoinColumn(name = "h_id", nullable = false)
+    private Hobby hobby;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "m_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false, length = 30)
     private String canvas;

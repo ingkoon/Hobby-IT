@@ -13,17 +13,17 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @EntityListeners(AuditingEntityListener.class) // 변화 감지에 따른 값을 추가해주기 위한 어노테이션
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "writed_date", nullable = false, updatable = false)
     private LocalDateTime writedDate;
 
     @LastModifiedDate
-    @Column
+    @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
     @LastModifiedDate
-    @Column
+    @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 }

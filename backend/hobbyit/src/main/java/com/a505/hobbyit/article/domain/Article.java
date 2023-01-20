@@ -1,7 +1,7 @@
 package com.a505.hobbyit.article.domain;
 
 import com.a505.hobbyit.comment.domain.Comment;
-import com.a505.hobbyit.user.domain.User;
+import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +24,8 @@ public class Article {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "m_id")
+    private Member member;
 
     @Column(nullable = false, length = 15)
     private String header;
