@@ -13,15 +13,15 @@
 </template>
 
 <script>
+import ParticipateGroupItem from "@/components/ParticipateGroupItem.vue";
+
 export default {
   components: { ParticipateGroupItem },
 
 }
 </script>
 
-<script setup>
-import ParticipateGroupItem from '../components/ParticipateGroupItem.vue'
-</script>
+
 
 <style>
 
