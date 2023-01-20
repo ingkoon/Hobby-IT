@@ -1,10 +1,10 @@
 <template>
   <h3>John, 나 여행가고싶어</h3>
 
-  <div style="color:white; display:flex">
+  <div id="group">
     <!-- 왼쪽 모임 정보 탭 -->
     <div id = "groupinfo">
-      <img src="src\assets\tmpimg.jpeg">
+      <img src="@\assets\tmpimg.jpeg">
       <div id="title">John, 나 여행가고싶어</div>
       <div id="content">
         따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
@@ -31,48 +31,62 @@
         ></v-text-field>
     </div>
     <!-- 오른쪽 게시판 탭 -->
-    <div>
-      <v-card>
+    <div id="board">
+      <v-card style="background-color:#00000000">
         <v-tabs
           v-model="tab"
-          color="deep-purple-accent-4"
           align-tabs="start"
-        >
-          <v-tab :value="1">Landscape</v-tab>
-          <v-tab :value="2">City</v-tab>
-          <v-tab :value="3">Abstract</v-tab>
-        </v-tabs>
-        <v-window v-model="tab">
-          <v-window-item
-            v-for="n in 3"
-            :key="n"
-            :value="n"
+          style="color:white;"
           >
-            <v-container fluid>
-              <v-row>
-                <v-col
-                  v-for="i in 6"
-                  :key="i"
-                  cols="12"
-                  md="4"
-                >
-                  <v-img
-                    :src="`https://picsum.photos/500/300?image=${i * n * 5 + 10}`"
-                    :lazy-src="`https://picsum.photos/10/6?image=${i * n * 5 + 10}`"
-                    aspect-ratio="1"
-                  ></v-img>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-window-item>
-        </v-window>
+          <v-tab value="board">게시글</v-tab>
+          <v-tab value="notice">공지사항</v-tab>
+          <v-tab value="memberlist">회원목록</v-tab>
+        </v-tabs>
+        <hr style="margin-top:10px; border: 2px solid #FA8EB6">
+        <v-card-text>
+          <v-window v-model="tab">
+            <v-window-item value="board" id="boarditem">
+                <v-container>
+                  <v-row >
+                    <v-col
+                      v-for="j in 4"
+                      :key="j"
+                      cols="12"
+                      sm="3"
+                    >
+                      <article-item v-for="i in 4" :key="i" :n=j+i />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              
+            </v-window-item>
+            <v-window-item value="notice">
+              공지사항
+            </v-window-item>
+            <v-window-item value="memberlist">
+              회원 목록
+            </v-window-item>
+          </v-window>
+        </v-card-text>
       </v-card>
+      
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import ArticleItem from "../components/ArticleItem.vue"
+export default {
+  components : {
+    ArticleItem
+  },
+  data(){
+    return {
+      tab: null,
+    }
+  },
+
+};
 </script>
 
 <style>
@@ -83,13 +97,20 @@ h3 {
   -webkit-background-clip: text;
   margin-top:50px
 }
+
+#group {
+  color:white;
+  display:flex;
+  flex-direction:row;
+}
+
 #groupinfo {
-  width: 248px;
+  width: 180px;
 }
 
 #groupinfo img {
-  width:248px;
-  height:342px;
+  width:180px;
+  height:250px;
   border:2px solid #fa8eb6
 }
 
@@ -97,7 +118,6 @@ h3 {
   font-size: 24px;
   text-align: center;
   margin: 17px 0px;
-  
 }
 
 #groupinfo #content {
@@ -110,4 +130,14 @@ h3 {
 button { 
   margin: 15px 0px;
 }
+
+#board {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+#board button {
+  font-size: 24px;
+}
+
 </style>

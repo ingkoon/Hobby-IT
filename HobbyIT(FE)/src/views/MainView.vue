@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  import ParticipateGroup from '@/components/ParticipateGroup.vue'
   export default {
   components: { ParticipateGroup },
     data(){
@@ -55,10 +56,6 @@
       }
     },
   }
-</script>
-
-<script setup>
-  import ParticipateGroup from '@/components/ParticipateGroup.vue'
 </script>
 
 <style>
