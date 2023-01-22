@@ -22,7 +22,12 @@ const routes = [
       {
         path: 'mypage/',
         name: 'MyPage',
-        component: () => import('@/views/MypageView.vue'),
+        component: () => import('@/views/MyPageView.vue'),
+      },
+      {
+        path: 'group/',
+        name: 'Grouppage',
+        component: () => import('@/views/GroupPageView.vue'),
       }
     ],
   },
