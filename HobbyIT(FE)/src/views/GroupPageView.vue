@@ -128,7 +128,6 @@ h3 {
   background: linear-gradient(to bottom, #642EFE, #FA8EB6);
   color: transparent;
   -webkit-background-clip: text;
-  margin-top:50px
 }
 
 #group {
@@ -149,7 +148,7 @@ h3 {
 
 #groupinfo #title {
   font-size: 24px;
-  text-align: center;
+  text-align: start;
   margin: 17px 0px;
 }
 

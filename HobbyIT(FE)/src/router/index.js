@@ -22,7 +22,7 @@ const routes = [
       {
         path: 'mypage/',
         name: 'MyPage',
-        component: () => import('@/views/MyPageView.vue'),
+        component: () => import('@/views/MypageView.vue'),
       },
       {
         path: 'group/',
