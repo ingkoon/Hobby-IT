@@ -93,14 +93,23 @@
       style="color:white;"
     >오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</v-list-item>
 
-    
+    <div style="text-align:center; margin:20px">
+      <v-date-picker
+        v-model="date"
+        color="purple"
+        :max-date="nowdate"
+        style="background-color:#fbd3de; padding:10px"
+        :attributes="attrs"
+      />
+    </div>
     
   </v-navigation-drawer>
 </template>
 
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
-import ArticleItem from "../components/ArticleItem.vue"
+import ArticleItem from "../components/ArticleItem.vue";
+
 export default {
   components : {
     ArticleItem,
@@ -110,7 +119,23 @@ export default {
     return {
       tab: null,
       drawer : null,
-      
+      nowdate: new Date(),
+      date: new Date(),
+      attrs: [
+        {
+          key: 'today',
+          highlight: {
+            color: 'purple',
+            fillMode: 'solid',
+          },
+          dates: new Date(),
+        },
+        {
+          key: 'visit',
+          dot: true,
+          dates: new Date(2023, 0, 20),
+        },
+      ],
     }
   },
 
@@ -172,5 +197,8 @@ button {
   font-size: 24px;
 }
 
+.vc-weekday {
+  color: #642efe
+}
 
 </style>
