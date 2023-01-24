@@ -2,6 +2,10 @@ package com.a505.hobbyit.hobby.domain;
 
 
 import com.a505.hobbyit.common.BaseEntity;
+import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.hobbypostit.domain.HobbyPostit;
+import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +14,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,7 +51,7 @@ public class Hobby {
     private LocalDateTime createdDate = LocalDateTime.now();
 
     @Column
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedDate = null;
 
     public Hobby() {}
 
@@ -59,15 +65,16 @@ public class Hobby {
         this.category = category;
         this.freeRegistration = freeRegistration;
     }
-    //    @OneToMany(mappedBy = "group")
-//    private List<Pending> pendings = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "group")
-//    private List<GroupUser> groupUsers = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "group")
-//    private List<GroupArticle> groupArticles = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "group")
-//    private List<Postit> postits = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<Pending> pendings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<HobbyMember> groupUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<HobbyArticle> groupArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<HobbyPostit> postits = new ArrayList<>();
 }
