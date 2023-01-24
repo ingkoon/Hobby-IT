@@ -1,7 +1,5 @@
 package com.a505.hobbyit.hobby.domain;
 
-
-import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbypostit.domain.HobbyPostit;
@@ -9,9 +7,6 @@ import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,15 +61,15 @@ public class Hobby {
         this.freeRegistration = freeRegistration;
     }
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "hobby")
     private List<Pending> pendings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "hobby")
     private List<HobbyMember> groupUsers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "hobby")
     private List<HobbyArticle> groupArticles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "hobby")
     private List<HobbyPostit> postits = new ArrayList<>();
 }
