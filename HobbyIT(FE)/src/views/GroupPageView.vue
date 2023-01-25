@@ -8,20 +8,22 @@
       <div id="title">John, 나 여행가고싶어</div>
       <div id="content">
         따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
-        <div style="margin-top : 20px">
-          카테고리 : 여행 <br>
-          가입유형 : 신청가입 <br>
-          개설일 : 2023.1.1 <br>
-          방장 : John
-        </div>
 
         <div style="margin-top : 20px">
           <v-icon icon="mdi-account-multiple" size="small" color="#FA8EB6"></v-icon>
           13/20
         </div>
       </div>
-      <v-btn block color="#642EFE" style="color:white; font-size:24px; height:44px">글 작성</v-btn>
-      <v-btn block color="#642EFE" style="color:white; font-size:24px; height:44px">화상 채팅</v-btn>
+
+      <div style="display:flex; justify-content:space-around">
+        <v-btn color="#2B146C" style="color:white; height:44px; width:47%">
+          <v-icon icon="mdi-plus-circle-outline"></v-icon>
+        </v-btn>
+        <v-btn color="#2B146C" style="color:white; height:44px; width:47%">
+          <v-icon icon="mdi-video-account"></v-icon>
+        </v-btn>
+      </div>
+
 
       <v-text-field 
         clearable
@@ -98,7 +100,7 @@
         v-model="date"
         color="purple"
         :max-date="nowdate"
-        style="background-color:#fbd3de; padding:10px"
+        style="background-color:#fbd3de; padding:10px; width:85%"
         :attributes="attrs"
       />
     </div>
@@ -199,6 +201,20 @@ button {
 
 .vc-weekday {
   color: #642efe
+}
+
+.v-field--variant-outlined .v-field__outline__end.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__end {
+    border-radius: 0 40px 40px 0 !important ;
+    opacity: 1;
+}
+
+.v-field--variant-outlined .v-field__outline__start {
+    flex: 1 !important;
+}
+
+.v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
+    border-radius: 40px 0 0 40px !important;
+    opacity: 1;
 }
 
 </style>
