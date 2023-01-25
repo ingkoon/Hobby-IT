@@ -26,15 +26,12 @@ public class HobbyResponse {
 
     public HobbyResponse of(Hobby hobby){
         return HobbyResponse.builder()
-                .id(hobby.getId())
                 .name(hobby.getName())
-                .img(hobby.getImg())
+                .intro(hobby.getIntro())
                 .participantsNum(hobby.getParticipantsNum())
                 .maxParticipantsNum(hobby.getMaxParticipantsNum())
-                .intro(hobby.getIntro())
                 .category(hobby.getCategory())
-                .freeRegistration(hobby.getFreeRegistration())
-                .createdDate(hobby.getCreatedDate())
+                .img(hobby.getImg())
                 .build();
     }
 }

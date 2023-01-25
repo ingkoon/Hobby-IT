@@ -5,6 +5,8 @@ import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.dto.HobbyRequest;
 import com.a505.hobbyit.hobby.dto.HobbyResponse;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +75,12 @@ public class HobbyServiceImpl implements HobbyService{
             responses.add(new HobbyResponse().of(hobby));
         }
         return responses;
+    }
+
+    @Override
+    public List<HobbyMember> findHobbyMembers(Long hobbyId) {
+        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
+        List<HobbyMember> members = hobby.getGroupUsers();
+        return members;
     }
 }

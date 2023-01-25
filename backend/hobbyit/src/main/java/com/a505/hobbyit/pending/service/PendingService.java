@@ -10,5 +10,4 @@ public interface PendingService {
     public void save(Long memberId, Long hobbyId, PendingRequest request);
     public List<PendingResponse> findPendingList(Long hobbyId);
     public void allowPending(PendingAllowRequest request);
-
 }
