@@ -1,143 +1,122 @@
 <template>
-  <h3>John, 나 여행가고싶어</h3>
-
-  <div id="group">
-    <!-- 왼쪽 모임 정보 탭 -->
-    <div id = "groupinfo">
+  <div id="mypage">
+    <!-- 왼쪽 정보 탭 -->
+    <div id = "mypageinfo">
       <img src="@\assets\tmpimg.jpeg">
-      <div id="title">John, 나 여행가고싶어</div>
+      <div id="title">호빗러버</div>
       <div id="content">
-        따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
+        hobbyit@hobbyit.com
         <div style="margin-top : 20px">
           카테고리 : 여행 <br>
           가입유형 : 신청가입 <br>
-          개설일 : 2023.1.1
+          개설일 : 2023.1.1 <br>
+          방장 : John
         </div>
+
 
         <div style="margin-top : 20px">
-          <v-icon icon="mdi-account-multiple" size="small" color="#FA8EB6"></v-icon>
-          13/20
+          오늘의 획득량 : 20/30
+        </div>
+        <div style="margin : 10px 0px">
+          진척도 보상
+        </div>
+
+        <v-progress-linear
+          v-model="gauge"
+          color="#fa8eb6"
+          bg-color="#642efe"
+          bg-opacity="1"
+          height="20px"
+          rounded
+          rounded-bar
+          style="border:2px solid white; border-radius:20px; width:90%"
+        >
+          <div style="font-size:14px; margin:5px">
+            {{ Math.ceil(gauge) }} %
+          </div>
+          
+        </v-progress-linear>
+
+        <div style="display:flex; justify-content: space-between; margin:5px 5% 0px; ">
+          <span>Lv.10</span>
+          <span>Lv.11</span>
         </div>
       </div>
-      <v-btn block color="#642EFE" style="color:white; font-size:24px; height:44px">글 작성</v-btn>
-      <v-btn block color="#642EFE" style="color:white; font-size:24px; height:44px">화상 채팅</v-btn>
-
-      <v-text-field 
-        clearable
-        variant="outlined"
-        prepend-inner-icon="mdi-magnify"
-        placeholder="검색"
-        style="color:white; height:40px"
-        ></v-text-field>
+      
     </div>
     <!-- 오른쪽 게시판 탭 -->
-    <div id="board">
-      <v-card style="background-color:#00000000">
-        <v-tabs
-          v-model="tab"
-          align-tabs="start"
-          style="color:white;"
-          >
-          <v-tab value="board">게시글</v-tab>
-          <v-tab value="notice">공지사항</v-tab>
-          <v-tab value="memberlist">회원목록</v-tab>
-        </v-tabs>
-        <hr style="margin-top:10px; border: 2px solid #FA8EB6">
-        <v-card-text>
-          <v-window v-model="tab">
-            <v-window-item value="board" id="boarditem">
-                <v-container>
-                  <v-row >
-                    <v-col
-                      v-for="j in 4"
-                      :key="j"
-                      cols="12"
-                      sm="3"
-                    >
-                      <article-item v-for="i in 4" :key="i" :n=j+i />
-                    </v-col>
-                  </v-row>
-                </v-container>
-              
-            </v-window-item>
-            <v-window-item value="notice">
-              공지사항
-            </v-window-item>
-            <v-window-item value="memberlist">
-              회원 목록
-            </v-window-item>
-          </v-window>
-        </v-card-text>
-      </v-card>
+    <div id="board" style="flex-grow:1; font-size:25px">
+      
+      Who am I?
+      <div style="font-family:linefont;">
+        운동, 댄스, 음악, 코딩, 등 다양한 취미생활을 즐기는 MZ 세대 입니다.
+        <br>
+        insta:@@@@@@
+      </div>
+
+      <div style="font-size:36px; margin-top : 20px">MY HOBBY!</div>
+      <participate-group/>
+
+      <div style="font-size:36px; margin-top : 20px">가입 대기중인 HOBBY...</div>
+      <participate-group/>
       
     </div>
   </div>
 </template>
 
 <script>
-import ArticleItem from "../components/ArticleItem.vue"
-export default {
-  components : {
-    ArticleItem
-  },
-  data(){
-    return {
-      tab: null,
+  import ParticipateGroup from '@/components/ParticipateGroup.vue'
+  export default {
+    components : {
+      ParticipateGroup,
+    },
+    data() {
+      return {
+        gauge : 55.0,
+      }
     }
-  },
-
-};
+  }
 </script>
 
 <style>
-h3 {
-  font-size:48px;
-  background: linear-gradient(to bottom, #642EFE, #FA8EB6);
-  color: transparent;
-  -webkit-background-clip: text;
-  margin-top:50px
-}
-
-#group {
+#mypage {
   color:white;
   display:flex;
   flex-direction:row;
 }
 
-#groupinfo {
-  width: 180px;
+#mypageinfo {
+  width: 25%;
 }
 
-#groupinfo img {
-  width:180px;
-  height:250px;
-  border:2px solid #fa8eb6
+#mypageinfo img {
+  width:261px;
+  height:261px;
+  border:2px solid #fa8eb6;
+  border-radius: 70%;
+  overflow: hidden;
 }
 
-#groupinfo #title {
+#mypageinfo #title {
   font-size: 24px;
-  text-align: center;
+  text-align: start;
   margin: 17px 0px;
 }
 
-#groupinfo #content {
+#mypageinfo #content {
   font-size : 20px;
   font-family: linefont;
   word-break: keep-all;
   margin-bottom: 40px;
 }
 
-button { 
-  margin: 15px 0px;
-}
-
 #board {
-  flex-grow: 1;
-  margin-left: 20px;
+  width: 70%;
+  margin-left: 40px;
 }
 
-#board button {
-  font-size: 24px;
+.v-progress-linear__content{
+  justify-content: end;
 }
 
 </style>

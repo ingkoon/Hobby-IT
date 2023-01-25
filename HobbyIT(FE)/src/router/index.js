@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import VideoChat from "@/views/VideoChat.vue";
 
 const routes = [
   {
@@ -23,6 +24,23 @@ const routes = [
         path: 'mypage/',
         name: 'MyPage',
         component: () => import('@/views/MypageView.vue'),
+      },
+      {
+        path: 'group/',
+        name: 'Grouppage',
+        component: () => import('@/views/GroupView.vue'),
+        children:[
+          {
+            path: '',
+            name: 'GroupMainPage',
+            component: () => import('@/views/GroupPageView.vue')
+          },
+          {
+            path: 'videochat',
+            component: () => import('@/views/VideoChat.vue'),
+            name: 'VideoChat'
+          }
+        ]
       }
     ],
   },
