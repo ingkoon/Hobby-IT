@@ -54,4 +54,8 @@ public class HobbyMember {
         this.resignedDate = resignedDate;
         this.privilege = privilege;
     }
+
+    public void updatePrivilege(HobbyMemberPrivilege hobbyMemberPrivilege){
+        this.privilege = hobbyMemberPrivilege;
+    }
 }
