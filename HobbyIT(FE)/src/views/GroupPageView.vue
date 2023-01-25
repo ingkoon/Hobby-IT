@@ -105,17 +105,30 @@
       />
     </div>
 
+    <div>
+      <v-btn color="white">추가하기
+
+        <v-dialog v-model="canvasmodal" activator="parent">
+          <canvasadd/>
+        </v-dialog>
+      </v-btn>
+    </div>
+
   </v-navigation-drawer>
+
+
 </template>
 
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
 import ArticleItem from "../components/ArticleItem.vue";
+import Canvasadd from '../components/Canvasadd.vue';
 
 export default {
   components : {
     ArticleItem,
     GroupNotice,
+    Canvasadd,
   },
   data(){
     return {
@@ -138,12 +151,21 @@ export default {
           dates: new Date(2023, 0, 20),
         },
       ],
+      canvasmodal : false,
+      message : '',
+
     }
   },
 
   methods : {
     onclickVideoChat(){
       this.$router.push({name:'VideoChat'})
+    },
+    openaddmodal(){
+      this.canvasmodal = true
+    },
+    closeaddmodal(){
+      this.canvasmodal = false
     }
 
   },
