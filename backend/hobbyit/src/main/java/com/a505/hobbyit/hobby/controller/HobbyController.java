@@ -4,11 +4,13 @@ import com.a505.hobbyit.hobby.dto.HobbyRequest;
 import com.a505.hobbyit.hobby.dto.HobbyResponse;
 import com.a505.hobbyit.hobby.service.HobbyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/hobby")

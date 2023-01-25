@@ -26,7 +26,7 @@ public class HobbyResponse {
 
     public HobbyResponse of(Hobby hobby){
         return HobbyResponse.builder()
-                .id(hobby.getHobbyId())
+                .id(hobby.getId())
                 .name(hobby.getName())
                 .img(hobby.getImg())
                 .participantsNum(hobby.getParticipantsNum())

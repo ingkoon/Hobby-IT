@@ -19,13 +19,13 @@ public class HobbyMember {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "hm_id")
-    private Long hobbyMemberId;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(nullable = false, name = "m_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "h_id")
     private Hobby hobby;
 
