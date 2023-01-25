@@ -20,11 +20,11 @@ public class Pending {
     @Column(name = "p_id", nullable = false)
     private Long pendingId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "h_id")
     private Hobby hobby;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "m_id")
     private Member member;
 
