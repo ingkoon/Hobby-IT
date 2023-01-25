@@ -2,18 +2,19 @@
   <div>
 
     <v-container>
-      <v-row >
+      <v-row>
         <v-col id="background" :style="{height: computedHeight + 'px'}"></v-col>
-        <v-col id="leftSidebar" :style="{height: computedHeight + 'px'}" >
-          <v-icon size="24" icon="mdi-microphone"  v-show="false"></v-icon>
-          <v-icon size="24" icon="mdi-microphone" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-video" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-monitor" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-phone-off" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-pencil-box" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-cog-outline" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-creation" color="white"></v-icon>
-          <v-icon size="24" icon="mdi-microphone" v-show="false"></v-icon>
+        <v-col id="leftSidebar" :style="{height: computedHeight + 'px'}">
+
+          <v-icon icon="mdi-microphonea" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-microphone" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-video" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-monitor" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-phone-off" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-pencil-box" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-cog-outline" size="24"></v-icon>
+          <v-icon color="white" icon="mdi-creation" size="24"></v-icon>
+          <v-icon icon="mdi-microphonea" size="24"></v-icon>
         </v-col>
         <v-row id="circle1"/>
         <v-row id="circle2"/>
@@ -21,8 +22,7 @@
           <v-row style="margin: 0; height: 126px">
             <h1 id="title">John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row>
-
+          <v-row v-if="one" style="margin:0;height: 100%">
 
           </v-row>
         </v-col>
@@ -37,28 +37,45 @@
 <script>
 export default {
   name: "VideoChat",
-  data(){
+  data() {
     return {
-      windowHeight: window.innerHeight
-    }
+      windowHeight: window.innerHeight,
+      publisher: undefined,
+      subscribers: [],
+    };
   },
   mounted() {
     window.onresize = () => {
-      this.windowHeight = window.innerHeight
-    }
+      this.windowHeight = window.innerHeight;
+    };
   },
-  computed:{
+  computed: {
     computedHeight() {
-      console.log(this.windowHeight)
-      return this.windowHeight - 59
+      console.log(this.windowHeight);
+      return this.windowHeight - 59;
+    },
+    isOne() {
+      return (this.subscribers.length === 0);
+    },
+    isTwo() {
+      return (this.subscribers.length === 1);
+    },
+    isBelowFour() {
+      return (2 <= this.subscribers.length) && (this.subscribers.length < 4);
+    },
+    isBelowEight() {
+      return (4 <= this.subscribers.length) && (this.subscribers.length < 8);
+    },
+    isBelowSixteen() {
+      return (8 <= this.subscribers.length) && (this.subscribers.length < 16);
     }
   }
-}
+};
 </script>
 
 <style scoped>
 
-#leftSidebar{
+#leftSidebar {
   background-color: #0e0f28;
   flex-direction: column;
   justify-content: space-evenly;
@@ -66,7 +83,7 @@ export default {
   display: flex;
   position: absolute;
   top: 59px;
-  left:0px;
+  left: 0px;
   width: 126px;
   padding: 0px;
   margin: 0px;
@@ -74,19 +91,21 @@ export default {
   z-index: 4;
   opacity: 1;
 }
-#videoList{
+
+#videoList {
   position: absolute;
   top: 59px;
-  left:126px;
+  left: 126px;
   z-index: 5;
   width: 1286px;
   padding: 0px;
   margin: 0px;
 }
-#rightSidebar{
+
+#rightSidebar {
   position: absolute;
   top: 59px;
-  right:0px;
+  right: 0px;
   background-color: #0e0f28;
   width: 483px;
   padding: 0px;
@@ -94,17 +113,19 @@ export default {
   border-radius: 50px 0 0 0;
   z-index: 4;
 }
-#background{
+
+#background {
   position: absolute;
   top: 59px;
-  right:0px;
+  right: 0px;
   background-color: black;
   width: 100%;
   padding: 0px;
   margin: 0px;
   z-index: 1;
 }
-#circle1{
+
+#circle1 {
   position: absolute;
   width: 700px;
   height: 700px;
@@ -115,7 +136,8 @@ export default {
   box-shadow: 0px 4px 250px #EE49FD, inset 0px 4px 250px #642EFE;
   -webkit-box-shadow: 0px 4px 250px #EE49FD, inset 0px 4px 250px #642EFE;
 }
-#circle2{
+
+#circle2 {
   position: absolute;
   width: 700px;
   height: 700px;
@@ -126,7 +148,8 @@ export default {
   background: #000101;
   box-shadow: 0px 4px 250px #FFF16A, inset 0px 4px 250px #FF4066;
 }
-#title{
+
+#title {
   background: linear-gradient(180deg, #FFFFFF 0%, #642EFE 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
