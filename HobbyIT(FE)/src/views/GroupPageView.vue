@@ -20,12 +20,12 @@
           <v-icon icon="mdi-plus-circle-outline"></v-icon>
         </v-btn>
         <v-btn color="#2B146C" style="color:white; height:44px; width:47%">
-          <v-icon icon="mdi-video-account"></v-icon>
+          <v-icon icon="mdi-video-account" @click="onclickVideoChat"></v-icon>
         </v-btn>
       </div>
 
 
-      <v-text-field 
+      <v-text-field
         clearable
         variant="outlined"
         prepend-inner-icon="mdi-magnify"
@@ -79,7 +79,7 @@
           </v-window>
         </v-card-text>
       </v-card>
-      
+
     </div>
   </div>
 
@@ -104,7 +104,7 @@
         :attributes="attrs"
       />
     </div>
-    
+
   </v-navigation-drawer>
 </template>
 
@@ -142,9 +142,12 @@ export default {
   },
 
   methods : {
-    
+    onclickVideoChat(){
+      this.$router.push({name:'VideoChat'})
+    }
+
   },
-  
+
 
 };
 </script>
@@ -186,7 +189,7 @@ h3 {
   margin-bottom: 40px;
 }
 
-button { 
+button {
   margin: 15px 0px;
 }
 
