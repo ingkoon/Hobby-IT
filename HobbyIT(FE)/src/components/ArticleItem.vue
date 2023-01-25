@@ -3,7 +3,7 @@
     class="mx-auto"
     max-width="265"
     :height=n*(Math.random()*50)+300
-    style="background-color:#fbd3de; margin: 5px 0"
+    style="background-color:#fbd3de; margin: 5px 0; border-radius:0px"
     >
     <v-img
       class="align-end text-white"

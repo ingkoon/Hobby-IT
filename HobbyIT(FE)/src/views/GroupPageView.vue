@@ -105,17 +105,30 @@
       />
     </div>
     
+    <div>
+      <v-btn @click="openaddmodal" color="white">추가하기</v-btn>
+
+      
+
+    </div>
   </v-navigation-drawer>
+
+  <canvasadd @close="closeaddmodal" v-if="canvasmodal">
+        <p>Vue.js Modal Window!</p>
+        
+  </canvasadd>
 </template>
 
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
 import ArticleItem from "../components/ArticleItem.vue";
+import Canvasadd from '@/components/Canvasadd.vue';
 
 export default {
   components : {
     ArticleItem,
     GroupNotice,
+    Canvasadd,
   },
   data(){
     return {
@@ -138,11 +151,18 @@ export default {
           dates: new Date(2023, 0, 20),
         },
       ],
+      canvasmodal : false,
+      message : '',
     }
   },
 
   methods : {
-    
+    openaddmodal(){
+      this.canvasmodal = true
+    },
+    closeaddmodal(){
+      this.canvasmodal = false
+    }
   },
   
 
