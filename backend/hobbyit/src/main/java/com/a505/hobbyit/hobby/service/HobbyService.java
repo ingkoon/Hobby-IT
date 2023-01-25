@@ -2,6 +2,8 @@ package com.a505.hobbyit.hobby.service;
 
 import com.a505.hobbyit.hobby.dto.HobbyRequest;
 import com.a505.hobbyit.hobby.dto.HobbyResponse;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.member.domain.Member;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ public interface HobbyService {
     public List<HobbyResponse> findByKeyword(String category, String keyword);
     public List<HobbyResponse> findPopularHobby();
     public List<HobbyResponse> findFreshHobby();
+
+    public List<HobbyMember> findHobbyMembers(Long hobbyId);
 }
 
 /*
