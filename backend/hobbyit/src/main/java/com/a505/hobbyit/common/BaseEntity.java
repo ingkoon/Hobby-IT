@@ -23,7 +23,4 @@ public abstract class BaseEntity {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
-    @LastModifiedDate
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
 }

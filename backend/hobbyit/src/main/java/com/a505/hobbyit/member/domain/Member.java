@@ -4,16 +4,26 @@ import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+@Builder
 @Entity
 @Getter
-//@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity implements UserDetails {
     @Column(name = "m_id", nullable = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -26,6 +36,9 @@ public class Member {
 
     @Column(nullable = false)
     private String nickname;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column
     private String intro;
@@ -45,30 +58,49 @@ public class Member {
     @Column(nullable = false)
     private String profileImg;
 
+//    @Column(nullable = false)
+//    @Enumerated(EnumType.STRING)
+//    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<String> privilege = new ArrayList<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberState state = MemberState.ACTIVE;
 
-    @Builder
-    public Member(String email, String name, String nickname, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyNum, int point, String profileImg, MemberPrivilege privilege, MemberState state) {
-        this.email = email;
-        this.name = name;
-        this.nickname = nickname;
-        this.intro = intro;
-        this.enrollDate = enrollDate;
-        this.resignedRequestDate = resignedRequestDate;
-        this.ownedHobbyNum = ownedHobbyNum;
-        this.point = point;
-        this.profileImg = profileImg;
-        this.privilege = privilege;
-        this.state = state;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.privilege.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
-    public Member() {}
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 //    @OneToMany(mappedBy = "member")
 //    private List<Pending> pendings = new ArrayList<>();
