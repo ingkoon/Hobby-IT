@@ -15,6 +15,7 @@
 #app {
   font-family: linefontbold;
   background-color:#0E0F28;
+
 }
 
 @font-face {
