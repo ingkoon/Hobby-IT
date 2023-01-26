@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RequiredArgsConstructor
-@RequestMapping("/member")
 @RestController
+@RequiredArgsConstructor
+@RequestMapping(value = "/api/member")
 public class MemberController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
     private final MemberResponse response;
 
-    @PostMapping("/signup")
+    @PostMapping(value = "/signup")
     public ResponseEntity<?> signUp(@Validated MemberRequest.SignUp signUp, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -34,7 +34,7 @@ public class MemberController {
         return memberService.signUp(signUp);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<?> login(@Validated MemberRequest.Login login, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -43,7 +43,7 @@ public class MemberController {
         return memberService.login(login);
     }
 
-    @PostMapping("/reissue")
+    @PostMapping(value = "/reissue")
     public ResponseEntity<?> reissue(@Validated MemberRequest.Reissue reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -52,7 +52,7 @@ public class MemberController {
         return memberService.reissue(reissue);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(@Validated MemberRequest.Logout logout, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -61,19 +61,19 @@ public class MemberController {
         return memberService.logout(logout);
     }
 
-    @GetMapping("/authority")
+    @GetMapping(value = "/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
         return memberService.authority();
     }
 
-    @GetMapping("/userTest")
+    @GetMapping(value = "/userTest")
     public ResponseEntity<?> userTest() {
         log.info("ROLE_USER TEST");
         return response.success();
     }
 
-    @GetMapping("/adminTest")
+    @GetMapping(value = "/adminTest")
     public ResponseEntity<?> adminTest() {
         log.info("ROLE_ADMIN TEST");
         return response.success();

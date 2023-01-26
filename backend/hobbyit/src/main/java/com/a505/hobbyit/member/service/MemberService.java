@@ -1,12 +1,10 @@
 package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
+import com.a505.hobbyit.member.dto.*;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.security.SecurityUtil;
-import com.a505.hobbyit.member.dto.MemberResponse;
-import com.a505.hobbyit.member.dto.MemberRequest;
-import com.a505.hobbyit.member.dto.MemberTokenResponse;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +34,14 @@ public class MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate redisTemplate;
 
-    public ResponseEntity<?> signUp(MemberRequest.SignUp signUp) {
-        if (memberRepository.existsByEmail(signUp.getEmail())) {
+    public ResponseEntity<?> signUp(MemberSignupRequest request) {
+        if (memberRepository.existsByEmail(request.toEntity().getEmail())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
         Member member = Member.builder()
-                .email(signUp.getEmail())
-                .password(passwordEncoder.encode(signUp.getPassword()))
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
@@ -51,15 +49,14 @@ public class MemberService {
         return response.success("회원가입에 성공했습니다.");
     }
 
-    public ResponseEntity<?> login(MemberRequest.Login login) {
-
-        if (memberRepository.findByEmail(login.getEmail()).orElse(null) == null) {
+    public ResponseEntity<?> login(MemberLoginRequest request) {
+        if (memberRepository.findByEmail(request.getEmail()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행

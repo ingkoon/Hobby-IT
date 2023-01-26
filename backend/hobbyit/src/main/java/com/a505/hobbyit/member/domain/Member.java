@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-@Builder
+
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "member")
 public class Member implements UserDetails {
     @Column(name = "m_id", nullable = false)
@@ -28,10 +26,10 @@ public class Member implements UserDetails {
     @Column(nullable = false)
     private String email;
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
@@ -47,26 +45,45 @@ public class Member implements UserDetails {
     @Column
     private LocalDateTime resignedRequestDate;
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     private int ownedHobbyNum;
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     private int point;
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     private String profileImg;
 
 //    @Column(nullable = false)
 //    @Enumerated(EnumType.STRING)
 //    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
-    @Column//(nullable = false)
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private List<String> privilege = new ArrayList<>();
 
-    @Column//(nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberState state = MemberState.ACTIVE;
+
+    public Member() {}
+
+    @Builder
+    public Member(Long memberId, String email, String name, String nickname, String password, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyNum, int point, String profileImg, List<String> privilege, MemberState state) {
+        this.memberId = memberId;
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.intro = intro;
+        this.enrollDate = enrollDate;
+        this.resignedRequestDate = resignedRequestDate;
+        this.ownedHobbyNum = ownedHobbyNum;
+        this.point = point;
+        this.profileImg = profileImg;
+        this.privilege = privilege;
+        this.state = state;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
