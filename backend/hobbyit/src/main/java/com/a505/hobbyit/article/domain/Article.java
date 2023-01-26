@@ -45,9 +45,6 @@ public class Article {
     @Column
     private LocalDateTime modifiedDate;
 
-    @Column
-    private LocalDateTime deletedDate;
-
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private int isDeleted;
 
