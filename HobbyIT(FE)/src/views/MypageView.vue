@@ -2,7 +2,9 @@
   <div id="mypage">
     <!-- 왼쪽 정보 탭 -->
     <div id = "mypageinfo">
-      <img src="@\assets\tmpimg.jpeg">
+      <div id="profileimg">
+        <div id="img"></div>
+      </div>
       <div id="title">호빗러버</div>
       <div id="content">
         hobbyit@hobbyit.com
@@ -86,15 +88,21 @@
 }
 
 #mypageinfo {
-  width: 25%;
+  width: 261px;
 }
 
-#mypageinfo img {
-  width:261px;
-  height:261px;
-  border:2px solid #fa8eb6;
-  border-radius: 70%;
-  overflow: hidden;
+#mypageinfo #img {
+  width: 250px;
+  height: 250px;
+
+  background-image: url(..\assets\tmpimg.jpeg);
+  background-size: cover;
+  border-radius: 50%;
+  margin: 2px;
+  /* background-image: linear-gradient(#fff, #fff),
+  linear-gradient(to right, red, orange);
+  background-origin:border-box;
+  background-clip: content-box, border-box; */
 }
 
 #mypageinfo #title {
@@ -117,6 +125,22 @@
 
 .v-progress-linear__content{
   justify-content: end;
+}
+
+#profileimg {
+  position : relative;
+  width : 260px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color : #0E0F28;
+  border : 3px solid transparent;
+  border-radius: 50%;
+  background-image : linear-gradient(#0E0F28, #0E0F28),
+  linear-gradient(to right, #FF005E, #642EFE);
+  background-origin:border-box;
+  background-clip:content-box, border-box;
 }
 
 </style>
