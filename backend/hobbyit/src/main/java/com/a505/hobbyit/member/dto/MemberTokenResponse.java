@@ -1,10 +1,10 @@
-package com.a505.hobbyit.member.dto.response;
+package com.a505.hobbyit.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-public class MemberResponseDto {
+public class MemberTokenResponse {
 
     @Builder
     @Getter

@@ -1,4 +1,4 @@
-package com.a505.hobbyit.jwt;
+package com.a505.hobbyit.member.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

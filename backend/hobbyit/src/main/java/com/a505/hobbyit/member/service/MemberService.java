@@ -2,12 +2,12 @@ package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
-import com.a505.hobbyit.security.SecurityUtil;
-import com.a505.hobbyit.member.dto.Response;
-import com.a505.hobbyit.member.dto.request.MemberRequestDto;
-import com.a505.hobbyit.member.dto.response.MemberResponseDto;
-import com.a505.hobbyit.member.repository.MemberRepository;
+import com.a505.hobbyit.member.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.security.SecurityUtil;
+import com.a505.hobbyit.member.dto.MemberResponse;
+import com.a505.hobbyit.member.dto.MemberRequest;
+import com.a505.hobbyit.member.dto.MemberTokenResponse;
+import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,13 +30,13 @@ import java.util.concurrent.TimeUnit;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final Response response;
+    private final MemberResponse response;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate redisTemplate;
 
-    public ResponseEntity<?> signUp(MemberRequestDto.SignUp signUp) {
+    public ResponseEntity<?> signUp(MemberRequest.SignUp signUp) {
         if (memberRepository.existsByEmail(signUp.getEmail())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
@@ -51,7 +51,7 @@ public class MemberService {
         return response.success("회원가입에 성공했습니다.");
     }
 
-    public ResponseEntity<?> login(MemberRequestDto.Login login) {
+    public ResponseEntity<?> login(MemberRequest.Login login) {
 
         if (memberRepository.findByEmail(login.getEmail()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -66,7 +66,7 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberTokenResponse.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue()
@@ -75,7 +75,7 @@ public class MemberService {
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> reissue(MemberRequestDto.Reissue reissue) {
+    public ResponseEntity<?> reissue(MemberRequest.Reissue reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -95,7 +95,7 @@ public class MemberService {
         }
 
         // 4. 새로운 토큰 생성
-        MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberTokenResponse.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue()
@@ -104,7 +104,7 @@ public class MemberService {
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> logout(MemberRequestDto.Logout logout) {
+    public ResponseEntity<?> logout(MemberRequest.Logout logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);

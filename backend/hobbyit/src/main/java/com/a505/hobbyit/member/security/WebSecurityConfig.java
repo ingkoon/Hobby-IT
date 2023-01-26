@@ -1,7 +1,7 @@
-package com.a505.hobbyit.security;
+package com.a505.hobbyit.member.security;
 
-import com.a505.hobbyit.jwt.JwtAuthenticationFilter;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.jwt.JwtAuthenticationFilter;
+import com.a505.hobbyit.member.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.dto.request;
+package com.a505.hobbyit.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
-public class MemberRequestDto {
+public class MemberRequest {
 
     @Getter
     @Setter

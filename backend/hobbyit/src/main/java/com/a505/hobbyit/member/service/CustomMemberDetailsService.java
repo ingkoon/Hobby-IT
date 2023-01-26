@@ -1,7 +1,7 @@
 package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
-import com.a505.hobbyit.member.repository.MemberRepository;
+import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
