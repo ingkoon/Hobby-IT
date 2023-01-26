@@ -1,13 +1,10 @@
 package com.a505.hobbyit.member.domain;
 
-import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "member")
-public class Member extends BaseEntity implements UserDetails {
+public class Member implements UserDetails {
     @Column(name = "m_id", nullable = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -31,10 +28,10 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
@@ -43,30 +40,31 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private String intro;
 
+    @CreatedDate
     @Column(nullable = false)
     private LocalDateTime enrollDate;
 
     @Column
     private LocalDateTime resignedRequestDate;
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     private int ownedHobbyNum;
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     private int point;
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     private String profileImg;
 
 //    @Column(nullable = false)
 //    @Enumerated(EnumType.STRING)
 //    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
-    @Column(nullable = false)
+    @Column//(nullable = false)
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private List<String> privilege = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column//(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberState state = MemberState.ACTIVE;
 
