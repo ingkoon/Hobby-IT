@@ -88,34 +88,55 @@
       v-model="drawer"
       temporary
       location="right"
-      style="width:30%;background-color:#0e0f28; border-left:5px solid #fa8eb6"
+      style="width:30%; background-color:#0e0f28; border-left:5px solid #fa8eb6; position:fixed"
     >
-    <v-list-item
-      title="방명록"
-      style="color:white;"
-    >오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</v-list-item>
+    <div>
+      <v-list-item
+        style="color:white;"
+      >
+        <div style="font-size:40px">방명록</div>
+        <span style="font-size:16px;">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
+      </v-list-item>
 
-    <div style="text-align:center; margin:20px">
-      <v-date-picker
-        v-model="date"
-        color="purple"
-        :max-date="nowdate"
-        style="background-color:#fbd3de; padding:10px; width:85%"
-        :attributes="attrs"
-      />
+      <div style="text-align:center; margin:20px;">
+        <v-date-picker
+          v-model="date"
+          color="purple"
+          :max-date="nowdate"
+          style="background-color:#fbd3de; padding:10px; width:85%"
+          :attributes="attrs"
+        />
+      </div>
+
+      <div id="canvasdialog" style="text-align:center;">
+        <v-btn color="white" >
+          <div style="display:flex; flex-direction:column; align-items:center">
+            <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
+            <span style="color:white; margin-top:10px">방명록<br>작성하기</span>
+          </div>
+
+          <v-dialog v-model="canvasmodal" activator="parent">
+            <canvasadd @close="closeaddmodal"/>
+          </v-dialog>
+        </v-btn>
+      </div>
     </div>
 
   </v-navigation-drawer>
+
+
 </template>
 
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
 import ArticleItem from "../components/ArticleItem.vue";
+import Canvasadd from '../components/Canvasadd.vue';
 
 export default {
   components : {
     ArticleItem,
     GroupNotice,
+    Canvasadd,
   },
   data(){
     return {
@@ -137,7 +158,20 @@ export default {
           dot: true,
           dates: new Date(2023, 0, 20),
         },
+        {
+          key: 'visit',
+          dot: true,
+          dates: new Date(2023, 0, 18),
+        },
+        {
+          key: 'visit',
+          dot: true,
+          dates: new Date(2023, 0, 24),
+        },
       ],
+      canvasmodal : false,
+      message : '',
+
     }
   },
 
@@ -145,6 +179,12 @@ export default {
     onclickVideoChat(){
       window.open("http://localhost:3000/group/videochat", "_blank");
       // this.$router.push({name:'VideoChat',target:'_blank'})
+    },
+    openaddmodal(){
+      this.canvasmodal = true
+    },
+    closeaddmodal(){
+      this.canvasmodal = false
     }
 
   },
@@ -219,6 +259,13 @@ button {
 .v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
     border-radius: 40px 0 0 40px !important;
     opacity: 1;
+}
+
+#canvasdialog button {
+  background: linear-gradient(to bottom, #642EFE, #0E0F28);
+  width : 120px;
+  height: 120px;
+  border-radius: 150px;
 }
 
 </style>

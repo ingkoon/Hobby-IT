@@ -12,6 +12,7 @@
     "@mdi/font": "7.1.96",
     "axios": "^1.2.4",
     "core-js": "^3.8.3",
+    "jquery": "^3.6.3",
     "openvidu-browser": "^2.25.0",
     "pinia": "^2.0.23",
     "roboto-fontface": "*",
