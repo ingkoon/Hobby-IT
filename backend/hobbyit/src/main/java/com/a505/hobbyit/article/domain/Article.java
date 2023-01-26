@@ -1,5 +1,6 @@
 package com.a505.hobbyit.article.domain;
 
+import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "article")
-public class Article {
+public class Article extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "a_id", nullable = false)
     private Long id;
@@ -35,11 +36,5 @@ public class Article {
 
     @Column(nullable = false)
     private int hit = 0;
-
-    @Column(nullable = false)
-    private LocalDateTime writedDate;
-
-    @Column
-    private LocalDateTime modifiedDate;
 
 }

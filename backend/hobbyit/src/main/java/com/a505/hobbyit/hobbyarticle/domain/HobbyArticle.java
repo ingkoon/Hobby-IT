@@ -49,7 +49,7 @@ public class HobbyArticle extends BaseEntity {
     }
 
     //    @Column(nullable = false)
-//    private LocalDateTime writedDate;
+//    private LocalDateTime writtenDate;
 //
 //    @Column
 //    private LocalDateTime modifiedDate;
