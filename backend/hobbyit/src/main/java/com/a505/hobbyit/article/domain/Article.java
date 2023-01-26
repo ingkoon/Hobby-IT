@@ -45,9 +45,6 @@ public class Article {
     @Column
     private LocalDateTime modifiedDate;
 
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-    private int isDeleted;
-
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
 }
