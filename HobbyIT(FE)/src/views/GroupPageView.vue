@@ -91,9 +91,11 @@
       style="width:30%;background-color:#0e0f28; border-left:5px solid #fa8eb6"
     >
     <v-list-item
-      title="방명록"
       style="color:white;"
-    >오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</v-list-item>
+    >
+      <div style="font-size:40px">방명록</div>
+      <span style="font-size:16px;">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
+    </v-list-item>
 
     <div style="text-align:center; margin:20px">
       <v-date-picker
@@ -109,11 +111,11 @@
       <v-btn color="white" >
         <div style="display:flex; flex-direction:column; align-items:center">
           <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
-          <span style="color:white">추가하기</span>
+          <span style="color:white; margin-top:10px">방명록<br>작성하기</span>
         </div>
 
         <v-dialog v-model="canvasmodal" activator="parent">
-          <canvasadd/>
+          <canvasadd @close="closeaddmodal"/>
         </v-dialog>
       </v-btn>
     </div>
@@ -153,6 +155,16 @@ export default {
           key: 'visit',
           dot: true,
           dates: new Date(2023, 0, 20),
+        },
+        {
+          key: 'visit',
+          dot: true,
+          dates: new Date(2023, 0, 18),
+        },
+        {
+          key: 'visit',
+          dot: true,
+          dates: new Date(2023, 0, 24),
         },
       ],
       canvasmodal : false,
@@ -247,7 +259,7 @@ button {
 }
 
 #canvasdialog button {
-  background: linear-gradient(to bottom, #642EFE, #FA8EB6);
+  background: linear-gradient(to bottom, #642EFE, #0E0F28);
   width : 120px;
   height: 120px;
   border-radius: 150px;
