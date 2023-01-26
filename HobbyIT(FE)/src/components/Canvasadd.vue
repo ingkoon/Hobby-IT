@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div style="align-self:center">
     <v-card style="width:800px; height: 500px; background-color:#0E0F28">
       <div style="color:white; display:flex; justify-content:space-between; margin:10px 5px;">
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <span>방명록 작성</span>
-        <v-icon icon="mdi-close" size="small"></v-icon>
+        <v-icon icon="mdi-close" size="small" @click="closeaddmodal"></v-icon>
       </div>
       <div style="display:flex">
         <canvas class="new-cursor" id="canvas" width="500" height="500" style="background-color:#f7fdb0"></canvas>
@@ -19,6 +19,17 @@
 <script>
 
 export default {
+  data(){
+    return {
+      canvasmodal : true,
+    }
+  },
+  methods : {
+    closemodal() {
+      this.canvasmodal = false
+      
+    }
+  },
   mounted() {
 
     var pos = {

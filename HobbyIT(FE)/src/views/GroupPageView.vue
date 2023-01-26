@@ -105,8 +105,12 @@
       />
     </div>
 
-    <div>
-      <v-btn color="white">추가하기
+    <div id="canvasdialog" style="text-align:center">
+      <v-btn color="white" >
+        <div style="display:flex; flex-direction:column; align-items:center">
+          <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
+          <span style="color:white">추가하기</span>
+        </div>
 
         <v-dialog v-model="canvasmodal" activator="parent">
           <canvasadd/>
@@ -240,6 +244,13 @@ button {
 .v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
     border-radius: 40px 0 0 40px !important;
     opacity: 1;
+}
+
+#canvasdialog button {
+  background: linear-gradient(to bottom, #642EFE, #FA8EB6);
+  width : 120px;
+  height: 120px;
+  border-radius: 150px;
 }
 
 </style>
