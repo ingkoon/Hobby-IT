@@ -1,6 +1,5 @@
 package com.a505.hobbyit.article.domain;
 
-import com.a505.hobbyit.comment.domain.Comment;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -45,6 +42,4 @@ public class Article {
     @Column
     private LocalDateTime modifiedDate;
 
-    @OneToMany(mappedBy = "article")
-    private List<Comment> comments = new ArrayList<>();
 }
