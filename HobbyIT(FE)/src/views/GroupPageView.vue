@@ -143,7 +143,8 @@ export default {
 
   methods : {
     onclickVideoChat(){
-      this.$router.push({name:'VideoChat'})
+      window.open("http://localhost:3000/group/videochat", "_blank");
+      // this.$router.push({name:'VideoChat',target:'_blank'})
     }
 
   },
