@@ -88,36 +88,38 @@
       v-model="drawer"
       temporary
       location="right"
-      style="width:30%;background-color:#0e0f28; border-left:5px solid #fa8eb6"
+      style="width:30%; background-color:#0e0f28; border-left:5px solid #fa8eb6; position:fixed"
     >
-    <v-list-item
-      style="color:white;"
-    >
-      <div style="font-size:40px">방명록</div>
-      <span style="font-size:16px;">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
-    </v-list-item>
+    <div>
+      <v-list-item
+        style="color:white;"
+      >
+        <div style="font-size:40px">방명록</div>
+        <span style="font-size:16px;">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
+      </v-list-item>
 
-    <div style="text-align:center; margin:20px">
-      <v-date-picker
-        v-model="date"
-        color="purple"
-        :max-date="nowdate"
-        style="background-color:#fbd3de; padding:10px; width:85%"
-        :attributes="attrs"
-      />
-    </div>
+      <div style="text-align:center; margin:20px;">
+        <v-date-picker
+          v-model="date"
+          color="purple"
+          :max-date="nowdate"
+          style="background-color:#fbd3de; padding:10px; width:85%"
+          :attributes="attrs"
+        />
+      </div>
 
-    <div id="canvasdialog" style="text-align:center">
-      <v-btn color="white" >
-        <div style="display:flex; flex-direction:column; align-items:center">
-          <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
-          <span style="color:white; margin-top:10px">방명록<br>작성하기</span>
-        </div>
+      <div id="canvasdialog" style="text-align:center;">
+        <v-btn color="white" >
+          <div style="display:flex; flex-direction:column; align-items:center">
+            <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
+            <span style="color:white; margin-top:10px">방명록<br>작성하기</span>
+          </div>
 
-        <v-dialog v-model="canvasmodal" activator="parent">
-          <canvasadd @close="closeaddmodal"/>
-        </v-dialog>
-      </v-btn>
+          <v-dialog v-model="canvasmodal" activator="parent">
+            <canvasadd @close="closeaddmodal"/>
+          </v-dialog>
+        </v-btn>
+      </div>
     </div>
 
   </v-navigation-drawer>

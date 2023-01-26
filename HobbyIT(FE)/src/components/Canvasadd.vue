@@ -7,8 +7,8 @@
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display:flex">
-        <canvas class="new-cursor" id="canvas" width="500" height="500" style="background-color:#f7fdb0"></canvas>
-        <div style="margin-left:20px">
+        <canvas class="new-cursor" id="canvas" width="500" height="500"></canvas>
+        <div style="margin-left:20px; display:flex;">
           <div style="display:flex; flex-direction:column">
             <div style="color:white; margin-bottom:5px">굵기 :
               <input id="input" type="number" min="1" max="100" color="white" style="color:white; border: 1px solid white"/>
@@ -18,6 +18,17 @@
             <button @click="colorChange('#EE49FD')" style="background-color: #EE49FD; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
             <button @click="colorChange('#000000')" style="background-color: black; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
             <button id="eraser"></button>
+          </div>
+
+          <div style="color:white; display:flex; flex-direction:column; justify-content:space-evenly; margin-right:10px">
+            <div style="text-align:end">
+              today
+              <div style="font-size:35px">{{date}}</div>
+            </div>
+            <div style="font-size:35px; text-align:end; line-height:42px">Something<br>on your<br>mind?</div>
+            <div style="text-align:end">
+              <v-btn icon="mdi-send-outline" style="background-color:pink; transform:rotate(-45deg);"></v-btn>
+            </div>
           </div>
         </div>
       </div>
@@ -31,6 +42,9 @@ export default {
     return {
       ctx : "",
       canvas : "",
+      date : "",
+      background:"",
+      bglist : ['#F7FDB0','#ABFAB3', '#BFE0FE', '#FECDCD'],
     }
   },
   methods : {
@@ -54,6 +68,11 @@ export default {
     };
 
     var canvas = document.getElementById('canvas')
+
+    this.background = this.bglist[Math.floor(Math.random()*4)]
+
+    canvas.setAttribute('style','background-color:'+this.background+";")
+    var background = this.background
     var ctx = canvas.getContext('2d');
     this.ctx = ctx;
     this.canvas = canvas;
@@ -68,6 +87,9 @@ export default {
     canvas.addEventListener("mousemove", listener);
     canvas.addEventListener("mouseup", listener);
     canvas.addEventListener("mouseout", listener);
+
+    input.value = 3
+    ctx.lineWidth = 3
 
     input.oninput = function(){
       ctx.lineWidth = input.value;
@@ -134,9 +156,8 @@ export default {
       pos.y = -1;
     }
 
-
     function mouseclick() {
-      ctx.strokeStyle = '#f7fdb0';
+      ctx.strokeStyle = background;
     };
 
     function mousedouble() {
@@ -144,6 +165,15 @@ export default {
     }
 
   },
+
+  created() {
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0'+today.getDate()).slice(-2);
+
+    this.date = year+"."+month+"."+day
+  }
 };
 </script>
 

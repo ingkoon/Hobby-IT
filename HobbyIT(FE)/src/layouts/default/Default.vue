@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <default-bar />
+    <default-bar style="position:fixed" />
 
     <default-view style="margin:50px 13% 0px" />
   </v-app>
