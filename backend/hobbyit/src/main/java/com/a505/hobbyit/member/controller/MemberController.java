@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberService usersService;
+    private final MemberService memberService;
     private final Response response;
 
     @PostMapping("/signup")
@@ -31,7 +31,7 @@ public class MemberController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.signUp(signUp);
+        return memberService.signUp(signUp);
     }
 
     @PostMapping("/login")
@@ -40,7 +40,7 @@ public class MemberController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.login(login);
+        return memberService.login(login);
     }
 
     @PostMapping("/reissue")
@@ -49,7 +49,7 @@ public class MemberController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.reissue(reissue);
+        return memberService.reissue(reissue);
     }
 
     @PostMapping("/logout")
@@ -58,13 +58,13 @@ public class MemberController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.logout(logout);
+        return memberService.logout(logout);
     }
 
     @GetMapping("/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
-        return usersService.authority();
+        return memberService.authority();
     }
 
     @GetMapping("/userTest")
