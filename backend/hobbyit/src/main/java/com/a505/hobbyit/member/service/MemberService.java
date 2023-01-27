@@ -41,6 +41,8 @@ public class MemberService {
 
         Member member = Member.builder()
                 .email(request.getEmail())
+                .name(request.getName())
+                .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
