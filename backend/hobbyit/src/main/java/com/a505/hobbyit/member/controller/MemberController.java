@@ -1,9 +1,13 @@
 package com.a505.hobbyit.member.controller;
 
-import com.a505.hobbyit.member.dto.*;
+import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
+import com.a505.hobbyit.member.dto.request.MemberLogoutRequest;
+import com.a505.hobbyit.member.dto.request.MemberReissueRequest;
+import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
+import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.jwt.JwtTokenProvider;
 import com.a505.hobbyit.common.Helper;
-import com.a505.hobbyit.member.service.MemberService;
+import com.a505.hobbyit.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final MemberResponse response;
 
     @PostMapping(value = "/signup")

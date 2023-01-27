@@ -1,7 +1,12 @@
 package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
-import com.a505.hobbyit.member.dto.*;
+import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
+import com.a505.hobbyit.member.dto.request.MemberLogoutRequest;
+import com.a505.hobbyit.member.dto.request.MemberReissueRequest;
+import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
+import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.security.SecurityUtil;
@@ -25,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class MemberServiceImpl {
 
     private final MemberRepository memberRepository;
     private final MemberResponse response;

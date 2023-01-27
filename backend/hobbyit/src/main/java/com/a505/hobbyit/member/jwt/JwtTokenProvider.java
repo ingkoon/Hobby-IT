@@ -1,6 +1,6 @@
 package com.a505.hobbyit.member.jwt;
 
-import com.a505.hobbyit.member.dto.MemberTokenResponse;
+import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

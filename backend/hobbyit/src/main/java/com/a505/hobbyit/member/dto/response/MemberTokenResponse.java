@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.dto;
+package com.a505.hobbyit.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.dto;
+package com.a505.hobbyit.member.dto.request;
 
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.validation.constraints.NotNull;
