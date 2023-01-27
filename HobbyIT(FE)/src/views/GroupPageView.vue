@@ -88,14 +88,14 @@
       v-model="drawer"
       temporary
       location="right"
-      style="width:30%; background-color:#0e0f28; border-left:5px solid #fa8eb6; position:fixed"
+      style="width:30%; background-color:#0e0f28; border-left:5px solid #fa8eb6; position:fixed; top:59px;"
     >
     <div>
       <v-list-item
         style="color:white;"
       >
-        <div style="font-size:40px">방명록</div>
-        <span style="font-size:16px;">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
+        <div style="font-size:40px; margin:7px">방명록</div>
+        <span style="font-size:16px; margin-left:10px">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
       </v-list-item>
 
       <div style="text-align:center; margin:20px;">
