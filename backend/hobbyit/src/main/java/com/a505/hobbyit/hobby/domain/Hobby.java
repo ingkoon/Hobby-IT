@@ -72,4 +72,20 @@ public class Hobby {
 
     @OneToMany(mappedBy = "hobby")
     private List<HobbyPostit> postits = new ArrayList<>();
+
+    public void updateName(String name){
+        this.name = name;
+    }
+
+    public void updateIntro(String intro){
+        this.intro = intro;
+    }
+
+    public void updateMaxParticipantsNum(int maxParticipantsNum){
+        this.maxParticipantsNum = maxParticipantsNum;
+    }
+
+    public void updateImg(String img){
+        this.img = img;
+    }
 }

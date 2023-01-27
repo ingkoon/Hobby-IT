@@ -1,6 +1,7 @@
 package com.a505.hobbyit.hobbymember.domain;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyException;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
 import com.a505.hobbyit.member.domain.Member;
@@ -57,5 +58,13 @@ public class HobbyMember {
 
     public void updatePrivilege(HobbyMemberPrivilege hobbyMemberPrivilege){
         this.privilege = hobbyMemberPrivilege;
+    }
+
+    public void updateState(HobbyMemberState state){
+        this.state = state;
+    }
+
+    public void checkPrivilege(){
+        if(this.privilege != HobbyMemberPrivilege.OWNER) throw new UnAuthorizedHobbyException();
     }
 }

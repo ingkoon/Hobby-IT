@@ -40,16 +40,10 @@ public class Article {
     private int hit = 0;
 
     @Column(nullable = false)
-    private LocalDateTime writedDate;
+    private LocalDateTime writtenDate;
 
     @Column
     private LocalDateTime modifiedDate;
-
-    @Column
-    private LocalDateTime deletedDate;
-
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-    private int isDeleted;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();

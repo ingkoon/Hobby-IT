@@ -81,6 +81,7 @@ public class PendingServiceImpl implements PendingService{
                 .enrollDate(LocalDateTime.now())
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
+
         hobbyMemberRepository.save(hobbyMember);
         pendingRepository.deleteById(request.getWaitId());
     }
