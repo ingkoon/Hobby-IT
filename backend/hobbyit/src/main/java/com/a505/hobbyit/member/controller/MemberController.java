@@ -1,9 +1,8 @@
 package com.a505.hobbyit.member.controller;
 
+import com.a505.hobbyit.member.dto.*;
 import com.a505.hobbyit.member.jwt.JwtTokenProvider;
 import com.a505.hobbyit.common.Helper;
-import com.a505.hobbyit.member.dto.MemberResponse;
-import com.a505.hobbyit.member.dto.MemberRequest;
 import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class MemberController {
     private final MemberResponse response;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> signUp(@Validated MemberRequest.SignUp signUp, Errors errors) {
+    public ResponseEntity<?> signUp(@Validated MemberSignupRequest signUp, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -35,7 +34,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@Validated MemberRequest.Login login, Errors errors) {
+    public ResponseEntity<?> login(@Validated MemberLoginRequest login, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -44,7 +43,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/reissue")
-    public ResponseEntity<?> reissue(@Validated MemberRequest.Reissue reissue, Errors errors) {
+    public ResponseEntity<?> reissue(@Validated MemberReissueRequest reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));

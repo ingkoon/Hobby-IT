@@ -1,7 +1,7 @@
 package com.a505.hobbyit.member.dto;
 
 import com.a505.hobbyit.member.domain.Member;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +12,10 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MemberReissueRequest {
 
-    @NotNull(message = "accessToken 을 입력해주세요.")
+    @NotEmpty(message = "accessToken 을 입력해주세요.")
     private String accessToken;
 
-    @NotNull(message = "refreshToken 을 입력해주세요.")
+    @NotEmpty(message = "refreshToken 을 입력해주세요.")
     private String refreshToken;
 
-    public Member toEntity() {
-        return Member.builder().
-    }
 }
