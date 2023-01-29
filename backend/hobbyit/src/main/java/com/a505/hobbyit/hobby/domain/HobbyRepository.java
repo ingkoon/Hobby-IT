@@ -9,8 +9,11 @@ public interface HobbyRepository extends JpaRepository<Hobby, Long> {
 
     @Query("SELECT h "
             + "FROM Hobby h "
-            + "WHERE h.category = :category ")
-    List<Hobby> findByCategoryAndKeyword(final String category, final String keyword);
+            + "WHERE h.name = :keyword "
+            + "OR h.category = :keyword")
+    List<Hobby> findByKeyword(final String keyword);
+
+    List<Hobby> findByNameLikeOrCategoryLike(String name, String category);
 
     @Query(value = "SELECT * "
             + "FROM HOBBY "

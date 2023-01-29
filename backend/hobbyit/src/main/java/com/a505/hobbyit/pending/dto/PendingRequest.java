@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 public class PendingRequest {
 
     @NotNull()
-    String message;
+    String msg;
 
     public Pending toEntity(Member member, Hobby hobby){
         return Pending.builder()
                 .member(member)
                 .hobby(hobby)
-                .message(message)
+                .msg(msg)
                 .apply_date(LocalDateTime.now())
                 .build();
     }

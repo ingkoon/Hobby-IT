@@ -25,7 +25,7 @@ public class PendingResponse {
         return PendingResponse.builder()
                 .nickname(pending.getMember().getNickname())
                 .applyDate(pending.getApply_date())
-                .message(pending.getMessage())
+                .message(pending.getMsg())
                 .build();
     }
 }
