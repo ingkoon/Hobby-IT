@@ -3,12 +3,17 @@ package com.a505.hobbyit.hobbyarticle.domain;
 import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
+import com.a505.hobbyit.hobbyarticlecomment.domain.HobbyArticleComment;
+import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -54,6 +59,18 @@ public class HobbyArticle extends BaseEntity {
         this.like = like;
     }
 
+    public void updateTitle(String title){
+        this.title = title;
+    }
+
+    public void updateContent(String content){
+        this.content = content;
+    }
+
+//    public void updateImg(String[] imgUrl){
+//        this.img
+//    }
+
     //    @Column(nullable = false)
 //    private LocalDateTime writedDate;
 //
@@ -63,10 +80,10 @@ public class HobbyArticle extends BaseEntity {
 //    @Column
 //    private LocalDateTime deletedDate;
 
-//    @OneToMany(mappedBy = "groupArticle")
-//    private List<GroupArticleImg> groupArticleImgs = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "groupArticle")
-//    private List<GroupComment> groupComments = new ArrayList<>();
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleComment> hobbyArticleComments = new ArrayList<>();
 
 }
