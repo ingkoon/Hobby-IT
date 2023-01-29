@@ -7,10 +7,12 @@
         <v-col id="leftSidebar" :style="{height: computedHeight + 'px'}">
 
           <v-icon icon="mdi-microphonea" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-microphone" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-video" size="36"></v-icon>
+          <v-icon color="white" icon="mdi-microphone" @click="handleAudio" size="36" v-if="isAudioEnabled"></v-icon>
+          <v-icon color="white" icon="mdi-microphone-off" @click="handleAudio" size="36" v-else></v-icon>
+          <v-icon color="white" icon="mdi-video" size="36" @click="handleMyVideo" v-if="isVideoEnabled"></v-icon>
+          <v-icon color="white" icon="mdi-video-off" size="36" @click="handleMyVideo" v-else></v-icon>
           <v-icon color="white" icon="mdi-monitor" size="36"></v-icon>
-          <v-btn style="background-color: red; color: white"  icon="mdi-phone-off" @click="window.open('','_self').close()"></v-btn>
+          <v-btn style="background-color: red; color: white"  icon="mdi-phone-off" @click="handleClickOff"></v-btn>
           <v-icon color="white" icon="mdi-pencil-box" size="36"></v-icon>
           <v-icon color="white" icon="mdi-cog-outline" size="36"></v-icon>
           <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
@@ -30,7 +32,7 @@
           </v-row>
         </v-col>
         <v-col id="rightSidebar" :style="{height: computedHeight + 'px'}">
-
+          <VideoMessage @handle-message="sendMessage"/>
         </v-col>
       </v-row>
     </v-container>
@@ -42,6 +44,7 @@ import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/components/UserVideo.vue";
 import {useAppStore} from "@/store/app";
+import VideoMessage from "@/components/VideoMessage.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
@@ -51,7 +54,7 @@ export default {
     return {appStore}
   },
   name: "VideoChat",
-  components: {UserVideo},
+  components: {VideoMessage, UserVideo},
   data() {
     return {
       windowHeight: window.innerHeight,
@@ -64,6 +67,8 @@ export default {
       // Join form
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
+      isAudioEnabled: true,
+      isVideoEnabled: true,
     };
   },
   mounted() {
@@ -110,6 +115,34 @@ export default {
     }
   },
   methods:{
+    sendMessage(msg){
+      this.session.signal({
+        data: msg,
+        to: [],
+        type: 'my-chat'
+      })
+        .then(()=>{
+          console.log("Success");
+        })
+        .catch((err)=>{
+          console.error(err);
+        })
+    },
+    handleMyVideo(){
+      this.publisher.publishVideo(!this.isVideoEnabled);
+      this.isVideoEnabled = !this.isVideoEnabled;
+    },
+    handleAudio(){
+      this.publisher.publishAudio(!this.isAudioEnabled);
+      this.isAudioEnabled = !this.isAudioEnabled;
+
+    },
+    handleClickOff() {
+      window.open('','_self').close();
+      return false;
+    },
+
+
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -132,6 +165,10 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
+      // On Message
+      this.session.on("signal:message",(event) =>{
+        console.log(event.data,event.from,event.type);
+      })
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
       this.getToken(this.mySessionId).then((token) => {
