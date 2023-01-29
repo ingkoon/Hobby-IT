@@ -36,19 +36,20 @@ public class MemberServiceImpl {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate redisTemplate;
 
-    public ResponseEntity<?> signUp(MemberRequestDto.SignUp signUp) {
-        if (memberRepository.existsByEmail(signUp.getEmail())) {
+    public ResponseEntity<?> signUp(MemberSignupRequest request) {
+        Member member1 = request.toEntity();
+        if (memberRepository.existsByEmail(member1.getEmail())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        Member member = Member.builder()
-                .email(signUp.getEmail())
-                .name(signUp.getName())
-                .nickname(signUp.getNickname())
-                .password(passwordEncoder.encode(signUp.getPassword()))
+        Member member2 = Member.builder()
+                .email(member1.getEmail())
+                .name(member1.getName())
+                .nickname(member1.getNickname())
+                .password(passwordEncoder.encode(member1.getPassword()))
                 .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
-        memberRepository.save(member);
+        memberRepository.save(member2);
 
         return response.success("회원가입에 성공했습니다.");
     }
