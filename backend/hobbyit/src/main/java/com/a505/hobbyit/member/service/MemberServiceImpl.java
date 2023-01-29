@@ -37,24 +37,23 @@ public class MemberServiceImpl {
     private final RedisTemplate redisTemplate;
 
     public ResponseEntity<?> signUp(MemberSignupRequest request) {
-        Member member1 = request.toEntity();
-        if (memberRepository.existsByEmail(member1.getEmail())) {
+        if (memberRepository.existsByEmail(request.getEmail())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        Member member2 = Member.builder()
-                .email(member1.getEmail())
-                .name(member1.getName())
-                .nickname(member1.getNickname())
-                .password(passwordEncoder.encode(member1.getPassword()))
+        Member member = Member.builder()
+                .email(request.getEmail())
+                .name(request.getName())
+                .nickname(request.getNickname())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
-        memberRepository.save(member2);
+        memberRepository.save(member);
 
         return response.success("회원가입에 성공했습니다.");
     }
 
-    public ResponseEntity<?> login(MemberRequestDto.Login login) {
+    public ResponseEntity<?> login(MemberLoginRequest login) {
 
         if (memberRepository.findByEmail(login.getEmail()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
