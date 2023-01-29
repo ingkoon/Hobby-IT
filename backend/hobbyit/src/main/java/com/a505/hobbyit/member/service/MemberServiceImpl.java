@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl {
+public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
     private final Response response;

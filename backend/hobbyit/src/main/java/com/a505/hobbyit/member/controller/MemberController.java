@@ -4,7 +4,7 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.common.Helper;
-import com.a505.hobbyit.member.service.MemberServiceImpl;
+import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     private final Response response;
 
     @PostMapping("/signup")
