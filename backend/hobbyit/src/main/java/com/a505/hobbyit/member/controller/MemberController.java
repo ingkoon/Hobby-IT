@@ -1,11 +1,8 @@
 package com.a505.hobbyit.member.controller;
 
-import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
-import com.a505.hobbyit.member.dto.request.MemberLogoutRequest;
-import com.a505.hobbyit.member.dto.request.MemberReissueRequest;
-import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
-import com.a505.hobbyit.member.dto.response.MemberResponse;
-import com.a505.hobbyit.member.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.Response;
+import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.common.Helper;
 import com.a505.hobbyit.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +23,10 @@ public class MemberController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberServiceImpl memberService;
-    private final MemberResponse response;
+    private final Response response;
 
-    @PostMapping(value = "/signup")
-    public ResponseEntity<?> signUp(@Validated MemberSignupRequest signUp, Errors errors) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@Validated MemberRequestDto.SignUp signUp, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -37,8 +34,8 @@ public class MemberController {
         return memberService.signUp(signUp);
     }
 
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@Validated MemberLoginRequest login, Errors errors) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Validated MemberRequestDto.Login login, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -46,8 +43,8 @@ public class MemberController {
         return memberService.login(login);
     }
 
-    @PostMapping(value = "/reissue")
-    public ResponseEntity<?> reissue(@Validated MemberReissueRequest reissue, Errors errors) {
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(@Validated MemberRequestDto.Reissue reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -55,8 +52,8 @@ public class MemberController {
         return memberService.reissue(reissue);
     }
 
-    @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout(@Validated MemberLogoutRequest logout, Errors errors) {
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@Validated MemberRequestDto.Logout logout, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -64,19 +61,19 @@ public class MemberController {
         return memberService.logout(logout);
     }
 
-    @GetMapping(value = "/authority")
+    @GetMapping("/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
         return memberService.authority();
     }
 
-    @GetMapping(value = "/userTest")
+    @GetMapping("/userTest")
     public ResponseEntity<?> userTest() {
         log.info("ROLE_USER TEST");
         return response.success();
     }
 
-    @GetMapping(value = "/adminTest")
+    @GetMapping("/adminTest")
     public ResponseEntity<?> adminTest() {
         log.info("ROLE_ADMIN TEST");
         return response.success();

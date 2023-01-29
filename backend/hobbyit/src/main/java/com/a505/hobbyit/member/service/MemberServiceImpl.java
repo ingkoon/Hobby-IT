@@ -1,15 +1,12 @@
 package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
-import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
-import com.a505.hobbyit.member.dto.request.MemberLogoutRequest;
-import com.a505.hobbyit.member.dto.request.MemberReissueRequest;
-import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
-import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
-import com.a505.hobbyit.member.jwt.JwtTokenProvider;
-import com.a505.hobbyit.member.security.SecurityUtil;
+import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.security.SecurityUtil;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,37 +30,38 @@ import java.util.concurrent.TimeUnit;
 public class MemberServiceImpl {
 
     private final MemberRepository memberRepository;
-    private final MemberResponse response;
+    private final Response response;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate redisTemplate;
 
-    public ResponseEntity<?> signUp(MemberSignupRequest request) {
-        if (memberRepository.existsByEmail(request.toEntity().getEmail())) {
+    public ResponseEntity<?> signUp(MemberRequestDto.SignUp signUp) {
+        if (memberRepository.existsByEmail(signUp.getEmail())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
         Member member = Member.builder()
-                .email(request.getEmail())
-                .name(request.getName())
-                .nickname(request.getNickname())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+                .email(signUp.getEmail())
+                .name(signUp.getName())
+                .nickname(signUp.getNickname())
+                .password(passwordEncoder.encode(signUp.getPassword()))
+                .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
 
         return response.success("회원가입에 성공했습니다.");
     }
 
-    public ResponseEntity<?> login(MemberLoginRequest request) {
-        if (memberRepository.findByEmail(request.getEmail()).orElse(null) == null) {
+    public ResponseEntity<?> login(MemberRequestDto.Login login) {
+
+        if (memberRepository.findByEmail(login.getEmail()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
@@ -79,7 +77,7 @@ public class MemberServiceImpl {
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> reissue(MemberReissueRequest reissue) {
+    public ResponseEntity<?> reissue(MemberRequestDto.Reissue reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -108,7 +106,7 @@ public class MemberServiceImpl {
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> logout(MemberLogoutRequest logout) {
+    public ResponseEntity<?> logout(MemberRequestDto.Logout logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
@@ -135,12 +133,12 @@ public class MemberServiceImpl {
         // SecurityContext에 담겨 있는 authentication userEamil 정보
         String userEmail = SecurityUtil.getCurrentUserEmail();
 
-        Member member = memberRepository.findByEmail(userEmail)
+        Member user = memberRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        // add ADMIN
-        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
-        memberRepository.save(member);
+        // add ROLE_ADMIN
+        user.getRoles().add(MemberPrivilege.ADMIN.name());
+        memberRepository.save(user);
 
         return response.success();
     }

@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.security;
+package com.a505.hobbyit.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

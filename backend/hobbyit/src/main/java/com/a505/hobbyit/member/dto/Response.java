@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.dto.response;
+package com.a505.hobbyit.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 @Component
-public class MemberResponse {
+public class Response {
 
     @Getter
     @Builder

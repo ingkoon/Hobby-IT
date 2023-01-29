@@ -1,7 +1,7 @@
-package com.a505.hobbyit.member.security;
+package com.a505.hobbyit.security;
 
-import com.a505.hobbyit.member.jwt.JwtAuthenticationFilter;
-import com.a505.hobbyit.member.jwt.JwtTokenProvider;
+import com.a505.hobbyit.jwt.JwtAuthenticationFilter;
+import com.a505.hobbyit.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class WebSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority", "/api/v1/users/reissue", "/api/v1/users/logout").permitAll()
+            .requestMatchers("/api/member/**", "/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority", "/api/v1/users/reissue", "/api/v1/users/logout").permitAll()
             .requestMatchers("/api/v1/users/userTest").hasRole("USER")
             .requestMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
             .and()

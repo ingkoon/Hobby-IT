@@ -1,4 +1,4 @@
-package com.a505.hobbyit.member.jwt;
+package com.a505.hobbyit.jwt;
 
 import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import io.jsonwebtoken.*;
