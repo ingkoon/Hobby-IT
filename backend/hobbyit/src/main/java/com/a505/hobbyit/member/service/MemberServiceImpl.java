@@ -53,15 +53,15 @@ public class MemberServiceImpl {
         return response.success("회원가입에 성공했습니다.");
     }
 
-    public ResponseEntity<?> login(MemberLoginRequest login) {
+    public ResponseEntity<?> login(MemberLoginRequest request) {
 
-        if (memberRepository.findByEmail(login.getEmail()).orElse(null) == null) {
+        if (memberRepository.findByEmail(request.getEmail()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
@@ -131,14 +131,14 @@ public class MemberServiceImpl {
 
     public ResponseEntity<?> authority() {
         // SecurityContext에 담겨 있는 authentication userEamil 정보
-        String userEmail = SecurityUtil.getCurrentUserEmail();
+        String memberEmail = SecurityUtil.getCurrentMemberEmail();
 
-        Member user = memberRepository.findByEmail(userEmail)
+        Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         // add ROLE_ADMIN
-        user.getRoles().add(MemberPrivilege.ADMIN.name());
-        memberRepository.save(user);
+        member.getRoles().add(MemberPrivilege.ADMIN.name());
+        memberRepository.save(member);
 
         return response.success();
     }
