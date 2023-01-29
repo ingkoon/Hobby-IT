@@ -68,7 +68,7 @@ public class MemberServiceImpl {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberTokenResponse.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue()
@@ -97,7 +97,7 @@ public class MemberServiceImpl {
         }
 
         // 4. 새로운 토큰 생성
-        MemberTokenResponse.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue()
