@@ -53,7 +53,7 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Validated MemberRequestDto.Logout logout, Errors errors) {
+    public ResponseEntity<?> logout(@Validated MemberLogoutRequest logout, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));

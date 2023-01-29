@@ -106,7 +106,7 @@ public class MemberServiceImpl {
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> logout(MemberRequestDto.Logout logout) {
+    public ResponseEntity<?> logout(MemberLogoutRequest logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
