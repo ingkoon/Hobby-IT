@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
+@Builder
 @AllArgsConstructor
 public class MemberTokenResponse {
     private String grantType;
