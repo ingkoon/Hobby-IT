@@ -9,24 +9,25 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name="hobby_article_img")
 public class HobbyArticleImg {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hai_id", nullable = false)
-    private Long groupArticleImgId;
+
+    @Id
+    @Column(name = "hobby_art_id")
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ha_id", nullable = false)
+    @MapsId
+    @JoinColumn(name = "hobby_art_id", nullable = false)
     private HobbyArticle hobbyArticle;
 
-    @Column(nullable = false, length = 80)
-    private String img;
-
-    public HobbyArticleImg() {}
+    @Column(nullable = false, length = 255)
+    private String imgUrl;
 
     @Builder
-    public HobbyArticleImg(HobbyArticle hobbyArticle, String img) {
+    public HobbyArticleImg(HobbyArticle hobbyArticle, String imgUrl) {
         this.hobbyArticle = hobbyArticle;
-        this.img = img;
+        this.imgUrl = imgUrl;
     }
 }

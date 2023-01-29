@@ -14,15 +14,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "item")
 public class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "i_id")
-    private Long itemId;
+    @Column()
+    private Long id;
 
     @Column(nullable = false, length = 30)
-    private String type;
+    private Long itemTypeId;
 
     @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false, length = 30)
-    private String requiredPoint;
+    @Column(name = "rqd_point", nullable = false)
+    private int requiredPoint;
+
+    @Column(nullable = false, length = 255)
+    private String imgUrl;
 }
