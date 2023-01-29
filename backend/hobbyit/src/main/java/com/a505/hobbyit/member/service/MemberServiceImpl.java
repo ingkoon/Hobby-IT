@@ -77,7 +77,7 @@ public class MemberServiceImpl {
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> reissue(MemberRequestDto.Reissue reissue) {
+    public ResponseEntity<?> reissue(MemberReissueRequest reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);

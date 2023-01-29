@@ -44,7 +44,7 @@ public class MemberController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@Validated MemberRequestDto.Reissue reissue, Errors errors) {
+    public ResponseEntity<?> reissue(@Validated MemberReissueRequest reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
