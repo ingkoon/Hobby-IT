@@ -2,6 +2,7 @@ package com.a505.hobbyit.hobby.dto;
 
 
 import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobby.enums.HobbyFree;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,24 +20,24 @@ public class HobbyRequest {
     private String intro;
 
     @NotNull
-    private int maxParticipantsNum;
+    private int maxMemberCnt;
 
     @NotNull
     private String category;
 
     @NotNull
-    private String img;
+    private String imgUrl;
 
     @NotNull
-    private int freeRegistration;
+    private HobbyFree free;
 
     public Hobby toEntity(){
         return Hobby.builder().name(name)
                 .intro(intro)
-                .maxParticipantsNum(maxParticipantsNum)
+                .maxMemberCount(maxMemberCnt)
                 .category(category)
-                .img(img)
-                .freeRegistration(freeRegistration)
+                .imgUrl(imgUrl)
+                .free(free)
                 .build();
     }
 }

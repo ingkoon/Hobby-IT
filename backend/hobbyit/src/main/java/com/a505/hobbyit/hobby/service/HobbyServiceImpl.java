@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +86,7 @@ public class HobbyServiceImpl implements HobbyService{
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId) {
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
         List<HobbyMemberResponse> responses = new ArrayList<>();
-        List<HobbyMember> members = hobby.getGroupUsers();
+        List<HobbyMember> members = hobby.getHobbyMembers();
 
         for (HobbyMember member : members) {
             responses.add(new HobbyMemberResponse().toEntity(member));
