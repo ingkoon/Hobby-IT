@@ -1,6 +1,5 @@
 package com.a505.hobbyit.member.domain;
 
-import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
@@ -11,60 +10,62 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-//@AllArgsConstructor
 @Table(name = "member")
 public class Member {
-    @Column(name = "m_id", nullable = false)
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-
     @Column(nullable = false)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 64)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String nickname;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    private String password;
+
+    @Column(length = 128)
     private String intro;
 
-    @Column(nullable = false)
+    @Column(name =  "reg_dt", nullable = false)
     private LocalDateTime enrollDate;
 
-    @Column
+    @Column(name = "resd_req_dt")
     private LocalDateTime resignedRequestDate;
 
     @Column(nullable = false)
-    private int ownedHobbyNum;
+    private int ownedHobbyCnt;
 
     @Column(nullable = false)
     private int point;
 
     @Column(nullable = false)
-    private String profileImg;
+    private String imgUrl;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
+//    @Column(nullable = false)
+//    @Enumerated(EnumType.STRING)
+//    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberState state = MemberState.ACTIVE;
 
     @Builder
-    public Member(String email, String name, String nickname, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyNum, int point, String profileImg, MemberPrivilege privilege, MemberState state) {
+    public Member(String email, String name, String nickname, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyCnt, int point, String imgUrl, MemberState state) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.intro = intro;
         this.enrollDate = enrollDate;
         this.resignedRequestDate = resignedRequestDate;
-        this.ownedHobbyNum = ownedHobbyNum;
+        this.ownedHobbyCnt = ownedHobbyCnt;
         this.point = point;
-        this.profileImg = profileImg;
-        this.privilege = privilege;
+        this.imgUrl = imgUrl;
+//        this.privilege = privilege;
         this.state = state;
     }
 

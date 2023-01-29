@@ -28,10 +28,10 @@ public class HobbyResponse {
         return HobbyResponse.builder()
                 .name(hobby.getName())
                 .intro(hobby.getIntro())
-                .participantsNum(hobby.getParticipantsNum())
-                .maxParticipantsNum(hobby.getMaxParticipantsNum())
+                .participantsNum(hobby.getCurrentMemberCount())
+                .maxParticipantsNum(hobby.getMaxMemberCount())
                 .category(hobby.getCategory())
-                .img(hobby.getImg())
+                .img(hobby.getImgUrl())
                 .build();
     }
 }

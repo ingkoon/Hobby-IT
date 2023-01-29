@@ -4,6 +4,7 @@ import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.hobbymember.domain.HobbyMemberId;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
@@ -73,6 +74,7 @@ public class PendingServiceImpl implements PendingService{
 
         Member findMember = pending.getMember();
         Hobby findHobby = pending.getHobby();
+
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)

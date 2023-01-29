@@ -20,10 +20,9 @@ public class HobbyMemberResponse {
     public HobbyMemberResponse toEntity(HobbyMember hobbyMember){
         return HobbyMemberResponse
                 .builder()
-                .id(hobbyMember.getId())
+                .id(hobbyMember.getMember().getId())
                 .nickName(hobbyMember.getMember().getNickname())
                 .privilege(hobbyMember.getPrivilege())
                 .build();
     }
-
 }
