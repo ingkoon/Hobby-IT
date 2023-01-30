@@ -1,17 +1,20 @@
 package com.a505.hobbyit.member.domain;
 
+import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "member")
-public class Member {
+@NoArgsConstructor
+public class Member extends BaseEntity {
     @Column(nullable = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,9 +33,6 @@ public class Member {
 
     @Column(length = 128)
     private String intro;
-
-    @Column(name =  "reg_dt", nullable = false)
-    private LocalDateTime enrollDate;
 
     @Column(name = "resd_req_dt")
     private LocalDateTime resignedRequestDate;
@@ -55,12 +55,11 @@ public class Member {
     private MemberState state = MemberState.ACTIVE;
 
     @Builder
-    public Member(String email, String name, String nickname, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyCnt, int point, String imgUrl, MemberState state) {
+    public Member(String email, String name, String nickname, String intro, LocalDateTime resignedRequestDate, int ownedHobbyCnt, int point, String imgUrl, MemberState state) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.intro = intro;
-        this.enrollDate = enrollDate;
         this.resignedRequestDate = resignedRequestDate;
         this.ownedHobbyCnt = ownedHobbyCnt;
         this.point = point;
@@ -68,8 +67,6 @@ public class Member {
 //        this.privilege = privilege;
         this.state = state;
     }
-
-    public Member() {}
 
 //    @OneToMany(mappedBy = "member")
 //    private List<Pending> pendings = new ArrayList<>();
