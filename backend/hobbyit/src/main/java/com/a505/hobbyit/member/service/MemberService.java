@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 public interface MemberService {
     public void signUp(MemberSignupRequest request);
     public MemberTokenResponse login(MemberLoginRequest request);
-    public ResponseEntity<?> reissue(MemberReissueRequest reissue);
+    public void reissue(MemberReissueRequest reissue);
     public ResponseEntity<?> logout(MemberLogoutRequest logout);
     public ResponseEntity<?> authority();
 }
