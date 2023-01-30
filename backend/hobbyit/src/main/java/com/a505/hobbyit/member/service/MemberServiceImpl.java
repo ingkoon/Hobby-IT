@@ -6,6 +6,7 @@ import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.exception.DuplicatedEmailException;
 import com.a505.hobbyit.security.SecurityUtil;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,21 +37,19 @@ public class MemberServiceImpl implements MemberService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final StringRedisTemplate stringRedisTemplate;
 
-    public ResponseEntity<?> signUp(MemberSignupRequest request) {
-        if (memberRepository.existsByEmail(request.getEmail())) {
-            return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
-        }
+    @Override
+    public void signUp(MemberSignupRequest request) {
+        if (memberRepository.existsByEmail(request.getEmail()))
+            throw new DuplicatedEmailException();
 
         Member member = Member.builder()
                 .email(request.getEmail())
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-//                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+//                .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
-
-        return response.success("회원가입에 성공했습니다.");
     }
 
     public ResponseEntity<?> login(MemberLoginRequest request) {

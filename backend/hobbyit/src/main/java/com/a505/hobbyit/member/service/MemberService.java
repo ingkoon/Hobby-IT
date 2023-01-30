@@ -7,7 +7,7 @@ import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
-    public ResponseEntity<?> signUp(MemberSignupRequest request);
+    public void signUp(MemberSignupRequest request);
     public ResponseEntity<?> login(MemberLoginRequest request);
     public ResponseEntity<?> reissue(MemberReissueRequest reissue);
     public ResponseEntity<?> logout(MemberLogoutRequest logout);
