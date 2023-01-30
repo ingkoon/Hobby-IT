@@ -4,19 +4,24 @@ import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
-//@AllArgsConstructor
 @Table(name = "member")
-public class Member {
-    @Column(name = "m_id", nullable = false)
+public class Member extends BaseEntity implements UserDetails {
+    @Column(nullable = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long id;
 
     @Column(nullable = false)
     private String email;
@@ -27,48 +32,87 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
+    private String password;
+
     @Column
     private String intro;
 
     @Column(nullable = false)
-    private LocalDateTime enrollDate;
-
-    @Column
-    private LocalDateTime resignedRequestDate;
-
-    @Column(nullable = false)
-    private int ownedHobbyNum;
+    private int ownedHobbyCnt;
 
     @Column(nullable = false)
     private int point;
 
-    @Column(nullable = false)
-    private String profileImg;
+    @Column
+    private String imgUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberPrivilege privilege = MemberPrivilege.GENERAL;
+    private MemberState state;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberState state = MemberState.ACTIVE;
+    private MemberPrivilege privilege;
 
-    @Builder
-    public Member(String email, String name, String nickname, String intro, LocalDateTime enrollDate, LocalDateTime resignedRequestDate, int ownedHobbyNum, int point, String profileImg, MemberPrivilege privilege, MemberState state) {
-        this.email = email;
-        this.name = name;
-        this.nickname = nickname;
-        this.intro = intro;
-        this.enrollDate = enrollDate;
-        this.resignedRequestDate = resignedRequestDate;
-        this.ownedHobbyNum = ownedHobbyNum;
-        this.point = point;
-        this.profileImg = profileImg;
-        this.privilege = privilege;
-        this.state = state;
+    @Column
+    private LocalDateTime resdReqDt;
+
+    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Member() {}
+
+    @Builder
+    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, List<String> roles) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.intro = intro;
+        this.ownedHobbyCnt = ownedHobbyCnt;
+        this.point = point;
+        this.imgUrl = imgUrl;
+        this.state = MemberState.ACTIVE;
+        this.privilege = MemberPrivilege.GENERAL;
+        this.resdReqDt = resdReqDt;
+        this.roles = roles;
+    }
 
 //    @OneToMany(mappedBy = "member")
 //    private List<Pending> pendings = new ArrayList<>();

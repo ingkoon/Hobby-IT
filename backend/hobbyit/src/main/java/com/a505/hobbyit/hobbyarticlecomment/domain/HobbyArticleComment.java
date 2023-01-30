@@ -28,16 +28,12 @@ public class HobbyArticleComment extends BaseEntity {
     @Column(nullable = false, length = 300)
     private String content;
 
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-    private int isDeleted;
-
     public HobbyArticleComment() {}
 
     @Builder
-    public HobbyArticleComment(HobbyArticle hobbyArticle, Member member, String content, int isDeleted) {
+    public HobbyArticleComment(HobbyArticle hobbyArticle, Member member, String content) {
         this.hobbyArticle = hobbyArticle;
         this.member = member;
         this.content = content;
-        this.isDeleted = isDeleted;
     }
 }

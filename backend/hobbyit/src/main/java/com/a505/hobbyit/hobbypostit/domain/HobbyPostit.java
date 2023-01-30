@@ -34,5 +34,5 @@ public class HobbyPostit {
     private String canvas;
 
     @Column(nullable = false)
-    private LocalDateTime writedDate;
+    private LocalDateTime writtenDate;
 }
