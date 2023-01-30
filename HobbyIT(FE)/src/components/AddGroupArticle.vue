@@ -4,10 +4,10 @@
       <div id="notopa" style="color:white; height:60px; display:flex; justify-content:space-between; padding:10px 5px; background-color:#0E0F28">
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <span>게시글 작성</span>
-        <v-icon icon="mdi-close" size="small"></v-icon>
+        <v-icon icon="mdi-close" size="small" @click="closeaddarticle"></v-icon>
       </div>
       <div style="display:flex;">
-        <div style="width:500px; height:500px; background-color:#FA8EB630" @click="uploadimg" id="realimg">            
+        <div style="width:500px; height:500px; background-color:#FA8EB630" id="realimg">            
           <div id="line">
             <div id="line9"></div>
             <div id="line7"></div>
@@ -17,6 +17,11 @@
             <div id="line10"></div>
             <div id="circle"></div>
           </div>
+
+          <v-carousel id="imgcarousel">
+            <v-carousel-item cover v-for="(item,i) in uploadfiles" :key="i" :src="item.src" @click="uploadimg" ></v-carousel-item>
+          </v-carousel>
+          
         </div>
         <input type="file" id="uploadimg" accept="image/*" required multiple style="display:none">
 
@@ -39,9 +44,11 @@
             :model-value="content"
             color="white"
             placeholder="본문"
-            style="margin:15px; height:100px"
+            style="margin:15px;"
             auto-grow="false"
           ></v-textarea>
+
+          <v-btn color="#FA8EB6" style="color:white; width:100px; float:right">업로드</v-btn>
         </div>
 
       </div>
@@ -55,49 +62,57 @@ export default {
     return {
       rules: [v => v.length <= 200 || '최대 200자까지 작성가능합니다.'],
       content : "",
+      uploadfiles : [{src:""}],
     }
   },
   methods : {
+    closeaddarticle() {
+      this.$emit('closeaddarticle');
+    },
     uploadimg(){
-      function getImageFiles(e){
-        const uploadFiles = []
-        const files = e.currentTarget.files
-        console.log(typeof files, files)
-
-        if([...files].length >= 11) {
-          alert('이미지는 10개까지 업로드가 가능합니다')
-          return;
-        }
-
-        [...files].forEach(file => {
-          if ([...files].length < 11){
-            uploadFiles.push(file)
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const preview = createElement(e, file)
-            realimg.appendChild(preview)
-          }
-          reader.readAsDataURL(file);
-          }
-        })
-      }
-
-      function createElement(e, file){
-        const img = document.createElement('img')
-        img.setAttribute('src', e.target.result);
-        img.setAttribute('data-file', file.name);
-
-        const line = document.getElementById('line')
-        line.setAttribute('style', 'display:none')
-        return img
-      }
-
       const realimg = document.getElementById('realimg')
       const upload = document.getElementById('uploadimg')
+      
 
       upload.click()
-      upload.addEventListener('change', getImageFiles);
+      upload.addEventListener('change', this.getImageFiles);
     },
+    getImageFiles(e){
+
+      const files = e.currentTarget.files
+      console.log(typeof files, files)
+
+      if([...files].length >= 11) {
+        alert('이미지는 10개까지 업로드가 가능합니다')
+        return;
+      }
+
+      [...files].forEach(file => {
+        if (!file.type.match("image/.*")) {
+          alert('이미지 파일만 업로드가 가능합니다.');
+          return
+        }
+
+        if ([...files].length < 11){
+          
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            var tmp = {src : e.target.result}
+            if (this.uploadfiles[0].src === ""){
+              this.uploadfiles = this.uploadfiles.slice(1)
+            }
+            this.uploadfiles.push(tmp)
+            console.log(this.uploadfiles)
+          }
+          reader.readAsDataURL(file);
+
+        }
+      })
+
+      
+      const line = document.getElementById('line')
+      line.setAttribute('style', 'display:none')
+    }
     
   },
   mounted() {

@@ -26,7 +26,7 @@
           <v-icon icon="mdi-plus-circle-outline"></v-icon>
 
           <v-dialog v-model="addarticlemodal" activator="parent">
-            <article-add/>
+            <article-add @closeaddarticle="closeaddarticle"/>
           </v-dialog>
         </v-btn>
         <!-- 화상채팅 버튼 -->
@@ -74,7 +74,8 @@
               <v-container>
                 <v-row>
                   <v-col v-for="j in 4" :key="j" cols="12" sm="3">
-                    <article-item v-for="i in 4" :key="i" :n="j + i" />
+                    
+                    <article-item v-for="i in 4" :key="i" :n="j + i" @click="openmodal"/>
                   </v-col>
                 </v-row>
               </v-container>
@@ -92,7 +93,13 @@
         </v-card-text>
       </v-card>
     </div>
+
+    <v-dialog v-model="articlemodal">
+      <article-modal @closearticle="closearticle"/>
+    </v-dialog>
+
   </div>
+
 
   <!-- 방명록 사이드바 -->
   <v-navigation-drawer
@@ -151,6 +158,7 @@ import GroupNotice from "../components/GroupNotice.vue";
 import ArticleItem from "../components/ArticleItem.vue";
 import Canvasadd from "../components/Canvasadd.vue";
 import ArticleAdd from "../components/AddGroupArticle.vue";
+import ArticleModal from "../components/GroupArticle.vue";
 
 export default {
   components: {
@@ -158,6 +166,7 @@ export default {
     GroupNotice,
     Canvasadd,
     ArticleAdd,
+    ArticleModal,
   },
   data() {
     return {
@@ -192,6 +201,7 @@ export default {
       ],
       canvasmodal: false,
       addarticlemodal: false,
+      articlemodal : false,
     };
   },
 
@@ -206,6 +216,12 @@ export default {
     closeaddarticle() {
       this.addarticlemodal = false;
     },
+    openmodal() {
+      this.articlemodal = true;
+    },
+    closearticle(){
+      this.articlemodal = false;
+    }
   },
 };
 </script>
