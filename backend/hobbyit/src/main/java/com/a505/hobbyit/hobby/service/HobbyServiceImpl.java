@@ -14,6 +14,7 @@ import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class HobbyServiceImpl implements HobbyService{
 
     @Override
     @Transactional
-    public void save(HobbyRequest request) {
+    public void save(MultipartFile file, HobbyRequest request) {
         Hobby hobby = request.toEntity();
         hobbyRepository.save(hobby);
     }

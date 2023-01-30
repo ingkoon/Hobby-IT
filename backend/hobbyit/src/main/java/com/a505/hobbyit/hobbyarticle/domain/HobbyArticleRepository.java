@@ -9,7 +9,7 @@ public interface HobbyArticleRepository extends JpaRepository<HobbyArticle, Long
     /*
         검색하는 쿼리 구현할 것
      */
-    List<HobbyArticle> findByHobbyAndTitleContainingKeyword(Hobby hobby, String keyword);
+    List<HobbyArticle> findByHobbyAndTitleContaining(Hobby hobby, String keyword);
 
     List<HobbyArticle> findByHobby(Hobby hobby);
 }

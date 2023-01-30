@@ -11,7 +11,7 @@ public interface HobbyArticleService {
     public List<HobbyArticleResponse> findAll(Long hobbyId);
     public void save(Long memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest);
     public HobbyArticleResponse findById(Long articleId);
-    public HobbyArticleResponse findByKeyword(Long HobbyId, String keyword);
+    public List<HobbyArticleResponse> findByKeyword(Long HobbyId, String keyword);
     public void update(Long articleId, HobbyArticleUpdateRequest hobbyArticleUpdateRequest);
     public void delete(Long articleId);
 }

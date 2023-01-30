@@ -46,7 +46,7 @@ public class Hobby {
     @Column(name = "reg_dt",nullable = false)
     private final LocalDateTime createdDateTime = LocalDateTime.now();
 
-    @Column(name = "resd_dt")
+    @Column(name = "resd_req_dt")
     private LocalDateTime deletedDateTime;
 
     @Builder

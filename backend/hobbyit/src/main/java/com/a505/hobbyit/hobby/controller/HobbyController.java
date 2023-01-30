@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class HobbyController {
     private final HobbyService hobbyService;
 
     @PostMapping
-    public ResponseEntity<Void> createHobby(@RequestBody HobbyRequest request){
-         hobbyService.save(request);
+    public ResponseEntity<Void> createHobby(@RequestPart MultipartFile file, @RequestBody HobbyRequest request){
+        hobbyService.save(file, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
