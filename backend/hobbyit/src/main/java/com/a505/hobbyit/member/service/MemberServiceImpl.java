@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -52,11 +53,8 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(member);
     }
 
-    public ResponseEntity<?> login(MemberLoginRequest request) {
-
-        if (memberRepository.findByEmail(request.getEmail()).orElse(null) == null) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
+    public MemberTokenResponse login(MemberLoginRequest request) {
+        memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -73,7 +71,7 @@ public class MemberServiceImpl implements MemberService{
         stringRedisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+        return tokenInfo;
     }
 
     public ResponseEntity<?> reissue(MemberReissueRequest reissue) {

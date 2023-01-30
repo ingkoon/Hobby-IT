@@ -33,13 +33,14 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@Validated MemberLoginRequest login, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
+    @PostMapping(value = "/login")
+    public ResponseEntity<MemberTokenResponse> login(@RequestBody MemberLoginRequest request) {
+        try {
+            memberService.login(request);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return memberService.login(login);
     }
 
     @PostMapping("/reissue")
