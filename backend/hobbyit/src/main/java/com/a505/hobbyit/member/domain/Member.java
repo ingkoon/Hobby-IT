@@ -1,7 +1,6 @@
 package com.a505.hobbyit.member.domain;
 
 import com.a505.hobbyit.common.BaseEntity;
-import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.enums.MemberState;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,21 +49,17 @@ public class Member extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private MemberState state;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MemberPrivilege privilege;
-
     @Column
     private LocalDateTime resdReqDt;
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<String> privilege;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
+        return this.privilege.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
@@ -98,7 +92,7 @@ public class Member extends BaseEntity implements UserDetails {
     public Member() {}
 
     @Builder
-    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, List<String> roles) {
+    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, List<String> privilege) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -109,9 +103,8 @@ public class Member extends BaseEntity implements UserDetails {
         this.point = point;
         this.imgUrl = imgUrl;
         this.state = MemberState.ACTIVE;
-        this.privilege = MemberPrivilege.GENERAL;
         this.resdReqDt = resdReqDt;
-        this.roles = roles;
+        this.privilege = privilege;
     }
 
 //    @OneToMany(mappedBy = "member")

@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -19,35 +16,31 @@ import java.util.List;
 @Table(name = "article")
 public class Article {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "a_id", nullable = false)
+    @Column(nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "m_id")
+    @JoinColumn(name = "mem_id")
     private Member member;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 16)
     private String header;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 128)
     private String title;
 
-    @Column(nullable = false, length = 300)
+    @Column(nullable = false, length = 512)
     private String content;
 
     @Column(nullable = false)
     private int hit = 0;
 
-    @Column(nullable = false)
-    private LocalDateTime writedDate;
+    @Column(name="reg_dt", nullable = false)
+    private LocalDateTime writtenDate;
 
-    @Column
+    @Column(name= "chg_dt")
     private LocalDateTime modifiedDate;
 
-    @Column
-    private LocalDateTime deletedDate;
-
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-    private int isDeleted;
-
+//    @OneToMany(mappedBy = "article")
+//    private List<Comment> comments = new ArrayList<>();
 }
