@@ -83,4 +83,7 @@ public class Hobby {
     public void updateImg(String img){
         this.imgUrl = img;
     }
+    public void updateCnt(){
+        this.currentMemberCount = hobbyMembers.size();
+    }
 }

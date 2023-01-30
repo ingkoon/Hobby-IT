@@ -5,12 +5,13 @@ import com.a505.hobbyit.hobby.dto.HobbyRequest;
 import com.a505.hobbyit.hobby.dto.HobbyResponse;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.domain.Member;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface HobbyService {
-    public void save(final MultipartFile file, final HobbyRequest request);
+    public void save(final String token, final MultipartFile file, final HobbyRequest requestDto);
     public HobbyResponse findById(Long hobbyId);
     public List<HobbyResponse> findAll();
     public List<HobbyResponse> findByKeyword(String keyword);

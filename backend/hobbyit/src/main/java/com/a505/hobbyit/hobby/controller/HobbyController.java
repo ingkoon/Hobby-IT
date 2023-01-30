@@ -4,6 +4,7 @@ import com.a505.hobbyit.hobby.dto.HobbyMemberResponse;
 import com.a505.hobbyit.hobby.dto.HobbyRequest;
 import com.a505.hobbyit.hobby.dto.HobbyResponse;
 import com.a505.hobbyit.hobby.service.HobbyService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,11 @@ public class HobbyController {
     private final HobbyService hobbyService;
 
     @PostMapping
-    public ResponseEntity<Void> createHobby(@RequestPart MultipartFile file, @RequestBody HobbyRequest request){
-        hobbyService.save(file, request);
+    public ResponseEntity<Void> createHobby(
+            @RequestHeader("Authorization") final String token,
+            @RequestPart("multipartFile") MultipartFile multipartFile,
+            @RequestPart("request") HobbyRequest requestDto){
+        hobbyService.save(token, multipartFile, requestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

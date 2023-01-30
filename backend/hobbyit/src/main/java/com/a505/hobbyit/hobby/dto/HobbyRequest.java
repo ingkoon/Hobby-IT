@@ -31,9 +31,10 @@ public class HobbyRequest {
     @NotNull
     private HobbyFree free;
 
-    public Hobby toEntity(){
+    public Hobby toEntity(String imgUrl){
         return Hobby.builder().name(name)
                 .intro(intro)
+                .currentMemberCount(1)
                 .maxMemberCount(maxMemberCnt)
                 .category(category)
                 .imgUrl(imgUrl)
