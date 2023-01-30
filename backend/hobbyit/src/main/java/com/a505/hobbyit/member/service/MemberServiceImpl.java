@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService{
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
 
@@ -137,7 +137,7 @@ public class MemberServiceImpl implements MemberService{
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         // add ROLE_ADMIN
-        member.getRoles().add(MemberPrivilege.ADMIN.name());
+        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
         memberRepository.save(member);
 
         return response.success();

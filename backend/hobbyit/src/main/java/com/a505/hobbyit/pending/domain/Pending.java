@@ -17,20 +17,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Pending {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "p_id", nullable = false)
-    private Long pendingId;
+    @Column(nullable = false)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "h_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "hobby_id")
     private Hobby hobby;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "m_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "mem_id")
     private Member member;
 
     @Column(nullable = false, length = 200)
-    private String message;
+    private String msg;
 
-    @Column(nullable = false)
+    @Column(name = "reg_dt", nullable = false)
     private LocalDateTime apply_date;
 }

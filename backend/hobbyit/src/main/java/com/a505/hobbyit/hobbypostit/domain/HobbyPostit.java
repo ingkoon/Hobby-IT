@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -19,20 +20,21 @@ import java.time.LocalDateTime;
 public class HobbyPostit {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hp_id", nullable = false)
-    private Long hobbyPostitId;
+    @Column(nullable = false)
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "h_id", nullable = false)
+    @JoinColumn(name = "hobby_id", nullable = false)
     private Hobby hobby;
 
     @ManyToOne
-    @JoinColumn(name = "m_id", nullable = false)
+    @JoinColumn(name = "mem_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 255)
     private String canvas;
 
-    @Column(nullable = false)
-    private LocalDateTime writtenDate;
+    @Column(name = "reg_dt", nullable = false)
+    private LocalDateTime writedDate;
+
 }

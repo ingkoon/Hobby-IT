@@ -1,0 +1,37 @@
+package com.a505.hobbyit.hobby.dto;
+
+import com.a505.hobbyit.hobby.domain.Hobby;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class HobbyResponse {
+    private Long id;
+    private String name;
+    private String img;
+    private int participantsNum;
+    private int maxParticipantsNum;
+    private String intro;
+    private String category;
+    private int freeRegistration;
+    private LocalDateTime createdDate;
+
+    public HobbyResponse of(Hobby hobby){
+        return HobbyResponse.builder()
+                .name(hobby.getName())
+                .intro(hobby.getIntro())
+                .participantsNum(hobby.getCurrentMemberCount())
+                .maxParticipantsNum(hobby.getMaxMemberCount())
+                .category(hobby.getCategory())
+                .img(hobby.getImgUrl())
+                .build();
+    }
+}
