@@ -31,31 +31,31 @@
           </div>
         </div>
         <div id="typo">
-          <div>
+          <div class="left">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="right">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="left">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="right">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="left">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="right">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="left">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="right">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
-          <div>
+          <div class="left">
             <span style="color: #8947E2">#HOBBY’IT</span> #덕질 #cooking #홈트 #party #먹방 <span style="color: #8947E2">#HOBBY’IT</span> #art #GAME #class #공예 #MOVIE <span style="color: #8947E2">#HOBBY’IT</span> #독서 #fashion #여행 #BOARDGAME <span style="color: #8947E2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
         </div>
@@ -87,10 +87,10 @@
         <h1 style="color: #0E0F28; margin-top: 20px; font-size: 20px;">좀 더 프라이빗한 모임이었으면 좋겠어요<br>가입신청 인사, 활동 중인 모임 등을<br>확인 후에 신규멤버로 초대해볼까요?<br>우리들만의 아지트가 필요할때도 있는 법이죠</h1>
       </div>
       <div style="display:flex; align-items:center; text-align: center; flex-direction: column;">
-        <h1 style="color: #9078B8; margin-top: 4300px">Your Hobby, Your Style.</h1>
+        <h1 style="color: #9078B8; margin-top: 2600px">Your Hobby, Your Style.</h1>
       </div>
-      <div style="margin-top: 300px; width: 1920px;
-height: 1080px; z-index: 10; background: radial-gradient(50% 50% at 50% 50%, #D534EF 0%, rgba(36, 39, 75, 0) 100%); filter: blur(100px);">
+      <div style="position: absolute; width: 1920px; height: 1080px; left: 0px; top: 5241px; width: 1920px; height: 1080px;
+      background: radial-gradient(50% 50% at 50% 50%, #D534EF 0%, rgba(36, 39, 75, 0) 100%); filter: blur(100px);">
       </div>
       <div id="card1">
         <div style="width:400px; height:400px; margin-top:10px;">
@@ -223,7 +223,7 @@ p{
   overflow: hidden;
 }
 
-#typo div{
+#typo .right{
   transform: rotate(-60deg);
   color:white;
   font-size: 96px;
@@ -232,8 +232,13 @@ p{
   margin-top:70px;
 }
 
-#mq1{
-  font-size: 0;
+#typo .left{
+  transform: rotate(-60deg);
+  color:white;
+  font-size: 96px;
+  display:inline-block;
+  white-space:nowrap;
+  margin-top:70px;
 }
 
 #text1{
