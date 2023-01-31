@@ -2,20 +2,25 @@ package com.a505.hobbyit.pending.service;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
+import com.a505.hobbyit.hobby.enums.HobbyFree;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
+import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.pending.DuplicatedPendingException;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.pending.domain.PendingRepository;
 import com.a505.hobbyit.pending.dto.PendingAllowRequest;
 import com.a505.hobbyit.pending.dto.PendingRequest;
 import com.a505.hobbyit.pending.dto.PendingResponse;
+import com.a505.hobbyit.pending.enums.PendingAllow;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PendingServiceImpl implements PendingService{
@@ -37,24 +43,34 @@ public class PendingServiceImpl implements PendingService{
 
     @Transactional
     @Override
-    public void save(final String token, Long hobbyId, PendingRequest request) {
+    public void join(final String token, Long hobbyId, PendingRequest request) {
         String userEmail = jwtTokenProvider.getUser(token);
-        Member findMember = memberRepository.findByEmail(userEmail).orElseThrow(NoSuchElementException::new);
-        Hobby findHobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        Pending pending = request.toEntity(findMember, findHobby);
+        Member member = memberRepository.findByEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
+
+        if(pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
+            throw new DuplicatedPendingException();
+
+        if(hobby.getFree().equals(HobbyFree.FREE)){
+            HobbyMember hobbyMember = new HobbyMember().ofGeneral(member, hobby);
+            hobbyMemberRepository.save(hobbyMember);
+            return;
+        }
+
+        Pending pending = request.toEntity(member, hobby);
 
         pendingRepository.save(pending);
     }
 
     @Override
-    public List<PendingResponse> findPendingList(Long hobbyId) {
-        Hobby hobby = hobbyRepository
-                .findById(hobbyId)
-                .orElseThrow(NoSuchHobbyException::new);
+    public List<PendingResponse> findPendingList(final String token, Long hobbyId) {
+        Hobby hobby = checkPrivilege(hobbyId, token);
+//        List<Pending> pendings = hobby.getPendings();
 
-        List<Pending> pendings = hobby.getPendings();
+        List<Pending> pendings = pendingRepository
+                .getAllByHobbyAndPendingAllow(hobby, PendingAllow.WAIT);
+        log.info(pendings.size()+"");
         List<PendingResponse> responses = new ArrayList<>();
-
         for (Pending pending : pendings) {
             PendingResponse response = new PendingResponse().of(pending);
             responses.add(response);
@@ -71,17 +87,18 @@ public class PendingServiceImpl implements PendingService{
      */
     @Transactional
     @Override
-    public void allowPending(String token, PendingAllowRequest request) {
-        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token)).orElseThrow(NoSuchElementException::new);
-        HobbyMember adminMember = hobbyMemberRepository.findByMember(member).orElseThrow(NoSuchElementException::new);
+    public void allowPending(final String token, final Long hobbyId, PendingAllowRequest request) {
+       checkPrivilege(hobbyId, token);
 
-        adminMember.checkPrivilege();
+        Pending pending = pendingRepository
+                .findById(request.getWaitId())
+                .orElseThrow(NoSuchElementException::new);
 
-        Pending pending = pendingRepository.findById(request.getWaitId()).orElseThrow(NoSuchElementException::new);
+        pending.updatePendingAllow(request.getIsAllowed());
+        if(request.getIsAllowed().equals(PendingAllow.REJECT)) return;
 
         Member findMember = pending.getMember();
         Hobby findHobby = pending.getHobby();
-
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)
@@ -92,6 +109,21 @@ public class PendingServiceImpl implements PendingService{
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-        pendingRepository.deleteById(request.getWaitId());
+    }
+
+    @Override
+    public Hobby checkPrivilege(Long hobbyId, String token){
+        String memberEmail = jwtTokenProvider.getUser(token);
+        Member member = memberRepository
+                .findByEmail(memberEmail)
+                .orElseThrow(NoSuchElementException::new);
+        Hobby hobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
+        hobbyMemberRepository
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new)
+                .checkPrivilege();
+        return hobby;
     }
 }
