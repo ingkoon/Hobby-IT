@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface HobbyMemberRepository extends JpaRepository<HobbyMember, Long> {
     Optional<HobbyMember> findByMemberAndHobby(Member member, Hobby hobby);
     HobbyMember getHobbyMemberByMemberAndHobby(Member member, Hobby hobby);
+    Boolean existsByMemberAndHobby(Member member, Hobby hobby);
+
     Optional<HobbyMember> findByMember(Member member);
 }

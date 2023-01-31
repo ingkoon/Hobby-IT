@@ -10,17 +10,15 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
-import com.a505.hobbyit.jwt.JwtAuthenticationFilter;
+import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -45,19 +43,13 @@ public class HobbyServiceImpl implements HobbyService{
     @Transactional
     public void save(final String token, MultipartFile multipartFile, HobbyRequest requestDto) {
         if(hobbyRepository.existsByName(requestDto.getName())) throw new DuplicatedHobbyException();
-
-        log.info("=============== name is " + requestDto.getName() + "======================");
         final String domain = requestDto.getName();
 
-        log.info("==========파일 저장==========");
-//        FileUploader fileUploader = new FileUploader();
         String fileUrl = fileUploader.upload(multipartFile, domain);
 
-        log.info("==========모임 생성==========");
         Hobby hobby = requestDto.toEntity(fileUrl);
         hobbyRepository.save(hobby);
 
-        log.info("==========모임 회원 추가===========");
         String email = jwtTokenProvider.getUser(token);
 
         Member member = memberRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
@@ -72,19 +64,15 @@ public class HobbyServiceImpl implements HobbyService{
 
         hobbyMemberRepository.save(hobbyMember);
 
-//        hobby.updateCnt();
-        log.info("현재 모임 회원 수: " + hobby.getHobbyMembers().size());
     }
 
     @Override
     public HobbyAndMemberResponse findById(final String token, Long hobbyId) {
         String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
-        log.info("==========소모임 탐색 로직==========");
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);;
         Hobby hobby = hobbyRepository
                 .findById(hobbyId)
                 .orElseThrow(()-> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));
-        log.info("==========소모임 회원 여부 탐색 로직==========");
         HobbyMember hobbyMember = hobbyMemberRepository.findByMemberAndHobby(member,hobby).orElseGet(HobbyMember::new);
 
         log.info("========== 결과 DTO 반환==========");
@@ -147,18 +135,7 @@ public class HobbyServiceImpl implements HobbyService{
     @Transactional
     @Override
     public void updateHobby(String token, Long hobbyId, MultipartFile multipartFile, HobbyUpdateRequest request){
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
-
-        log.info("================== member: " + member.getName());
-
-        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        log.info("================== hobby: " + hobby.getName());
-        log.info("================== hobbymember: " + hobbyMemberRepository.getHobbyMemberByMemberAndHobby(member, hobby));
-        hobbyMemberRepository
-                .getHobbyMemberByMemberAndHobby(member, hobby)
-                .checkPrivilege();
-
+        Hobby hobby = checkPrivilege(hobbyId, token);
         String fileUrl = hobby.getImgUrl();
         log.info(hobby.getImgUrl());
         log.info(multipartFile.getName());
@@ -172,17 +149,19 @@ public class HobbyServiceImpl implements HobbyService{
     @Transactional
     @Override
     public void deleteHobby(Long hobbyId, String token) {
+        Hobby hobby = checkPrivilege(hobbyId, token);
+        hobbyRepository.delete(hobby);
+    }
+
+    @Override
+    public Hobby checkPrivilege(Long hobbyId, String token){
         String memberEmail = jwtTokenProvider.getUser(token);
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
         hobbyMemberRepository
-                .getHobbyMemberByMemberAndHobby(member, hobby)
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new)
                 .checkPrivilege();
-
-        hobbyRepository.delete(hobby);
+        return hobby;
     }
-
-//    public void checkPrivilege(){
-//
-//    }
 }

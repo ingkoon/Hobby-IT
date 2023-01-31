@@ -26,6 +26,7 @@ public class PendingResponse {
                 .nickname(pending.getMember().getNickname())
                 .applyDate(pending.getApply_date())
                 .message(pending.getMsg())
+                .waitId(pending.getId())
                 .build();
     }
 }

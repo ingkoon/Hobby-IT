@@ -1,6 +1,7 @@
 package com.a505.hobbyit.pending.dto;
 
 
+import com.a505.hobbyit.pending.enums.PendingAllow;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class PendingAllowRequest {
-    boolean isAllowed;
+    PendingAllow isAllowed;
     Long waitId;
 }
