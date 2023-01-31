@@ -1,15 +1,12 @@
 package com.a505.hobbyit.common.file;
 
 import com.a505.hobbyit.common.file.exception.FileStorageException;
-import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,8 +18,8 @@ public class FileUploader {
 
     public String upload(MultipartFile uploadFile, String domain) {
         // 파일경로/ + nanotime + 유니크한 스트링 + 원본파일이름
-        String uploadPath = "C:/Users/SSAFY/Desktop/o/img";
-
+//        String uploadPath = "C:/Users/SSAFY/Desktop/o/img";
+        String uploadPath = "/Users/orlando/Desktop/img";
         String path = uploadPath + File.separator + System.nanoTime() + domain +StringUtils.cleanPath(uploadFile.getOriginalFilename());
         Path copyOfLocation = Paths.get(path);
 
