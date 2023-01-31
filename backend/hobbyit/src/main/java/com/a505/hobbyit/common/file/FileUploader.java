@@ -19,13 +19,12 @@ import java.util.UUID;
 @Component
 public class FileUploader {
 
-    public String upload(MultipartFile uploadFile) {
-
+    public String upload(MultipartFile uploadFile, String domain) {
+        // 파일경로/ + nanotime + 유니크한 스트링 + 원본파일이름
         String uploadPath = "C:/Users/SSAFY/Desktop/o/img";
-        Path copyOfLocation = Paths.get(uploadPath + File.separator + StringUtils.cleanPath(uploadFile.getOriginalFilename()));
 
-        String fileName = uploadFile.getOriginalFilename();
-        UUID uuid = UUID.randomUUID();
+        String path = uploadPath + File.separator + System.nanoTime() + domain +StringUtils.cleanPath(uploadFile.getOriginalFilename());
+        Path copyOfLocation = Paths.get(path);
 
         try {
             // inputStream을 가져와서
@@ -34,11 +33,10 @@ public class FileUploader {
             Files.copy(uploadFile.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
-//            throw new FileStorageException("Could not store file : " + uploadFile.getOriginalFilename());
             throw new FileStorageException();
         }
 
-        return uploadFile.getOriginalFilename();
+        return path;
     }
 
 }
