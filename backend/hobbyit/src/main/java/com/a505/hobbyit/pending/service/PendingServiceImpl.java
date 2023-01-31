@@ -7,6 +7,7 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
+import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.pending.domain.Pending;
@@ -32,11 +33,13 @@ public class PendingServiceImpl implements PendingService{
     private final MemberRepository memberRepository;
     private final HobbyMemberRepository hobbyMemberRepository;
     private final PendingRepository pendingRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     @Override
-    public void save(Long memberId, Long hobbyId, PendingRequest request) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+    public void save(final String token, Long hobbyId, PendingRequest request) {
+        String userEmail = jwtTokenProvider.getUser(token);
+        Member findMember = memberRepository.findByEmail(userEmail).orElseThrow(NoSuchElementException::new);
         Hobby findHobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
         Pending pending = request.toEntity(findMember, findHobby);
 
@@ -68,7 +71,12 @@ public class PendingServiceImpl implements PendingService{
      */
     @Transactional
     @Override
-    public void allowPending(PendingAllowRequest request) {
+    public void allowPending(String token, PendingAllowRequest request) {
+        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token)).orElseThrow(NoSuchElementException::new);
+        HobbyMember adminMember = hobbyMemberRepository.findByMember(member).orElseThrow(NoSuchElementException::new);
+
+        adminMember.checkPrivilege();
+
         Pending pending = pendingRepository.findById(request.getWaitId()).orElseThrow(NoSuchElementException::new);
 
         Member findMember = pending.getMember();

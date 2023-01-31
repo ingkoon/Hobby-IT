@@ -21,9 +21,13 @@ public class PendingController {
 
     // 가입 신청
     @PostMapping(value = "/{hobby}/join")
-    public ResponseEntity<String> savePendingMember(@RequestBody PendingRequest request){
-//        pendingService.save();
-        return ResponseEntity.status(HttpStatus.OK).body("신청되었습니다");
+    public ResponseEntity<String> savePendingMember(
+            @RequestHeader final String token,
+            @PathVariable final long hobby,
+            @RequestBody PendingRequest request){
+        pendingService.save(token, hobby, request);
+        String message = "신청되었습니다.";
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     @GetMapping(value = "/{hobby-id}/join")
@@ -34,8 +38,9 @@ public class PendingController {
 
     @PostMapping(value = "/{hobby-id}/allow")
     public ResponseEntity<String> allowHobbyMember(
+            @RequestHeader final String token,
             @RequestBody PendingAllowRequest request){
-        pendingService.allowPending(request);
+        pendingService.allowPending(token, request);
         return ResponseEntity.status(HttpStatus.OK).body("승인되었습니다");
     }
 
