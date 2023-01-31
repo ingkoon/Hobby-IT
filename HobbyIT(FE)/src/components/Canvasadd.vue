@@ -1,13 +1,15 @@
 <template>
   <div style="align-self:center">
-    <v-card style="width:800px; height: 500px; background-color:#0E0F28">
+    <v-card style="width:800px; height: 530px; background-color:#0E0F28">
       <div style="color:white; display:flex; justify-content:space-between; margin:10px 5px;">
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <span>방명록 작성</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display:flex">
-        <canvas class="new-cursor" id="canvas" width="500" height="500"></canvas>
+        <canvas class="new-cursor" id="canvas" width="500" height="500" style="">
+          
+        </canvas>
         <div style="margin-left:20px; display:flex;">
           <div style="display:flex; flex-direction:column">
             <div style="color:white; margin-bottom:5px">굵기 :
@@ -29,8 +31,13 @@
             <div style="text-align:end">
               <v-btn icon="mdi-send-outline" style="background-color:pink; transform:rotate(-45deg);"></v-btn>
             </div>
+
+            
           </div>
         </div>
+
+        <div id="tri1"></div>
+        <div id="tri2"></div>
       </div>
     </v-card>
   </div>
@@ -45,6 +52,7 @@ export default {
       date : "",
       background:"",
       bglist : ['#F7FDB0','#ABFAB3', '#BFE0FE', '#FECDCD'],
+      bglist2 : ['#D3D98F','#63D382','#AC94F1','#DAA6A6'],
     }
   },
   methods : {
@@ -68,9 +76,11 @@ export default {
     };
 
     var canvas = document.getElementById('canvas')
+    var randomnum = Math.floor(Math.random()*4)
+    this.background = this.bglist[randomnum]
 
-    this.background = this.bglist[Math.floor(Math.random()*4)]
-
+    var triangle = document.getElementById('tri1')
+    triangle.setAttribute('style','border-color:'+this.bglist2[randomnum]+";")
     canvas.setAttribute('style','background-color:'+this.background+";")
     var background = this.background
     var ctx = canvas.getContext('2d');
@@ -195,5 +205,29 @@ export default {
   height: 107px;
   background-size:cover;
   margin-top: 10px;
+}
+
+#tri2 {
+  width: 0;
+  height: 0;
+  border-bottom: 50px solid #0E0F28;
+  border-top: 50px solid transparent;
+  border-left: 50px solid transparent;
+  border-right: 50px solid #0E0F28;
+  position: absolute;
+  left: 401px;
+  bottom: 0;
+}
+
+#tri1 {
+  width: 0;
+  height: 0;
+  border-bottom: 50px solid transparent;
+  border-top: 50px solid white;
+  border-left: 50px solid white;
+  border-right: 50px solid transparent;
+  position: absolute;
+  left: 400px;
+  bottom: 0;
 }
 </style>

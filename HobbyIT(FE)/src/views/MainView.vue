@@ -5,9 +5,10 @@
       show-arrows
       style="margin:1% 0%;"
       selected-class="font-family:linefontbold"
+      v-model="selecttag"
     >
     <v-slide-group-item
-      v-for="n in category"
+      v-for="n in category.length-1"
       :key="n"
       v-slot="{ isSelected, toggle }"
     >
@@ -18,10 +19,27 @@
         :style="isSelected ? 'border : 4px solid #642EFE; color:#642EFE; font-family:linefontbold;' : 'border : 4px solid #A8456A; font-family:linefont;' "
         @click="toggle"
       >
-        <span style="margin:10px">{{n}}</span>
+        <span style="margin:10px">{{category[n]}}</span>
       </v-btn>
     </v-slide-group-item>
   </v-slide-group>
+
+  <v-carousel hide-delimiter-background style="width:100%; height:450px;" id="main-carousel">
+    <v-carousel-item cover src="../src/assets/gif/main1.gif" style="font-size:48px; color:white;">
+      <div style="background-color:#1D1E4480; width:100%; height:100%; padding:0px 8%; display:flex">
+        <div style="align-self:center; width:100%">
+          <div>
+            부캐 전성시대,<br>
+            그 시작은 Hobby'IT에서
+          </div>
+
+          <div style="float:right">
+            지금이 바로 시작할 때!
+          </div>
+        </div>
+      </div>
+    </v-carousel-item>
+  </v-carousel>
     
   <h3 id="search">당신이 참여중인 HOBBY
     <span>
@@ -52,7 +70,8 @@
   components: { ParticipateGroup },
     data(){
       return {
-        category : ["전체", "#공예", "#스터디", "#운동", "#음악", "#파티", "#게임", "#코딩"]
+        model : "전체",
+        category : ["","전체", "#공예", "#스터디", "#운동", "#음악", "#파티", "#게임", "#코딩"]
       }
     },
   }
@@ -103,5 +122,9 @@ button:not(*){
 .v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
     border-radius: 100px 0 0 100px !important;
     opacity: 1;
+}
+
+#main-carousel button{
+  background-color: #ffffff00
 }
 </style>

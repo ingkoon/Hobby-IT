@@ -24,5 +24,9 @@ export default {
 
 
 <style>
-
+#makegroup {
+  position: absolute;
+  top: 0px;
+  left: 20px;
+}
 </style>

@@ -57,10 +57,10 @@
       </div>
 
       <div style="font-size:36px; margin-top : 20px">MY HOBBY!</div>
-      <participate-group/>
+      <mypage-group/>
 
       <div style="font-size:36px; margin-top : 20px">가입 대기중인 HOBBY...</div>
-      <participate-group/>
+      <mypage-group/>
       
     </div>
   </div>
@@ -68,9 +68,12 @@
 
 <script>
   import ParticipateGroup from '@/components/ParticipateGroup.vue'
+import MypageGroup from '@/components/MypageGroup.vue'
+  
   export default {
     components : {
       ParticipateGroup,
+        MypageGroup,
     },
     data() {
       return {
@@ -92,17 +95,14 @@
 }
 
 #mypageinfo #img {
-  width: 250px;
-  height: 250px;
+  width: 240px;
+  height: 240px;
 
   background-image: url(..\assets\tmpimg.jpeg);
   background-size: cover;
   border-radius: 50%;
   margin: 2px;
-  /* background-image: linear-gradient(#fff, #fff),
-  linear-gradient(to right, red, orange);
-  background-origin:border-box;
-  background-clip: content-box, border-box; */
+
 }
 
 #mypageinfo #title {
@@ -135,8 +135,9 @@
   justify-content: center;
   align-items: center;
   background-color : #0E0F28;
-  border : 3px solid transparent;
+  border : 4px solid transparent;
   border-radius: 50%;
+  
   background-image : linear-gradient(#0E0F28, #0E0F28),
   linear-gradient(to right, #FF005E, #642EFE);
   background-origin:border-box;
