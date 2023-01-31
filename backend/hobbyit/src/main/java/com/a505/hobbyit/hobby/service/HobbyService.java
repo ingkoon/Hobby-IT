@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobby.service;
 
+import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.domain.Member;
@@ -20,6 +21,8 @@ public interface HobbyService {
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId);
     public void updateHobby(String token, Long hobbyId, MultipartFile file, HobbyUpdateRequest request);
     public void deleteHobby(Long hobbyId, String token);
+
+    public Hobby checkPrivilege(Long hobbyId, String token);
 }
 
 /*
