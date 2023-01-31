@@ -1,8 +1,9 @@
 <template>
   <v-app-bar flat style="background-color:#0E0F28">
     <v-app-bar-title >
-      <router-link to="/main">
-        <span style="font-family:logofont">HOBBY'</span>
+      <router-link to="/main" style="display:flex; align-content:center">
+        <img src="src\assets\HBLOGO.svg" style="width:30px; margin-right:10px;">
+        <span style="font-family:logofont;">HOBBY'</span>
         <span style="color:#8947E2; font-family:logofont">IT</span>
       </router-link>
     </v-app-bar-title>
