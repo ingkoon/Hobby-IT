@@ -16,7 +16,6 @@ public class HobbyMemberResponse {
     private Long id;
     private String nickName;
     private HobbyMemberPrivilege privilege;
-
     public HobbyMemberResponse toEntity(HobbyMember hobbyMember){
         return HobbyMemberResponse
                 .builder()
