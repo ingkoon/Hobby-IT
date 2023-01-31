@@ -7,12 +7,15 @@
         <v-col id="leftSidebar" :style="{height: computedHeight + 'px'}">
 
           <v-icon icon="mdi-microphonea" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-microphone" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-video" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-monitor" size="36"></v-icon>
-          <v-btn style="background-color: red; color: white"  icon="mdi-phone-off" @click="window.open('','_self').close()"></v-btn>
-          <v-icon color="white" icon="mdi-pencil-box" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-cog-outline" size="36"></v-icon>
+          <v-icon color="white" icon="mdi-microphone" @click="handleAudio" size="36" v-if="isAudioEnabled"></v-icon>
+          <v-icon color="white" icon="mdi-microphone-off" @click="handleAudio" size="36" v-else></v-icon>
+          <v-icon color="white" icon="mdi-video" size="36" @click="handleMyVideo" v-if="isVideoEnabled"></v-icon>
+          <v-icon color="white" icon="mdi-video-off" size="36" @click="handleMyVideo" v-else></v-icon>
+          <v-icon color="white" icon="mdi-monitor-off" v-if="isScreenShareEnabled" @click="handleScreenShare" size="36"></v-icon>
+          <v-icon color="white" icon="mdi-monitor" @click="handleScreenShare" v-else size="36"></v-icon>
+          <v-btn style="background-color: red; color: white"  icon="mdi-phone-off" @click="handleClickOff"></v-btn>
+          <v-icon color="white" icon="mdi-pencil-box" @click="openpaint" size="36"></v-icon>
+          <v-icon color="white" icon="mdi-cog-outline" @click="" size="36"></v-icon>
           <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
           <v-icon icon="mdi-microphonea" size="24"></v-icon>
         </v-col>
@@ -20,20 +23,26 @@
         <v-row id="circle2"/>
         <v-col id="videoList" :style="{height: computedHeight + 'px'}">
           <v-row style="margin: 0; height: 126px">
-            <h1 id="title" @click="joinSession()">John, 나 여행가고 싶어</h1>
+            <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
           </v-row>
           <v-row id="video-container" style="height: 757px; margin: 0; align-items: center; justify-content: center">
-            <user-video v-for="sub in subscribers"  :stream-manager="sub">
+            <user-video v-for="sub in subscribers"  :stream-manager="sub" :key="sub.stream.connection.connectionId">
 <!--            추가 바람-->
             </user-video>
 
           </v-row>
         </v-col>
         <v-col id="rightSidebar" :style="{height: computedHeight + 'px'}">
-
+          <VideoMessage @handle-message="sendMessage"/>
         </v-col>
       </v-row>
+
+      <v-dialog v-model="paint">
+        <SharedPaint @send-canvas="sendCanvas" :canvas-data="canvasData"/>
+      </v-dialog>
     </v-container>
+
+
   </div>
 </template>
 
@@ -42,16 +51,21 @@ import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/components/UserVideo.vue";
 import {useAppStore} from "@/store/app";
+import VideoMessage from "@/components/VideoMessage.vue";
+import {useMessageStore} from "@/store/message";
+import SharedPaint from "@/components/VideoChat/SharedPaint.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
 export default {
   setup(){
     const appStore = useAppStore()
-    return {appStore}
+    const messageStore = useMessageStore()
+    console.log(messageStore,"112233")
+    return {appStore, messageStore}
   },
   name: "VideoChat",
-  components: {UserVideo},
+  components: {SharedPaint, VideoMessage, UserVideo},
   data() {
     return {
       windowHeight: window.innerHeight,
@@ -64,6 +78,12 @@ export default {
       // Join form
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
+      isAudioEnabled: true,
+      isVideoEnabled: true,
+      isScreenShareEnabled : false,
+      // for canvas
+      paint : false,
+      canvasData : undefined,
     };
   },
   mounted() {
@@ -110,6 +130,97 @@ export default {
     }
   },
   methods:{
+    openpaint(){
+      this.paint = true
+    },
+    sendCanvas(data){
+      this.session.signal({
+        data: data,
+        to: [],
+        type: 'canvas'
+      })
+        .then(()=>{
+          console.log("Success");
+        })
+        .catch((err)=>{
+          console.error(err);
+        })
+    },
+
+    myCustomMethod(){
+      this.OV.getUserMedia({
+        videoSource: "screen"
+      })
+        .then((stream) => {
+          const track = stream.getVideoTracks()[0];
+          this.publisher.replaceTrack(track)
+          stream.getAudioTracks().forEach(t  => t.stop());
+          console.log(track)
+        })
+
+      // this.session.unpublish(this.publisher)
+
+    },
+    sendMessage(msg){
+      this.session.signal({
+        data: msg,
+        to: [],
+        type: 'message'
+      })
+        .then(()=>{
+          console.log("Success");
+        })
+        .catch((err)=>{
+          console.error(err);
+        })
+    },
+    handleMyVideo(){
+      this.publisher.publishVideo(!this.isVideoEnabled);
+      this.isVideoEnabled = !this.isVideoEnabled;
+    },
+    handleAudio(){
+      this.publisher.publishAudio(!this.isAudioEnabled);
+      this.isAudioEnabled = !this.isAudioEnabled;
+
+    },
+    handleClickOff() {
+      window.open('','_self').close();
+      return false;
+    },
+    handleScreenShare(){
+      if(this.isScreenShareEnabled){
+        this.isScreenShareEnabled = !this.isScreenShareEnabled
+        // 유저화면 보여주기
+        this.OV.getUserMedia( {
+          audioSource: undefined, // The source of audio. If undefined default microphone
+          videoSource: undefined, // The source of video. If undefined default webcam
+          publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+          publishVideo: true, // Whether you want to start publishing with your video enabled or not
+          resolution: "600x400", // The resolution of your video
+          frameRate: 30, // The frame rate of your video
+          insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+          mirror: false, // Whether to mirror your local video or not
+        })
+          .then((stream) => {
+            const track = stream.getVideoTracks()[0];
+            this.publisher.replaceTrack(track)
+            stream.getAudioTracks().forEach(t  => t.stop());
+          })
+      }else{
+        this.isScreenShareEnabled = !this.isScreenShareEnabled
+        // 쉐어 화면 보여주기
+        this.OV.getUserMedia({
+          videoSource: "screen"
+        })
+          .then((stream) => {
+            const track = stream.getVideoTracks()[0];
+            this.publisher.replaceTrack(track)
+            stream.getAudioTracks().forEach(t  => t.stop());
+          })
+      }
+    },
+
+
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -124,6 +235,7 @@ export default {
       // On every Stream destroyed...
       this.session.on("streamDestroyed", ({ stream }) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
+        console.log(index)
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
@@ -132,6 +244,29 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
+      // On Message
+      this.session.on("signal:message",(event) =>{
+        // 만약 보낸 사람이 나라면 무시
+        // JSON.parse(event.from.data).clientData => 보낸사람 이름 parsing
+        const from = JSON.parse(event.from.data).clientData
+        if (JSON.parse(event.from.data).clientData === this.myUserName){
+          return false
+        }
+        const msgData = {
+          data: event.data,
+          from: from
+        }
+        this.messageStore.message.push(msgData)
+
+      })
+      this.session.on("signal:canvas",(event)=>{
+        const from = JSON.parse(event.from.data).clientData
+        if (JSON.parse(event.from.data).clientData === this.myUserName){
+          return false
+        }
+        this.canvasData = event.data
+
+      })
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
       this.getToken(this.mySessionId).then((token) => {
@@ -298,7 +433,7 @@ export default {
 }
 video{
   height: 300px;
-  width: 200px`;
+  width: 200px;
 }
 
 </style>
