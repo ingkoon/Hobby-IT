@@ -1,12 +1,12 @@
 package com.a505.hobbyit.hobby.controller;
 
-import com.a505.hobbyit.hobby.dto.HobbyMemberResponse;
-import com.a505.hobbyit.hobby.dto.HobbyRequest;
-import com.a505.hobbyit.hobby.dto.HobbyResponse;
+import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobby.service.HobbyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +32,9 @@ public class HobbyController {
     }
 
     @GetMapping(value = "/{hobby-id}")
-    public ResponseEntity<HobbyResponse> findHobby(@PathVariable(value = "hobby-id") final Long hobbyId){
-        HobbyResponse response = hobbyService.findById(hobbyId);
+    public ResponseEntity<HobbyAndMemberResponse> findHobby(@RequestHeader("Authorization") final String token,
+                                                   @PathVariable(value = "hobby-id") final Long hobbyId){
+        HobbyAndMemberResponse response = hobbyService.findById(token, hobbyId);
         return ResponseEntity.ok(response);
     }
 
@@ -44,9 +45,8 @@ public class HobbyController {
     }
 
     @GetMapping(value = "/search")
-    public ResponseEntity<List<HobbyResponse>> searchHobbies(@RequestParam(value = "category") String category,
-                                                              @RequestParam(value = "keyWord") String keyWord) {
-        List<HobbyResponse> responses = hobbyService.findByKeyword(keyWord);
+    public ResponseEntity<List<HobbyResponse>> searchHobbies(@RequestParam(value = "keyWord") String keyWord, Pageable pageable) {
+        List<HobbyResponse> responses = hobbyService.findByKeyword(keyWord, pageable);
         return ResponseEntity.ok(responses);
     }
 
@@ -71,10 +71,21 @@ public class HobbyController {
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
+    @PutMapping (value = "/{hobby-id}")
+    public ResponseEntity<Void> updateHobby(@RequestHeader("Authorization") final String token,
+                                            @PathVariable("hobby-id") Long hobbyId,
+                                            @RequestPart( "multipartFile") MultipartFile multipartFile,
+                                            @RequestPart("request") HobbyUpdateRequest request){
+        hobbyService.updateHobby(token,  hobbyId, multipartFile, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     @DeleteMapping(value = "/{hobby-id}")
-    public ResponseEntity<Void> deleteHobby(@PathVariable(value = "hobby-id") final Long hobbyId){
-        Long memberId = 1L;
-        hobbyService.deleteHobby(hobbyId, memberId);
+    public ResponseEntity<Void> deleteHobby(
+            @RequestHeader("Authorization") final String token,
+            @PathVariable(value = "hobby-id") final Long hobbyId){
+
+        hobbyService.deleteHobby(hobbyId, token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
