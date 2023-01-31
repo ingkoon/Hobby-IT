@@ -69,16 +69,12 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        System.out.println("1");
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-        System.out.println("2");
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            System.out.println("3");
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
-        System.out.println("4");
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
@@ -86,10 +82,8 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        System.out.println("5");
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("6");
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

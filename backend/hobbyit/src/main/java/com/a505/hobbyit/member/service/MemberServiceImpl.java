@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService{
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-//                .roles(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
     }
@@ -79,42 +79,32 @@ public class MemberServiceImpl implements MemberService{
     public void reissue(MemberReissueRequest reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
-            System.out.println("1111111111111111111111111111111");
             throw new InvalidedRefreshTokenException();
 //            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        System.out.println("222222222222222222222222222222");
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
 
-        System.out.println("3333333333333333333333333");
         // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
-        System.out.println("444444444444444444444444444444");
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if(ObjectUtils.isEmpty(refreshToken)) {
-            System.out.println("5555555555555555555555555555");
             throw new BadRequestException();
 //            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        System.out.println("666666666666666666666666666");
         if(!refreshToken.equals(reissue.getRefreshToken())) {
-            System.out.println("77777777777777777777777");
             throw new BadRequestException();
 //            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        System.out.println("88888888888888888888888");
 
         // 4. 새로운 토큰 생성
         MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
-        System.out.println("999999999999999999");
 
         // 5. RefreshToken Redis 업데이트
         stringRedisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        System.out.println("11111111111111111111");
 //        return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
@@ -149,7 +139,7 @@ public class MemberServiceImpl implements MemberService{
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         // add ROLE_ADMIN
-//        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
+        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
         memberRepository.save(member);
 
         return response.success();

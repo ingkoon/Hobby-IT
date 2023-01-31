@@ -46,7 +46,6 @@ public class MemberController {
     @PostMapping("/reissue")
     public ResponseEntity<MemberTokenResponse> reissue(@RequestBody MemberReissueRequest reissue) {
         // validation check
-        System.out.println(reissue);
         try {
             memberService.reissue(reissue);
             return ResponseEntity.ok().build();
