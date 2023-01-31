@@ -2,6 +2,7 @@ package com.a505.hobbyit.pending.domain;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.member.domain.Member;
+import com.a505.hobbyit.pending.enums.PendingAllow;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +34,12 @@ public class Pending {
 
     @Column(name = "reg_dt", nullable = false)
     private LocalDateTime apply_date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private PendingAllow pendingAllow;
+
+    public void updatePendingAllow(PendingAllow pendingALlow){
+        this.pendingAllow = pendingALlow;
+    }
 }
