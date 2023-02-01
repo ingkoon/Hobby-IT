@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final Response response;
@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService{
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+                .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
     }
@@ -89,11 +89,11 @@ public class MemberServiceImpl implements MemberService{
         // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
-        if(ObjectUtils.isEmpty(refreshToken)) {
+        if (ObjectUtils.isEmpty(refreshToken)) {
             throw new BadRequestException();
 //            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        if(!refreshToken.equals(reissue.getRefreshToken())) {
+        if (!refreshToken.equals(reissue.getRefreshToken())) {
             throw new BadRequestException();
 //            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }

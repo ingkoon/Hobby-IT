@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -55,7 +55,7 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    private List<String> privilege;
+    private Set<String> privilege;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -92,7 +92,7 @@ public class Member extends BaseEntity implements UserDetails {
     public Member() {}
 
     @Builder
-    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, List<String> privilege) {
+    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, Set<String> privilege) {
         this.id = id;
         this.email = email;
         this.name = name;
