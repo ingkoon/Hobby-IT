@@ -15,6 +15,28 @@ const routes = [
     ]
   },
   {
+    path: '/signin',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'signin',
+        component: () => import('@/views/SignIn.vue'),
+      },
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: () => import('@/views/LogIn.vue'),
+      },
+    ]
+  },
+  {
     path: '/main',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
