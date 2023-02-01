@@ -1,23 +1,28 @@
 package com.a505.hobbyit.hobby.service;
 
-import com.a505.hobbyit.hobby.dto.HobbyMemberResponse;
-import com.a505.hobbyit.hobby.dto.HobbyRequest;
-import com.a505.hobbyit.hobby.dto.HobbyResponse;
+import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.domain.Member;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface HobbyService {
-    public void save(final MultipartFile file, final HobbyRequest request);
-    public HobbyResponse findById(Long hobbyId);
+    public void save(final String token, final MultipartFile file, final HobbyRequest requestDto);
+    public HobbyAndMemberResponse findById(final String token, Long hobbyId);
     public List<HobbyResponse> findAll();
-    public List<HobbyResponse> findByKeyword(String keyword);
+    public List<HobbyResponse> findByKeyword(String keyword, Pageable pageable
+    );
     public List<HobbyResponse> findPopularHobby();
     public List<HobbyResponse> findFreshHobby();
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId);
-    public void deleteHobby(Long hobbyId, Long memberId);
+    public void updateHobby(String token, Long hobbyId, MultipartFile file, HobbyUpdateRequest request);
+    public void deleteHobby(Long hobbyId, String token);
+
+    public Hobby checkPrivilege(Long hobbyId, String token);
 }
 
 /*

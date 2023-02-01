@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobby.domain;
 
+import com.a505.hobbyit.hobby.dto.HobbyUpdateRequest;
 import com.a505.hobbyit.hobby.enums.HobbyFree;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.pending.domain.Pending;
@@ -82,5 +83,15 @@ public class Hobby {
 
     public void updateImg(String img){
         this.imgUrl = img;
+    }
+    public void updateCnt(){
+        this.currentMemberCount = hobbyMembers.size();
+    }
+
+    public void updateHobby(HobbyUpdateRequest request, String imgUrl){
+        this.name = request.getName();
+        this.intro = request.getIntro();
+        this.maxMemberCount = request.getMaxParticipantsNum();
+        this.imgUrl = imgUrl;
     }
 }
