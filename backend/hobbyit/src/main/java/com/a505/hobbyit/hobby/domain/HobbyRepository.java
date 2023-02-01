@@ -29,4 +29,5 @@ public interface HobbyRepository extends JpaRepository<Hobby, Long> {
             + "ORDER BY CREATED_DATE, RAND() "
             + "LIMIT 10", nativeQuery = true)
     List<Hobby> findFreshHobby();
+
 }
