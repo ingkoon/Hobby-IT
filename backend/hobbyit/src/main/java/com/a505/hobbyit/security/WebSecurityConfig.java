@@ -31,8 +31,8 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**", "/swagger-ui/**").permitAll()
-                .requestMatchers("/api/v1/users/userTest").hasRole("USER")
-                .requestMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
+                .requestMatchers("/api/member/userTest").hasRole("GENERAL")
+                .requestMatchers("/api/member/adminTest").hasRole("ADMIN")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, stringRedisTemplate), UsernamePasswordAuthenticationFilter.class);
         // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
