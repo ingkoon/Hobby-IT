@@ -2,6 +2,7 @@ package com.a505.hobbyit.hobbymember.controller;
 
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
 import com.a505.hobbyit.hobbymember.service.HobbyMemberService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class HobbyMemberController {
 
     @PutMapping("/{hobby-id}/member/{member-id}")
     public ResponseEntity<Void> updateHobbyMember(
+            @Parameter(description = "사용자 정보 갱신 API")
             @RequestHeader final String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("member-id") final Long targetId,

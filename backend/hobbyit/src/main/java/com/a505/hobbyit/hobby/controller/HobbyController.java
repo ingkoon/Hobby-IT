@@ -2,10 +2,9 @@ package com.a505.hobbyit.hobby.controller;
 
 import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobby.service.HobbyService;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,7 +71,8 @@ public class HobbyController {
     }
 
     @PutMapping (value = "/{hobby-id}")
-    public ResponseEntity<Void> updateHobby(@RequestHeader("Authorization") final String token,
+    public ResponseEntity<Void> updateHobby(@Parameter(description = "게시할 글의 정보")
+            @RequestHeader("Authorization") final String token,
                                             @PathVariable("hobby-id") Long hobbyId,
                                             @RequestPart( "multipartFile") MultipartFile multipartFile,
                                             @RequestPart("request") HobbyUpdateRequest request){
