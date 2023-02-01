@@ -21,7 +21,7 @@ public class ControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
 
     @ExceptionHandler({InvalidHobbyException.class})
-    public ResponseEntity<ErrorResponse> handleInvalidException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> handleInvalidException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -30,8 +30,8 @@ public class ControllerAdvice {
     @ExceptionHandler({
             NoSuchHobbyException.class,
             NoSuchHobbyMemberException.class,
-            NoSuchPendingException.class })
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
+            NoSuchPendingException.class})
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(errorResponse);
@@ -39,15 +39,15 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             DuplicatedHobbyException.class,
-            DuplicatedPendingException.class })
-    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e){
+            DuplicatedPendingException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler({UnAuthorizedHobbyMemberException.class})
-    public  ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);

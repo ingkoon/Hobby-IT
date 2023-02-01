@@ -10,7 +10,7 @@ public enum HobbyFree {
         this.value = value;
     }
 
-    public String registry(){
+    public String registry() {
         return value;
     }
 }

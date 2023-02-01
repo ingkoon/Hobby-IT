@@ -8,10 +8,15 @@ import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleUpdateRequest;
 import java.util.List;
 
 public interface HobbyArticleService {
-    public List<HobbyArticleResponse> findAll(Long hobbyId);
-    public void save(Long memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest);
-    public HobbyArticleResponse findById(Long articleId);
-    public List<HobbyArticleResponse> findByKeyword(Long HobbyId, String keyword);
-    public void update(Long articleId, HobbyArticleUpdateRequest hobbyArticleUpdateRequest);
-    public void delete(Long articleId);
+    List<HobbyArticleResponse> findAll(Long hobbyId);
+
+    void save(Long memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest);
+
+    HobbyArticleResponse findById(Long articleId);
+
+    List<HobbyArticleResponse> findByKeyword(Long HobbyId, String keyword);
+
+    void update(Long articleId, HobbyArticleUpdateRequest hobbyArticleUpdateRequest);
+
+    void delete(Long articleId);
 }

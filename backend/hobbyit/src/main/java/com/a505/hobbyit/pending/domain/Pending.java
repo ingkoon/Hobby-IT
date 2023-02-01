@@ -10,15 +10,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pending extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -27,20 +26,20 @@ public class Pending extends BaseEntity {
     private Hobby hobby;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "mem_id")
+    @JoinColumn(nullable = false, name = "member_id")
     private Member member;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 128)
     private String msg;
 
 //    @Column(name = "reg_dt", nullable = false)
 //    private LocalDateTime apply_date;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "state")
+    @Column(name = "state", length = 16)
     private PendingAllow pendingAllow;
 
-    public void updatePendingAllow(PendingAllow pendingALlow){
+    public void updatePendingAllow(PendingAllow pendingALlow) {
         this.pendingAllow = pendingALlow;
     }
 }

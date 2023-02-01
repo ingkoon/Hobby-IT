@@ -2,7 +2,6 @@ package com.a505.hobbyit.hobbyarticleimg.domain;
 
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name="hobby_article_img")
+@Table(name = "hobby_article_img")
 public class HobbyArticleImg {
 
     @Id

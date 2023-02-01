@@ -114,7 +114,7 @@ public class Response {
      *     }
      * </pre>
      *
-     * @param msg 응답 바디 message 필드에 포함될 정보
+     * @param msg    응답 바디 message 필드에 포함될 정보
      * @param status 응답 바디 status 필드에 포함될 응답 상태 코드
      * @return 응답 객체
      */

@@ -17,7 +17,7 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class HobbyArticleServiceImpl implements HobbyArticleService{
+public class HobbyArticleServiceImpl implements HobbyArticleService {
 
     private final MemberRepository memberRepository;
     private final HobbyRepository hobbyRepository;

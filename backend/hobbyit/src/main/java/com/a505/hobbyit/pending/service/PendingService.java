@@ -8,9 +8,11 @@ import com.a505.hobbyit.pending.dto.PendingResponse;
 import java.util.List;
 
 public interface PendingService {
-    public void join(final String token, Long hobbyId, PendingRequest request);
-    public List<PendingResponse> findPendingList(final String token, Long hobbyId);
-    public void allowPending(final String token,final Long hobbyId, PendingAllowRequest request);
+    void join(final String token, Long hobbyId, PendingRequest request);
 
-    public Hobby checkPrivilege(Long hobbyId, String token);
+    List<PendingResponse> findPendingList(final String token, Long hobbyId);
+
+    void allowPending(final String token, final Long hobbyId, PendingAllowRequest request);
+
+    Hobby checkPrivilege(Long hobbyId, String token);
 }

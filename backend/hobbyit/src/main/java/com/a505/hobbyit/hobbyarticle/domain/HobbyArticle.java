@@ -20,7 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "hobby_article")
 public class HobbyArticle extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -29,7 +30,7 @@ public class HobbyArticle extends BaseEntity {
     private Hobby hobby;
 
     @ManyToOne
-    @JoinColumn(name = "mem_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Enumerated(EnumType.STRING)
@@ -59,11 +60,11 @@ public class HobbyArticle extends BaseEntity {
         this.like = like;
     }
 
-    public void updateTitle(String title){
+    public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void updateContent(String content){
+    public void updateContent(String content) {
         this.content = content;
     }
 

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/member")
 public class MemberController {
-
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
     private final Response response;
@@ -28,7 +27,7 @@ public class MemberController {
         try {
             memberService.signUp(request);
             return ResponseEntity.ok().build();
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

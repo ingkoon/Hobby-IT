@@ -30,13 +30,13 @@ public class HobbyArticleResponse {
 
     int likes;
 
-    public HobbyArticleResponse of(HobbyArticle hobbyArticle){
+    public HobbyArticleResponse of(HobbyArticle hobbyArticle) {
         return HobbyArticleResponse.builder()
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
-                .createdAt(hobbyArticle.getWritedDate())
+                .createdAt(hobbyArticle.getRegDt())
                 .images(hobbyArticle.getHobbyArticleImg())
                 .build();
     }

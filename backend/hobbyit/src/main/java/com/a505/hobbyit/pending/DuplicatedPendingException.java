@@ -1,6 +1,6 @@
 package com.a505.hobbyit.pending;
 
-public class DuplicatedPendingException extends RuntimeException{
+public class DuplicatedPendingException extends RuntimeException {
     public DuplicatedPendingException() {
         this("이미 신청된 Hobby입니다.");
     }

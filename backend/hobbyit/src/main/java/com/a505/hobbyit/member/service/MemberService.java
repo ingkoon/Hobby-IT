@@ -8,9 +8,13 @@ import com.a505.hobbyit.member.dto.response.MemberResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
-    public void signUp(MemberSignupRequest request);
-    public MemberResponse login(MemberLoginRequest request);
-    public void reissue(MemberReissueRequest reissue);
-    public ResponseEntity<?> logout(MemberLogoutRequest logout);
-    public ResponseEntity<?> authority();
+    void signUp(MemberSignupRequest request);
+
+    MemberResponse login(MemberLoginRequest request);
+
+    void reissue(MemberReissueRequest reissue);
+
+    ResponseEntity<?> logout(MemberLogoutRequest logout);
+
+    ResponseEntity<?> authority();
 }

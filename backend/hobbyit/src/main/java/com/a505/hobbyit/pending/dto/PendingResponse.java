@@ -21,10 +21,10 @@ public class PendingResponse {
 
     Long waitId;
 
-    public PendingResponse of(Pending pending){
+    public PendingResponse of(Pending pending) {
         return PendingResponse.builder()
                 .nickname(pending.getMember().getNickname())
-                .applyDate(pending.getWritedDate())
+                .applyDate(pending.getRegDt())
                 .message(pending.getMsg())
                 .waitId(pending.getId())
                 .build();

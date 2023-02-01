@@ -18,22 +18,23 @@ import java.util.stream.Collectors;
 @Table(name = "member")
 public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String password;
 
-    @Column
+    @Column(length = 128)
     private String intro;
 
     @Column(nullable = false)
@@ -45,14 +46,14 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private String imgUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     @Enumerated(EnumType.STRING)
     private MemberState state;
 
     @Column
     private LocalDateTime resdReqDt;
 
-    @Column
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private Set<String> privilege;
@@ -89,7 +90,8 @@ public class Member extends BaseEntity implements UserDetails {
         return true;
     }
 
-    public Member() {}
+    public Member() {
+    }
 
     @Builder
     public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, Set<String> privilege) {

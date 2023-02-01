@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "hobby_postit")
 public class HobbyPostit {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -28,11 +28,11 @@ public class HobbyPostit {
     private Hobby hobby;
 
     @ManyToOne
-    @JoinColumn(name = "mem_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Column(nullable = false, length = 255)
-    private String canvas;
+    private String imgUrl;
 
     @Column(name = "reg_dt", nullable = false)
     private LocalDateTime writedDate;

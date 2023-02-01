@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Component
 public class FileUploader {
@@ -20,7 +19,7 @@ public class FileUploader {
         // 파일경로/ + nanotime + 유니크한 스트링 + 원본파일이름
 //        String uploadPath = "C:/Users/SSAFY/Desktop/o/img";
         String uploadPath = "/Users/orlando/Desktop/img";
-        String path = uploadPath + File.separator + System.nanoTime() + domain +StringUtils.cleanPath(uploadFile.getOriginalFilename());
+        String path = uploadPath + File.separator + System.nanoTime() + domain + StringUtils.cleanPath(uploadFile.getOriginalFilename());
         Path copyOfLocation = Paths.get(path);
 
         try {
