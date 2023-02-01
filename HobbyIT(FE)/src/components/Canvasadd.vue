@@ -60,8 +60,8 @@ export default {
       this.$emit('close')
     },
     colorChange(color) {
-      console.log(color)
       this.ctx.strokeStyle = color;
+      this.canvas.setAttribute('style','cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:'+this.background+";")
     },
     clearAll() {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -168,6 +168,7 @@ export default {
 
     function mouseclick() {
       ctx.strokeStyle = background;
+      canvas.setAttribute('style', 'cursor : url("../src/assets/eraser.png"), auto; background-color:'+background+";")
     };
 
     function mousedouble() {
@@ -205,6 +206,8 @@ export default {
   height: 107px;
   background-size:cover;
   margin-top: 10px;
+  /* cursor : url("../src/assets/eraser.png"), auto; */
+
 }
 
 #tri2 {

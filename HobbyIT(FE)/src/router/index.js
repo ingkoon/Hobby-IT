@@ -5,28 +5,43 @@ import VideoChat from "@/views/VideoChat.vue";
 const routes = [
   {
     path: '/',
-    component: () => import('@/layouts/default/Default.vue'),
+    component: () => import('@/layouts/default/HomeDefault.vue'),
     children: [
       {
         path: '',
         name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        component: () => import('@/views/Home.vue'),
       },
+    ]
+  },
+  {
+    path: '/main',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
       {
-        path: 'main/',
+        path: '',
         name: 'Main',
         component: () => import('@/views/MainView.vue'),
       },
+    ]
+  },
+  {
+    path: '/mypage',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
       {
-        path: 'mypage/',
+        path: '',
         name: 'MyPage',
         component: () => import('@/views/MypageView.vue'),
       },
+    ]
+  },
+  {
+    path: '/group',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
       {
-        path: 'group/',
+        path: '',
         name: 'Grouppage',
         component: () => import('@/views/GroupView.vue'),
         children:[
@@ -41,9 +56,19 @@ const routes = [
             name: 'VideoChat'
           }
         ]
-      }
-    ],
+      },
+    ]
   },
+  {
+    path:'/404',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+  },
+  {
+    path: '/:pathMathch(.*)*',
+    redirect: "/404"
+    // notfound!
+  }
 ]
 
 const router = createRouter({
