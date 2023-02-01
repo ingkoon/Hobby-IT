@@ -12,4 +12,5 @@ public interface HobbyArticleRepository extends JpaRepository<HobbyArticle, Long
     List<HobbyArticle> findByHobbyAndTitleContaining(Hobby hobby, String keyword);
 
     List<HobbyArticle> findByHobby(Hobby hobby);
+
 }

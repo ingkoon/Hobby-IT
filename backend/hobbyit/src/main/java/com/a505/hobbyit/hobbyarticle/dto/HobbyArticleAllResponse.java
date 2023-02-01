@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HobbyArticleResponse {
+public class HobbyArticleAllResponse {
     String title;
 
     String content;
@@ -26,19 +26,18 @@ public class HobbyArticleResponse {
 
     LocalDateTime createdAt;
 
-    String thumbnail;
+    List<HobbyArticleImg> images;
+
     int likes;
-    int commentCount;
-    public HobbyArticleResponse of(HobbyArticle hobbyArticle){
-        return HobbyArticleResponse.builder()
+
+    public HobbyArticleAllResponse of(HobbyArticle hobbyArticle){
+        return HobbyArticleAllResponse.builder()
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
                 .createdAt(hobbyArticle.getWritedDate())
-                .thumbnail(hobbyArticle.getThumbnailPath())
-                .likes(hobbyArticle.getLikeCount())
-                .commentCount(hobbyArticle.getCommentCount())
+                .images(hobbyArticle.getHobbyArticleImg())
                 .build();
     }
 }

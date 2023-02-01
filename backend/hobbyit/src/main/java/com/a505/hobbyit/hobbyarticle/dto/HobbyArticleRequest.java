@@ -18,9 +18,6 @@ public class HobbyArticleRequest {
     String content;
     HobbyArticleCategory category;
 
-    //이미지 삽입하는 로직 넣어야함
-    String[] images;
-
     public HobbyArticle toEntity(Member member, Hobby hobby){
         return HobbyArticle.builder()
                 .member(member)
