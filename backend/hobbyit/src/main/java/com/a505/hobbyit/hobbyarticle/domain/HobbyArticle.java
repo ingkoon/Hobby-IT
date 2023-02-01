@@ -5,6 +5,7 @@ import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
 import com.a505.hobbyit.hobbyarticlecomment.domain.HobbyArticleComment;
 import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
+import com.a505.hobbyit.hobbyarticlelikes.domain.HobbyArticleLikes;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 
@@ -71,19 +72,22 @@ public class HobbyArticle extends BaseEntity {
 //        this.img
 //    }
 
-    //    @Column(nullable = false)
-//    private LocalDateTime writedDate;
-//
-//    @Column
-//    private LocalDateTime modifiedDate;
-//
-//    @Column
-//    private LocalDateTime deletedDate;
-
-    @OneToMany(mappedBy = "hobbyArticle")
-    private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
-
     @OneToMany(mappedBy = "hobbyArticle")
     private List<HobbyArticleComment> hobbyArticleComments = new ArrayList<>();
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleLikes> hobbyArticleLikes = new ArrayList<>();
 
+    public int getCommentCount(){
+        return this.hobbyArticleComments.size();
+    }
+    public int getLikeCount(){
+        return this.hobbyArticleLikes.size();
+    }
+    public String getThumbnailPath(){
+        return this.hobbyArticleImg
+                .get(0)
+                .getImgUrl();
+    }
 }
