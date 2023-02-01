@@ -1,6 +1,7 @@
 package com.a505.hobbyit.jwt;
 
-import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
+import com.a505.hobbyit.member.domain.Member;
+import com.a505.hobbyit.member.dto.response.MemberResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -38,7 +39,7 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public MemberTokenResponse generateToken(Authentication authentication) {
+    public MemberResponse generateToken(Authentication authentication, Member member) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -60,11 +61,12 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return MemberTokenResponse.builder()
+        return MemberResponse.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .nickname(member.getNickname())
                 .build();
     }
 
