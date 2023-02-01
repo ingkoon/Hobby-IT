@@ -24,7 +24,7 @@ public class PendingResponse {
     public PendingResponse of(Pending pending){
         return PendingResponse.builder()
                 .nickname(pending.getMember().getNickname())
-                .applyDate(pending.getApply_date())
+                .applyDate(pending.getWritedDate())
                 .message(pending.getMsg())
                 .waitId(pending.getId())
                 .build();

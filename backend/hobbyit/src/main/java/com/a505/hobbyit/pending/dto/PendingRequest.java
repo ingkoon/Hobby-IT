@@ -24,7 +24,6 @@ public class PendingRequest {
                 .member(member)
                 .hobby(hobby)
                 .msg(message)
-                .apply_date(LocalDateTime.now())
                 .pendingAllow(PendingAllow.WAIT)
                 .build();
     }
