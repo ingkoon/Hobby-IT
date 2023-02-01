@@ -30,4 +30,11 @@ public class HobbyArticleImg {
         this.hobbyArticle = hobbyArticle;
         this.imgUrl = imgUrl;
     }
+
+    public HobbyArticleImg toEntity(String imgUrl, HobbyArticle hobbyArticle) {
+        return HobbyArticleImg.builder()
+                .hobbyArticle(hobbyArticle)
+                .imgUrl(imgUrl)
+                .build();
+    }
 }
