@@ -5,6 +5,7 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.exception.BadRequestException;
 import com.a505.hobbyit.member.exception.DuplicatedEmailException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
