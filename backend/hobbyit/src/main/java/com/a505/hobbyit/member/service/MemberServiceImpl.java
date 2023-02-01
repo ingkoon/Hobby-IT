@@ -127,7 +127,6 @@ public class MemberServiceImpl implements MemberService {
         Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
         stringRedisTemplate.opsForValue()
                 .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-
         return response.success("로그아웃 되었습니다.");
     }
 
