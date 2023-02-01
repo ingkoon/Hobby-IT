@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class MemberLoginRequest {
     @NotEmpty(message = "이메일은 필수 입력값입니다.")
