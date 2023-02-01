@@ -3,7 +3,8 @@ package com.a505.hobbyit.member.service;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.Response;
-import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
+import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.BadRequestException;
 import com.a505.hobbyit.member.exception.DuplicatedEmailException;
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final Response response;
@@ -49,13 +50,13 @@ public class MemberServiceImpl implements MemberService{
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
+                .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
     }
 
-    public MemberTokenResponse login(MemberLoginRequest request) {
-        memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
+    public MemberResponse login(MemberLoginRequest request) {
+        Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -66,7 +67,7 @@ public class MemberServiceImpl implements MemberService{
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
@@ -85,20 +86,22 @@ public class MemberServiceImpl implements MemberService{
         // 2. Access Token 에서 Member email 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
 
+        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
+
         // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
-        if(ObjectUtils.isEmpty(refreshToken)) {
+        if (ObjectUtils.isEmpty(refreshToken)) {
             throw new BadRequestException();
 //            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        if(!refreshToken.equals(reissue.getRefreshToken())) {
+        if (!refreshToken.equals(reissue.getRefreshToken())) {
             throw new BadRequestException();
 //            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 4. 새로운 토큰 생성
-        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
 
         // 5. RefreshToken Redis 업데이트
         stringRedisTemplate.opsForValue()
@@ -126,7 +129,6 @@ public class MemberServiceImpl implements MemberService{
         Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
         stringRedisTemplate.opsForValue()
                 .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-
         return response.success("로그아웃 되었습니다.");
     }
 

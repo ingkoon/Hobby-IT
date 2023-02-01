@@ -7,9 +7,10 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MemberTokenResponse {
+public class MemberResponse {
     private String grantType;
     private String accessToken;
     private String refreshToken;
     private Long refreshTokenExpirationTime;
+    private String nickname;
 }

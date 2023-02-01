@@ -4,7 +4,7 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.common.Helper;
-import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
+import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class MemberController {
     private final Response response;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<MemberTokenResponse> signUp(@RequestBody MemberSignupRequest request) {
+    public ResponseEntity<MemberResponse> signUp(@RequestBody MemberSignupRequest request) {
         try {
             memberService.signUp(request);
             return ResponseEntity.ok().build();
@@ -34,9 +34,9 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<MemberTokenResponse> login(@RequestBody MemberLoginRequest request) {
+    public ResponseEntity<MemberResponse> login(@RequestBody MemberLoginRequest request) {
         try {
-            MemberTokenResponse response = memberService.login(request);
+            MemberResponse response = memberService.login(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -44,10 +44,10 @@ public class MemberController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<MemberTokenResponse> reissue(@RequestBody MemberReissueRequest reissue) {
+    public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
         // validation check
         try {
-            memberService.reissue(reissue);
+            memberService.reissue(request);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -55,12 +55,12 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Validated MemberLogoutRequest logout, Errors errors) {
+    public ResponseEntity<?> logout(@Validated MemberLogoutRequest request, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return memberService.logout(logout);
+        return memberService.logout(request);
     }
 
     @GetMapping("/authority")

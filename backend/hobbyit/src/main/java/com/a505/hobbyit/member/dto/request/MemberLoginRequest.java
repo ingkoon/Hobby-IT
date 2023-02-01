@@ -4,8 +4,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class MemberLoginRequest {
