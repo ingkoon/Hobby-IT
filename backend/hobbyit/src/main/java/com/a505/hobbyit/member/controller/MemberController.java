@@ -6,15 +6,11 @@ import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,6 +19,7 @@ import java.util.Map;
 public class MemberController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
+    private final JavaMailSender javaMailSender;
 
     @PostMapping(value = "/signup")
     public ResponseEntity<Void> signUp(@Validated MemberSignupRequest request, Errors errors) {
@@ -58,6 +55,15 @@ public class MemberController {
             return ResponseEntity.badRequest().build();
         }
         memberService.logout(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/password/reset")
+    public ResponseEntity<Void> resetPassword(@Validated MemberMailRequest request, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        memberService.resetPassword(request);
         return ResponseEntity.ok().build();
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -36,11 +37,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signUp(MemberSignupRequest request) {
-        if (memberRepository.existsByEmail(request.getEmail()))
+        if (memberRepository.existsByEmail(request.getEmail())) {
             throw new DuplicatedMemberException();
+        }
 
-        if (memberRepository.existsByNickname(request.getNickname()))
+        if (memberRepository.existsByNickname(request.getNickname())) {
             throw new DuplicatedMemberException("중복된 닉네임입니다.");
+        }
 
         Member member = Member.builder()
                 .email(request.getEmail())
@@ -123,6 +126,15 @@ public class MemberServiceImpl implements MemberService {
         Long expiration = jwtTokenProvider.getExpiration(request.getAccessToken());
         stringRedisTemplate.opsForValue()
                 .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public void resetPassword(MemberMailRequest request) {
+        Optional<Member> member = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
+
+//        throw new NoSuchElementException("사용자를 찾을 수 없습니다.");
+
+
     }
 
 }
