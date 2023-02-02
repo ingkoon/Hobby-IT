@@ -1,55 +1,114 @@
 // Composables
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
 import VideoChat from "@/views/VideoChat.vue";
 
 const routes = [
   {
-    path: "/",
-    component: () => import("@/layouts/default/Default.vue"),
+    path: '/',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
     children: [
       {
-        path: "",
-        name: "Home",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
+        path: '',
+        name: 'Home',
+        component: () => import('@/views/Home.vue'),
       },
-      {
-        path: "main/",
-        name: "Main",
-        component: () => import("@/views/MainView.vue"),
-      },
-      {
-        path: "mypage/",
-        name: "MyPage",
-        component: () => import("@/views/MypageView.vue"),
-      },
-      {
-        path: "group/",
-        name: "Grouppage",
-        component: () => import("@/views/GroupView.vue"),
-        children: [
-          {
-            path: "",
-            name: "GroupMainPage",
-            component: () => import("@/views/GroupPageView.vue"),
-          },
-          {
-            path: "videochat",
-            component: () => import("@/views/VideoChat.vue"),
-            name: "VideoChat",
-          },
-        ],
-      },
-    ],
+    ]
   },
-];
+  // 모달을 위한
+  {
+    path: '/router',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Modal',
+        component: () => import('@/views/Modal.vue'),
+      },
+    ]
+  },
+  //
+  {
+    path: '/signin',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'signin',
+        component: () => import('@/views/SignIn.vue'),
+      },
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: () => import('@/views/LogIn.vue'),
+      },
+    ]
+  },
+  {
+    path: '/main',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Main',
+        component: () => import('@/views/MainView.vue'),
+      },
+    ]
+  },
+  {
+    path: '/mypage',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'MyPage',
+        component: () => import('@/views/MypageView.vue'),
+      },
+    ]
+  },
+  {
+    path: '/group',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Grouppage',
+        component: () => import('@/views/GroupView.vue'),
+        children:[
+          {
+            path: '',
+            name: 'GroupMainPage',
+            component: () => import('@/views/GroupPageView.vue')
+          },
+          {
+            path: 'videochat',
+            component: () => import('@/views/VideoChat.vue'),
+            name: 'VideoChat'
+          }
+        ]
+      },
+    ]
+  },
+  {
+    path:'/404',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+  },
+  {
+    path: '/:pathMathch(.*)*',
+    redirect: "/404"
+    // notfound!
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
+})
 
-export default router;
+export default router

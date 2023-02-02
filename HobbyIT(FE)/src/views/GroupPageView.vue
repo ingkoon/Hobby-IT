@@ -1,4 +1,5 @@
 <template>
+<div style="margin:50px 13% 0px">
   <h3>이름 들어갈 곳</h3>
 
   <div id="group">
@@ -153,6 +154,7 @@
       </div>
     </div>
   </v-navigation-drawer>
+</div>
 </template>
 
 <script>
