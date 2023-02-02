@@ -3,6 +3,9 @@
   <transition appear @before-enter="beforeEnter" @enter="enter" :css="false">
     <div class="card"></div>
   </transition>
+  <transition appear @before-enter="beforeEnter" @enter="enter" :css="false">
+    <div class="card"></div>
+  </transition>
 
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
@@ -10,8 +13,8 @@
                 width: 800px; height: 150px; margin-top: 200px; z-index:1;">
       <p>HOBBY'IT</p>
     </div>
-    <div style="position: absolute; width: 1021px; height: 1021px; left: 449px; top: 365px;">
-      <img src = "../assets/STAR.svg">
+    <div style="position: absolute; width: 1500px; height: 1500px; left: 210px; top: 119px;">
+      <img id="stars" src = "../assets/Fstar.svg">
     </div>
     <div id="back-oval"></div>
     <div id="front-oval">
@@ -216,6 +219,16 @@ p{
   position: absolute; width: 3400px; height: 400px; left: -740px; top: 495px;
   background: radial-gradient(50% 50% at 50% 50%, #D534EF 0%, rgba(36, 39, 75, 0) 100%);
   filter: blur(100px);
+}
+
+#stars{
+  animation: rotate-image 100s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes rotate-image {
+  100%{
+      transform: rotate(-360deg);
+  }
 }
 
 #front-oval{
