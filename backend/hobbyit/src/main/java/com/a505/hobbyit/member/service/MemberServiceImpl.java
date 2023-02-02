@@ -42,6 +42,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signUp(MemberSignupRequest request) {
+        System.out.println(request.getEmail());
         if (memberRepository.existsByEmail(request.getEmail()))
             throw new DuplicatedEmailException();
 

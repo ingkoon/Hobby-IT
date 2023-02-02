@@ -2,12 +2,9 @@ package com.a505.hobbyit.member.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class MemberSignupRequest {
     @NotEmpty(message = "이메일은 필수 입력값입니다.")
@@ -23,4 +20,12 @@ public class MemberSignupRequest {
     @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
+
+    @Builder
+    public MemberSignupRequest(String email, String name, String nickname, String password) {
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+    }
 }

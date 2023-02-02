@@ -8,6 +8,7 @@ import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -23,13 +24,15 @@ public class MemberController {
     private final Response response;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<MemberResponse> signUp(@RequestBody MemberSignupRequest request) {
-        try {
-            memberService.signUp(request);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
+//    public ResponseEntity<MemberResponse> signUp(@RequestBody MemberSignupRequest request) {
+    public ResponseEntity<MemberResponse> signUp(@Validated MemberSignupRequest request, Errors errors) {
+        System.out.println(request.getEmail());
+        if (errors.hasErrors()) {
+            System.out.println("error");
             return ResponseEntity.badRequest().build();
         }
+        memberService.signUp(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/login")
