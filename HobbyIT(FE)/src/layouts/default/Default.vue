@@ -1,21 +1,20 @@
 <template>
   <v-app id="app">
-    <default-bar style="position:fixed" />
+    <default-bar style="position: fixed" />
 
-    <default-view style="margin:50px 13% 0px" />
+    <default-view style="margin: 50px 13% 0px" />
   </v-app>
 </template>
 
 <script setup>
-  import DefaultBar from './AppBar.vue'
-  import DefaultView from './View.vue'
+import DefaultBar from "./AppBar.vue";
+import DefaultView from "./View.vue";
 </script>
 
 <style>
 #app {
   font-family: linefontbold;
-  background-color:#0E0F28;
-
+  background-color: #0e0f28;
 }
 
 @font-face {

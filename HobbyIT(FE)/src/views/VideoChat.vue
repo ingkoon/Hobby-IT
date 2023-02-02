@@ -1,48 +1,108 @@
 <template>
   <div>
-
     <v-container>
       <v-row>
-        <v-col id="background" :style="{height: computedHeight + 'px'}"></v-col>
-        <v-col id="leftSidebar" :style="{height: computedHeight + 'px'}">
-
+        <v-col
+          id="background"
+          :style="{ height: computedHeight + 'px' }"
+        ></v-col>
+        <v-col id="leftSidebar" :style="{ height: computedHeight + 'px' }">
           <v-icon icon="mdi-microphonea" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-microphone" @click="handleAudio" size="36" v-if="isAudioEnabled"></v-icon>
-          <v-icon color="white" icon="mdi-microphone-off" @click="handleAudio" size="36" v-else></v-icon>
-          <v-icon color="white" icon="mdi-video" size="36" @click="handleMyVideo" v-if="isVideoEnabled"></v-icon>
-          <v-icon color="white" icon="mdi-video-off" size="36" @click="handleMyVideo" v-else></v-icon>
-          <v-icon color="white" icon="mdi-monitor-off" v-if="isScreenShareEnabled" @click="handleScreenShare" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-monitor" @click="handleScreenShare" v-else size="36"></v-icon>
-          <v-btn style="background-color: red; color: white"  icon="mdi-phone-off" @click="handleClickOff"></v-btn>
-          <v-icon color="white" icon="mdi-pencil-box" @click="openpaint" size="36"></v-icon>
-          <v-icon color="white" icon="mdi-cog-outline" @click="" size="36"></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-microphone"
+            @click="handleAudio"
+            size="36"
+            v-if="isAudioEnabled"
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-microphone-off"
+            @click="handleAudio"
+            size="36"
+            v-else
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-video"
+            size="36"
+            @click="handleMyVideo"
+            v-if="isVideoEnabled"
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-video-off"
+            size="36"
+            @click="handleMyVideo"
+            v-else
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-monitor-off"
+            v-if="isScreenShareEnabled"
+            @click="handleScreenShare"
+            size="36"
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-monitor"
+            @click="handleScreenShare"
+            v-else
+            size="36"
+          ></v-icon>
+          <v-btn
+            style="background-color: red; color: white"
+            icon="mdi-phone-off"
+            @click="handleClickOff"
+          ></v-btn>
+          <v-icon
+            color="white"
+            icon="mdi-pencil-box"
+            @click="openpaint"
+            size="36"
+          ></v-icon>
+          <v-icon
+            color="white"
+            icon="mdi-cog-outline"
+            @click=""
+            size="36"
+          ></v-icon>
           <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
           <v-icon icon="mdi-microphonea" size="24"></v-icon>
         </v-col>
-        <v-row id="circle1"/>
-        <v-row id="circle2"/>
-        <v-col id="videoList" :style="{height: computedHeight + 'px'}">
+        <v-row id="circle1" />
+        <v-row id="circle2" />
+        <v-col id="videoList" :style="{ height: computedHeight + 'px' }">
           <v-row style="margin: 0; height: 126px">
             <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row id="video-container" style="height: 757px; margin: 0; align-items: center; justify-content: center">
-            <user-video v-for="sub in subscribers"  :stream-manager="sub" :key="sub.stream.connection.connectionId">
-<!--            추가 바람-->
+          <v-row
+            id="video-container"
+            style="
+              height: 757px;
+              margin: 0;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <user-video
+              v-for="sub in subscribers"
+              :stream-manager="sub"
+              :key="sub.stream.connection.connectionId"
+            >
+              <!--            추가 바람-->
             </user-video>
-
           </v-row>
         </v-col>
-        <v-col id="rightSidebar" :style="{height: computedHeight + 'px'}">
-          <VideoMessage @handle-message="sendMessage"/>
+        <v-col id="rightSidebar" :style="{ height: computedHeight + 'px' }">
+          <VideoMessage @handle-message="sendMessage" />
         </v-col>
       </v-row>
 
       <v-dialog v-model="paint">
-        <SharedPaint @send-canvas="sendCanvas" :canvas-data="canvasData"/>
+        <SharedPaint @send-canvas="sendCanvas" :canvas-data="canvasData" />
       </v-dialog>
     </v-container>
-
-
   </div>
 </template>
 
@@ -50,22 +110,23 @@
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/components/UserVideo.vue";
-import {useAppStore} from "@/store/app";
+import { useAppStore } from "@/store/app";
 import VideoMessage from "@/components/VideoMessage.vue";
-import {useMessageStore} from "@/store/message";
+import { useMessageStore } from "@/store/message";
 import SharedPaint from "@/components/VideoChat/SharedPaint.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
 export default {
-  setup(){
-    const appStore = useAppStore()
-    const messageStore = useMessageStore()
-    console.log(messageStore,"112233")
-    return {appStore, messageStore}
+  setup() {
+    const appStore = useAppStore();
+    const messageStore = useMessageStore();
+    console.log(messageStore, "112233");
+    return { appStore, messageStore };
   },
   name: "VideoChat",
-  components: {SharedPaint, VideoMessage, UserVideo},
+  components: { SharedPaint, VideoMessage, UserVideo },
   data() {
     return {
       windowHeight: window.innerHeight,
@@ -80,17 +141,17 @@ export default {
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       isAudioEnabled: true,
       isVideoEnabled: true,
-      isScreenShareEnabled : false,
+      isScreenShareEnabled: false,
       // for canvas
-      paint : false,
-      canvasData : undefined,
+      paint: false,
+      canvasData: undefined,
     };
   },
   mounted() {
     window.onresize = () => {
       this.windowHeight = window.innerHeight;
     };
-    this.joinSession()
+    this.joinSession();
   },
   computed: {
     computedHeight() {
@@ -98,100 +159,99 @@ export default {
       return this.windowHeight - 59;
     },
     isOne() {
-      return (this.subscribers.length === 0);
+      return this.subscribers.length === 0;
     },
     isTwo() {
-      return (this.subscribers.length === 1);
+      return this.subscribers.length === 1;
     },
     isBelowFour() {
-      return (2 <= this.subscribers.length) && (this.subscribers.length < 4);
+      return 2 <= this.subscribers.length && this.subscribers.length < 4;
     },
     isBelowEight() {
-      return (4 <= this.subscribers.length) && (this.subscribers.length < 8);
+      return 4 <= this.subscribers.length && this.subscribers.length < 8;
     },
     isBelowSixteen() {
-      return (8 <= this.subscribers.length) && (this.subscribers.length < 16);
+      return 8 <= this.subscribers.length && this.subscribers.length < 16;
     },
-    baseUnit(){
-      if(this.isOne){
-        return 200
-      }else if(this.isTwo || this.isBelowFour){
-        return 160
-      }else if(this.isBelowEight){
-        return 100
-      }else{
-        return 80
+    baseUnit() {
+      if (this.isOne) {
+        return 200;
+      } else if (this.isTwo || this.isBelowFour) {
+        return 160;
+      } else if (this.isBelowEight) {
+        return 100;
+      } else {
+        return 80;
       }
-    }
-  },
-  watch :{
-    baseUnit: function (newVal,oldVal){
-      this.appStore.baseUnit = newVal;
-    }
-  },
-  methods:{
-    openpaint(){
-      this.paint = true
     },
-    sendCanvas(data){
-      this.session.signal({
-        data: data,
-        to: [],
-        type: 'canvas'
-      })
-        .then(()=>{
+  },
+  watch: {
+    baseUnit: function (newVal, oldVal) {
+      this.appStore.baseUnit = newVal;
+    },
+  },
+  methods: {
+    openpaint() {
+      this.paint = true;
+    },
+    sendCanvas(data) {
+      this.session
+        .signal({
+          data: data,
+          to: [],
+          type: "canvas",
+        })
+        .then(() => {
           console.log("Success");
         })
-        .catch((err)=>{
+        .catch((err) => {
           console.error(err);
-        })
+        });
     },
 
-    myCustomMethod(){
+    myCustomMethod() {
       this.OV.getUserMedia({
-        videoSource: "screen"
-      })
-        .then((stream) => {
-          const track = stream.getVideoTracks()[0];
-          this.publisher.replaceTrack(track)
-          stream.getAudioTracks().forEach(t  => t.stop());
-          console.log(track)
-        })
+        videoSource: "screen",
+      }).then((stream) => {
+        const track = stream.getVideoTracks()[0];
+        this.publisher.replaceTrack(track);
+        stream.getAudioTracks().forEach((t) => t.stop());
+        console.log(track);
+      });
 
       // this.session.unpublish(this.publisher)
-
     },
-    sendMessage(msg){
-      this.session.signal({
-        data: msg,
-        to: [],
-        type: 'message'
-      })
-        .then(()=>{
+    sendMessage(msg) {
+      this.session
+        .signal({
+          data: msg,
+          to: [],
+          type: "message",
+        })
+        .then(() => {
           console.log("Success");
         })
-        .catch((err)=>{
+        .catch((err) => {
           console.error(err);
-        })
+        });
     },
-    handleMyVideo(){
+    handleMyVideo() {
       this.publisher.publishVideo(!this.isVideoEnabled);
       this.isVideoEnabled = !this.isVideoEnabled;
     },
-    handleAudio(){
+    handleAudio() {
       this.publisher.publishAudio(!this.isAudioEnabled);
       this.isAudioEnabled = !this.isAudioEnabled;
-
     },
     handleClickOff() {
-      window.open('','_self').close();
+      window.open("", "_self").close();
       return false;
     },
-    handleScreenShare(){
-      if(this.isScreenShareEnabled){
-        this.isScreenShareEnabled = !this.isScreenShareEnabled
+    handleScreenShare() {
+      if (this.isScreenShareEnabled) {
+        this.isScreenShareEnabled = !this.isScreenShareEnabled;
         // 유저화면 보여주기
-        this.OV.getUserMedia( {
+        this.OV.getUserMedia({
           audioSource: undefined, // The source of audio. If undefined default microphone
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
@@ -200,26 +260,23 @@ export default {
           frameRate: 30, // The frame rate of your video
           insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
           mirror: false, // Whether to mirror your local video or not
-        })
-          .then((stream) => {
-            const track = stream.getVideoTracks()[0];
-            this.publisher.replaceTrack(track)
-            stream.getAudioTracks().forEach(t  => t.stop());
-          })
-      }else{
-        this.isScreenShareEnabled = !this.isScreenShareEnabled
+        }).then((stream) => {
+          const track = stream.getVideoTracks()[0];
+          this.publisher.replaceTrack(track);
+          stream.getAudioTracks().forEach((t) => t.stop());
+        });
+      } else {
+        this.isScreenShareEnabled = !this.isScreenShareEnabled;
         // 쉐어 화면 보여주기
         this.OV.getUserMedia({
-          videoSource: "screen"
-        })
-          .then((stream) => {
-            const track = stream.getVideoTracks()[0];
-            this.publisher.replaceTrack(track)
-            stream.getAudioTracks().forEach(t  => t.stop());
-          })
+          videoSource: "screen",
+        }).then((stream) => {
+          const track = stream.getVideoTracks()[0];
+          this.publisher.replaceTrack(track);
+          stream.getAudioTracks().forEach((t) => t.stop());
+        });
       }
     },
-
 
     joinSession() {
       // --- 1) Get an OpenVidu object ---
@@ -235,7 +292,7 @@ export default {
       // On every Stream destroyed...
       this.session.on("streamDestroyed", ({ stream }) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
-        console.log(index)
+        console.log(index);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
@@ -245,34 +302,33 @@ export default {
         console.warn(exception);
       });
       // On Message
-      this.session.on("signal:message",(event) =>{
+      this.session.on("signal:message", (event) => {
         // 만약 보낸 사람이 나라면 무시
         // JSON.parse(event.from.data).clientData => 보낸사람 이름 parsing
-        const from = JSON.parse(event.from.data).clientData
-        if (JSON.parse(event.from.data).clientData === this.myUserName){
-          return false
+        const from = JSON.parse(event.from.data).clientData;
+        if (JSON.parse(event.from.data).clientData === this.myUserName) {
+          return false;
         }
         const msgData = {
           data: event.data,
-          from: from
+          from: from,
+        };
+        this.messageStore.message.push(msgData);
+      });
+      this.session.on("signal:canvas", (event) => {
+        const from = JSON.parse(event.from.data).clientData;
+        if (JSON.parse(event.from.data).clientData === this.myUserName) {
+          return false;
         }
-        this.messageStore.message.push(msgData)
-
-      })
-      this.session.on("signal:canvas",(event)=>{
-        const from = JSON.parse(event.from.data).clientData
-        if (JSON.parse(event.from.data).clientData === this.myUserName){
-          return false
-        }
-        this.canvasData = event.data
-
-      })
+        this.canvasData = event.data;
+      });
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
       this.getToken(this.mySessionId).then((token) => {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-        this.session.connect(token, { clientData: this.myUserName })
+        this.session
+          .connect(token, { clientData: this.myUserName })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
             // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
@@ -295,7 +351,11 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
           });
       });
       window.addEventListener("beforeunload", this.leaveSession);
@@ -324,24 +384,30 @@ export default {
       return await this.createToken(sessionId);
     },
     async createSession(sessionId) {
-      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-        headers: { 'Content-Type': 'application/json', },
-      });
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + "api/sessions",
+        { customSessionId: sessionId },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       return response.data; // The sessionId
     },
     async createToken(sessionId) {
-      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-        headers: { 'Content-Type': 'application/json', },
-      });
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+        {},
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       return response.data; // The token
     },
-
   },
 };
 </script>
 
 <style scoped>
-
 #leftSidebar {
   background-color: #0e0f28;
   flex-direction: column;
@@ -400,8 +466,8 @@ export default {
   top: -226px;
   border-radius: 350px;
   z-index: 2;
-  box-shadow: 0px 4px 250px #EE49FD, inset 0px 4px 250px #642EFE;
-  -webkit-box-shadow: 0px 4px 250px #EE49FD, inset 0px 4px 250px #642EFE;
+  box-shadow: 0px 4px 250px #ee49fd, inset 0px 4px 250px #642efe;
+  -webkit-box-shadow: 0px 4px 250px #ee49fd, inset 0px 4px 250px #642efe;
 }
 
 #circle2 {
@@ -413,11 +479,11 @@ export default {
   z-index: 2;
   border-radius: 350px;
   background: #000101;
-  box-shadow: 0px 4px 250px #FFF16A, inset 0px 4px 250px #FF4066;
+  box-shadow: 0px 4px 250px #fff16a, inset 0px 4px 250px #ff4066;
 }
 
 #title {
-  background: linear-gradient(180deg, #FFFFFF 0%, #642EFE 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #642efe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -431,9 +497,8 @@ export default {
   margin-left: 104px;
   z-index: 0;
 }
-video{
+video {
   height: 300px;
   width: 200px;
 }
-
 </style>

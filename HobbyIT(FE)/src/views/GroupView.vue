@@ -4,10 +4,8 @@
 
 <script>
 export default {
-  name: "GroupView"
-}
+  name: "GroupView",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

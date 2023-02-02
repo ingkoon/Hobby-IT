@@ -26,7 +26,7 @@
           <v-icon icon="mdi-plus-circle-outline"></v-icon>
 
           <v-dialog v-model="addarticlemodal" activator="parent">
-            <article-add @closeaddarticle="closeaddarticle"/>
+            <article-add @closeaddarticle="closeaddarticle" />
           </v-dialog>
         </v-btn>
         <!-- 화상채팅 버튼 -->
@@ -74,8 +74,12 @@
               <v-container>
                 <v-row>
                   <v-col v-for="j in 4" :key="j" cols="12" sm="3">
-                    
-                    <article-item v-for="i in 4" :key="i" :n="j + i" @click="openmodal"/>
+                    <article-item
+                      v-for="i in 4"
+                      :key="i"
+                      :n="j + i"
+                      @click="openmodal"
+                    />
                   </v-col>
                 </v-row>
               </v-container>
@@ -95,11 +99,9 @@
     </div>
 
     <v-dialog v-model="articlemodal">
-      <article-modal @closearticle="closearticle"/>
+      <article-modal @closearticle="closearticle" />
     </v-dialog>
-
   </div>
-
 
   <!-- 방명록 사이드바 -->
   <v-navigation-drawer
@@ -201,7 +203,7 @@ export default {
       ],
       canvasmodal: false,
       addarticlemodal: false,
-      articlemodal : false,
+      articlemodal: false,
     };
   },
 
@@ -219,9 +221,9 @@ export default {
     openmodal() {
       this.articlemodal = true;
     },
-    closearticle(){
+    closearticle() {
       this.articlemodal = false;
-    }
+    },
   },
 };
 </script>

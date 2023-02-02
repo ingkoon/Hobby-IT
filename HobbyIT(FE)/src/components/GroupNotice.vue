@@ -25,26 +25,47 @@
             <tr id="noticetitle">
               <td>{{ no - idx }}</td>
               <td class="txt_left">
-                <a href="javascript:;" @click="godetail(`${row.id}`)">{{ row.title }}</a>
+                <a href="javascript:;" @click="godetail(`${row.id}`)">{{
+                  row.title
+                }}</a>
               </td>
               <td>{{ row.created_at.substring(0, 10) }}</td>
               <td>{{ row.user_nickname }}</td>
             </tr>
-            <tr :name="`${row.id}`" style="display:none">
-              <td colspan="4" id="noticedetail" style="text-align:left; padding:20px">
-                <div style="font-size:24px; margin-bottom:20px; display:flex; justify-content:space-between">
+            <tr :name="`${row.id}`" style="display: none">
+              <td
+                colspan="4"
+                id="noticedetail"
+                style="text-align: left; padding: 20px"
+              >
+                <div
+                  style="
+                    font-size: 24px;
+                    margin-bottom: 20px;
+                    display: flex;
+                    justify-content: space-between;
+                  "
+                >
                   새해 복 많이 받으세요
                   <div>
                     <v-icon icon="mdi-eye" size="small"></v-icon> 558
-                    <v-icon icon="mdi-close" size="small" @click="godetail(`${row.id}`)"></v-icon>
+                    <v-icon
+                      icon="mdi-close"
+                      size="small"
+                      @click="godetail(`${row.id}`)"
+                    ></v-icon>
                   </div>
                 </div>
-                <div style="font-family:linefont">
+                <div style="font-family: linefont">
                   까치까치 설날은 어저께고요 우리우리 설날은 오늘이래요~
                 </div>
-                <div style="text-align:right">
-                    <v-icon icon="mdi-pencil" size="small"></v-icon>
-                    <v-icon icon="mdi-delete" size="small" @click="godetail(`${row.id}`)"></v-icon>
+                <div style="text-align: right">
+                  <v-icon icon="mdi-pencil" size="small"></v-icon>
+                  <v-icon
+                    icon="mdi-delete"
+                    size="small"
+                    @click="godetail(`${row.id}`)"
+                  ></v-icon>
                 </div>
               </td>
             </tr>
@@ -52,7 +73,6 @@
         </td>
       </tr>
 
-      
       <tr v-if="list.length == 0">
         <td colspan="4">데이터가 없습니다.</td>
       </tr>
@@ -73,9 +93,7 @@
         <strong :key="index">{{ n }}</strong>
       </template>
       <template v-else>
-        <a href="javascript:;" @click="fnPage(`${n}`)" :key="index">{{
-          n
-        }}</a>
+        <a href="javascript:;" @click="fnPage(`${n}`)" :key="index">{{ n }}</a>
       </template>
     </template>
     <a
@@ -85,10 +103,7 @@
       class="next"
       >&gt;</a
     >
-    <a
-      href="javascript:;"
-      @click="fnPage(`${paging.total_page}`)"
-      class="last"
+    <a href="javascript:;" @click="fnPage(`${paging.total_page}`)" class="last"
       >&gt;&gt;</a
     >
   </div>
@@ -96,69 +111,76 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      list : [],
-      tmplist : [
+      list: [],
+      tmplist: [
         {
-            "id": 1,
-            "title": "Hair each base dark guess garden accept.",
-            "content": "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-            "user_nickname": 2,
-            "created_at": "1995-01-20T07:27:13Z",
-            "updated_at": "1990-04-21T01:07:51Z"
+          id: 1,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: 2,
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
         },
         {
-            "id": 2,
-            "title": "Sit sign share you.",
-            "content": "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
-            "user_nickname": 3,
-            "created_at": "2013-05-29T15:46:17Z",
-            "updated_at": "2001-12-09T17:38:01Z"
+          id: 2,
+          title: "Sit sign share you.",
+          content:
+            "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
+          user_nickname: 3,
+          created_at: "2013-05-29T15:46:17Z",
+          updated_at: "2001-12-09T17:38:01Z",
         },
         {
-            "id": 3,
-            "title": "Hair each base dark guess garden accept.",
-            "content": "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-            "user_nickname": 2,
-            "created_at": "1995-01-20T07:27:13Z",
-            "updated_at": "1990-04-21T01:07:51Z"
+          id: 3,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: 2,
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
         },
         {
-            "id": 4,
-            "title": "Sit sign share you.",
-            "content": "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
-            "user_nickname": 3,
-            "created_at": "2013-05-29T15:46:17Z",
-            "updated_at": "2001-12-09T17:38:01Z"
+          id: 4,
+          title: "Sit sign share you.",
+          content:
+            "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
+          user_nickname: 3,
+          created_at: "2013-05-29T15:46:17Z",
+          updated_at: "2001-12-09T17:38:01Z",
         },
         {
-            "id": 5,
-            "title": "Hair each base dark guess garden accept.",
-            "content": "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-            "user_nickname": 2,
-            "created_at": "1995-01-20T07:27:13Z",
-            "updated_at": "1990-04-21T01:07:51Z"
+          id: 5,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: 2,
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
         },
       ],
-      no : "",
+      no: "",
       paging: "", //페이징 데이터
       start_page: "", //시작페이지
       page: this.$route.query.page ? this.$route.query.page : 1,
       keyword: this.$route.query.keyword,
       paginavigation: function () {
         //페이징 처리 for문 커스텀
-        var pageNumber = []
-        var start_page = this.paging.start_page
-        var end_page = this.paging.end_page
-        for (var i = start_page; i <= end_page; i++) pageNumber.push(i)
-        return pageNumber
+        var pageNumber = [];
+        var start_page = this.paging.start_page;
+        var end_page = this.paging.end_page;
+        for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
+        return pageNumber;
       },
-    }
+    };
   },
-  methods : {
+  methods: {
     getlist() {
-      this.list = this.tmplist.reverse().slice((this.page - 1) * 10, this.page * 10)
+      this.list = this.tmplist
+        .reverse()
+        .slice((this.page - 1) * 10, this.page * 10);
       const paging = {
         totalCount: this.tmplist.length,
         total_page: Math.ceil(this.tmplist.length / 10),
@@ -166,34 +188,34 @@ export default {
         start_page: Math.ceil(this.page / 10),
         end_page: Math.ceil(this.page / 10) * 10,
         ipp: 10,
-      }
+      };
       if (paging.total_page < paging.end_page) {
-        paging.end_page = paging.total_page
+        paging.end_page = paging.total_page;
       }
-      this.paging = paging
-      this.no = paging.totalCount - (paging.page - 1) * this.paging.ipp
+      this.paging = paging;
+      this.no = paging.totalCount - (paging.page - 1) * this.paging.ipp;
     },
     fnPage(n) {
       //페이징 이동
       if (this.page != n) {
-        this.page = n
-        this.getlist()
+        this.page = n;
+        this.getlist();
       }
     },
     godetail(id) {
-      let clickitem = document.getElementsByName(id)
-      console.log(clickitem[0].getAttribute("style"))
-      if (clickitem[0].getAttribute("style") == "display: none;"){
-        clickitem[0].setAttribute("style", "")
+      let clickitem = document.getElementsByName(id);
+      console.log(clickitem[0].getAttribute("style"));
+      if (clickitem[0].getAttribute("style") == "display: none;") {
+        clickitem[0].setAttribute("style", "");
       } else {
-        clickitem[0].setAttribute("style", "display: none;")
+        clickitem[0].setAttribute("style", "display: none;");
       }
-    }
+    },
   },
-  created(){
-    this.getlist()
-  }
-}
+  created() {
+    this.getlist();
+  },
+};
 </script>
 
 <style>
@@ -209,7 +231,7 @@ export default {
 .tbList #noticedetail {
   border-bottom: 0px;
   padding: 5px 0px;
-  background-color : #3e1b41;
+  background-color: #3e1b41;
 }
 
 .tbList #noticetitle {
@@ -228,6 +250,6 @@ table {
 }
 
 strong {
-  color: #a3e1f4
+  color: #a3e1f4;
 }
 </style>

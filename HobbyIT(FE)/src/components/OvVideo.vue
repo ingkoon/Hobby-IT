@@ -1,26 +1,32 @@
 <template>
-  <video :style="{height: appStore.baseUnit*2 + 'px', width: appStore.baseUnit*3+'px'}" autoplay/>
+  <video
+    :style="{
+      height: appStore.baseUnit * 2 + 'px',
+      width: appStore.baseUnit * 3 + 'px',
+    }"
+    autoplay
+  />
 </template>
 
 <script>
-import {useAppStore} from "@/store/app";
+import { useAppStore } from "@/store/app";
 
 export default {
-  setup(){
-    const appStore = useAppStore()
-    return {appStore}
+  setup() {
+    const appStore = useAppStore();
+    return { appStore };
   },
-  name: 'OvVideo',
+  name: "OvVideo",
   props: {
     streamManager: Object,
   },
-  mounted () {
+  mounted() {
     this.streamManager.addVideoElement(this.$el);
   },
 };
 </script>
 <style scoped>
-video{
-  margin: 12px 36px
+video {
+  margin: 12px 36px;
 }
 </style>

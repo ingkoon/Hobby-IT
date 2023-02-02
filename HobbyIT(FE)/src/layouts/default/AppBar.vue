@@ -1,9 +1,9 @@
 <template>
-  <v-app-bar flat style="background-color:#0E0F28">
-    <v-app-bar-title >
+  <v-app-bar flat style="background-color: #0e0f28">
+    <v-app-bar-title>
       <router-link to="/main">
-        <span style="font-family:logofont">HOBBY'</span>
-        <span style="color:#8947E2; font-family:logofont">IT</span>
+        <span style="font-family: logofont">HOBBY'</span>
+        <span style="color: #8947e2; font-family: logofont">IT</span>
       </router-link>
     </v-app-bar-title>
 
@@ -12,30 +12,35 @@
       <router-link to="/about">참여하기</router-link>
       <router-link to="/about">공지사항</router-link>
     </div>
-    
 
     <span>
-      <v-icon icon="mdi-account-circle" color="blue-lighten-2" style="margin-right:10px" ></v-icon>
+      <v-icon
+        icon="mdi-account-circle"
+        color="blue-lighten-2"
+        style="margin-right: 10px"
+      ></v-icon>
       <router-link to="/mypage">
-        <span style="font-family:linefontbold">호빗러버</span>
+        <span style="font-family: linefontbold">호빗러버</span>
         님, 안녕하세요!
       </router-link>
-      <v-btn color="white" rounded="pill" style="background-color:#8947E2">로그아웃</v-btn>
+      <v-btn color="white" rounded="pill" style="background-color: #8947e2"
+        >로그아웃</v-btn
+      >
     </span>
   </v-app-bar>
 </template>
 
 <script setup>
-  //
+//
 </script>
 
 <style>
 div.v-toolbar__content {
   max-height: 59px;
   /* height: 59px; */
-  border-bottom:3px solid #642EFE;
+  border-bottom: 3px solid #642efe;
   display: flex;
-  color : white;
+  color: white;
   /* justify-content: space-between; */
   padding: 0 20px;
   align-items: center;
@@ -43,7 +48,7 @@ div.v-toolbar__content {
 
 a {
   text-decoration: none;
-  color : white;
+  color: white;
 }
 
 #nav {
@@ -54,10 +59,10 @@ a {
   margin-right: 30px;
 }
 
-button { 
+button {
   width: 120px;
   height: 50px;
-  margin-left:10px; 
-  margin : 5px
+  margin-left: 10px;
+  margin: 5px;
 }
 </style>

@@ -1,13 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-
-export const useAppStore = defineStore('app', {
-  id: 'app',
+export const useAppStore = defineStore("app", {
+  id: "app",
   state: () => ({
-    baseUnit : 200,
-    accessToken : null,
-    refreshToken : null,
+    baseUnit: 200,
+    accessToken: null,
+    refreshToken: null,
   }),
-})
-
-
+});

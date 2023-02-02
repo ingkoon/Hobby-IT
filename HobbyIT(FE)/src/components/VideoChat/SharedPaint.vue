@@ -1,25 +1,83 @@
 <template>
-  <div style="align-self:center">
-    <v-card style="width:650px; height: 500px; background-color:#0E0F28">
-      <div style="color:white; display:flex; justify-content:space-between; margin:10px 5px;">
+  <div style="align-self: center">
+    <v-card style="width: 650px; height: 500px; background-color: #0e0f28">
+      <div
+        style="
+          color: white;
+          display: flex;
+          justify-content: space-between;
+          margin: 10px 5px;
+        "
+      >
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
-      <div style="display:flex">
-        <canvas class="new-cursor" id="canvas" width="500" height="500"></canvas>
-        <div style="margin-left:20px; display:flex;">
-          <div style="display:flex; flex-direction:column">
-            <div style="color:white; margin-bottom:5px">굵기 :
-              <input id="input" type="number" min="1" max="100" color="white" style="color:white; border: 1px solid white"/>
+      <div style="display: flex">
+        <canvas
+          class="new-cursor"
+          id="canvas"
+          width="500"
+          height="500"
+        ></canvas>
+        <div style="margin-left: 20px; display: flex">
+          <div style="display: flex; flex-direction: column">
+            <div style="color: white; margin-bottom: 5px">
+              굵기 :
+              <input
+                id="input"
+                type="number"
+                min="1"
+                max="100"
+                color="white"
+                style="color: white; border: 1px solid white"
+              />
             </div>
-            <button @click="colorChange('#ff0000')" style="background-color: red; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#000AFF')" style="background-color: blue; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#EE49FD')" style="background-color: #EE49FD; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#000000')" style="background-color: black; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
+            <button
+              @click="colorChange('#ff0000')"
+              style="
+                background-color: red;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+            ></button>
+            <button
+              @click="colorChange('#000AFF')"
+              style="
+                background-color: blue;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+            ></button>
+            <button
+              @click="colorChange('#EE49FD')"
+              style="
+                background-color: #ee49fd;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+            ></button>
+            <button
+              @click="colorChange('#000000')"
+              style="
+                background-color: black;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+            ></button>
             <button id="eraser"></button>
           </div>
-
-
         </div>
       </div>
     </v-card>
@@ -28,24 +86,24 @@
 
 <script>
 export default {
-  props:{
+  props: {
     canvasData: String,
   },
-  data(){
+  data() {
     return {
-      ctx : "",
-      canvas : "",
-      date : "",
-      background:"",
-      bglist : ['#F7FDB0','#ABFAB3', '#BFE0FE', '#FECDCD'],
-    }
+      ctx: "",
+      canvas: "",
+      date: "",
+      background: "",
+      bglist: ["#F7FDB0", "#ABFAB3", "#BFE0FE", "#FECDCD"],
+    };
   },
-  methods : {
+  methods: {
     closemodal() {
-      this.$emit('close')
+      this.$emit("close");
     },
     colorChange(color) {
-      console.log(color)
+      console.log(color);
       this.ctx.strokeStyle = color;
     },
     clearAll() {
@@ -53,25 +111,24 @@ export default {
     },
   },
   mounted() {
-
     var pos = {
       drawable: false,
       x: -1,
       y: -1,
     };
 
-    var canvas = document.getElementById('canvas')
+    var canvas = document.getElementById("canvas");
 
-    this.background = this.bglist[Math.floor(Math.random()*4)]
+    this.background = this.bglist[Math.floor(Math.random() * 4)];
 
-    canvas.setAttribute('style','background-color:'+this.background+";")
-    var background = this.background
-    var ctx = canvas.getContext('2d');
+    canvas.setAttribute("style", "background-color:" + this.background + ";");
+    var background = this.background;
+    var ctx = canvas.getContext("2d");
     this.ctx = ctx;
     this.canvas = canvas;
-    var rect = canvas.getBoundingClientRect();  // 터치 스크린
+    var rect = canvas.getBoundingClientRect(); // 터치 스크린
 
-    var eraser = document.getElementById('eraser')
+    var eraser = document.getElementById("eraser");
 
     eraser.addEventListener("mousedown", mouseclick);
     eraser.addEventListener("dblclick", mousedouble);
@@ -81,23 +138,22 @@ export default {
     canvas.addEventListener("mouseup", listener);
     canvas.addEventListener("mouseout", listener);
 
-    input.value = 3
-    ctx.lineWidth = 3
+    input.value = 3;
+    ctx.lineWidth = 3;
 
-    input.oninput = function(){
+    input.oninput = function () {
       ctx.lineWidth = input.value;
-    }
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
-    const tempThis = this
-    function listener(e){
-      switch(e.type){
+    };
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    const tempThis = this;
+    function listener(e) {
+      switch (e.type) {
         case "mousedown":
           drawStart(e);
           break;
         case "mousemove":
-          if(pos.drawable)
-            draw(e);
+          if (pos.drawable) draw(e);
           break;
         case "mouseout":
         case "mouseup":
@@ -107,8 +163,7 @@ export default {
           touchStart(e);
           break;
         case "touchmove":
-          if(pos.drawable)
-            touch(e);
+          if (pos.drawable) touch(e);
           break;
         case "touchend":
           drawEnd();
@@ -145,55 +200,54 @@ export default {
     }
 
     function drawEnd() {
-
       pos.drawable = false;
       pos.x = -1;
       pos.y = -1;
-      tempThis.$emit('sendCanvas',canvas.toDataURL().split(',')[1])
+      tempThis.$emit("sendCanvas", canvas.toDataURL().split(",")[1]);
     }
 
     function mouseclick() {
       ctx.strokeStyle = background;
-    };
+    }
 
     function mousedouble() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
   },
   watch: {
-    canvasData(newData,oldData){
-      console.log('hahah')
-      const canvas = this.canvas
-      const ctx = this.ctx
+    canvasData(newData, oldData) {
+      console.log("hahah");
+      const canvas = this.canvas;
+      const ctx = this.ctx;
       const image = new Image();
-      image.onload = function() {
+      image.onload = function () {
         ctx.drawImage(image, 0, 0);
       };
-      image.src = `data:image/png;base64,${newData}`
-    }
-  }
-
+      image.src = `data:image/png;base64,${newData}`;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .new-cursor {
-  cursor : url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>") 0 25 , auto
+  cursor: url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>")
+      0 25,
+    auto;
 }
 
 #groupname {
-  font-size:20px;
-  background: linear-gradient(to bottom, #642EFE, #FA8EB6);
+  font-size: 20px;
+  background: linear-gradient(to bottom, #642efe, #fa8eb6);
   color: transparent;
   -webkit-background-clip: text;
 }
 
 #eraser {
-  background: url( "../assets/eraser.png" ) no-repeat;
+  background: url("../assets/eraser.png") no-repeat;
   width: 60px;
   height: 107px;
-  background-size:cover;
+  background-size: cover;
   margin-top: 10px;
 }
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div v-if="streamManager">
-    <ov-video :stream-manager="streamManager"/>
-<!--    <div><p style="color: white">{{ clientData }}</p></div>-->
+    <ov-video :stream-manager="streamManager" />
+    <!--    <div><p style="color: white">{{ clientData }}</p></div>-->
   </div>
 </template>
 
 <script>
-import OvVideo from './OvVideo';
+import OvVideo from "./OvVideo";
 export default {
-  name: 'UserVideo',
+  name: "UserVideo",
   components: {
     OvVideo,
   },
@@ -16,13 +16,13 @@ export default {
     streamManager: Object,
   },
   computed: {
-    clientData () {
+    clientData() {
       const { clientData } = this.getConnectionData();
       return clientData;
     },
   },
   methods: {
-    getConnectionData () {
+    getConnectionData() {
       const { connection } = this.streamManager.stream;
       return JSON.parse(connection.data);
     },
