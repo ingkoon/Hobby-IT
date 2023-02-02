@@ -2,24 +2,19 @@ package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
-import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.BadRequestException;
 import com.a505.hobbyit.member.exception.DuplicatedEmailException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
-import com.a505.hobbyit.security.SecurityUtil;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -34,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final Response response;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -81,7 +75,6 @@ public class MemberServiceImpl implements MemberService {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             throw new InvalidedRefreshTokenException();
-//            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
@@ -96,8 +89,7 @@ public class MemberServiceImpl implements MemberService {
             throw new BadRequestException();
         }
         if (!refreshToken.equals(reissue.getRefreshToken())) {
-            throw new BadRequestException();
-//            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Refresh Token 정보가 일치하지 않습니다.");
         }
 
         // 4. 새로운 토큰 생성
@@ -109,6 +101,7 @@ public class MemberServiceImpl implements MemberService {
 
         return tokenInfo;
     }
+
     public void logout(MemberLogoutRequest logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
@@ -130,17 +123,4 @@ public class MemberServiceImpl implements MemberService {
                 .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
-    public ResponseEntity<?> authority() {
-        // SecurityContext에 담겨 있는 authentication userEamil 정보
-        String memberEmail = SecurityUtil.getCurrentMemberEmail();
-
-        Member member = memberRepository.findByEmail(memberEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
-
-        // add ROLE_ADMIN
-        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
-        memberRepository.save(member);
-
-        return response.success();
-    }
 }

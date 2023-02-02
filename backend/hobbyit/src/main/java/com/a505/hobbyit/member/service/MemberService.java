@@ -15,6 +15,4 @@ public interface MemberService {
     MemberResponse reissue(MemberReissueRequest reissue);
 
     void logout(MemberLogoutRequest logout);
-
-    ResponseEntity<?> authority();
 }

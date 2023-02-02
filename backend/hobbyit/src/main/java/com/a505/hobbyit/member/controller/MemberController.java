@@ -1,9 +1,7 @@
 package com.a505.hobbyit.member.controller;
 
 import com.a505.hobbyit.member.dto.request.*;
-import com.a505.hobbyit.member.dto.Response;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
-import com.a505.hobbyit.common.Helper;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +23,9 @@ import java.util.Map;
 public class MemberController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
-    private final Response response;
 
     @PostMapping(value = "/signup")
-        public ResponseEntity<Void> signUp(@Validated MemberSignupRequest request, Errors errors) {
+    public ResponseEntity<Void> signUp(@Validated MemberSignupRequest request, Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
@@ -45,9 +42,8 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/reissue")
+    @PostMapping(value = "/reissue")
     public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
-        // validation check
         try {
             MemberResponse memberResponse = memberService.reissue(request);
             return ResponseEntity.ok(memberResponse);
@@ -56,31 +52,12 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/logout")
+    @PostMapping(value = "/logout")
     public ResponseEntity<Void> logout(@Validated MemberLogoutRequest request, Errors errors) {
-        System.out.println(request.getAccessToken());
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         memberService.logout(request);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/authority")
-    public ResponseEntity<?> authority() {
-        log.info("ADD ROLE_ADMIN");
-        return memberService.authority();
-    }
-
-    @GetMapping("/userTest")
-    public ResponseEntity<?> userTest() {
-        log.info("ROLE_USER TEST");
-        return response.success();
-    }
-
-    @GetMapping("/adminTest")
-    public ResponseEntity<?> adminTest() {
-        log.info("ROLE_ADMIN TEST");
-        return response.success();
     }
 }
