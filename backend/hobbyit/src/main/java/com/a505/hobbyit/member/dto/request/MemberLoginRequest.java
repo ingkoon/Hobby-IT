@@ -2,13 +2,10 @@ package com.a505.hobbyit.member.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class MemberLoginRequest {
     @NotEmpty(message = "이메일은 필수 입력값입니다.")
@@ -20,5 +17,11 @@ public class MemberLoginRequest {
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
+    }
+
+    @Builder
+    public MemberLoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 }

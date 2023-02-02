@@ -14,6 +14,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,45 +28,42 @@ public class MemberController {
     private final Response response;
 
     @PostMapping(value = "/signup")
-//    public ResponseEntity<MemberResponse> signUp(@RequestBody MemberSignupRequest request) {
-    public ResponseEntity<MemberResponse> signUp(@Validated MemberSignupRequest request, Errors errors) {
-        System.out.println(request.getEmail());
+        public ResponseEntity<Void> signUp(@Validated MemberSignupRequest request, Errors errors) {
         if (errors.hasErrors()) {
-            System.out.println("error");
             return ResponseEntity.badRequest().build();
         }
         memberService.signUp(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<MemberResponse> login(@RequestBody MemberLoginRequest request) {
-        try {
-            MemberResponse response = memberService.login(request);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
+    public ResponseEntity<MemberResponse> login(@Validated MemberLoginRequest request, Errors errors) {
+        if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
+        MemberResponse response = memberService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reissue")
     public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
         // validation check
         try {
-            memberService.reissue(request);
-            return ResponseEntity.ok().build();
+            MemberResponse memberResponse = memberService.reissue(request);
+            return ResponseEntity.ok(memberResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Validated MemberLogoutRequest request, Errors errors) {
-        // validation check
+    public ResponseEntity<Void> logout(@Validated MemberLogoutRequest request, Errors errors) {
+        System.out.println(request.getAccessToken());
         if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
+            return ResponseEntity.badRequest().build();
         }
-        return memberService.logout(request);
+        memberService.logout(request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/authority")

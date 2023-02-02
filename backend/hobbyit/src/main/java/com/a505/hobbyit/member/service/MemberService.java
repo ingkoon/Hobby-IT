@@ -12,9 +12,9 @@ public interface MemberService {
 
     MemberResponse login(MemberLoginRequest request);
 
-    void reissue(MemberReissueRequest reissue);
+    MemberResponse reissue(MemberReissueRequest reissue);
 
-    ResponseEntity<?> logout(MemberLogoutRequest logout);
+    void logout(MemberLogoutRequest logout);
 
     ResponseEntity<?> authority();
 }

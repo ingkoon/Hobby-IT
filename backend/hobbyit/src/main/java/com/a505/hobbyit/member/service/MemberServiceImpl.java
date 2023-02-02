@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
-    public void reissue(MemberReissueRequest reissue) {
+    public MemberResponse reissue(MemberReissueRequest reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             throw new InvalidedRefreshTokenException();
@@ -94,7 +94,6 @@ public class MemberServiceImpl implements MemberService {
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
             throw new BadRequestException();
-//            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
         if (!refreshToken.equals(reissue.getRefreshToken())) {
             throw new BadRequestException();
@@ -108,13 +107,12 @@ public class MemberServiceImpl implements MemberService {
         stringRedisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-//        return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
+        return tokenInfo;
     }
-
-    public ResponseEntity<?> logout(MemberLogoutRequest logout) {
+    public void logout(MemberLogoutRequest logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+            throw new BadRequestException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
@@ -130,7 +128,6 @@ public class MemberServiceImpl implements MemberService {
         Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
         stringRedisTemplate.opsForValue()
                 .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-        return response.success("로그아웃 되었습니다.");
     }
 
     public ResponseEntity<?> authority() {
