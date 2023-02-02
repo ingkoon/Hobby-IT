@@ -1,6 +1,6 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
-import VideoChat from "@/views/VideoChat.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import VideoChat from '@/views/VideoChat.vue';
 
 const routes = [
   {
@@ -12,7 +12,7 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/Home.vue'),
       },
-    ]
+    ],
   },
   // 모달을 위한
   {
@@ -24,19 +24,19 @@ const routes = [
         name: 'Modal',
         component: () => import('@/views/Modal.vue'),
       },
-    ]
+    ],
   },
   //
   {
-    path: '/signin',
+    path: '/signup',
     component: () => import('@/layouts/default/HomeDefault.vue'),
     children: [
       {
         path: '',
-        name: 'signin',
-        component: () => import('@/views/SignIn.vue'),
+        name: 'signup',
+        component: () => import('@/views/Signup.vue'),
       },
-    ]
+    ],
   },
   {
     path: '/login',
@@ -47,7 +47,7 @@ const routes = [
         name: 'login',
         component: () => import('@/views/LogIn.vue'),
       },
-    ]
+    ],
   },
   {
     path: '/main',
@@ -58,7 +58,7 @@ const routes = [
         name: 'Main',
         component: () => import('@/views/MainView.vue'),
       },
-    ]
+    ],
   },
   {
     path: '/mypage',
@@ -69,7 +69,7 @@ const routes = [
         name: 'MyPage',
         component: () => import('@/views/MypageView.vue'),
       },
-    ]
+    ],
   },
   {
     path: '/group',
@@ -79,36 +79,36 @@ const routes = [
         path: '',
         name: 'Grouppage',
         component: () => import('@/views/GroupView.vue'),
-        children:[
+        children: [
           {
             path: '',
             name: 'GroupMainPage',
-            component: () => import('@/views/GroupPageView.vue')
+            component: () => import('@/views/GroupPageView.vue'),
           },
           {
             path: 'videochat',
             component: () => import('@/views/VideoChat.vue'),
-            name: 'VideoChat'
-          }
-        ]
+            name: 'VideoChat',
+          },
+        ],
       },
-    ]
+    ],
   },
   {
-    path:'/404',
+    path: '/404',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
   },
   {
     path: '/:pathMathch(.*)*',
-    redirect: "/404"
+    redirect: '/404',
     // notfound!
-  }
-]
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
-export default router
+export default router;

@@ -6,27 +6,27 @@
       <div style="flex-grow:1">
         <div style="font-size:32px;">Just Hobby'<span style="color:#642EFE">It</span>!</div>
         <input
-          type="email"
           placeholder="email"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          type="email">
         <div id="checkemail" style="font-size:12px; color:red">! 이미 등록된 이메일입니다.</div>
         <input
-          type="password"
           placeholder="password"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          type="password">
         <div id="checkpwd" style="font-size:12px; color:red">! 비밀번호를 입력해주세요.</div>
-        
-        <v-btn style="width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px" color="#EE49FD80">Log In</v-btn>
+
+        <v-btn color="#EE49FD80" style="width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px">Log In</v-btn>
         <div style="text-align:right; margin-right:60px; font-family:linefont">비밀번호 찾기</div>
 
         <div id="divsns" style="font-family:linefont; margin-top:20px">SNS 로그인</div>
-        <v-btn style="width:270px; height:44px; font-size:16px; margin-top:0px" color="#F7E600">카카오로 로그인</v-btn>
-        <v-btn style="width:270px; height:44px; font-size:16px; margin-top:10px" color="#ffffff">구글로 로그인</v-btn>
-        
+        <v-btn color="#F7E600" style="width:270px; height:44px; font-size:16px; margin-top:0px">카카오로 로그인</v-btn>
+        <v-btn color="#ffffff" style="width:270px; height:44px; font-size:16px; margin-top:10px">구글로 로그인</v-btn>
+
         <div style="font-size:15px; text-align:right; margin-right:60px; margin-top:5px; font-family:linefont">
           아직 회원이 아니신가요? <span id="gosignin" style="font-family:linefontbold" @click="gosignin">회원가입</span>
         </div>
-      
+
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
 export default {
   methods : {
     gosignin(){
-      this.$router.push('SignIn')
+      this.$router.push('signup')
     }
   }
 }
@@ -59,7 +59,7 @@ export default {
   font-size:150px;
   letter-spacing: 0.3em;
   font-family: logofont;
-  
+
 }
 
 #signup {

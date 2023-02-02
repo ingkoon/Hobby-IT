@@ -5,8 +5,8 @@ function setInterceptors(instance) {
   // 요청 인터셉터 추가하기
   instance.interceptors.request.use(
     function (config) {
-      config.headers['Content-Type'] = 'application/json';
-      config.headers.Authorization = userStore.$state.accessToken;
+      // config.headers['Content-Type'] = 'application/json';
+      // config.headers.Authorization = userStore.$state.accessToken;
       return config;
     },
     function (error) {

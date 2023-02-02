@@ -6,40 +6,76 @@
       <div style="flex-grow:1">
         <div style="font-size:32px;">회원 <span style="color:#642EFE">가입</span></div>
         <input
-          type="email"
+          v-model='userEmail'
           placeholder="email"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:7px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:7px 0px 7px; color:white"
+          type="email"
+        >
         <div id="checkemail" style="font-size:12px; color:red">! 이미 등록된 이메일입니다.</div>
         <input
-          type="password"
+          v-model='userPassword'
           placeholder="password"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          type="password">
         <div id="checkpwd" style="font-size:12px; color:red">! 비밀번호를 입력해주세요.</div>
         <input
-          type="text"
+          v-model='username'
           placeholder="이름"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          type="text">
         <div id="checkname" style="font-size:12px; color:red">! 성명을 입력해주세요.</div>
         <input
-          type="text"
+          v-model='userNickname'
           placeholder="활동할 닉네임"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white">
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          type="text">
         <div id="checknickname" style="font-size:12px; color:red">! 이미 사용중인 닉네임입니다.</div>
-        <v-btn style="width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px" color="#EE49FD80">Sign up</v-btn>
+        <v-btn color="#EE49FD80" style="width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px" @click='handleSignup'>Sign up</v-btn>
         <div style="font-size:15px; text-align:right; margin-right:60px; margin-top:5px">
           이미 계정이 있으신가요? <span id="gologin" @click="gologin">로그인</span>
         </div>
-      
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { useUserStore } from '@/store/user';
+import { memberSignup } from '@/api/member';
+
 export default {
+  setup(){
+    const userStore = useUserStore()
+
+    return {userStore}
+  },
+  data(){
+    return{
+      userEmail: '',
+      userPassword: '',
+      username: '',
+      userNickname: '',
+    }
+  },
   methods : {
     gologin(){
       this.$router.push('LogIn')
+    },
+    async handleSignup(){
+      try {
+        const data = {
+          "email":this.userEmail,
+          "name":this.username,
+          "nickname":this.userNickname,
+          "password":this.userPassword
+        }
+        const { response } = await memberSignup(data)
+        this.userStore.afterSignup(data)
+        this.$router.push('/')
+      }catch (err){
+        console.log(err,123123);
+      }
     }
   }
 }
@@ -62,7 +98,7 @@ export default {
   font-size:150px;
   letter-spacing: 0.3em;
   font-family: logofont;
-  
+
 }
 
 #signup {

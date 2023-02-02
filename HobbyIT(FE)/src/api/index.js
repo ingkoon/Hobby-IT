@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { setInterceptors } from '@/api/common/interceptors';
 
-const BASE_URL = 'https://i8a505.p.ssafy.io/api/';
+// const BASE_URL = 'http://i8a505.p.ssafy.io/api/';
+const BASE_URL = 'http://localhost:8080/api/';
 
 const defaultConfig = {
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: false,
 };
 const fileConfig = {
   ...defaultConfig,
@@ -20,7 +22,8 @@ function createInstance(path, config = defaultConfig) {
     ...defaultConfig,
     baseURL: BASE_URL + path,
   });
-  return setInterceptors(instance);
+  return instance;
+  // return setInterceptors(instance);
 }
 
 export { createInstance };
