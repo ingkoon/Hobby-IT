@@ -1,7 +1,6 @@
 package com.a505.hobbyit.hobbyarticle.dto;
 
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
-import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,12 +9,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-@Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HobbyArticleResponse {
+@Getter
+@Builder
+public class HobbyArticleDetailResponse {
     String title;
 
     String content;
@@ -26,22 +24,19 @@ public class HobbyArticleResponse {
 
     LocalDateTime createdAt;
 
-    String thumbnail;
+    List<String> images;
 
     int likes;
 
-    int commentCount;
-
-    public HobbyArticleResponse of(HobbyArticle hobbyArticle){
-        return HobbyArticleResponse.builder()
+    public HobbyArticleDetailResponse of(HobbyArticle hobbyArticle){
+        return HobbyArticleDetailResponse.builder()
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
                 .createdAt(hobbyArticle.getWritedDate())
-                .thumbnail(hobbyArticle.getThumbnailPath())
+                .images(hobbyArticle.getImages())
                 .likes(hobbyArticle.getLikeCount())
-                .commentCount(hobbyArticle.getCommentCount())
                 .build();
     }
 }
