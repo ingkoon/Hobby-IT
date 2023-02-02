@@ -47,6 +47,12 @@
     </v-dialog>
   </v-btn>
   
+  <v-btn @click="openexp">경험치
+    <v-dialog v-model="exp">
+      <exp @close="closeexp"/>
+    </v-dialog>
+  </v-btn>
+  
 </template>
 
 <script>
@@ -58,6 +64,7 @@ import AddNotice from '@/components/modals/AddNotice.vue'
 import DelGroup from '@/components/modals/DelGroup.vue'
 import GroupResign from '@/components/modals/GroupResign.vue'
 import MakeGroup from '@/components/modals/MakeGroup.vue'
+import exp from '@/components/modals/EXP.vue'
 
 export default {
   data(){
@@ -70,9 +77,10 @@ export default {
       delgroup : false,
       groupresign : false,
       makegroup: false,
+      exp:false,
     }
   },
-  components: { GroupRegister, GroupFreeRegi, BanMem, Resign, AddNotice, DelGroup, GroupResign, MakeGroup },
+  components: { GroupRegister, GroupFreeRegi, BanMem, Resign, AddNotice, DelGroup, GroupResign, MakeGroup, exp},
   methods : {
     closegroupregi() {
       this.groupregimodal = false
@@ -123,12 +131,18 @@ export default {
       this.delgroup = true
     },
     
-
     closemakegroup() {
       this.makegroup = false
     },
     openmakegroup() {
       this.makegroup = true
+    },
+
+    closeexp() {
+      this.exp = false
+    },
+    openexp() {
+      this.exp = true
     },
     
   }
