@@ -6,7 +6,7 @@ import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.BadRequestException;
-import com.a505.hobbyit.member.exception.DuplicatedEmailException;
+import com.a505.hobbyit.member.exception.DuplicatedMemberException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +36,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signUp(MemberSignupRequest request) {
-        System.out.println(request.getEmail());
         if (memberRepository.existsByEmail(request.getEmail()))
-            throw new DuplicatedEmailException();
+            throw new DuplicatedMemberException();
+
+        if (memberRepository.existsByNickname(request.getNickname()))
+            throw new DuplicatedMemberException("중복된 닉네임입니다.");
 
         Member member = Member.builder()
                 .email(request.getEmail())
