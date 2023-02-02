@@ -114,9 +114,6 @@ button:not(*){
 
 .v-field--variant-outlined .v-field__outline__start {
     flex: 1 !important;
-    border-top-width: var(--v-field-border-width);
-    border-bottom-width: var(--v-field-border-width);
-    border-inline-start-width: var(--v-field-border-width);
 }
 
 .v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr, .v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {

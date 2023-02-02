@@ -14,6 +14,41 @@ const routes = [
       },
     ]
   },
+  // 모달을 위한
+  {
+    path: '/router',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Modal',
+        component: () => import('@/views/Modal.vue'),
+      },
+    ]
+  },
+  //
+  {
+    path: '/signin',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'signin',
+        component: () => import('@/views/SignIn.vue'),
+      },
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: () => import('@/views/LogIn.vue'),
+      },
+    ]
+  },
   {
     path: '/main',
     component: () => import('@/layouts/default/Default.vue'),
