@@ -5,8 +5,22 @@
       show-arrows
       style="margin:1% 0%;"
       selected-class="font-family:linefontbold"
-      v-model="selecttag"
+      mandatory="force"
     >
+    <v-slide-group-item
+      v-slot="{ isSelected, toggle }"
+    >
+      <v-btn
+        class="ma-2"
+        id = "categorybtn"
+        rounded="pill"
+        :style="isSelected ? 'border : 4px solid #642EFE; color:#642EFE; font-family:linefontbold;' : 'border : 4px solid #A8456A; font-family:linefont;' "
+        @click="toggle"
+      >
+        <span style="margin:10px">전체</span>
+      </v-btn>
+    </v-slide-group-item>
+
     <v-slide-group-item
       v-for="n in category.length-1"
       :key="n"
@@ -19,7 +33,7 @@
         :style="isSelected ? 'border : 4px solid #642EFE; color:#642EFE; font-family:linefontbold;' : 'border : 4px solid #A8456A; font-family:linefont;' "
         @click="toggle"
       >
-        <span style="margin:10px">{{category[n]}}</span>
+        <span style="margin:10px">#{{category[n]}}</span>
       </v-btn>
     </v-slide-group-item>
   </v-slide-group>
@@ -71,7 +85,7 @@
     data(){
       return {
         model : "전체",
-        category : ["","전체", "#공예", "#스터디", "#운동", "#음악", "#파티", "#게임", "#코딩"]
+        category : ["", "공예", "스터디", "음악", "파티", "게임", "코딩", "스포츠", "문화", "예술", "패션", "여행", "요리" ]
       }
     },
   }
@@ -87,6 +101,7 @@ h3 {
 #search {
   display: flex;
   justify-content: space-between;
+  margin-top:40px;
 }
 
 h3 span {
