@@ -73,14 +73,14 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
-    public MemberResponse reissue(MemberReissueRequest reissue) {
+    public MemberResponse reissue(MemberReissueRequest request) {
         // 1. Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
+        if (!jwtTokenProvider.validateToken(request.getRefreshToken())) {
             throw new InvalidedRefreshTokenException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
 
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
 
@@ -90,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
         if (ObjectUtils.isEmpty(refreshToken)) {
             throw new BadRequestException();
         }
-        if (!refreshToken.equals(reissue.getRefreshToken())) {
+        if (!refreshToken.equals(request.getRefreshToken())) {
             throw new BadRequestException("Refresh Token 정보가 일치하지 않습니다.");
         }
 
@@ -104,14 +104,14 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
-    public void logout(MemberLogoutRequest logout) {
+    public void logout(MemberLogoutRequest request) {
         // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
+        if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
             throw new BadRequestException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
 
         // 3. Redis 에서 해당 Member email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (stringRedisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
@@ -120,9 +120,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
+        Long expiration = jwtTokenProvider.getExpiration(request.getAccessToken());
         stringRedisTemplate.opsForValue()
-                .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+                .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
 }
