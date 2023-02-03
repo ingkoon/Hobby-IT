@@ -2,35 +2,39 @@ package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
-import com.a505.hobbyit.member.dto.response.MemberResponse;
-import com.a505.hobbyit.member.enums.MemberPrivilege;
+import com.a505.hobbyit.member.dto.Response;
+import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.member.exception.BadRequestException;
-import com.a505.hobbyit.member.exception.DuplicatedMemberException;
+import com.a505.hobbyit.member.exception.DuplicatedEmailException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
+import com.a505.hobbyit.security.SecurityUtil;
 import com.a505.hobbyit.member.domain.MemberRepository;
-import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final Response response;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -38,26 +42,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signUp(MemberSignupRequest request) {
-        if (memberRepository.existsByEmail(request.getEmail())) {
-            throw new DuplicatedMemberException();
-        }
-
-        if (memberRepository.existsByNickname(request.getNickname())) {
-            throw new DuplicatedMemberException("중복된 닉네임입니다.");
-        }
+        if (memberRepository.existsByEmail(request.getEmail()))
+            throw new DuplicatedEmailException();
 
         Member member = Member.builder()
                 .email(request.getEmail())
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
+                .privilege(Collections.singletonList(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
     }
 
-    public MemberResponse login(MemberLoginRequest request) {
-        Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
+    public MemberTokenResponse login(MemberLoginRequest request) {
+        memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -68,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
@@ -77,45 +76,46 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
-    public MemberResponse reissue(MemberReissueRequest request) {
+    public void reissue(MemberReissueRequest reissue) {
         // 1. Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(request.getRefreshToken())) {
+        if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             throw new InvalidedRefreshTokenException();
+//            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
-
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
+        Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
 
         // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
-        if (ObjectUtils.isEmpty(refreshToken)) {
+        if(ObjectUtils.isEmpty(refreshToken)) {
             throw new BadRequestException();
+//            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        if (!refreshToken.equals(request.getRefreshToken())) {
-            throw new BadRequestException("Refresh Token 정보가 일치하지 않습니다.");
+        if(!refreshToken.equals(reissue.getRefreshToken())) {
+            throw new BadRequestException();
+//            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 4. 새로운 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberTokenResponse tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         // 5. RefreshToken Redis 업데이트
         stringRedisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        return tokenInfo;
+//        return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
-    public void logout(MemberLogoutRequest request) {
+    public ResponseEntity<?> logout(MemberLogoutRequest logout) {
         // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
-            throw new BadRequestException();
+        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
+            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
 
         // 3. Redis 에서 해당 Member email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (stringRedisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
@@ -124,18 +124,24 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(request.getAccessToken());
+        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
         stringRedisTemplate.opsForValue()
-                .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+                .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+
+        return response.success("로그아웃 되었습니다.");
     }
 
-    @Override
-    public void resetPassword(MemberMailRequest request) {
-        Optional<Member> member = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
+    public ResponseEntity<?> authority() {
+        // SecurityContext에 담겨 있는 authentication userEamil 정보
+        String memberEmail = SecurityUtil.getCurrentMemberEmail();
 
-        throw new NoSuchMemberException();
+        Member member = memberRepository.findByEmail(memberEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
+        // add ROLE_ADMIN
+        member.getPrivilege().add(MemberPrivilege.ADMIN.name());
+        memberRepository.save(member);
 
+        return response.success();
     }
-
 }

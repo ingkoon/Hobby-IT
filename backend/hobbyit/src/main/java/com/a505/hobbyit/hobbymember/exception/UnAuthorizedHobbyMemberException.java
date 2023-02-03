@@ -1,6 +1,6 @@
 package com.a505.hobbyit.hobbymember.exception;
 
-public class UnAuthorizedHobbyMemberException extends RuntimeException {
+public class UnAuthorizedHobbyMemberException extends RuntimeException{
     public UnAuthorizedHobbyMemberException(final String message) {
         super(message);
     }

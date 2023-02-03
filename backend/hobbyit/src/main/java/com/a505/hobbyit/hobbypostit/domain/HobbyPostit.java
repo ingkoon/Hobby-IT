@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "hobby_postit")
 public class HobbyPostit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 

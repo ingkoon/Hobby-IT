@@ -29,7 +29,7 @@ public class HobbyAndMemberResponse {
     private Long hobbyMemberId;
     private HobbyMemberPrivilege privilege;
 
-    public HobbyAndMemberResponse of(Hobby hobby, HobbyMember hobbyMember) {
+    public HobbyAndMemberResponse of(Hobby hobby, HobbyMember hobbyMember){
         return HobbyAndMemberResponse.builder()
                 .name(hobby.getName())
                 .intro(hobby.getIntro())

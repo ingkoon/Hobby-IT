@@ -22,7 +22,7 @@ public class HobbyMemberController {
             @RequestHeader final String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("member-id") final Long targetId,
-            @RequestBody HobbyMemberUpdateRequest request) {
+            @RequestBody HobbyMemberUpdateRequest request){
 
         hobbyMemberService.updatePrivilege(token, hobbyId, targetId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -32,7 +32,7 @@ public class HobbyMemberController {
     public ResponseEntity<Void> kickHobbyMember(
             @RequestHeader final String token,
             @PathVariable("hobby-id") final Long hobbyId,
-            @PathVariable("member-id") final Long targetId) {
+            @PathVariable("member-id") final Long targetId ){
 
         hobbyMemberService.kickHobbyMember(token, hobbyId, targetId);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -41,7 +41,7 @@ public class HobbyMemberController {
     @DeleteMapping("/{hobby-id}/member")
     public ResponseEntity<Void> resignHobbyMember(
             @RequestHeader final String token,
-            @PathVariable("hobby-id") final Long hobbyId) {
+            @PathVariable("hobby-id") final Long hobbyId){
 
         hobbyMemberService.resignHobbyMember(token, hobbyId);
         return ResponseEntity.status(HttpStatus.OK).build();

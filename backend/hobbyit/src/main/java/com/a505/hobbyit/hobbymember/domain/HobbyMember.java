@@ -18,14 +18,14 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "hobby_member")
+@Table(name="hobby_member")
 public class HobbyMember {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(nullable = false, name = "member_id")
     private Member member;
 
@@ -57,19 +57,19 @@ public class HobbyMember {
         this.privilege = privilege;
     }
 
-    public void updatePrivilege(HobbyMemberPrivilege hobbyMemberPrivilege) {
+    public void updatePrivilege(HobbyMemberPrivilege hobbyMemberPrivilege){
         this.privilege = hobbyMemberPrivilege;
     }
 
-    public void updateState(HobbyMemberState state) {
+    public void updateState(HobbyMemberState state){
         this.state = state;
     }
 
-    public void checkPrivilege() {
-        if (this.privilege != HobbyMemberPrivilege.OWNER) throw new UnAuthorizedHobbyMemberException();
+    public void checkPrivilege(){
+        if(this.privilege != HobbyMemberPrivilege.OWNER) throw new UnAuthorizedHobbyMemberException();
     }
 
-    public HobbyMember ofGeneral(Member member, Hobby hobby) {
+    public HobbyMember ofGeneral(Member member, Hobby hobby){
         return HobbyMember.builder()
                 .member(member)
                 .hobby(hobby)

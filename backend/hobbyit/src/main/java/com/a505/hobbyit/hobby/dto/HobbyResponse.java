@@ -21,8 +21,7 @@ public class HobbyResponse {
     private String category;
     private int freeRegistration;
     private LocalDateTime createdDate;
-
-    public HobbyResponse of(Hobby hobby) {
+    public HobbyResponse of(Hobby hobby){
         return HobbyResponse.builder()
                 .name(hobby.getName())
                 .intro(hobby.getIntro())

@@ -1,16 +1,16 @@
 package com.a505.hobbyit.member.service;
 
-import com.a505.hobbyit.member.dto.request.*;
-import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
+import com.a505.hobbyit.member.dto.request.MemberLogoutRequest;
+import com.a505.hobbyit.member.dto.request.MemberReissueRequest;
+import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
+import com.a505.hobbyit.member.dto.response.MemberTokenResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
-    void signUp(MemberSignupRequest request);
-
-    MemberResponse login(MemberLoginRequest request);
-
-    MemberResponse reissue(MemberReissueRequest request);
-
-    void logout(MemberLogoutRequest request);
-
-    void resetPassword(MemberMailRequest request);
+    public void signUp(MemberSignupRequest request);
+    public MemberTokenResponse login(MemberLoginRequest request);
+    public void reissue(MemberReissueRequest reissue);
+    public ResponseEntity<?> logout(MemberLogoutRequest logout);
+    public ResponseEntity<?> authority();
 }

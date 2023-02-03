@@ -7,6 +7,7 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
+import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
@@ -21,7 +22,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class HobbyMemberServiceImpl implements HobbyMemberService {
+public class HobbyMemberServiceImpl implements HobbyMemberService{
 
     private final MemberRepository memberRepository;
     private final HobbyRepository hobbyRepository;
@@ -40,7 +41,6 @@ public class HobbyMemberServiceImpl implements HobbyMemberService {
         hobbyMember.updatePrivilege(request.getPrivilege());
 
     }
-
     @Transactional
     @Override
     public void kickHobbyMember(String token, Long hobbyId, Long targetId) {
@@ -73,7 +73,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService {
     }
 
     @Override
-    public Hobby checkPrivilege(Long hobbyId, String token) {
+    public Hobby checkPrivilege(Long hobbyId, String token){
         String memberEmail = jwtTokenProvider.getUser(token);
         Member member = memberRepository
                 .findByEmail(memberEmail)
