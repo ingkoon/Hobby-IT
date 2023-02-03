@@ -1,22 +1,22 @@
 <template>
   <v-slide-group
       show-arrows
-      style="margin:1% 0%;"
+      style="margin:1% 0;"
   >
     <v-slide-group-item>
 
       <v-card
         class="mx-auto"
-        width="250"
         style="background-color:#ffffff00; padding:10px"
+        width="250"
         @click = "opencreategroup"
         >
         <v-img>
           <div style="border : 5px solid #FA8EB6; width:190px; height:250px; display:flex; justify-content:center">
-            <div style="background-color:#0E0F28; width:100px; height:320px" id="makegroup">
+            <div id="makegroup" style="background-color:#0E0F28; width:100px; height:320px">
 
             </div>
-            <div style="background-color:#0E0F28; width:190px; height:200px" id="makegroup2">
+            <div id="makegroup2" style="background-color:#0E0F28; width:190px; height:200px">
 
             </div>
             <v-icon icon="mdi-plus" style="align-self:center; color:#FA8EB6"></v-icon>
@@ -37,18 +37,18 @@
       v-for="n in 7"
       :key="n"
     >
-      <mypage-group-item/>
+      <MyPageGroupItem/>
     </v-slide-group-item>
   </v-slide-group>
 </template>
 
 <script>
 import CreateGroup from './CreateGroup.vue';
-import MypageGroupItem from './MypageGroupItem.vue';
+import MyPageGroupItem from './MyPageGroupItem.vue';
 
 export default {
   components: {
-    MypageGroupItem,
+    MyPageGroupItem,
     CreateGroup,
    },
 
@@ -75,12 +75,12 @@ export default {
 <style>
 #makegroup {
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 45px;
 }
 #makegroup2 {
   position: absolute;
   top: 25px;
-  left: 0px;
+  left: 0;
 }
 </style>

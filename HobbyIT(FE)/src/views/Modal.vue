@@ -75,6 +75,7 @@ import MakeGroup from '@/components/modals/MakeGroup.vue';
 import exp from '@/components/modals/EXP.vue';
 
 export default {
+  components: { GroupRegister, GroupFreeRegi, BanMem, Resign, AddNotice, DelGroup, GroupResign, MakeGroup, exp },
   data() {
     return {
       groupregimodal: false,
@@ -88,7 +89,6 @@ export default {
       exp: false,
     };
   },
-  components: { GroupRegister, GroupFreeRegi, BanMem, Resign, AddNotice, DelGroup, GroupResign, MakeGroup, exp },
   methods: {
     closegroupregi() {
       this.groupregimodal = false;

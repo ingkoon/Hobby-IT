@@ -10,7 +10,7 @@ import { onBeforeMount } from "vue";
 export default {
   name: "ChatMessage",
   props: {
-    msg: Object,
+    msg: [],
   },
   computed: {
     color() {

@@ -8,26 +8,26 @@
         <input
           v-model='userEmail'
           placeholder="email"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:7px 0px 7px; color:white"
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:7px 0 7px; color:white"
           type="email"
         >
         <div id="checkemail" style="font-size:12px; color:red">! 이미 등록된 이메일입니다.</div>
         <input
           v-model='userPassword'
           placeholder="password"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0 7px; color:white"
           type="password">
         <div id="checkpwd" style="font-size:12px; color:red">! 비밀번호를 입력해주세요.</div>
         <input
           v-model='username'
           placeholder="이름"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0 7px; color:white"
           type="text">
         <div id="checkname" style="font-size:12px; color:red">! 성명을 입력해주세요.</div>
         <input
           v-model='userNickname'
           placeholder="활동할 닉네임"
-          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0px 7px; color:white"
+          style="border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0 7px; color:white"
           type="text">
         <div id="checknickname" style="font-size:12px; color:red">! 이미 사용중인 닉네임입니다.</div>
         <v-btn color="#EE49FD80" style="width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px" @click='handleSignup'>Sign up</v-btn>
@@ -118,7 +118,7 @@ export default {
   position: absolute;
   width:800px;
   height: 600px;
-  box-shadow: 0px 4px 100px #ECE5FF;
+  box-shadow: 0 4px 100px #ECE5FF;
   border-radius: 20px;
   display: flex;
   align-items: center;

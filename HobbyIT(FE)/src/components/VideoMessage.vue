@@ -4,7 +4,7 @@
       style="
         height: 100%;
         width: 100%;
-        padding: 0px;
+        padding: 0;
         justify-content: space-between;
         flex-direction: column;
         display: flex;
@@ -19,19 +19,19 @@
         ></v-icon>
       </v-row>
 
-      <v-row style="overflow-y: auto" id="message-content">
+      <v-row id="message-content" style="overflow-y: auto">
         <ChatMessage
-          style="flex-wrap: wrap"
           v-for="(msg, index) in messageStore.message"
           :key="index"
           :msg="msg"
+          style="flex-wrap: wrap"
         />
       </v-row>
 
       <v-row id="message-sender">
         <form
-          style="width: 100%; align-items: center"
           id="message-sender-form"
+          style="width: 100%; align-items: center"
           @submit.prevent="submitMessage"
         >
           <div
@@ -42,10 +42,10 @@
             "
           >
             <input
-              style="color: white"
-              type="text"
               v-model="message"
               placeholder="type message :)"
+              style="color: white"
+              type="text"
             />
             <div id="button-box" style="margin-right: -20px">
               <v-icon color="white">mdi-send mdi-rotate-315 </v-icon>
@@ -90,7 +90,7 @@ export default {
 
 <style scoped>
 .v-row {
-  margin: 0px;
+  margin: 0;
 }
 
 #button-box {
@@ -114,7 +114,7 @@ export default {
 
 #message-header {
   color: white;
-  padding: 14px 7px 0px 43px;
+  padding: 14px 7px 0 43px;
   font-style: normal;
   font-size: 40px;
   max-height: 90px;

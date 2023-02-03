@@ -5,15 +5,16 @@
         <div id="notopa" style="color:white; height:60px; display:flex; justify-content:space-between; padding:10px 5px; background: linear-gradient(180deg, rgba(14, 15, 40, 0) 0%, #0E0F28 100%);">
           <span></span>
           <span style="font-size: 20px; font-weight: 700; margin-left: 80px;">HOBBY 만들기</span>
-          <v-icon icon="mdi-close" size="24" @click="closecreategroup" style="margin-right: 10px;"></v-icon>
+          <v-icon icon="mdi-close" size="24" style="margin-right: 10px;" @click="closecreategroup"></v-icon>
         </div>
         <div style="display:flex; background-color:#0E0F28;">
-          <div style="width:350px; height:500px; background-color:#0E0F28; display: flex; align-items: center; justify-content: center;
+          <div
+style="width:350px; height:500px; background-color:#0E0F28; display: flex; align-items: center; justify-content: center;
                       border: 4px solid #FA8EB6;" @click="uploadimg">
-            <v-icon icon = "mdi-plus-circle-outline" style="align-self: center; color: white; z-index:1;" v-if="!isImage"></v-icon>
-            <img style="width:350px; height:500px; object-fit: cover;" id="realimg" v-else>
+            <v-icon v-if="!isImage" icon = "mdi-plus-circle-outline" style="align-self: center; color: white; z-index:1;"></v-icon>
+            <img v-else id="realimg" style="width:350px; height:500px; object-fit: cover;">
           </div>
-          <input type="file" id="uploadimg" accept="image/*" required style="display:none">
+          <input id="uploadimg" accept="image/*" required style="display:none" type="file">
           <div id="tri1" style=""></div>
 
           <div style="background-color:#0E0F28; flex-grow:1; color:white">
@@ -41,6 +42,9 @@ export default {
       // temp
       isImage : false,
     }
+  },
+  mounted() {
+
   },
   methods : {
     closecreategroup() {
@@ -74,9 +78,6 @@ export default {
       }
       reader.readAsDataURL(file);
     }
-
-  },
-  mounted() {
 
   }
 }

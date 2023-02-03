@@ -14,10 +14,10 @@
       </div>
       <div style="display: flex">
         <canvas
-          class="new-cursor"
           id="canvas"
-          width="500"
+          class="new-cursor"
           height="500"
+          width="500"
         ></canvas>
         <div style="margin-left: 20px; display: flex">
           <div style="display: flex; flex-direction: column">
@@ -25,15 +25,14 @@
               굵기 :
               <input
                 id="input"
-                type="number"
-                min="1"
-                max="100"
                 color="white"
+                max="100"
+                min="1"
                 style="color: white; border: 1px solid white"
+                type="number"
               />
             </div>
             <button
-              @click="colorChange('#ff0000')"
               style="
                 background-color: red;
                 width: 50px;
@@ -42,9 +41,9 @@
                 border-radius: 50px;
                 margin: 5px;
               "
+              @click="colorChange('#ff0000')"
             ></button>
             <button
-              @click="colorChange('#000AFF')"
               style="
                 background-color: blue;
                 width: 50px;
@@ -53,9 +52,9 @@
                 border-radius: 50px;
                 margin: 5px;
               "
+              @click="colorChange('#000AFF')"
             ></button>
             <button
-              @click="colorChange('#EE49FD')"
               style="
                 background-color: #ee49fd;
                 width: 50px;
@@ -64,9 +63,9 @@
                 border-radius: 50px;
                 margin: 5px;
               "
+              @click="colorChange('#EE49FD')"
             ></button>
             <button
-              @click="colorChange('#000000')"
               style="
                 background-color: black;
                 width: 50px;
@@ -75,6 +74,7 @@
                 border-radius: 50px;
                 margin: 5px;
               "
+              @click="colorChange('#000000')"
             ></button>
             <button id="eraser"></button>
           </div>
@@ -98,16 +98,16 @@ export default {
       bglist: ["#F7FDB0", "#ABFAB3", "#BFE0FE", "#FECDCD"],
     };
   },
-  methods: {
-    closemodal() {
-      this.$emit("close");
-    },
-    colorChange(color) {
-      console.log(color);
-      this.ctx.strokeStyle = color;
-    },
-    clearAll() {
-      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+  watch: {
+    canvasData(newData, oldData) {
+      console.log("hahah");
+      const canvas = this.canvas;
+      const ctx = this.ctx;
+      const image = new Image();
+      image.onload = function () {
+        ctx.drawImage(image, 0, 0);
+      };
+      image.src = `data:image/png;base64,${newData}`;
     },
   },
   mounted() {
@@ -214,16 +214,16 @@ export default {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   },
-  watch: {
-    canvasData(newData, oldData) {
-      console.log("hahah");
-      const canvas = this.canvas;
-      const ctx = this.ctx;
-      const image = new Image();
-      image.onload = function () {
-        ctx.drawImage(image, 0, 0);
-      };
-      image.src = `data:image/png;base64,${newData}`;
+  methods: {
+    closemodal() {
+      this.$emit("close");
+    },
+    colorChange(color) {
+      console.log(color);
+      this.ctx.strokeStyle = color;
+    },
+    clearAll() {
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     },
   },
 };

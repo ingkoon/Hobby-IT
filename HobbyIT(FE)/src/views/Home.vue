@@ -11,7 +11,8 @@
 
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
-    <div style="position:relative; display: flex; align-items: center; text-align: center; justify-content: center;
+    <div
+style="position:relative; display: flex; align-items: center; text-align: center; justify-content: center;
                 width: 800px; height: 150px; margin-top: 200px;">
       <p>HOBBY'IT</p>
 
@@ -76,34 +77,34 @@
       </div>
 
       <!-- <div style="position: absolute; width: 100%; height: 221px; left: 0px; top: 1099px; background: #000211;"></div> -->
-      
-      
+
+
       <div style="display:flex; align-items:center; flex-direction:column">
         <div id="box1">
-          <h1 style="margin-top: 50px; font-size: 40px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">@@@하고 싶은데.. 같이 하지 않을래요?</h1>
+          <h1 style="margin-top: 50px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">@@@하고 싶은데.. 같이 하지 않을래요?</h1>
           <div style="display:flex; align-items:center">
-            <img style="width:60%; margin: 10px 20px" src = "../assets/people.gif">
+            <img src = "../assets/people.gif" style="width:60%; margin: 10px 20px">
             <h1 style="font-size: 25px;">혼자보단 둘,<br>둘보단 다같이!<br><br>관심있는 모임에 들어가거나,<br>동료들을 구해보는건 어떨까요?<br>다함께 취미생활을 기록하고 공유하세요.<br>혼자보단 분명 더욱 즐거울겁니다!
             <br>What's So Special?<br>호빗만의 장점을 더 알아볼까요?</h1>
           </div>
         </div>
-        
+
         <div style="display:flex; margin-top:400px">
           <div id="box2">
-            <h1 style="color:white; margin-top: 50px; font-size: 50px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">24/7 즐기는 취미생활</h1>
-            <h1 style="color:white; margin-top: 15px; font-size: 20px;"><span style="color: #5204BA; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">사진 공유, 방명록, 화상채팅까지!</span><br>언제 어디서든 추억을 쌓아갈 수 있습니다.<br><br>내가 속한 모임마다 특별한 추억들로<br>채워가보세요 :)</h1>
+            <h1 style="color:white; margin-top: 50px; font-size: 50px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">24/7 즐기는 취미생활</h1>
+            <h1 style="color:white; margin-top: 15px; font-size: 20px;"><span style="color: #5204BA; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">사진 공유, 방명록, 화상채팅까지!</span><br>언제 어디서든 추억을 쌓아갈 수 있습니다.<br><br>내가 속한 모임마다 특별한 추억들로<br>채워가보세요 :)</h1>
             <img src = "../assets/nod.gif">
           </div>
 
           <div>
             <div id="box3">
               <v-icon icon="mdi-lock-open" size="38" style="margin-top:20px"></v-icon>
-              <h1 style="color: #0E0F28; margin-top: 10px; font-size: 40px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">We are Open!</h1>
+              <h1 style="color: #0E0F28; margin-top: 10px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">We are Open!</h1>
               <h1 style="color: #0E0F28; margin-top: 20px; font-size: 20px;">유입 환영!<br>아무나 자유롭게 모임 가입이 바로 가능하군요!<br>취향이 맞는 다양한 사람들을 만날 수 있겠어요<br>누구나 welcome!</h1>
             </div>
             <div id="box4">
               <v-icon icon="mdi-lock" size="38" style="margin-top:20px"></v-icon>
-              <h1 style="color: #0E0F28; margin-top: 10px; font-size: 40px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">Friends & Family!</h1>
+              <h1 style="color: #0E0F28; margin-top: 10px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">Friends & Family!</h1>
               <h1 style="color: #0E0F28; margin-top: 20px; font-size: 20px;">좀 더 프라이빗한 모임이었으면 좋겠어요<br>가입신청 인사, 활동 중인 모임 등을<br>확인 후에 신규멤버로 초대해볼까요?<br>우리들만의 아지트가 필요할때도 있는 법이죠</h1>
             </div>
           </div>
@@ -115,34 +116,35 @@
           <div style="position:relative">
             <div id="card1">
               <div style="width:300px; height:300px; margin-top:10px;">
-                <img style="width:100%; height:100%" src = "../assets/home1.gif">
+                <img src = "../assets/home1.gif" style="width:100%; height:100%">
                 <div style="font-size: 40px; margin-left: 10px; background: linear-gradient(180deg, #642EFE 0%, #FA8EB6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">끝이 없다!</div>
                 <div style="font-size: 20px; margin-left: 15px; color: white">하고싶은거 다 해<br>취미엔 끝이 없으니까!</div>
               </div>
             </div>
             <div id="card2">
               <div style="width:500px; height:500px; margin-top:10px;">
-                <img style="width:100%; height:100%" src = "../assets/home4.gif">
+                <img src = "../assets/home4.gif" style="width:100%; height:100%">
                 <div style="font-size: 40px; margin-right: 10px; background: linear-gradient(180deg, #642EFE 0%, #FA8EB6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">나 혼자 즐기긴 아깝지</div>
                 <div style="font-size: 20px; color: white; margin-top: 50px;  margin-right: 15px;">찍고 올리고, 찍고 올리고<br>기록은 기억보다 선명하니까</div>
               </div>
             </div>
             <div id="card3">
               <div style="width:600px; height:600px; margin-top:10px;">
-                <img style="width:100%; height:100%" src = "../assets/home2.gif">
+                <img src = "../assets/home2.gif" style="width:100%; height:100%">
                 <div style="font-size: 40px; margin-left: 10px; background: linear-gradient(180deg, #642EFE 0%, #FA8EB6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">나를 만드는 것은 나자신!</div>
                 <div style="font-size: 20px; margin-left: 16px; color: white">텍스트1<br>텍스트2<br>텍스트3<br>텍스트4</div>
               </div>
             </div>
             <div id="card4">
               <div style="width:400px; height:400px; margin-top:10px;">
-                <img style="width:100%; height:100%; object-fit:cover;" src = "../assets/home3.gif">
+                <img src = "../assets/home3.gif" style="width:100%; height:100%; object-fit:cover;">
                 <div style="font-size: 40px; margin-left: 10px; background: linear-gradient(180deg, #642EFE 0%, #FA8EB6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">중요한건 즐기는 마음</div>
                 <div style="font-size: 20px; margin-left: 15px; color: white"><br>텍스트1<br>텍스트2<br>텍스트3</div>
               </div>
             </div>
 
-            <div style="position: absolute; width: 1920px; height: 1080px; left: -900px; top: 200px; width: 1920px; height: 1080px;
+            <div
+style="position: absolute; width: 1920px; height: 1080px; left: -900px; top: 200px; width: 1920px; height: 1080px;
             background: radial-gradient(50% 50% at 50% 50%, #D534EF 0%, rgba(36, 39, 75, 0) 100%); filter: blur(100px);">
             </div>
           </div>
@@ -173,17 +175,17 @@
             <img src = "../assets/greenp.svg">
           </div>
           <div style="position: absolute; width: 100%; height: 1540px; left: -287px; top: 648px;">
-            <img style="z-index: 5;" src = "../assets/BLOB.svg">
+            <img src = "../assets/BLOB.svg" style="z-index: 5;">
           </div>
         </div>
-    
+
       </div>
 
 
 
     </div>
 
-    
+
   </div>
 </template>
 
@@ -232,7 +234,7 @@ p{
   font-style: normal;
   font-weight: 400;
   font-size: 124px;
-  line-height: 100 px;
+  line-height: 100px;
   background: linear-gradient(180deg, #AD00FF 24.05%, #FA8EB6 72.16%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -265,7 +267,7 @@ p{
   box-sizing: border-box;
   width: 120%;
   left:-10%;
-  border-radius: 50% 50% 0% 0% / 50% 50% 0% 0%;
+  border-radius: 50% 50% 0 0 / 50% 50% 0 0;
   /* background: linear-gradient(360deg, #000211, #0E0F28); */
   /* background: #000211; */
   border-top: 5px solid transparent;
@@ -337,7 +339,7 @@ p{
 }
 
 #text3{
-  color:#FA8EB6;
+  /*color:#FA8EB6;*/
   font-size: 26px;
   line-height: 48px;
   color: #E9D7DD;
@@ -347,7 +349,7 @@ p{
 #box1{
   width: 80%;
   background: linear-gradient(180deg, #F4D1D6 0%, #F4D1D6 23.41%, #F5D2D7 68.11%, #FADFDD 86.61%, #F4D1D6 100%);
-  box-shadow: inset 0px 4px 50px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -360,7 +362,7 @@ p{
 #box2{
   width: auto;
   background: linear-gradient(180deg, #FA8EB6 0%, #F98CB4 55.18%, #FCA2C3 71.63%, #FCB0CB 81.7%, #FABAD0 96.94%, #FBB7CD 100%);;
-  box-shadow: inset 0px 4px 50px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -370,10 +372,10 @@ p{
 }
 
 #box3{
-  width: 100%; 
+  width: 100%;
   height: 320px;
   background: #DEFFBE;
-  box-shadow: inset 0px 4px 50px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -383,10 +385,10 @@ p{
 }
 
 #box4{
-  width: 100%; 
+  width: 100%;
   height: 320px;
   background: #69FCE1;
-  box-shadow: inset 0px 4px 50px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -415,10 +417,10 @@ p{
 
 #card1{
   position: absolute;
-  width: 320px; 
-  height: 524px; 
+  width: 320px;
+  height: 524px;
   left: -400px;
-  top: 0px;
+  top: 0;
   z-index: 2;
   background-color: #000211;
   display: flex;
@@ -428,11 +430,11 @@ p{
 }
 
 #card2{
-  position: absolute; 
-  width: 520px; 
-  height: 813px; 
-  left: 0px; 
-  top: 0px;
+  position: absolute;
+  width: 520px;
+  height: 813px;
+  left: 0;
+  top: 0;
   z-index: 3;
   background-color: #000211;
   display: flex;
@@ -445,7 +447,7 @@ p{
   position: absolute;
   width: 620px;
   height: 986px;
-  left: -500px; 
+  left: -500px;
   top: 700px;
   z-index: 4;
   background-color: #000211;

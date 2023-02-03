@@ -9,63 +9,63 @@
         <v-col id="leftSidebar" :style="{ height: computedHeight + 'px' }">
           <v-icon icon="mdi-microphonea" size="36"></v-icon>
           <v-icon
+            v-if="isAudioEnabled"
             color="white"
             icon="mdi-microphone"
-            @click="handleAudio"
             size="36"
-            v-if="isAudioEnabled"
+            @click="handleAudio"
           ></v-icon>
           <v-icon
+            v-else
             color="white"
             icon="mdi-microphone-off"
-            @click="handleAudio"
             size="36"
-            v-else
+            @click="handleAudio"
           ></v-icon>
           <v-icon
+            v-if="isVideoEnabled"
             color="white"
             icon="mdi-video"
             size="36"
             @click="handleMyVideo"
-            v-if="isVideoEnabled"
           ></v-icon>
           <v-icon
+            v-else
             color="white"
             icon="mdi-video-off"
             size="36"
             @click="handleMyVideo"
-            v-else
           ></v-icon>
           <v-icon
+            v-if="isScreenShareEnabled"
             color="white"
             icon="mdi-monitor-off"
-            v-if="isScreenShareEnabled"
-            @click="handleScreenShare"
             size="36"
+            @click="handleScreenShare"
           ></v-icon>
           <v-icon
+            v-else
             color="white"
             icon="mdi-monitor"
-            @click="handleScreenShare"
-            v-else
             size="36"
+            @click="handleScreenShare"
           ></v-icon>
           <v-btn
-            style="background-color: red; color: white"
             icon="mdi-phone-off"
+            style="background-color: red; color: white"
             @click="handleClickOff"
           ></v-btn>
           <v-icon
             color="white"
             icon="mdi-pencil-box"
-            @click="openpaint"
             size="36"
+            @click="openpaint"
           ></v-icon>
           <v-icon
             color="white"
             icon="mdi-cog-outline"
-            @click=""
             size="36"
+            @click=""
           ></v-icon>
           <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
           <v-icon icon="mdi-microphonea" size="24"></v-icon>
@@ -87,8 +87,8 @@
           >
             <user-video
               v-for="sub in subscribers"
-              :stream-manager="sub"
               :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
             >
               <!--            추가 바람-->
             </user-video>
@@ -100,7 +100,7 @@
       </v-row>
 
       <v-dialog v-model="paint">
-        <SharedPaint @send-canvas="sendCanvas" :canvas-data="canvasData" />
+        <SharedPaint :canvas-data="canvasData" @send-canvas="sendCanvas" />
       </v-dialog>
     </v-container>
   </div>
@@ -119,14 +119,14 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
 export default {
+  name: "VideoChat",
+  components: { SharedPaint, VideoMessage, UserVideo },
   setup() {
     const appStore = useAppStore();
     const messageStore = useMessageStore();
     console.log(messageStore, "112233");
     return { appStore, messageStore };
   },
-  name: "VideoChat",
-  components: { SharedPaint, VideoMessage, UserVideo },
   data() {
     return {
       windowHeight: window.innerHeight,
@@ -146,12 +146,6 @@ export default {
       paint: false,
       canvasData: undefined,
     };
-  },
-  mounted() {
-    window.onresize = () => {
-      this.windowHeight = window.innerHeight;
-    };
-    this.joinSession();
   },
   computed: {
     computedHeight() {
@@ -189,6 +183,12 @@ export default {
     baseUnit: function (newVal, oldVal) {
       this.appStore.baseUnit = newVal;
     },
+  },
+  mounted() {
+    window.onresize = () => {
+      this.windowHeight = window.innerHeight;
+    };
+    this.joinSession();
   },
   methods: {
     openpaint() {
@@ -416,10 +416,10 @@ export default {
   display: flex;
   position: absolute;
   top: 59px;
-  left: 0px;
+  left: 0;
   width: 126px;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   border-radius: 0 50px 50px 0;
   z-index: 4;
   opacity: 1;
@@ -431,18 +431,18 @@ export default {
   left: 126px;
   z-index: 5;
   width: 1286px;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 #rightSidebar {
   position: absolute;
   top: 59px;
-  right: 0px;
+  right: 0;
   background-color: #0e0f28;
   width: 483px;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   border-radius: 50px 0 0 0;
   z-index: 4;
 }
@@ -450,11 +450,11 @@ export default {
 #background {
   position: absolute;
   top: 59px;
-  right: 0px;
+  right: 0;
   background-color: black;
   width: 100%;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   z-index: 1;
 }
 
@@ -466,8 +466,8 @@ export default {
   top: -226px;
   border-radius: 350px;
   z-index: 2;
-  box-shadow: 0px 4px 250px #ee49fd, inset 0px 4px 250px #642efe;
-  -webkit-box-shadow: 0px 4px 250px #ee49fd, inset 0px 4px 250px #642efe;
+  box-shadow: 0 4px 250px #ee49fd, inset 0 4px 250px #642efe;
+  -webkit-box-shadow: 0 4px 250px #ee49fd, inset 0 4px 250px #642efe;
 }
 
 #circle2 {
@@ -479,7 +479,7 @@ export default {
   z-index: 2;
   border-radius: 350px;
   background: #000101;
-  box-shadow: 0px 4px 250px #fff16a, inset 0px 4px 250px #ff4066;
+  box-shadow: 0 4px 250px #fff16a, inset 0 4px 250px #ff4066;
 }
 
 #title {
@@ -487,7 +487,6 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
   font-style: normal;
   font-weight: 700;
   font-size: 40px;

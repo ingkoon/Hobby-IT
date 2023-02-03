@@ -51,7 +51,7 @@ const routes = [
   },
   {
     path: '/main',
-    component: () => import('@/layouts/default/Default.vue'),
+    component: () => import('@/layouts/default/MainPage.vue'),
     children: [
       {
         path: '',
@@ -62,7 +62,7 @@ const routes = [
   },
   {
     path: '/mypage',
-    component: () => import('@/layouts/default/Default.vue'),
+    component: () => import('@/layouts/default/MainPage.vue'),
     children: [
       {
         path: '',

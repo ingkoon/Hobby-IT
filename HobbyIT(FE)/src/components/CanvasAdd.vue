@@ -7,18 +7,18 @@
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display:flex">
-        <canvas class="new-cursor" id="canvas" width="500" height="500" style="">
-          
+        <canvas id="canvas" class="new-cursor" height="500" style="" width="500">
+
         </canvas>
         <div style="margin-left:20px; display:flex;">
           <div style="display:flex; flex-direction:column">
             <div style="color:white; margin-bottom:5px">굵기 :
-              <input id="input" type="number" min="1" max="100" color="white" style="color:white; border: 1px solid white"/>
+              <input id="input" color="white" max="100" min="1" style="color:white; border: 1px solid white" type="number"/>
             </div>
-            <button @click="colorChange('#ff0000')" style="background-color: red; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#000AFF')" style="background-color: blue; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#EE49FD')" style="background-color: #EE49FD; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
-            <button @click="colorChange('#000000')" style="background-color: black; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px"></button>
+            <button style="background-color: red; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#ff0000')"></button>
+            <button style="background-color: blue; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#000AFF')"></button>
+            <button style="background-color: #EE49FD; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#EE49FD')"></button>
+            <button style="background-color: black; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#000000')"></button>
             <button id="eraser"></button>
           </div>
 
@@ -32,7 +32,7 @@
               <v-btn icon="mdi-send-outline" style="background-color:pink; transform:rotate(-45deg);"></v-btn>
             </div>
 
-            
+
           </div>
         </div>
 
@@ -55,20 +55,7 @@ export default {
       bglist2 : ['#D3D98F','#63D382','#AC94F1','#DAA6A6'],
     }
   },
-  methods : {
-    closemodal() {
-      this.$emit('close')
-    },
-    colorChange(color) {
-      this.ctx.strokeStyle = color;
-      this.canvas.setAttribute('style','cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:'+this.background+";")
-    },
-    clearAll() {
-      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    },
-  },
   mounted() {
-
     var pos = {
       drawable: false,
       x: -1,
@@ -105,7 +92,7 @@ export default {
       ctx.lineWidth = input.value;
     }
     ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'    
+    ctx.lineJoin = 'round'
 
     function listener(e){
       switch(e.type){
@@ -184,6 +171,18 @@ export default {
     var day = ('0'+today.getDate()).slice(-2);
 
     this.date = year+"."+month+"."+day
+  },
+  methods : {
+    closemodal() {
+      this.$emit('close')
+    },
+    colorChange(color) {
+      this.ctx.strokeStyle = color;
+      this.canvas.setAttribute('style','cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:'+this.background+";")
+    },
+    clearAll() {
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    },
   }
 };
 </script>

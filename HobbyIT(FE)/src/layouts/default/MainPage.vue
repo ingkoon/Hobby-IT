@@ -2,7 +2,7 @@
   <v-app id="app">
     <default-bar style="position: fixed" />
 
-    <default-view style="margin: 50px 13% 0px" />
+    <default-view style="margin: 50px 13% 0" />
   </v-app>
 </template>
 

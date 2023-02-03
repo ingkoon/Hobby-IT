@@ -12,13 +12,13 @@
 import { useAppStore } from "@/store/app";
 
 export default {
-  setup() {
-    const appStore = useAppStore();
-    return { appStore };
-  },
   name: "OvVideo",
   props: {
     streamManager: Object,
+  },
+  setup() {
+    const appStore = useAppStore();
+    return { appStore };
   },
   mounted() {
     this.streamManager.addVideoElement(this.$el);

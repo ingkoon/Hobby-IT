@@ -2,15 +2,15 @@
   <v-card id="groupnotice">
     <v-icon icon="mdi-close" style="align-self: end" @click="close"></v-icon>
     <div style="margin-bottom: 10px">
-      <v-icon icon="mdi-trophy" style="" id="icon"></v-icon>
+      <v-icon id="icon" icon="mdi-trophy" style=""></v-icon>
       Hobbitz
     </div>
 
     <v-progress-linear
       v-model="gauge"
-      color="#fa8eb6"
       bg-color="#642EFE"
       bg-opacity="1"
+      color="#fa8eb6"
       height="50px"
       rounded
       rounded-bar
@@ -28,19 +28,19 @@
 
 
     <div style="font-size:16px; align-self:start; margin-left:50px; margin-bottom:10px">
-      <div style="font-family:linefont;" align="left">
+      <div align="left" style="font-family:linefont;">
         <v-icon icon="mdi-lightbulb-outline"></v-icon>
         방명록 작성 시 10pts
       </div>
-      <div style="font-family:linefont" align="left">
+      <div align="left" style="font-family:linefont">
         <v-icon icon="mdi-lightbulb-outline"></v-icon>
         작성한 게시글 당 5pts
       </div>
-      <div style="font-family:linefont" align="left">
+      <div align="left" style="font-family:linefont">
         <v-icon icon="mdi-lightbulb-outline"></v-icon>
         댓글 작성 시 1pts
       </div>
-      <div style="font-family:linefont" align="left">
+      <div align="left" style="font-family:linefont">
         <v-icon icon="mdi-lightbulb-outline"></v-icon>
         화상채팅 참여 시간 당 1pts
       </div>
@@ -74,7 +74,7 @@ export default {
   display: flex;
   align-self: center;
   text-align: center;
-  justify-content: center;
+  /*justify-content: center;*/
   background-color: #0e0f28;
   color: white;
   font-family: linefontbold;
@@ -90,7 +90,5 @@ export default {
   padding-right: 10px;
 }
 
-#icon {
-  color : linear-gradient(to bottom, #642efe, #0e0f28);
-}
+
 </style>

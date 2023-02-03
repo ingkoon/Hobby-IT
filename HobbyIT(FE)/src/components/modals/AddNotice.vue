@@ -7,22 +7,22 @@
     </div>
 
     <v-text-field
-      placeholder="제목"
       color="white"
+      placeholder="제목"
+      style="margin:0 10px; width:100%"
       variant="outlined"
-      style="margin:0px 10px; width:100%"
-      
+
     ></v-text-field>
 
     <v-textarea
-      variant="outlined"
-      counter
-      :rules="rules"
       :model-value="content"
-      color="white"
-      placeholder="본문"
-      style="margin:0px; width:100%"
+      :rules="rules"
       auto-grow="false"
+      color="white"
+      counter
+      placeholder="본문"
+      style="margin:0; width:100%"
+      variant="outlined"
     ></v-textarea>
 
     <div style="align-self:end; font-family:linefont; margin-bottom:5px">
@@ -48,10 +48,10 @@ export default {
 #groupnotice {
   width:670px;
   height:auto;
-  display:flex; 
-  align-self:center; 
-  text-align:center; 
-  justify-content:center; 
+  display:flex;
+  align-self:center;
+  text-align:center;
+  /*justify-content:center;*/
   background-color:#0E0F28;
   color:white;
   font-family: linefontbold;

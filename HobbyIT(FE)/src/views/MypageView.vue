@@ -16,13 +16,13 @@
         </div>
 
         <div style="margin-top: 20px">오늘의 획득량 : 20/30</div>
-        <div style="margin: 10px 0px">진척도 보상</div>
+        <div style="margin: 10px 0">진척도 보상</div>
 
         <v-progress-linear
           v-model="gauge"
-          color="#fa8eb6"
           bg-color="#642efe"
           bg-opacity="1"
+          color="#fa8eb6"
           height="20px"
           rounded
           rounded-bar
@@ -37,7 +37,7 @@
           style="
             display: flex;
             justify-content: space-between;
-            margin: 5px 5% 0px;
+            margin: 5px 5% 0;
           "
         >
           <span>Lv.10</span>
@@ -55,24 +55,24 @@
       </div>
 
       <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
-      <mypage-group />
+      <MyPageGroup />
 
       <div style="font-size: 36px; margin-top: 20px">
         가입 대기중인 HOBBY...
       </div>
-      <mypage-group />
+      <MyPageGroup />
     </div>
   </div>
 </template>
 
 <script>
 import ParticipateGroup from "@/components/ParticipateGroup.vue";
-import MypageGroup from "@/components/MypageGroup.vue";
+import MyPageGroup from "@/components/MyPageGroup.vue";
 
 export default {
   components: {
     ParticipateGroup,
-    MypageGroup,
+    MyPageGroup,
   },
   data() {
     return {
@@ -106,7 +106,7 @@ export default {
 #mypageinfo #title {
   font-size: 24px;
   text-align: start;
-  margin: 17px 0px;
+  margin: 17px 0;
 }
 
 #mypageinfo #content {

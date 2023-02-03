@@ -31,11 +31,11 @@ export default {
 
 #delgroup {
   width:670px;
-  height:330px; 
-  display:flex; 
-  align-self:center; 
-  text-align:center; 
-  justify-content:center; 
+  height:330px;
+  display:flex;
+  align-self:center;
+  text-align:center;
+  /*justify-content:center; */
   background-color:#0E0F28;
   color:white;
   font-family: linefontbold;

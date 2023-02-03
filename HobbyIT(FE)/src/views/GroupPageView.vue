@@ -1,5 +1,5 @@
 <template>
-<div style="margin:50px 13% 0px">
+<div style="margin:50px 13% 0">
   <h3>이름 들어갈 곳</h3>
 
   <div id="group">
@@ -13,9 +13,9 @@
 
         <div style="margin-top: 20px">
           <v-icon
+            color="#FA8EB6"
             icon="mdi-account-multiple"
             size="small"
-            color="#FA8EB6"
           ></v-icon>
           13/20
         </div>
@@ -39,10 +39,10 @@
       <!-- 검색 -->
       <v-text-field
         clearable
-        variant="outlined"
-        prepend-inner-icon="mdi-magnify"
         placeholder="검색"
+        prepend-inner-icon="mdi-magnify"
         style="color: white; height: 40px"
+        variant="outlined"
       ></v-text-field>
     </div>
     <!-- 오른쪽 게시판 탭 -->
@@ -59,19 +59,19 @@
           <div style="flex-grow: 1">
             <div style="float: right">
               <v-icon
-                icon="mdi-calendar"
                 color="white"
+                icon="mdi-calendar"
                 style="padding: 35px"
                 @click.stop="drawer = !drawer"
               ></v-icon>
             </div>
           </div>
         </v-tabs>
-        <hr style="margin-top: 0px; border: 2px solid #fa8eb6" />
+        <hr style="margin-top: 0; border: 2px solid #fa8eb6" />
         <v-card-text>
           <v-window v-model="tab">
             <!-- 게시글 -->
-            <v-window-item value="board" id="boarditem">
+            <v-window-item id="boarditem" value="board">
               <v-container>
                 <v-row>
                   <v-col v-for="j in 4" :key="j" cols="12" sm="3">
@@ -107,7 +107,6 @@
   <!-- 방명록 사이드바 -->
   <v-navigation-drawer
     v-model="drawer"
-    temporary
     location="right"
     style="
       width: 30%;
@@ -116,6 +115,7 @@
       position: fixed;
       top: 59px;
     "
+    temporary
   >
     <div>
       <v-list-item style="color: white">
@@ -128,10 +128,10 @@
       <div style="text-align: center; margin: 20px">
         <v-date-picker
           v-model="date"
-          color="purple"
-          :max-date="nowdate"
-          style="background-color: #fbd3de; padding: 10px; width: 85%"
           :attributes="attrs"
+          :max-date="nowdate"
+          color="purple"
+          style="background-color: #fbd3de; padding: 10px; width: 85%"
         />
       </div>
 
@@ -141,14 +141,14 @@
           <div
             style="display: flex; flex-direction: column; align-items: center"
           >
-            <v-icon icon="mdi-calendar-plus-outline" color="white"></v-icon>
+            <v-icon color="white" icon="mdi-calendar-plus-outline"></v-icon>
             <span style="color: white; margin-top: 10px"
               >방명록<br />작성하기</span
             >
           </div>
 
           <v-dialog v-model="canvasmodal" activator="parent">
-            <canvasadd @close="closeaddmodal" />
+            <CanvasAdd @close="closeaddmodal" />
           </v-dialog>
         </v-btn>
       </div>
@@ -160,15 +160,15 @@
 <script>
 import GroupNotice from "../components/GroupNotice.vue";
 import ArticleItem from "../components/ArticleItem.vue";
-import Canvasadd from "../components/Canvasadd.vue";
 import ArticleAdd from "../components/AddGroupArticle.vue";
 import ArticleModal from "../components/GroupArticle.vue";
+import CanvasAdd from '@/components/CanvasAdd.vue';
 
 export default {
   components: {
     ArticleItem,
     GroupNotice,
-    Canvasadd,
+    CanvasAdd,
     ArticleAdd,
     ArticleModal,
   },
@@ -257,7 +257,7 @@ h3 {
 #groupinfo #title {
   font-size: 24px;
   text-align: start;
-  margin: 17px 0px;
+  margin: 17px 0;
 }
 
 #groupinfo #content {
@@ -268,7 +268,7 @@ h3 {
 }
 
 button {
-  margin: 15px 0px;
+  margin: 15px 0;
 }
 
 #board {

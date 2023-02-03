@@ -13,7 +13,7 @@
         <th>작성일</th>
         <th>작성자</th>
       </tr>
-      <tr id="lst" v-for="(row, idx) in list" :key="idx">
+      <tr v-for="(row, idx) in list" id="lst" :key="idx">
         <td colspan="4">
           <table>
             <colgroup>
@@ -34,8 +34,8 @@
             </tr>
             <tr :name="`${row.id}`" style="display: none">
               <td
-                colspan="4"
                 id="noticedetail"
+                colspan="4"
                 style="text-align: left; padding: 20px"
               >
                 <div
@@ -79,13 +79,13 @@
     </table>
   </div>
 
-  <div class="pagination" v-if="paging.totalCount > 0">
-    <a href="javascript:;" @click="fnPage(1)" class="first">&lt;&lt;</a>
+  <div v-if="paging.totalCount > 0" class="pagination">
+    <a class="first" href="javascript:;" @click="fnPage(1)">&lt;&lt;</a>
     <a
-      href="javascript:;"
       v-if="paging.start_page > 10"
-      @click="fnPage(`${paging.start_page - 1}`)"
       class="prev"
+      href="javascript:;"
+      @click="fnPage(`${paging.start_page - 1}`)"
       >&lt;</a
     >
     <template v-for="(n, index) in paginavigation()">
@@ -93,17 +93,17 @@
         <strong :key="index">{{ n }}</strong>
       </template>
       <template v-else>
-        <a href="javascript:;" @click="fnPage(`${n}`)" :key="index">{{ n }}</a>
+        <a :key="index" href="javascript:;" @click="fnPage(`${n}`)">{{ n }}</a>
       </template>
     </template>
     <a
-      href="javascript:;"
       v-if="paging.total_page > paging.end_page"
-      @click="fnPage(`${paging.end_page + 1}`)"
       class="next"
+      href="javascript:;"
+      @click="fnPage(`${paging.end_page + 1}`)"
       >&gt;</a
     >
-    <a href="javascript:;" @click="fnPage(`${paging.total_page}`)" class="last"
+    <a class="last" href="javascript:;" @click="fnPage(`${paging.total_page}`)"
       >&gt;&gt;</a
     >
   </div>
@@ -176,6 +176,9 @@ export default {
       },
     };
   },
+  created() {
+    this.getlist();
+  },
   methods: {
     getlist() {
       this.list = this.tmplist
@@ -212,9 +215,6 @@ export default {
       }
     },
   },
-  created() {
-    this.getlist();
-  },
 };
 </script>
 
@@ -229,8 +229,8 @@ export default {
 }
 
 .tbList #noticedetail {
-  border-bottom: 0px;
-  padding: 5px 0px;
+  border-bottom: 0;
+  padding: 5px 0;
   background-color: #3e1b41;
 }
 

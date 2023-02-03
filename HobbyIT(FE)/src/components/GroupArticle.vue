@@ -18,16 +18,16 @@
       </div>
       <div style="display: flex">
         <div
+          id="realimg"
           style="width: 500px; height: 500px; background-color: #fa8eb630"
           @click="uploadimg"
-          id="realimg"
         >
           <v-carousel style="width: 500px">
             <v-carousel-item
-              cover
               v-for="(item, i) in imgurl"
               :key="i"
               :src="item.src"
+              cover
             ></v-carousel-item>
           </v-carousel>
         </div>
@@ -35,19 +35,19 @@
         <div style="background-color: #0e0f28; color: white">
           <div style="margin: 5px 10px">
             <v-icon
-              icon="mdi-account-circle"
               color="blue-lighten-2"
+              icon="mdi-account-circle"
               style="margin-right: 10px"
             ></v-icon>
             다나카
             <div>
-              <v-icon icon="mdi-thumb-up" size="small" color="#000000"></v-icon>
+              <v-icon color="#000000" icon="mdi-thumb-up" size="small"></v-icon>
               좋아요 19
             </div>
           </div>
 
           <div>배낭 여행 3일차</div>
-          <hr style="height: 3px" color="white" />
+          <hr color="white" style="height: 3px" />
 
           <div style="word-break: keep-all">
             석촌호수에 도착했다. 커플들이 많이 보인다. 이 근처 맛집
@@ -59,7 +59,7 @@
             <v-icon icon="mdi-eye" size="small"></v-icon> 558
           </div>
 
-          <hr style="height: 3px" color="#642EFE" />
+          <hr color="#642EFE" style="height: 3px" />
         </div>
       </div>
     </v-card>
@@ -87,12 +87,12 @@ export default {
       ],
     };
   },
+  mounted() {},
   methods: {
     closemodal() {
       this.$emit("closearticle");
     },
   },
-  mounted() {},
 };
 </script>
 

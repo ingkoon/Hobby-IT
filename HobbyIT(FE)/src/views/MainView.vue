@@ -2,19 +2,19 @@
   <h3 style="font-size:36px;">관심 <span>#카테고리</span>를 선택해보세요.</h3>
 
   <v-slide-group
-      show-arrows
-      style="margin:1% 0%;"
-      selected-class="font-family:linefontbold"
       mandatory="force"
+      selected-class="font-family:linefontbold"
+      show-arrows
+      style="margin:1% 0;"
     >
     <v-slide-group-item
       v-slot="{ isSelected, toggle }"
     >
       <v-btn
-        class="ma-2"
         id = "categorybtn"
-        rounded="pill"
         :style="isSelected ? 'border : 4px solid #642EFE; color:#642EFE; font-family:linefontbold;' : 'border : 4px solid #A8456A; font-family:linefont;' "
+        class="ma-2"
+        rounded="pill"
         @click="toggle"
       >
         <span style="margin:10px">전체</span>
@@ -27,10 +27,10 @@
       v-slot="{ isSelected, toggle }"
     >
       <v-btn
-        class="ma-2"
         id = "categorybtn"
-        rounded="pill"
         :style="isSelected ? 'border : 4px solid #642EFE; color:#642EFE; font-family:linefontbold;' : 'border : 4px solid #A8456A; font-family:linefont;' "
+        class="ma-2"
+        rounded="pill"
         @click="toggle"
       >
         <span style="margin:10px">#{{category[n]}}</span>
@@ -38,9 +38,9 @@
     </v-slide-group-item>
   </v-slide-group>
 
-  <v-carousel hide-delimiter-background style="width:100%; height:450px;" id="main-carousel">
+  <v-carousel id="main-carousel" hide-delimiter-background style="width:100%; height:450px;">
     <v-carousel-item cover src="../src/assets/gif/main1.gif" style="font-size:48px; color:white;">
-      <div style="background-color:#1D1E4480; width:100%; height:100%; padding:0px 8%; display:flex">
+      <div style="background-color:#1D1E4480; width:100%; height:100%; padding:0 8%; display:flex">
         <div style="align-self:center; width:100%">
           <div>
             부캐 전성시대,<br>
@@ -54,20 +54,20 @@
       </div>
     </v-carousel-item>
   </v-carousel>
-    
+
   <h3 id="search">당신이 참여중인 HOBBY
     <span>
-      <v-text-field 
+      <v-text-field
         clearable
-        variant="outlined"
-        prepend-inner-icon="mdi-magnify"
         placeholder="어떤 취미를 찾으시나요?"
-        style="color:white; width:334px; height:44"
+        prepend-inner-icon="mdi-magnify"
+        style="color:white; width:334px; height:44px"
+        variant="outlined"
         ></v-text-field>
     </span>
-    
+
   </h3>
-  
+
   <participate-group/>
 
   <h3>오늘의 HOBBY 추천</h3>
@@ -94,7 +94,7 @@
 <style>
 h3 {
   color : #ffffff;
-  margin:1% 0% ;
+  margin:1% 0;
   font-size:48px;
 }
 

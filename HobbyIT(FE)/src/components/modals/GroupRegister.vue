@@ -9,11 +9,11 @@
       max-height="70px"
       style="">
       <v-text-field
-        style="width:500px; align-self:center; font-size:20px;"
-        variant="outlined"
+        append-inner-icon="mdi-send-outline"
         color = "#24B1D0"
         placeholder="welcome!"
-        append-inner-icon="mdi-send-outline"
+        style="width:500px; align-self:center; font-size:20px;"
+        variant="outlined"
         >
 
       </v-text-field>
@@ -35,11 +35,11 @@ export default {
 
 #groupregi {
   width:670px;
-  height:330px; 
-  display:flex; 
-  align-self:center; 
-  text-align:center; 
-  justify-content:center; 
+  height:330px;
+  display:flex;
+  align-self:center;
+  text-align:center;
+  /*justify-content:center; */
   background-color:#0E0F28;
   color:white;
   font-family: linefontbold;

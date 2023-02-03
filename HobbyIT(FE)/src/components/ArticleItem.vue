@@ -1,14 +1,14 @@
 <template>
   <v-card
+    :height="n * (Math.random() * 50) + 300"
     class="mx-auto"
     max-width="265"
-    :height="n * (Math.random() * 50) + 300"
-    style="background-color: #fbd3de; margin: 5px 0; border-radius: 0px"
+    style="background-color: #fbd3de; margin: 5px 0; border-radius: 0"
   >
     <v-img
       class="align-end text-white"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       cover
+      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
     >
     </v-img>
 
@@ -31,19 +31,19 @@
       >
         <div>
           <v-icon
+            color="#FA8EB6"
             icon="mdi-account-circle"
             size="small"
-            color="#FA8EB6"
           ></v-icon>
           John
         </div>
         <div>
-          <v-icon icon="mdi-thumb-up" size="small" color="#000000"></v-icon>
+          <v-icon color="#000000" icon="mdi-thumb-up" size="small"></v-icon>
           10
           <v-icon
+            color="#000000"
             icon="mdi-message-bulleted"
             size="small"
-            color="#000000"
           ></v-icon>
           11
         </div>
@@ -54,11 +54,11 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: {
     n: Number,
+  },
+  data() {
+    return {};
   },
 };
 </script>
