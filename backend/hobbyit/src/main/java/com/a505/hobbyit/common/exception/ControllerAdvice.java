@@ -6,6 +6,10 @@ import com.a505.hobbyit.hobby.exception.InvalidHobbyException;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
+import com.a505.hobbyit.member.exception.DuplicatedMemberException;
+import com.a505.hobbyit.member.exception.InvalidedAccessTokenException;
+import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
 import org.slf4j.Logger;
@@ -20,7 +24,10 @@ public class ControllerAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
 
-    @ExceptionHandler({InvalidHobbyException.class})
+    @ExceptionHandler({
+            InvalidedAccessTokenException.class,
+            InvalidedRefreshTokenException.class,
+            InvalidHobbyException.class})
     public ResponseEntity<ErrorResponse> handleInvalidException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
@@ -28,6 +35,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
+            NoSuchMemberException.class,
             NoSuchHobbyException.class,
             NoSuchHobbyMemberException.class,
             NoSuchPendingException.class})
@@ -38,6 +46,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
+            DuplicatedMemberException.class,
             DuplicatedHobbyException.class,
             DuplicatedPendingException.class})
     public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {

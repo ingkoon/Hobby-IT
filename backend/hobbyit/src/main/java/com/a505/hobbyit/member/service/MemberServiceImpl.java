@@ -5,11 +5,8 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
-import com.a505.hobbyit.member.exception.BadRequestException;
-import com.a505.hobbyit.member.exception.DuplicatedMemberException;
-import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
+import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
-import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -90,12 +87,12 @@ public class MemberServiceImpl implements MemberService {
 
         // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
-        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        // 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
-            throw new BadRequestException();
+            throw new InvalidedRefreshTokenException("Refresh Token 이 없습니다.");
         }
         if (!refreshToken.equals(request.getRefreshToken())) {
-            throw new BadRequestException("Refresh Token 정보가 일치하지 않습니다.");
+            throw new InvalidedRefreshTokenException("Refresh Token 정보가 일치하지 않습니다.");
         }
 
         // 4. 새로운 토큰 생성
@@ -111,7 +108,7 @@ public class MemberServiceImpl implements MemberService {
     public void logout(MemberLogoutRequest request) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
-            throw new BadRequestException();
+            throw new InvalidedAccessTokenException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
@@ -131,10 +128,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void resetPassword(MemberMailRequest request) {
-        Optional<Member> member = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
-
-        throw new NoSuchMemberException();
-
+        String email = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
+        if(email == null)
+            throw new NoSuchMemberException();
 
     }
 
