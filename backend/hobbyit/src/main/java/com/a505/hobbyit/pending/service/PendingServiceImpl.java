@@ -104,7 +104,6 @@ public class PendingServiceImpl implements PendingService{
                 .member(findMember)
                 .hobby(findHobby)
                 .state(HobbyMemberState.ACTIVE)
-                .enrollDate(LocalDateTime.now())
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
 

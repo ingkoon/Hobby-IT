@@ -58,7 +58,6 @@ public class HobbyServiceImpl implements HobbyService{
                 .member(member)
                 .hobby(hobby)
                 .state(HobbyMemberState.ACTIVE)
-                .enrollDate(LocalDateTime.now())
                 .privilege(HobbyMemberPrivilege.OWNER)
                 .build();
 
@@ -69,7 +68,7 @@ public class HobbyServiceImpl implements HobbyService{
     @Override
     public HobbyAndMemberResponse findById(final String token, Long hobbyId) {
         String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);;
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchHobbyException::new);;
         Hobby hobby = hobbyRepository
                 .findById(hobbyId)
                 .orElseThrow(()-> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));

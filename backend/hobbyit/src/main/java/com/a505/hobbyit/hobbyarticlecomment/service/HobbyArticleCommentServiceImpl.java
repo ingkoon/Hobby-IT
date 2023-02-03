@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobbyarticlecomment.service;
 
+import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticleRepository;
 import com.a505.hobbyit.hobbyarticle.exception.NoSuchHobbyArticleException;
@@ -30,7 +31,7 @@ public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentServic
     @Override
     public void save(String token, Long articleId, CommentRequest request) {
         Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token))
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchHobbyException::new);
         HobbyArticle hobbyArticle = hobbyArticleRepository
                 .findById(articleId)
                 .orElseThrow(NoSuchHobbyArticleException::new);
