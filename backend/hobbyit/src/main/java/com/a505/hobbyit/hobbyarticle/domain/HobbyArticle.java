@@ -3,9 +3,10 @@ package com.a505.hobbyit.hobbyarticle.domain;
 import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
+import com.a505.hobbyit.hobbyarticle.exception.UnAuthorizedException;
 import com.a505.hobbyit.hobbyarticlecomment.domain.HobbyArticleComment;
 import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
-import com.a505.hobbyit.hobbyarticlelikes.domain.HobbyArticleLikes;
+import com.a505.hobbyit.hobbyarticlelike.domain.HobbyArticleLike;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 
@@ -30,7 +31,7 @@ public class HobbyArticle extends BaseEntity {
     private Hobby hobby;
 
     @ManyToOne
-    @JoinColumn(name = "mem_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Enumerated(EnumType.STRING)
@@ -77,7 +78,7 @@ public class HobbyArticle extends BaseEntity {
     @OneToMany(mappedBy = "hobbyArticle")
     private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
     @OneToMany(mappedBy = "hobbyArticle")
-    private List<HobbyArticleLikes> hobbyArticleLikes = new ArrayList<>();
+    private List<HobbyArticleLike> hobbyArticleLikes = new ArrayList<>();
 
     public int getCommentCount(){
         return this.hobbyArticleComments.size();
@@ -89,5 +90,17 @@ public class HobbyArticle extends BaseEntity {
         return this.hobbyArticleImg
                 .get(0)
                 .getImgUrl();
+    }
+
+    // 이미지를 주소를 반환하는 메서드
+    public List<String> getImages(){
+        List<String> images = new ArrayList<>();
+        for (HobbyArticleImg image : hobbyArticleImg) {
+            images.add(image.getImgUrl());
+        }
+        return images;
+    }
+    public void checkAuthor(Member member){
+        if(!this.member.equals(member)) throw new UnAuthorizedException();
     }
 }

@@ -27,7 +27,7 @@ public class Pending extends BaseEntity {
     private Hobby hobby;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "mem_id")
+    @JoinColumn(nullable = false, name = "member_id")
     private Member member;
 
     @Column(nullable = false, length = 200)

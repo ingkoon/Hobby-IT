@@ -6,9 +6,11 @@ import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,9 +24,13 @@ public class HobbyArticleComment extends BaseEntity {
     private HobbyArticle hobbyArticle;
 
     @ManyToOne
-    @JoinColumn(name = "mem_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Column(nullable = false, length = 255)
     private String content;
+
+    public void updateContent(String content){
+        this.content = content;
+    }
 }
