@@ -9,6 +9,7 @@ import com.a505.hobbyit.member.exception.BadRequestException;
 import com.a505.hobbyit.member.exception.DuplicatedMemberException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -132,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
     public void resetPassword(MemberMailRequest request) {
         Optional<Member> member = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
 
-//        throw new NoSuchElementException("사용자를 찾을 수 없습니다.");
+        throw new NoSuchMemberException();
 
 
     }
