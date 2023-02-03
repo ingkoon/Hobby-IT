@@ -42,7 +42,7 @@
 
 <script>
 import { useUserStore } from '@/store/user';
-import { memberSignup } from '@/api/member';
+import { memberLogin, memberSignup } from '@/api/member';
 
 export default {
   setup(){
@@ -64,17 +64,29 @@ export default {
     },
     async handleSignup(){
       try {
-        const data = {
+        const signupData = {
           "email":this.userEmail,
           "name":this.username,
           "nickname":this.userNickname,
           "password":this.userPassword
         }
-        const { response } = await memberSignup(data)
-        this.userStore.afterSignup(data)
+        const res = await memberSignup(signupData)
+        this.userStore.afterSignup(signupData)
+
+        const loginData = {
+          "email": this.userEmail,
+          "password":this.userPassword,
+        }
+
+        const { data } = await memberLogin(loginData);
+        console.log(data);
+        this.userStore.setUser(data)
+
+
+
         this.$router.push('/')
       }catch (err){
-        console.log(err,123123);
+        console.error(err);
       }
     }
   }

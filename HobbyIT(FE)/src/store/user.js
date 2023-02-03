@@ -1,35 +1,45 @@
 import { defineStore } from 'pinia';
-import { memberSignup } from '@/api/member';
 
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     userNickname: null,
     userEmail: null,
     accessToken: null,
-    refreshToken: null,
     userHobbyList: [],
   }),
+  getters: {
+    getRefreshToken(state) {
+      return localStorage.getItem('refreshToken');
+    },
+  },
   actions: {
-    updateUserNickname(nickname) {
+    setUserNickname(nickname) {
       this.userNickname = nickname;
     },
-    updateUserEmail(email) {
+    setUserEmail(email) {
       this.userEmail = email;
     },
-    updateAccessToken(token) {
+    setAccessToken(token) {
       this.accessToken = token;
     },
-    updateRefreshToken(token) {
-      this.refreshgToken = token;
+    setRefreshToken(token) {
+      localStorage.setItem('refreshToken', token);
+      return;
     },
-    updateUserHobbyList(list) {
+    setUserHobbyList(list) {
       this.userHobbyList = list;
     },
     afterSignup(data) {
       const { email, nickname } = data;
-      this.updateUserEmail(email);
-      this.updateUserNickname(nickname);
+      this.setUserEmail(email);
+      this.setUserNickname(nickname);
+    },
+    setUser(data) {
+      const { nickname, accessToken, refreshToken } = data;
+      this.setAccessToken(accessToken);
+      this.setRefreshToken(refreshToken);
+      this.setUserNickname(nickname);
     },
   },
 });

@@ -6,9 +6,25 @@
   </v-app>
 </template>
 
-<script setup>
+<script>
   import DefaultBar from './AppBar.vue'
   import DefaultView from './View.vue'
+  import { useUserStore } from '@/store/user';
+  export default {
+    name: "HomeDefault",
+    components:{
+      DefaultBar,
+      DefaultView
+    },
+    setup(){
+
+      const userStore = useUserStore()
+      return { userStore }
+    },
+    created() {
+      //
+    }
+  }
 </script>
 
 <style>

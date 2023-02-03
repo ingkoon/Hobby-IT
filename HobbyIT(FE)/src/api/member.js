@@ -16,4 +16,4 @@ function memberLogin(data) {
   return instance.post('login', data);
 }
 
-export { memberSignup };
+export { memberSignup, memberLogin };
