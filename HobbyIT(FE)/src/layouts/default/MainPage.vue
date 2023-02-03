@@ -1,14 +1,14 @@
 <template>
-  <v-app id="app">
-    <default-bar style="position: fixed" />
+  <v-app id='app'>
+    <default-bar style='position: fixed' />
 
-    <default-view style="margin: 50px 13% 0" />
+    <default-view style='margin: 50px 13% 0' />
   </v-app>
 </template>
 
 <script setup>
-import DefaultBar from "./AppBar.vue";
-import DefaultView from "./View.vue";
+import DefaultBar from './AppBar.vue';
+import DefaultView from './View.vue';
 </script>
 
 <style>
@@ -19,15 +19,17 @@ import DefaultView from "./View.vue";
 
 @font-face {
   font-family: "linefontbold";
-  src: url("../src/assets/fonts/LINESeedKR-Bd.ttf");
+  src: url("/assets/fonts/LINESeedKR-Bd.ttf");
 }
+
 @font-face {
   font-family: "linefont";
-  src: url("../src/assets/fonts/LINESeedKR-Rg.ttf");
+  src: url("/assets/fonts/LINESeedKR-Rg.ttf");
 }
 
 @font-face {
   font-family: "logofont";
-  src: url("../src/assets/fonts/FredokaOne-Regular.ttf");
+  src: url("/assets/fonts/FredokaOne-Regular.ttf");
 }
 </style>
+

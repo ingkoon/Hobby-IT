@@ -1,3 +1,11 @@
+<!--suppress ALL -->
+
+
+
+
+
+
+
 <template>
   <div style="align-self:center">
     <v-card style="width:800px; height: 530px; background-color:#0E0F28">
@@ -200,7 +208,7 @@ export default {
 }
 
 #eraser {
-  background: url( "../assets/eraser.png" ) no-repeat;
+  background: url("../../public/assets/eraser.png") no-repeat;
   width: 60px;
   height: 107px;
   background-size:cover;

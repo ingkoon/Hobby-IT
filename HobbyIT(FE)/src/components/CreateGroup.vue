@@ -1,3 +1,10 @@
+<!--suppress ALL -->
+
+
+
+
+
+
 <template>
   <div class="bg" style="align-self:center;">
     <div style="width:1000px; border-radius: 20px; background-color:#20225A; padding:1px;">
