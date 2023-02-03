@@ -8,12 +8,6 @@
       <div id="title">호빗러버</div>
       <div id="content">
         hobbyit@hobbyit.com
-        <div style="margin-top: 20px">
-          카테고리 : 여행 <br />
-          가입유형 : 신청가입 <br />
-          개설일 : 2023.1.1 <br />
-          방장 : John
-        </div>
 
         <div style="margin-top: 20px">오늘의 획득량 : 20/30</div>
         <div style="margin: 10px 0">진척도 보상</div>

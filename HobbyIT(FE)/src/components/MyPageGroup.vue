@@ -16,7 +16,7 @@
             <div id="makegroup" style="background-color:#0E0F28; width:100px; height:320px">
 
             </div>
-            <div id="makegroup2" style="background-color:#0E0F28; width:190px; height:200px">
+            <div id="makegroup2" style="background-color:#0E0F28; width:190px; height:140px">
 
             </div>
             <v-icon icon="mdi-plus" style="align-self:center; color:#FA8EB6"></v-icon>
@@ -80,7 +80,7 @@ export default {
 }
 #makegroup2 {
   position: absolute;
-  top: 25px;
+  top: 60px;
   left: 0;
 }
 </style>
