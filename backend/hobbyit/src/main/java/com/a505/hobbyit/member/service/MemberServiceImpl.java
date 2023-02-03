@@ -158,25 +158,16 @@ public class MemberServiceImpl implements MemberService {
 
         // 3. 이메일로 보낼 메일 내용을 작성하는 부분
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        // true는 멀티파트 메세지를 사용하겠다는 의미
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         mimeMessageHelper.setFrom(from);
         mimeMessageHelper.setTo(request.getEmail());
         mimeMessageHelper.setSubject("HOBBY'IT 임시비밀번호 안내 이메일 입니다.");
-        mimeMessageHelper.setText("안녕하세요. HOBBY'IT 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
-                + pwd + " 입니다. " + "로그인 후에 비밀번호를 변경을 해주세요.");
-        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/SSAFY/Desktop/logo.png"));
-        System.out.println(from+" -----> "+request.getEmail());
-        System.out.println(mimeMessage);
-        javaMailSender.send(mimeMessage );
-//        SimpleMailMessage message = new SimpleMailMessage();
-//
-//        message.setFrom(from);
-//        message.setTo(request.getEmail());
-//        message.setSubject("HOBBY'IT 임시비밀번호 안내 이메일 입니다.");
-//        message.setText("안녕하세요. HOBBY'IT 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
-//                + pwd + " 입니다. " + "로그인 후에 비밀번호를 변경을 해주세요.");
-//        System.out.println(message);
-//        javaMailSender.send(message);
+        // true는 html을 사용하겠다는 의미
+        mimeMessageHelper.setText("안녕하세요. HOBBY'IT 임시비밀번호 안내 관련 이메일 입니다.<br> " + " 회원님의 임시 비밀번호는 <b>"
+                + pwd + "</b> 입니다.<br> " + "로그인 후에 비밀번호를 변경을 해주세요.", true);
+//        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/KANG/Desktop/logo.png"));
+        javaMailSender.send(mimeMessage);
     }
 
 }
