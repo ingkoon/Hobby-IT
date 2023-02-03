@@ -1,5 +1,6 @@
 package com.a505.hobbyit.member.service;
 
+import com.a505.hobbyit.member.domain.Mail;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
@@ -7,9 +8,17 @@ import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import jakarta.activation.FileDataSource;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -19,7 +28,6 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -32,6 +40,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final StringRedisTemplate stringRedisTemplate;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public void signUp(MemberSignupRequest request) {
@@ -53,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    @Override
     public MemberResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
 
@@ -74,6 +84,7 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
+    @Override
     public MemberResponse reissue(MemberReissueRequest request) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(request.getRefreshToken())) {
@@ -105,6 +116,7 @@ public class MemberServiceImpl implements MemberService {
         return tokenInfo;
     }
 
+    @Override
     public void logout(MemberLogoutRequest request) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
@@ -126,12 +138,45 @@ public class MemberServiceImpl implements MemberService {
                 .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
+    @Transactional
     @Override
-    public void resetPassword(MemberMailRequest request) {
-        String email = memberRepository.findByEmailAndName(request.getEmail(), request.getName());
-        if(email == null)
-            throw new NoSuchMemberException();
+    public void resetPassword(MemberMailRequest request, String from) throws MessagingException {
+        // 1. 입력된 이메일과 본명을 동시에 만족하는 사용자가 존재하는지 확인
+        Member member = memberRepository.findByEmailAndName(request.getEmail(), request.getName()).orElseThrow(NoSuchMemberException::new);
 
+        // 2. 랜덤으로 비밀번호를 생성해서 비밀번호 자동 변경
+        char[] charSet = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+        String pwd = "";
+        for (int i = 0, idx = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            pwd += charSet[idx];
+        }
+
+        member.resetPassword(passwordEncoder.encode(pwd));
+
+        // 3. 이메일로 보낼 메일 내용을 작성하는 부분
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        mimeMessageHelper.setFrom(from);
+        mimeMessageHelper.setTo(request.getEmail());
+        mimeMessageHelper.setSubject("HOBBY'IT 임시비밀번호 안내 이메일 입니다.");
+        mimeMessageHelper.setText("안녕하세요. HOBBY'IT 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
+                + pwd + " 입니다. " + "로그인 후에 비밀번호를 변경을 해주세요.");
+        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/SSAFY/Desktop/logo.png"));
+        System.out.println(from+" -----> "+request.getEmail());
+        System.out.println(mimeMessage);
+        javaMailSender.send(mimeMessage );
+//        SimpleMailMessage message = new SimpleMailMessage();
+//
+//        message.setFrom(from);
+//        message.setTo(request.getEmail());
+//        message.setSubject("HOBBY'IT 임시비밀번호 안내 이메일 입니다.");
+//        message.setText("안녕하세요. HOBBY'IT 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
+//                + pwd + " 입니다. " + "로그인 후에 비밀번호를 변경을 해주세요.");
+//        System.out.println(message);
+//        javaMailSender.send(message);
     }
 
 }

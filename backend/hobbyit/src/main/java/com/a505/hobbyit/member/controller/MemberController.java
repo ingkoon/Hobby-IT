@@ -4,8 +4,10 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.Errors;
@@ -17,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/member")
 public class MemberController {
-    private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
-    private final JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     @PostMapping(value = "/signup")
     public ResponseEntity<Void> signUp(@Validated MemberSignupRequest request, Errors errors) {
@@ -59,11 +62,11 @@ public class MemberController {
     }
 
     @PostMapping(value = "/password/reset")
-    public ResponseEntity<Void> resetPassword(@Validated MemberMailRequest request, Errors errors) {
+    public ResponseEntity<Void> resetPassword(@Validated MemberMailRequest request, Errors errors) throws MessagingException {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        memberService.resetPassword(request);
+        memberService.resetPassword(request, from);
         return ResponseEntity.ok().build();
     }
 }

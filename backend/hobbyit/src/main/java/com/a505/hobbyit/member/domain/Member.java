@@ -109,6 +109,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.privilege = privilege;
     }
 
+
+    public void resetPassword(String password) {
+        this.password = password;
+    }
+
 //    @OneToMany(mappedBy = "member")
 //    private List<Pending> pendings = new ArrayList<>();
 //

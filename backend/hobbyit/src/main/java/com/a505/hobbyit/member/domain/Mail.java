@@ -1,15 +1,15 @@
 package com.a505.hobbyit.member.domain;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
 public class Mail {
     private String address;
     private String title;
     private String message;
 
+    @Builder
     public Mail(String address, String title, String message) {
         this.address = address;
         this.title = title;
