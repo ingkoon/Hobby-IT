@@ -14,6 +14,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,8 @@ public class HobbyServiceImpl implements HobbyService{
 
         String email = jwtTokenProvider.getUser(token);
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(InvalidedRefreshTokenException::new);
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(member)
@@ -62,17 +64,22 @@ public class HobbyServiceImpl implements HobbyService{
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-
     }
 
     @Override
     public HobbyAndMemberResponse findById(final String token, Long hobbyId) {
         String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchHobbyException::new);;
+
+        Member member = memberRepository.findByEmail(memberEmail)
+                .orElseThrow(InvalidedRefreshTokenException::new);
+        
         Hobby hobby = hobbyRepository
                 .findById(hobbyId)
                 .orElseThrow(()-> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));
-        HobbyMember hobbyMember = hobbyMemberRepository.findByMemberAndHobby(member,hobby).orElseGet(HobbyMember::new);
+
+        HobbyMember hobbyMember = hobbyMemberRepository
+                .findByMemberAndHobby(member,hobby)
+                .orElseGet(HobbyMember::new);
 
         log.info("========== 결과 DTO 반환==========");
         return new HobbyAndMemberResponse().of(hobby, hobbyMember);

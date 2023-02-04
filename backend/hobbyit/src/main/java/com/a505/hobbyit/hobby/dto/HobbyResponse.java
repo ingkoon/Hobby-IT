@@ -29,6 +29,7 @@ public class HobbyResponse {
                 .participantsNum(hobby.getCurrentMemberCount())
                 .maxParticipantsNum(hobby.getMaxMemberCount())
                 .category(hobby.getCategory())
+                .createdDate(hobby.getCreatedDateTime())
                 .img(hobby.getImgUrl())
                 .build();
     }
