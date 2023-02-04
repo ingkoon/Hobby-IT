@@ -5,19 +5,19 @@
 </template>
 
 <script>
-import { onBeforeMount } from "vue";
+import { onBeforeMount } from 'vue';
 
 export default {
-  name: "ChatMessage",
+  name: 'ChatMessage',
   props: {
     msg: [],
   },
   computed: {
     color() {
-      if (this.msg.from === "") {
-        return "green";
+      if (this.msg.from === '') {
+        return 'green';
       } else {
-        return "white";
+        return 'white';
       }
     },
   },

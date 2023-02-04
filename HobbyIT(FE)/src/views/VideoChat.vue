@@ -2,40 +2,13 @@
   <div>
     <v-container>
       <v-row>
-        <v-col
-          id="background"
-          :style="{ height: computedHeight + 'px' }"
-        ></v-col>
+        <v-col id="background" :style="{ height: computedHeight + 'px' }"></v-col>
         <v-col id="leftSidebar" :style="{ height: computedHeight + 'px' }">
           <v-icon icon="mdi-microphonea" size="36"></v-icon>
-          <v-icon
-            v-if="isAudioEnabled"
-            color="white"
-            icon="mdi-microphone"
-            size="36"
-            @click="handleAudio"
-          ></v-icon>
-          <v-icon
-            v-else
-            color="white"
-            icon="mdi-microphone-off"
-            size="36"
-            @click="handleAudio"
-          ></v-icon>
-          <v-icon
-            v-if="isVideoEnabled"
-            color="white"
-            icon="mdi-video"
-            size="36"
-            @click="handleMyVideo"
-          ></v-icon>
-          <v-icon
-            v-else
-            color="white"
-            icon="mdi-video-off"
-            size="36"
-            @click="handleMyVideo"
-          ></v-icon>
+          <v-icon v-if="isAudioEnabled" color="white" icon="mdi-microphone" size="36" @click="handleAudio"></v-icon>
+          <v-icon v-else color="white" icon="mdi-microphone-off" size="36" @click="handleAudio"></v-icon>
+          <v-icon v-if="isVideoEnabled" color="white" icon="mdi-video" size="36" @click="handleMyVideo"></v-icon>
+          <v-icon v-else color="white" icon="mdi-video-off" size="36" @click="handleMyVideo"></v-icon>
           <v-icon
             v-if="isScreenShareEnabled"
             color="white"
@@ -43,30 +16,10 @@
             size="36"
             @click="handleScreenShare"
           ></v-icon>
-          <v-icon
-            v-else
-            color="white"
-            icon="mdi-monitor"
-            size="36"
-            @click="handleScreenShare"
-          ></v-icon>
-          <v-btn
-            icon="mdi-phone-off"
-            style="background-color: red; color: white"
-            @click="handleClickOff"
-          ></v-btn>
-          <v-icon
-            color="white"
-            icon="mdi-pencil-box"
-            size="36"
-            @click="openpaint"
-          ></v-icon>
-          <v-icon
-            color="white"
-            icon="mdi-cog-outline"
-            size="36"
-            @click=""
-          ></v-icon>
+          <v-icon v-else color="white" icon="mdi-monitor" size="36" @click="handleScreenShare"></v-icon>
+          <v-btn icon="mdi-phone-off" style="background-color: red; color: white" @click="handleClickOff"></v-btn>
+          <v-icon color="white" icon="mdi-pencil-box" size="36" @click="handlePaint"></v-icon>
+          <v-icon color="white" icon="mdi-cog-outline" size="36" @click=""></v-icon>
           <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
           <v-icon icon="mdi-microphonea" size="24"></v-icon>
         </v-col>
@@ -76,20 +29,8 @@
           <v-row style="margin: 0; height: 126px">
             <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row
-            id="video-container"
-            style="
-              height: 757px;
-              margin: 0;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            <user-video
-              v-for="sub in subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
-            >
+          <v-row id="video-container" style="height: 757px; margin: 0; align-items: center; justify-content: center">
+            <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
               <!--            추가 바람-->
             </user-video>
           </v-row>
@@ -107,24 +48,23 @@
 </template>
 
 <script>
-import axios from "axios";
-import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/components/UserVideo.vue";
-import { useAppStore } from "@/store/app";
-import VideoMessage from "@/components/VideoMessage.vue";
-import { useMessageStore } from "@/store/message";
-import SharedPaint from "@/components/VideoChat/SharedPaint.vue";
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
+import UserVideo from '@/components/UserVideo.vue';
+import { useAppStore } from '@/store/app';
+import VideoMessage from '@/components/VideoMessage.vue';
+import { useMessageStore } from '@/store/message';
+import SharedPaint from '@/components/VideoChat/SharedPaint.vue';
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
+const APPLICATION_SERVER_URL = VITE_OPENVIDU_SERVER_URL ? VITE_OPENVIDU_SERVER_URL : 'http://localhost:5000/';
 export default {
-  name: "VideoChat",
+  name: 'VideoChat',
   components: { SharedPaint, VideoMessage, UserVideo },
   setup() {
     const appStore = useAppStore();
     const messageStore = useMessageStore();
-    console.log(messageStore, "112233");
     return { appStore, messageStore };
   },
   data() {
@@ -137,8 +77,8 @@ export default {
       publisher: undefined,
       subscribers: [],
       // Join form
-      mySessionId: "SessionA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: 'SessionA',
+      myUserName: 'Participant' + Math.floor(Math.random() * 100),
       isAudioEnabled: true,
       isVideoEnabled: true,
       isScreenShareEnabled: false,
@@ -191,7 +131,7 @@ export default {
     this.joinSession();
   },
   methods: {
-    openpaint() {
+    handlePaint() {
       this.paint = true;
     },
     sendCanvas(data) {
@@ -199,23 +139,23 @@ export default {
         .signal({
           data: data,
           to: [],
-          type: "canvas",
+          type: 'canvas',
         })
         .then(() => {
-          console.log("Success");
+          console.log('Success');
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
 
     myCustomMethod() {
       this.OV.getUserMedia({
-        videoSource: "screen",
-      }).then((stream) => {
+        videoSource: 'screen',
+      }).then(stream => {
         const track = stream.getVideoTracks()[0];
         this.publisher.replaceTrack(track);
-        stream.getAudioTracks().forEach((t) => t.stop());
+        stream.getAudioTracks().forEach(t => t.stop());
         console.log(track);
       });
 
@@ -226,12 +166,12 @@ export default {
         .signal({
           data: msg,
           to: [],
-          type: "message",
+          type: 'message',
         })
         .then(() => {
-          console.log("Success");
+          console.log('Success');
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
@@ -244,7 +184,7 @@ export default {
       this.isAudioEnabled = !this.isAudioEnabled;
     },
     handleClickOff() {
-      window.open("", "_self").close();
+      window.open('', '_self').close();
       return false;
     },
     handleScreenShare() {
@@ -256,24 +196,24 @@ export default {
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: "600x400", // The resolution of your video
+          resolution: '600x400', // The resolution of your video
           frameRate: 30, // The frame rate of your video
-          insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+          insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
           mirror: false, // Whether to mirror your local video or not
-        }).then((stream) => {
+        }).then(stream => {
           const track = stream.getVideoTracks()[0];
           this.publisher.replaceTrack(track);
-          stream.getAudioTracks().forEach((t) => t.stop());
+          stream.getAudioTracks().forEach(t => t.stop());
         });
       } else {
         this.isScreenShareEnabled = !this.isScreenShareEnabled;
         // 쉐어 화면 보여주기
         this.OV.getUserMedia({
-          videoSource: "screen",
-        }).then((stream) => {
+          videoSource: 'screen',
+        }).then(stream => {
           const track = stream.getVideoTracks()[0];
           this.publisher.replaceTrack(track);
-          stream.getAudioTracks().forEach((t) => t.stop());
+          stream.getAudioTracks().forEach(t => t.stop());
         });
       }
     },
@@ -285,12 +225,12 @@ export default {
       this.session = this.OV.initSession();
       // --- 3) Specify the actions when events take place in the session ---
       // On every new Stream received...
-      this.session.on("streamCreated", ({ stream }) => {
+      this.session.on('streamCreated', ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
         this.subscribers.push(subscriber);
       });
       // On every Stream destroyed...
-      this.session.on("streamDestroyed", ({ stream }) => {
+      this.session.on('streamDestroyed', ({ stream }) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
         console.log(index);
         if (index >= 0) {
@@ -298,11 +238,11 @@ export default {
         }
       });
       // On every asynchronous exception...
-      this.session.on("exception", ({ exception }) => {
+      this.session.on('exception', ({ exception }) => {
         console.warn(exception);
       });
       // On Message
-      this.session.on("signal:message", (event) => {
+      this.session.on('signal:message', event => {
         // 만약 보낸 사람이 나라면 무시
         // JSON.parse(event.from.data).clientData => 보낸사람 이름 parsing
         const from = JSON.parse(event.from.data).clientData;
@@ -315,7 +255,7 @@ export default {
         };
         this.messageStore.message.push(msgData);
       });
-      this.session.on("signal:canvas", (event) => {
+      this.session.on('signal:canvas', event => {
         const from = JSON.parse(event.from.data).clientData;
         if (JSON.parse(event.from.data).clientData === this.myUserName) {
           return false;
@@ -324,7 +264,7 @@ export default {
       });
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
-      this.getToken(this.mySessionId).then((token) => {
+      this.getToken(this.mySessionId).then(token => {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         this.session
@@ -338,9 +278,9 @@ export default {
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "600x400", // The resolution of your video
+              resolution: '600x400', // The resolution of your video
               frameRate: 30, // The frame rate of your video
-              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
 
@@ -350,15 +290,11 @@ export default {
             // --- 6) Publish your stream ---
             this.session.publish(this.publisher);
           })
-          .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+          .catch(error => {
+            console.log('There was an error connecting to the session:', error.code, error.message);
           });
       });
-      window.addEventListener("beforeunload", this.leaveSession);
+      window.addEventListener('beforeunload', this.leaveSession);
     },
 
     leaveSession() {
@@ -371,7 +307,7 @@ export default {
       this.subscribers = [];
       this.OV = undefined;
       // Remove beforeunload listener
-      window.removeEventListener("beforeunload", this.leaveSession);
+      window.removeEventListener('beforeunload', this.leaveSession);
     },
 
     updateMainVideoStreamManager(stream) {
@@ -385,21 +321,21 @@ export default {
     },
     async createSession(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions",
+        APPLICATION_SERVER_URL + 'api/sessions',
         { customSessionId: sessionId },
         {
-          headers: { "Content-Type": "application/json" },
-        }
+          headers: { 'Content-Type': 'application/json' },
+        },
       );
       return response.data; // The sessionId
     },
     async createToken(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
         {},
         {
-          headers: { "Content-Type": "application/json" },
-        }
+          headers: { 'Content-Type': 'application/json' },
+        },
       );
       return response.data; // The token
     },
@@ -496,6 +432,7 @@ export default {
   margin-left: 104px;
   z-index: 0;
 }
+
 video {
   height: 300px;
   width: 200px;

@@ -1,8 +1,8 @@
 <template>
-  <v-app id='app'>
-    <default-bar style='position: fixed' />
+  <v-app id="app">
+    <default-bar style="position: fixed" />
 
-    <default-view style='margin: 50px 13% 0' />
+    <default-view style="margin: 50px 13% 0" />
   </v-app>
 </template>
 
@@ -18,18 +18,17 @@ import DefaultView from './View.vue';
 }
 
 @font-face {
-  font-family: "linefontbold";
-  src: url("/assets/fonts/LINESeedKR-Bd.ttf");
+  font-family: 'linefontbold';
+  src: url('/assets/fonts/LINESeedKR-Bd.ttf');
 }
 
 @font-face {
-  font-family: "linefont";
-  src: url("/assets/fonts/LINESeedKR-Rg.ttf");
+  font-family: 'linefont';
+  src: url('/assets/fonts/LINESeedKR-Rg.ttf');
 }
 
 @font-face {
-  font-family: "logofont";
-  src: url("/assets/fonts/FredokaOne-Regular.ttf");
+  font-family: 'logofont';
+  src: url('/assets/fonts/FredokaOne-Regular.ttf');
 }
 </style>
-

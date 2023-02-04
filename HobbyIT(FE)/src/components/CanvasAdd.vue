@@ -1,46 +1,92 @@
 <!--suppress ALL -->
 
-
-
-
-
-
-
 <template>
-  <div style="align-self:center">
-    <v-card style="width:800px; height: 530px; background-color:#0E0F28">
-      <div style="color:white; display:flex; justify-content:space-between; margin:10px 5px;">
+  <div style="align-self: center">
+    <v-card style="width: 800px; height: 530px; background-color: #0e0f28">
+      <div style="color: white; display: flex; justify-content: space-between; margin: 10px 5px">
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <span>방명록 작성</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
-      <div style="display:flex">
-        <canvas id="canvas" class="new-cursor" height="500" style="" width="500">
-
-        </canvas>
-        <div style="margin-left:20px; display:flex;">
-          <div style="display:flex; flex-direction:column">
-            <div style="color:white; margin-bottom:5px">굵기 :
-              <input id="input" color="white" max="100" min="1" style="color:white; border: 1px solid white" type="number"/>
+      <div style="display: flex">
+        <canvas id="canvas" class="new-cursor" height="500" style="" width="500"> </canvas>
+        <div style="margin-left: 20px; display: flex">
+          <div style="display: flex; flex-direction: column">
+            <div style="color: white; margin-bottom: 5px">
+              굵기 :
+              <input
+                id="input"
+                color="white"
+                max="100"
+                min="1"
+                style="color: white; border: 1px solid white"
+                type="number"
+              />
             </div>
-            <button style="background-color: red; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#ff0000')"></button>
-            <button style="background-color: blue; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#000AFF')"></button>
-            <button style="background-color: #EE49FD; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#EE49FD')"></button>
-            <button style="background-color: black; width: 50px; height: 50px; border: solid 1px white; border-radius:50px; margin:5px" @click="colorChange('#000000')"></button>
+            <button
+              style="
+                background-color: red;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+              @click="colorChange('#ff0000')"
+            ></button>
+            <button
+              style="
+                background-color: blue;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+              @click="colorChange('#000AFF')"
+            ></button>
+            <button
+              style="
+                background-color: #ee49fd;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+              @click="colorChange('#EE49FD')"
+            ></button>
+            <button
+              style="
+                background-color: black;
+                width: 50px;
+                height: 50px;
+                border: solid 1px white;
+                border-radius: 50px;
+                margin: 5px;
+              "
+              @click="colorChange('#000000')"
+            ></button>
             <button id="eraser"></button>
           </div>
 
-          <div style="color:white; display:flex; flex-direction:column; justify-content:space-evenly; margin-right:10px">
-            <div style="text-align:end">
+          <div
+            style="
+              color: white;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-evenly;
+              margin-right: 10px;
+            "
+          >
+            <div style="text-align: end">
               today
-              <div style="font-size:35px">{{date}}</div>
+              <div style="font-size: 35px">{{ date }}</div>
             </div>
-            <div style="font-size:35px; text-align:end; line-height:42px">Something<br>on your<br>mind?</div>
-            <div style="text-align:end">
-              <v-btn icon="mdi-send-outline" style="background-color:pink; transform:rotate(-45deg);"></v-btn>
+            <div style="font-size: 35px; text-align: end; line-height: 42px">Something<br />on your<br />mind?</div>
+            <div style="text-align: end">
+              <v-btn icon="mdi-send-outline" style="background-color: pink; transform: rotate(-45deg)"></v-btn>
             </div>
-
-
           </div>
         </div>
 
@@ -53,15 +99,15 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      ctx : "",
-      canvas : "",
-      date : "",
-      background:"",
-      bglist : ['#F7FDB0','#ABFAB3', '#BFE0FE', '#FECDCD'],
-      bglist2 : ['#D3D98F','#63D382','#AC94F1','#DAA6A6'],
-    }
+      ctx: '',
+      canvas: '',
+      date: '',
+      background: '',
+      bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
+      bglist2: ['#D3D98F', '#63D382', '#AC94F1', '#DAA6A6'],
+    };
   },
   mounted() {
     var pos = {
@@ -70,63 +116,61 @@ export default {
       y: -1,
     };
 
-    var canvas = document.getElementById('canvas')
-    var randomnum = Math.floor(Math.random()*4)
-    this.background = this.bglist[randomnum]
+    var canvas = document.getElementById('canvas');
+    var randomnum = Math.floor(Math.random() * 4);
+    this.background = this.bglist[randomnum];
 
-    var triangle = document.getElementById('tri1')
-    triangle.setAttribute('style','border-color:'+this.bglist2[randomnum]+";")
-    canvas.setAttribute('style','background-color:'+this.background+";")
-    var background = this.background
+    var triangle = document.getElementById('tri1');
+    triangle.setAttribute('style', 'border-color:' + this.bglist2[randomnum] + ';');
+    canvas.setAttribute('style', 'background-color:' + this.background + ';');
+    var background = this.background;
     var ctx = canvas.getContext('2d');
     this.ctx = ctx;
     this.canvas = canvas;
-    var rect = canvas.getBoundingClientRect();  // 터치 스크린
+    var rect = canvas.getBoundingClientRect(); // 터치 스크린
 
-    var eraser = document.getElementById('eraser')
+    var eraser = document.getElementById('eraser');
 
-    eraser.addEventListener("mousedown", mouseclick);
-    eraser.addEventListener("dblclick", mousedouble);
+    eraser.addEventListener('mousedown', mouseclick);
+    eraser.addEventListener('dblclick', mousedouble);
 
-    canvas.addEventListener("mousedown", listener);
-    canvas.addEventListener("mousemove", listener);
-    canvas.addEventListener("mouseup", listener);
-    canvas.addEventListener("mouseout", listener);
+    canvas.addEventListener('mousedown', listener);
+    canvas.addEventListener('mousemove', listener);
+    canvas.addEventListener('mouseup', listener);
+    canvas.addEventListener('mouseout', listener);
 
-    input.value = 3
-    ctx.lineWidth = 3
+    input.value = 3;
+    ctx.lineWidth = 3;
 
-    input.oninput = function(){
+    input.oninput = function () {
       ctx.lineWidth = input.value;
-    }
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
+    };
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
 
-    function listener(e){
-      switch(e.type){
-          case "mousedown":
-              drawStart(e);
-              break;
-          case "mousemove":
-              if(pos.drawable)
-                  draw(e);
-              break;
-          case "mouseout":
-          case "mouseup":
-              drawEnd();
-              break;
-          case "touchstart":
-              touchStart(e);
-              break;
-          case "touchmove":
-              if(pos.drawable)
-                  touch(e);
-              break;
-          case "touchend":
-              drawEnd();
-              break;
-          default:
-        }
+    function listener(e) {
+      switch (e.type) {
+        case 'mousedown':
+          drawStart(e);
+          break;
+        case 'mousemove':
+          if (pos.drawable) draw(e);
+          break;
+        case 'mouseout':
+        case 'mouseup':
+          drawEnd();
+          break;
+        case 'touchstart':
+          touchStart(e);
+          break;
+        case 'touchmove':
+          if (pos.drawable) touch(e);
+          break;
+        case 'touchend':
+          drawEnd();
+          break;
+        default:
+      }
     }
 
     function drawStart(e) {
@@ -163,67 +207,75 @@ export default {
 
     function mouseclick() {
       ctx.strokeStyle = background;
-      canvas.setAttribute('style', 'cursor : url("../src/assets/eraser.png"), auto; background-color:'+background+";")
-    };
+      canvas.setAttribute(
+        'style',
+        'cursor : url("../src/assets/eraser.png"), auto; background-color:' + background + ';',
+      );
+    }
 
     function mousedouble() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
   },
 
   created() {
     var today = new Date();
     var year = today.getFullYear();
     var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0'+today.getDate()).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
 
-    this.date = year+"."+month+"."+day
+    this.date = year + '.' + month + '.' + day;
   },
-  methods : {
+  methods: {
     closemodal() {
-      this.$emit('close')
+      this.$emit('close');
     },
     colorChange(color) {
       this.ctx.strokeStyle = color;
-      this.canvas.setAttribute('style','cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:'+this.background+";")
+      this.canvas.setAttribute(
+        'style',
+        'cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:' +
+          this.background +
+          ';',
+      );
     },
     clearAll() {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
 .new-cursor {
-  cursor : url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>") 0 25 , auto
+  cursor: url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>")
+      0 25,
+    auto;
 }
 
 #groupname {
-  font-size:20px;
-  background: linear-gradient(to bottom, #642EFE, #FA8EB6);
+  font-size: 20px;
+  background: linear-gradient(to bottom, #642efe, #fa8eb6);
   color: transparent;
   -webkit-background-clip: text;
 }
 
 #eraser {
-  background: url("../../public/assets/eraser.png") no-repeat;
+  background: url('../../public/assets/eraser.png') no-repeat;
   width: 60px;
   height: 107px;
-  background-size:cover;
+  background-size: cover;
   margin-top: 10px;
   /* cursor : url("../src/assets/eraser.png"), auto; */
-
 }
 
 #tri2 {
   width: 0;
   height: 0;
-  border-bottom: 50px solid #0E0F28;
+  border-bottom: 50px solid #0e0f28;
   border-top: 50px solid transparent;
   border-left: 50px solid transparent;
-  border-right: 50px solid #0E0F28;
+  border-right: 50px solid #0e0f28;
   position: absolute;
   left: 401px;
   bottom: 0;

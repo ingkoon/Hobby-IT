@@ -1,37 +1,61 @@
 <template>
-  <div id='background'>
-    <div id='backtitle'>HOBBY'IT</div>
-    <div id='signup'>
+  <div id="background">
+    <div id="backtitle">HOBBY'IT</div>
+    <div id="signup">
       <img
-        src='/assets/gif/main1.gif'
-        style='width:400px; height:580px; margin:10px; border-radius:10px; object-fit:cover'>
-      <div style='flex-grow:1'>
-        <div style='font-size:32px;'>Just Hobby'<span style='color:#642EFE'>It</span>!</div>
+        src="/assets/gif/main1.gif"
+        style="width: 400px; height: 580px; margin: 10px; border-radius: 10px; object-fit: cover"
+      />
+      <div style="flex-grow: 1">
+        <div style="font-size: 32px">Just Hobby'<span style="color: #642efe">It</span>!</div>
         <input
-          placeholder='email'
-          style='border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0 7px; color:white'
-          type='email'>
-        <div id='checkemail' style='font-size:12px; color:red'>! 이미 등록된 이메일입니다.</div>
+          placeholder="email"
+          style="
+            border: 2px solid white;
+            border-radius: 30px;
+            height: 44px;
+            width: 270px;
+            padding-left: 20px;
+            margin: 15px 0 7px;
+            color: white;
+          "
+          type="email"
+        />
+        <div id="checkemail" style="font-size: 12px; color: red">! 이미 등록된 이메일입니다.</div>
         <input
-          placeholder='password'
-          style='border:2px solid white; border-radius:30px; height:44px; width:270px; padding-left:20px; margin:15px 0 7px; color:white'
-          type='password'>
-        <div id='checkpwd' style='font-size:12px; color:red'>! 비밀번호를 입력해주세요.</div>
+          placeholder="password"
+          style="
+            border: 2px solid white;
+            border-radius: 30px;
+            height: 44px;
+            width: 270px;
+            padding-left: 20px;
+            margin: 15px 0 7px;
+            color: white;
+          "
+          type="password"
+        />
+        <div id="checkpwd" style="font-size: 12px; color: red">! 비밀번호를 입력해주세요.</div>
 
         <v-btn
-          color='#EE49FD80'
-          style='width:270px; height:44px; border-radius:20px; color:white; font-size:24px; margin-top:20px'>Log In
+          color="#EE49FD80"
+          style="width: 270px; height: 44px; border-radius: 20px; color: white; font-size: 24px; margin-top: 20px"
+          >Log In
         </v-btn>
-        <div style='text-align:right; margin-right:60px; font-family:linefont'>비밀번호 찾기</div>
+        <div style="text-align: right; margin-right: 60px; font-family: linefont">비밀번호 찾기</div>
 
-        <div id='divsns' style='font-family:linefont; margin-top:20px'>SNS 로그인</div>
-        <v-btn color='#F7E600' style='width:270px; height:44px; font-size:16px; margin-top:0'>카카오로 로그인</v-btn>
-        <v-btn color='#ffffff' style='width:270px; height:44px; font-size:16px; margin-top:10px'>구글로 로그인</v-btn>
+        <div id="divsns" style="font-family: linefont; margin-top: 20px">SNS 로그인</div>
+        <v-btn color="#F7E600" style="width: 270px; height: 44px; font-size: 16px; margin-top: 0"
+          >카카오로 로그인</v-btn
+        >
+        <v-btn color="#ffffff" style="width: 270px; height: 44px; font-size: 16px; margin-top: 10px"
+          >구글로 로그인</v-btn
+        >
 
-        <div style='font-size:15px; text-align:right; margin-right:60px; margin-top:5px; font-family:linefont'>
-          아직 회원이 아니신가요? <span id='gosignin' style='font-family:linefontbold' @click='gosignin'>회원가입</span>
+        <div style="font-size: 15px; text-align: right; margin-right: 60px; margin-top: 5px; font-family: linefont">
+          아직 회원이 아니신가요?
+          <span id="gosignin" style="font-family: linefontbold" @click="gosignin">회원가입</span>
         </div>
-
       </div>
     </div>
   </div>
@@ -51,8 +75,8 @@ export default {
 #background {
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #0E0F28, #A8456A);
-  color: #FA8EB680;
+  background: linear-gradient(to bottom, #0e0f28, #a8456a);
+  color: #fa8eb680;
   text-align: center;
   display: flex;
   align-items: center;
@@ -64,15 +88,14 @@ export default {
   font-size: 150px;
   letter-spacing: 0.3em;
   font-family: logofont;
-
 }
 
 #signup {
-  background: #0E0F2880;
+  background: #0e0f2880;
   position: absolute;
   width: 800px;
   height: 600px;
-  box-shadow: 0 4px 100px #ECE5FF;
+  box-shadow: 0 4px 100px #ece5ff;
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -81,14 +104,15 @@ export default {
 }
 
 #gosignin {
-  color: #FA8EB6;
+  color: #fa8eb6;
   font-size: 15px;
   cursor: pointer;
 }
 
-#checkemail, #checkpwd, #divsns {
+#checkemail,
+#checkpwd,
+#divsns {
   text-align: start;
   margin-left: 60px;
 }
-
 </style>

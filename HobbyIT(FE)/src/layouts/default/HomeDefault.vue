@@ -1,8 +1,8 @@
 <template>
-  <v-app id='app'>
-    <default-bar style='position:fixed' />
+  <v-app id="app">
+    <default-bar style="position: fixed" />
 
-    <default-view style='' />
+    <default-view style="" />
   </v-app>
 </template>
 
@@ -18,12 +18,11 @@ export default {
     DefaultView,
   },
   setup() {
-
     const userStore = useUserStore();
     return { userStore };
   },
   created() {
-    //
+    console.log(import.meta.env.VITE_API_SERVER_URL);
   },
 };
 </script>
@@ -31,22 +30,21 @@ export default {
 <style>
 #app {
   font-family: linefontbold;
-  background-color: #0E0F28;
-
+  background-color: #0e0f28;
 }
 
 @font-face {
-  font-family: "linefontbold";
-  src: url("/assets/fonts/LINESeedKR-Bd.ttf");
+  font-family: 'linefontbold';
+  src: url('/assets/fonts/LINESeedKR-Bd.ttf');
 }
 
 @font-face {
-  font-family: "linefont";
-  src: url("/assets/fonts/LINESeedKR-Rg.ttf");
+  font-family: 'linefont';
+  src: url('/assets/fonts/LINESeedKR-Rg.ttf');
 }
 
 @font-face {
-  font-family: "logofont";
-  src: url("/assets/fonts/FredokaOne-Regular.ttf");
+  font-family: 'logofont';
+  src: url('/assets/fonts/FredokaOne-Regular.ttf');
 }
 </style>
