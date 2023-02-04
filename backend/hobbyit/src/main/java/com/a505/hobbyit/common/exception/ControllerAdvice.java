@@ -37,7 +37,7 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler({
