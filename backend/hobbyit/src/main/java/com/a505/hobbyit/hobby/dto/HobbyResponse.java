@@ -23,11 +23,13 @@ public class HobbyResponse {
     private LocalDateTime createdDate;
     public HobbyResponse of(Hobby hobby){
         return HobbyResponse.builder()
+                .id(hobby.getId())
                 .name(hobby.getName())
                 .intro(hobby.getIntro())
                 .participantsNum(hobby.getCurrentMemberCount())
                 .maxParticipantsNum(hobby.getMaxMemberCount())
                 .category(hobby.getCategory())
+                .createdDate(hobby.getCreatedDateTime())
                 .img(hobby.getImgUrl())
                 .build();
     }

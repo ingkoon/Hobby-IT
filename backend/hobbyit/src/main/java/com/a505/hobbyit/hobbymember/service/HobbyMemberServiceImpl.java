@@ -7,7 +7,6 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
-import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
@@ -53,6 +52,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
         hobbyMemberRepository.delete(hobbyMember);
     }
 
+    @Transactional
     @Override
     public void resignHobbyMember(String token, Long hobbyId) {
         String memberEmail = jwtTokenProvider.getUser(token);

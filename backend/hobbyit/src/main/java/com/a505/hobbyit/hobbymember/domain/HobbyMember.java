@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobbymember.domain;
 
+import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="hobby_member")
-public class HobbyMember {
+public class HobbyMember extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -37,8 +38,8 @@ public class HobbyMember {
     @Column(nullable = false, length = 10)
     private HobbyMemberState state = HobbyMemberState.ACTIVE;
 
-    @Column(nullable = false, name = "reg_dt")
-    private LocalDateTime enrollDate;
+//    @Column(nullable = false, name = "reg_dt")
+//    private LocalDateTime enrollDate;
 
     @Column(name = "resd_dt")
     private LocalDateTime resignedDate;
@@ -48,11 +49,10 @@ public class HobbyMember {
     private HobbyMemberPrivilege privilege = HobbyMemberPrivilege.GENERAL;
 
     @Builder
-    public HobbyMember(Member member, Hobby hobby, HobbyMemberState state, LocalDateTime enrollDate, LocalDateTime resignedDate, HobbyMemberPrivilege privilege) {
+    public HobbyMember(Member member, Hobby hobby, HobbyMemberState state, LocalDateTime resignedDate, HobbyMemberPrivilege privilege) {
         this.member = member;
         this.hobby = hobby;
         this.state = state;
-        this.enrollDate = enrollDate;
         this.resignedDate = resignedDate;
         this.privilege = privilege;
     }
@@ -75,7 +75,6 @@ public class HobbyMember {
                 .hobby(hobby)
                 .state(HobbyMemberState.ACTIVE)
                 .privilege(HobbyMemberPrivilege.GENERAL)
-                .enrollDate(LocalDateTime.now())
                 .build();
     }
 }
