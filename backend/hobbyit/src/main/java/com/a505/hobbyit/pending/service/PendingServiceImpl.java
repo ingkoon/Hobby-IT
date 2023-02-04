@@ -12,6 +12,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.pending.DuplicatedPendingException;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.pending.domain.PendingRepository;
@@ -24,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -44,8 +44,8 @@ public class PendingServiceImpl implements PendingService{
     @Transactional
     @Override
     public void join(final String token, Long hobbyId, PendingRequest request) {
-        String userEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        String memberEmail = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(InvalidedRefreshTokenException::new);
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
 
         if(pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
@@ -59,16 +59,17 @@ public class PendingServiceImpl implements PendingService{
 
         Pending pending = request.toEntity(member, hobby);
 
+        log.info(pending.toString());
         pendingRepository.save(pending);
     }
 
     @Override
     public List<PendingResponse> findPendingList(final String token, Long hobbyId) {
         Hobby hobby = checkPrivilege(hobbyId, token);
-//        List<Pending> pendings = hobby.getPendings();
 
         List<Pending> pendings = pendingRepository
-                .getAllByHobbyAndPendingAllow(hobby, PendingAllow.WAIT);
+                .getAllByHobbyAndPendingAllow(hobby, PendingAllow.WAITING);
+
         log.info(pendings.size()+"");
         List<PendingResponse> responses = new ArrayList<>();
         for (Pending pending : pendings) {
@@ -95,7 +96,7 @@ public class PendingServiceImpl implements PendingService{
                 .orElseThrow(NoSuchElementException::new);
 
         pending.updatePendingAllow(request.getIsAllowed());
-        if(request.getIsAllowed().equals(PendingAllow.REJECT)) return;
+        if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
         Hobby findHobby = pending.getHobby();
