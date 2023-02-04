@@ -5,10 +5,7 @@ import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.pending.enums.PendingAllow;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -32,9 +29,6 @@ public class Pending extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String msg;
-
-//    @Column(name = "reg_dt", nullable = false)
-//    private LocalDateTime apply_date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")

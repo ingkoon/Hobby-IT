@@ -38,7 +38,7 @@ public class HobbyArticleResponse {
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
-                .createdAt(hobbyArticle.getRegDt())
+                .createdAt(hobbyArticle.getWritedDate())
                 .thumbnail(hobbyArticle.getThumbnailPath())
                 .likes(hobbyArticle.getLikeCount())
                 .commentCount(hobbyArticle.getCommentCount())

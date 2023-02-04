@@ -69,6 +69,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
+        String token = accessToken.substring(7);
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
@@ -89,6 +90,7 @@ public class JwtTokenProvider {
 
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
+        token = token.substring(7);
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -105,27 +107,31 @@ public class JwtTokenProvider {
     }
 
     private Claims parseClaims(String accessToken) {
+        String token = accessToken.substring(7);
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
 
     public Long getExpiration(String accessToken) {
+        String token = accessToken.substring(7);
         // accessToken 남은 유효시간
-        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
         // 현재 시간
         Long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
 
     public String getUser(String accessToken) {
+        String token = accessToken.substring(7); // 8번 째 부터 토큰
+
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(accessToken)
+                    .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
         } catch (ExpiredJwtException e) {

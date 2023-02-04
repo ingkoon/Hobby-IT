@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class HobbyAndMemberResponse {
-    private Long id;
     private String name;
     private String img;
     private int participantsNum;
@@ -24,8 +23,6 @@ public class HobbyAndMemberResponse {
     private String intro;
     private String category;
     private HobbyFree freeRegistration;
-    private LocalDateTime createdDate;
-
     private Long hobbyMemberId;
     private HobbyMemberPrivilege privilege;
 

@@ -24,7 +24,7 @@ public class PendingRequest {
                 .member(member)
                 .hobby(hobby)
                 .msg(message)
-                .pendingAllow(PendingAllow.WAIT)
+                .pendingAllow(PendingAllow.WAITING)
                 .build();
     }
 }
