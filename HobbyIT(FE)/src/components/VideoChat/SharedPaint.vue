@@ -1,24 +1,14 @@
+<!--suppress ALL -->
+
 <template>
   <div style="align-self: center">
     <v-card style="width: 650px; height: 500px; background-color: #0e0f28">
-      <div
-        style="
-          color: white;
-          display: flex;
-          justify-content: space-between;
-          margin: 10px 5px;
-        "
-      >
+      <div style="color: white; display: flex; justify-content: space-between; margin: 10px 5px">
         <span id="groupname">To. John, 나 여행가고싶어</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display: flex">
-        <canvas
-          id="canvas"
-          class="new-cursor"
-          height="500"
-          width="500"
-        ></canvas>
+        <canvas id="canvas" class="new-cursor" height="500" width="500"></canvas>
         <div style="margin-left: 20px; display: flex">
           <div style="display: flex; flex-direction: column">
             <div style="color: white; margin-bottom: 5px">
@@ -91,16 +81,16 @@ export default {
   },
   data() {
     return {
-      ctx: "",
-      canvas: "",
-      date: "",
-      background: "",
-      bglist: ["#F7FDB0", "#ABFAB3", "#BFE0FE", "#FECDCD"],
+      ctx: '',
+      canvas: '',
+      date: '',
+      background: '',
+      bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
     };
   },
   watch: {
     canvasData(newData, oldData) {
-      console.log("hahah");
+      console.log('hahah');
       const canvas = this.canvas;
       const ctx = this.ctx;
       const image = new Image();
@@ -117,26 +107,26 @@ export default {
       y: -1,
     };
 
-    var canvas = document.getElementById("canvas");
+    var canvas = document.getElementById('canvas');
 
     this.background = this.bglist[Math.floor(Math.random() * 4)];
 
-    canvas.setAttribute("style", "background-color:" + this.background + ";");
+    canvas.setAttribute('style', 'background-color:' + this.background + ';');
     var background = this.background;
-    var ctx = canvas.getContext("2d");
+    var ctx = canvas.getContext('2d');
     this.ctx = ctx;
     this.canvas = canvas;
     var rect = canvas.getBoundingClientRect(); // 터치 스크린
 
-    var eraser = document.getElementById("eraser");
+    var eraser = document.getElementById('eraser');
 
-    eraser.addEventListener("mousedown", mouseclick);
-    eraser.addEventListener("dblclick", mousedouble);
+    eraser.addEventListener('mousedown', mouseclick);
+    eraser.addEventListener('dblclick', mousedouble);
 
-    canvas.addEventListener("mousedown", listener);
-    canvas.addEventListener("mousemove", listener);
-    canvas.addEventListener("mouseup", listener);
-    canvas.addEventListener("mouseout", listener);
+    canvas.addEventListener('mousedown', listener);
+    canvas.addEventListener('mousemove', listener);
+    canvas.addEventListener('mouseup', listener);
+    canvas.addEventListener('mouseout', listener);
 
     input.value = 3;
     ctx.lineWidth = 3;
@@ -144,28 +134,28 @@ export default {
     input.oninput = function () {
       ctx.lineWidth = input.value;
     };
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     const tempThis = this;
     function listener(e) {
       switch (e.type) {
-        case "mousedown":
+        case 'mousedown':
           drawStart(e);
           break;
-        case "mousemove":
+        case 'mousemove':
           if (pos.drawable) draw(e);
           break;
-        case "mouseout":
-        case "mouseup":
+        case 'mouseout':
+        case 'mouseup':
           drawEnd();
           break;
-        case "touchstart":
+        case 'touchstart':
           touchStart(e);
           break;
-        case "touchmove":
+        case 'touchmove':
           if (pos.drawable) touch(e);
           break;
-        case "touchend":
+        case 'touchend':
           drawEnd();
           break;
         default:
@@ -203,7 +193,7 @@ export default {
       pos.drawable = false;
       pos.x = -1;
       pos.y = -1;
-      tempThis.$emit("sendCanvas", canvas.toDataURL().split(",")[1]);
+      tempThis.$emit('sendCanvas', canvas.toDataURL().split(',')[1]);
     }
 
     function mouseclick() {
@@ -216,7 +206,7 @@ export default {
   },
   methods: {
     closemodal() {
-      this.$emit("close");
+      this.$emit('close');
     },
     colorChange(color) {
       console.log(color);
@@ -244,7 +234,7 @@ export default {
 }
 
 #eraser {
-  background: url("../assets/eraser.png") no-repeat;
+  background: url('../assets/eraser.png') no-repeat;
   width: 60px;
   height: 107px;
   background-size: cover;

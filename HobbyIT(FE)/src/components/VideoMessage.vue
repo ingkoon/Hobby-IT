@@ -12,41 +12,17 @@
     >
       <v-row id="message-header">
         <p style="vertical-align: middle">Chat</p>
-        <v-icon
-          id="message-header-icon"
-          icon="mdi-account-group"
-          size="30px"
-        ></v-icon>
+        <v-icon id="message-header-icon" icon="mdi-account-group" size="30px"></v-icon>
       </v-row>
 
       <v-row id="message-content" style="overflow-y: auto">
-        <ChatMessage
-          v-for="(msg, index) in messageStore.message"
-          :key="index"
-          :msg="msg"
-          style="flex-wrap: wrap"
-        />
+        <ChatMessage v-for="(msg, index) in messageStore.message" :key="index" :msg="msg" style="flex-wrap: wrap" />
       </v-row>
 
       <v-row id="message-sender">
-        <form
-          id="message-sender-form"
-          style="width: 100%; align-items: center"
-          @submit.prevent="submitMessage"
-        >
-          <div
-            style="
-              display: flex;
-              justify-content: space-evenly;
-              align-self: center;
-            "
-          >
-            <input
-              v-model="message"
-              placeholder="type message :)"
-              style="color: white"
-              type="text"
-            />
+        <form id="message-sender-form" style="width: 100%; align-items: center" @submit.prevent="submitMessage">
+          <div style="display: flex; justify-content: space-evenly; align-self: center">
+            <input v-model="message" placeholder="type message :)" style="color: white" type="text" />
             <div id="button-box" style="margin-right: -20px">
               <v-icon color="white">mdi-send mdi-rotate-315 </v-icon>
             </div>
@@ -58,11 +34,11 @@
 </template>
 
 <script>
-import ChatMessage from "@/components/ChatMessage.vue";
-import { useMessageStore } from "@/store/message";
+import ChatMessage from '@/components/ChatMessage.vue';
+import { useMessageStore } from '@/store/message';
 
 export default {
-  name: "VideoMessage",
+  name: 'VideoMessage',
   components: { ChatMessage },
   setup() {
     const messageStore = useMessageStore();
@@ -70,19 +46,19 @@ export default {
   },
   data() {
     return {
-      message: "",
+      message: '',
     };
   },
   methods: {
     submitMessage() {
       const msgData = {
         data: this.message,
-        from: "",
+        from: '',
       };
       this.messageStore.message.push(msgData);
       console.log(this.message);
-      this.$emit("handleMessage", this.message);
-      this.message = "";
+      this.$emit('handleMessage', this.message);
+      this.message = '';
     },
   },
 };

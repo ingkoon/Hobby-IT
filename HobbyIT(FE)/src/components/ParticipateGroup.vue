@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ParticipateGroupItem from "@/components/ParticipateGroupItem.vue";
+import ParticipateGroupItem from '@/components/ParticipateGroupItem.vue';
 
 export default {
   components: { ParticipateGroupItem },

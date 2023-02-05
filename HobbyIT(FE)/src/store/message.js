@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
-export const useMessageStore = defineStore("message", {
-  id: "message",
+export const useMessageStore = defineStore('message', {
+  id: 'message',
   state: () => ({
     message: [],
   }),

@@ -1,16 +1,7 @@
 <template>
-  <v-slide-group
-      show-arrows
-      style="margin:1% 0;"
-  >
+  <v-slide-group show-arrows style="margin: 1% 0">
     <v-slide-group-item>
-
-      <v-card
-        class="mx-auto"
-        style="background-color:#ffffff00; padding:10px"
-        width="250"
-        @click = "opencreategroup"
-        >
+      <v-card class="mx-auto" style="background-color: #ffffff00; padding: 10px" width="250" @click="opencreategroup">
         <v-img>
           <div style="border : 5px solid #FA8EB6; width:190px; height:250px; display:flex; justify-content:center">
             <div id="makegroup" style="background-color:#0E0F28; width:100px; height:320px">
@@ -21,23 +12,17 @@
             </div>
             <v-icon icon="mdi-plus" style="align-self:center; color:#FA8EB6"></v-icon>
             <v-dialog v-model="creategroupmodal" activator="parent">
-              <create-group @closecreategroup="closecreategroup"/>
+              <create-group @closecreategroup="closecreategroup" />
             </v-dialog>
           </div>
         </v-img>
 
-        <v-card-subtitle class="pt-4" style="color:#ffffff; opacity:1">
-          Hobby 만들기
-        </v-card-subtitle>
-
+        <v-card-subtitle class="pt-4" style="color: #ffffff; opacity: 1"> Hobby 만들기 </v-card-subtitle>
       </v-card>
     </v-slide-group-item>
 
-    <v-slide-group-item
-      v-for="n in 7"
-      :key="n"
-    >
-      <MyPageGroupItem/>
+    <v-slide-group-item v-for="n in 7" :key="n">
+      <MyPageGroupItem />
     </v-slide-group-item>
   </v-slide-group>
 </template>
@@ -50,27 +35,24 @@ export default {
   components: {
     MyPageGroupItem,
     CreateGroup,
-   },
+  },
 
-  data(){
-    return{
+  data() {
+    return {
       creategroupmodal: false,
-    }
+    };
   },
 
   methods: {
-    opencreategroup(){
+    opencreategroup() {
       this.creategroupmodal = true;
     },
-    closecreategroup(){
+    closecreategroup() {
       this.creategroupmodal = false;
-    }
-   },
-
-}
+    },
+  },
+};
 </script>
-
-
 
 <style>
 #makegroup {
