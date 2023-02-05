@@ -17,7 +17,7 @@ function memberLogin(data) {
 }
 
 // 4.비밀번호 리셋
-function memberFindPassword(data) {
+function resetPassword(data) {
   return instance.post('password/reset', data);
 }
 
@@ -27,17 +27,17 @@ function memberLogout(nickname) {
 }
 
 // 6.마이페이지(타인)
-function memberOthersMyPage(nickname) {
+function getOthersMyPage(nickname) {
   return instance.get(`${nickname}`);
 }
 
 // 7.마이페이지 정보수정
-function memberUpdateMyPage(data) {
+function updateMyPage(data) {
   return instance.put('', data);
 }
 
 // 8.마이페이지 (본인)
-function memberMyPage() {
+function getMyPage() {
   return instance.get('');
 }
 
@@ -47,13 +47,13 @@ function memberDelete() {
 }
 
 // 10.참여중인 모임 리스트 조회
-function memberGetParticipatingGroup(nickname) {
+function getParticipatingGroup(nickname) {
   return instance.get(`hobby/${nickname}`);
 }
 
 // 11.대기중인 모임 리스트 조회
-function memberGetWaitingGroup() {
-
+function getWaitingGroup() {
+  return instance.get('hobby');
 }
 
 export {
