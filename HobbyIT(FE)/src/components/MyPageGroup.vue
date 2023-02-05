@@ -3,10 +3,14 @@
     <v-slide-group-item>
       <v-card class="mx-auto" style="background-color: #ffffff00; padding: 10px" width="250" @click="opencreategroup">
         <v-img>
-          <div style="border: 5px solid #fa8eb6; width: 190px; height: 250px; display: flex; justify-content: center">
-            <div id="makegroup" style="background-color: #0e0f28; width: 100px; height: 320px"></div>
-            <div id="makegroup2" style="background-color: #0e0f28; width: 190px; height: 200px"></div>
-            <v-icon icon="mdi-plus" style="align-self: center; color: #fa8eb6"></v-icon>
+          <div style="border : 5px solid #FA8EB6; width:190px; height:250px; display:flex; justify-content:center">
+            <div id="makegroup" style="background-color:#0E0F28; width:100px; height:320px">
+
+            </div>
+            <div id="makegroup2" style="background-color:#0E0F28; width:190px; height:140px">
+
+            </div>
+            <v-icon icon="mdi-plus" style="align-self:center; color:#FA8EB6"></v-icon>
             <v-dialog v-model="creategroupmodal" activator="parent">
               <create-group @closecreategroup="closecreategroup" />
             </v-dialog>
@@ -58,7 +62,7 @@ export default {
 }
 #makegroup2 {
   position: absolute;
-  top: 25px;
+  top: 60px;
   left: 0;
 }
 </style>

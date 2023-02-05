@@ -21,15 +21,15 @@
           <v-btn color="#2B146C" style="color: white; height: 44px; width: 47%">
             <v-icon icon="mdi-plus-circle-outline"></v-icon>
 
-            <v-dialog v-model="addarticlemodal" activator="parent">
-              <article-add @closeaddarticle="closeaddarticle" />
-            </v-dialog>
-          </v-btn>
-          <!-- 화상채팅 버튼 -->
-          <v-btn color="#2B146C" style="color: white; height: 44px; width: 47%">
-            <v-icon icon="mdi-video-account" @click="onclickVideoChat"></v-icon>
-          </v-btn>
-        </div>
+          <v-dialog v-model="addarticlemodal" activator="parent">
+            <article-add @closeaddarticle="closeaddarticle" />
+          </v-dialog>
+        </v-btn>
+        <!-- 화상채팅 버튼 -->
+        <v-btn @click="onclickVideoChat" color="#2B146C" style="color: white; height: 44px; width: 47%">
+          <v-icon icon="mdi-video-account" ></v-icon>
+        </v-btn>
+      </div>
 
         <!-- 검색 -->
         <v-text-field

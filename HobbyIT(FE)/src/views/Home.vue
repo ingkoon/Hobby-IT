@@ -10,19 +10,9 @@
 
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
-    <div
-      style="
-        position: relative;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        width: 800px;
-        height: 150px;
-        margin-top: 200px;
-      "
-    >
-      <p>HOBBY'IT</p>
+    <div style="position:relative; display: flex; align-items: center; text-align: center; justify-content: center;
+                width: 800px; height: 150px; margin-top: 200px;">
+      <p style="height:150px">HOBBY'IT</p>
 
       <img id="stars" src="/assets/Fstar.svg" style="position: absolute; top: -100px; z-index: -1" />
     </div>
