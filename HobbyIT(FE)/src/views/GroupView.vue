@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "GroupView",
+  name: 'GroupView',
 };
 </script>
 

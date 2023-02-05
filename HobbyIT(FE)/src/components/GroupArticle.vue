@@ -17,28 +17,15 @@
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display: flex">
-        <div
-          id="realimg"
-          style="width: 500px; height: 500px; background-color: #fa8eb630"
-          @click="uploadimg"
-        >
+        <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630" @click="uploadimg">
           <v-carousel style="width: 500px">
-            <v-carousel-item
-              v-for="(item, i) in imgurl"
-              :key="i"
-              :src="item.src"
-              cover
-            ></v-carousel-item>
+            <v-carousel-item v-for="(item, i) in imgurl" :key="i" :src="item.src" cover></v-carousel-item>
           </v-carousel>
         </div>
 
         <div style="background-color: #0e0f28; color: white">
           <div style="margin: 5px 10px">
-            <v-icon
-              color="blue-lighten-2"
-              icon="mdi-account-circle"
-              style="margin-right: 10px"
-            ></v-icon>
+            <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
             다나카
             <div>
               <v-icon color="#000000" icon="mdi-thumb-up" size="small"></v-icon>
@@ -50,14 +37,12 @@
           <hr color="white" style="height: 3px" />
 
           <div style="word-break: keep-all">
-            석촌호수에 도착했다. 커플들이 많이 보인다. 이 근처 맛집
-            추천가능한가요? 파인애플이 듬뿍 올라간 피자가 먹고 싶습니다<br />
+            석촌호수에 도착했다. 커플들이 많이 보인다. 이 근처 맛집 추천가능한가요? 파인애플이 듬뿍 올라간 피자가 먹고
+            싶습니다<br />
             뜨거운 코트를 가르며~ 너에게 가고있어~
           </div>
 
-          <div style="text-align: right">
-            <v-icon icon="mdi-eye" size="small"></v-icon> 558
-          </div>
+          <div style="text-align: right"><v-icon icon="mdi-eye" size="small"></v-icon> 558</div>
 
           <hr color="#642EFE" style="height: 3px" />
         </div>
@@ -70,19 +55,19 @@
 export default {
   data() {
     return {
-      content: "",
+      content: '',
       imgurl: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
         },
       ],
     };
@@ -90,7 +75,7 @@ export default {
   mounted() {},
   methods: {
     closemodal() {
-      this.$emit("closearticle");
+      this.$emit('closearticle');
     },
   },
 };

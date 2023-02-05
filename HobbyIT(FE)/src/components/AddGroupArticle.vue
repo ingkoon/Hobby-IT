@@ -17,10 +17,7 @@
         <v-icon icon="mdi-close" size="small" @click="closeaddarticle"></v-icon>
       </div>
       <div style="display: flex">
-        <div
-          id="realimg"
-          style="width: 500px; height: 500px; background-color: #fa8eb630"
-        >
+        <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630">
           <div id="line">
             <div id="line9"></div>
             <div id="line7"></div>
@@ -41,30 +38,15 @@
             ></v-carousel-item>
           </v-carousel>
         </div>
-        <input
-          id="uploadimg"
-          accept="image/*"
-          multiple
-          required
-          style="display: none"
-          type="file"
-        />
+        <input id="uploadimg" accept="image/*" multiple required style="display: none" type="file" />
 
         <div style="background-color: #0e0f28; flex-grow: 1; color: white">
           <div style="margin: 5px 10px">
-            <v-icon
-              color="blue-lighten-2"
-              icon="mdi-account-circle"
-              style="margin-right: 10px"
-            ></v-icon>
+            <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
             다나카
           </div>
 
-          <v-text-field
-            color="white"
-            placeholder="제목"
-            style="margin: 15px 10px"
-          ></v-text-field>
+          <v-text-field color="white" placeholder="제목" style="margin: 15px 10px"></v-text-field>
 
           <v-textarea
             :model-value="content"
@@ -77,11 +59,7 @@
             variant="outlined"
           ></v-textarea>
 
-          <v-btn
-            color="#FA8EB6"
-            style="color: white; width: 100px; float: right"
-            >업로드</v-btn
-          >
+          <v-btn color="#FA8EB6" style="color: white; width: 100px; float: right">업로드</v-btn>
         </div>
       </div>
     </v-card>
@@ -92,43 +70,43 @@
 export default {
   data() {
     return {
-      rules: [(v) => v.length <= 200 || "최대 200자까지 작성가능합니다."],
-      content: "",
-      uploadfiles: [{ src: "" }],
+      rules: [v => v.length <= 200 || '최대 200자까지 작성가능합니다.'],
+      content: '',
+      uploadfiles: [{ src: '' }],
     };
   },
   mounted() {},
   methods: {
     closeaddarticle() {
-      this.$emit("closeaddarticle");
+      this.$emit('closeaddarticle');
     },
     uploadimg() {
-      const realimg = document.getElementById("realimg");
-      const upload = document.getElementById("uploadimg");
+      const realimg = document.getElementById('realimg');
+      const upload = document.getElementById('uploadimg');
 
       upload.click();
-      upload.addEventListener("change", this.getImageFiles);
+      upload.addEventListener('change', this.getImageFiles);
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
       console.log(typeof files, files);
 
       if ([...files].length >= 11) {
-        alert("이미지는 10개까지 업로드가 가능합니다");
+        alert('이미지는 10개까지 업로드가 가능합니다');
         return;
       }
 
-      [...files].forEach((file) => {
-        if (!file.type.match("image/.*")) {
-          alert("이미지 파일만 업로드가 가능합니다.");
+      [...files].forEach(file => {
+        if (!file.type.match('image/.*')) {
+          alert('이미지 파일만 업로드가 가능합니다.');
           return;
         }
 
         if ([...files].length < 11) {
           const reader = new FileReader();
-          reader.onload = (e) => {
+          reader.onload = e => {
             var tmp = { src: e.target.result };
-            if (this.uploadfiles[0].src === "") {
+            if (this.uploadfiles[0].src === '') {
               this.uploadfiles = this.uploadfiles.slice(1);
             }
             this.uploadfiles.push(tmp);
@@ -138,8 +116,8 @@ export default {
         }
       });
 
-      const line = document.getElementById("line");
-      line.setAttribute("style", "display:none");
+      const line = document.getElementById('line');
+      line.setAttribute('style', 'display:none');
     },
   },
 };

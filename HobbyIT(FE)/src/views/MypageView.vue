@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div id="mypage">
     <!-- 왼쪽 정보 탭 -->
@@ -28,18 +29,10 @@
           rounded-bar
           style="border: 2px solid white; border-radius: 20px; width: 90%"
         >
-          <div style="font-size: 14px; margin: 5px">
-            {{ Math.ceil(gauge) }} %
-          </div>
+          <div style="font-size: 14px; margin: 5px">{{ Math.ceil(gauge) }} %</div>
         </v-progress-linear>
 
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 5% 0;
-          "
-        >
+        <div style="display: flex; justify-content: space-between; margin: 5px 5% 0">
           <span>Lv.10</span>
           <span>Lv.11</span>
         </div>
@@ -57,17 +50,15 @@
       <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
       <MyPageGroup />
 
-      <div style="font-size: 36px; margin-top: 20px">
-        가입 대기중인 HOBBY...
-      </div>
+      <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
       <MyPageGroup />
     </div>
   </div>
 </template>
 
 <script>
-import ParticipateGroup from "@/components/ParticipateGroup.vue";
-import MyPageGroup from "@/components/MyPageGroup.vue";
+import ParticipateGroup from '@/components/ParticipateGroup.vue';
+import MyPageGroup from '@/components/MyPageGroup.vue';
 
 export default {
   components: {
@@ -97,7 +88,7 @@ export default {
   width: 240px;
   height: 240px;
 
-  background-image: url(..\assets\tmpimg.jpeg);
+  background-image: url('/assets/tmpimg.jpeg');
   background-size: cover;
   border-radius: 50%;
   margin: 2px;
@@ -136,8 +127,7 @@ export default {
   border: 4px solid transparent;
   border-radius: 50%;
 
-  background-image: linear-gradient(#0e0f28, #0e0f28),
-    linear-gradient(to right, #ff005e, #642efe);
+  background-image: linear-gradient(#0e0f28, #0e0f28), linear-gradient(to right, #ff005e, #642efe);
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
