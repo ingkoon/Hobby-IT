@@ -1,9 +1,11 @@
 package com.a505.hobbyit.hobbyarticle.domain;
 
-import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobby.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+
+
 
 public interface HobbyArticleRepository extends JpaRepository<HobbyArticle, Long> {
     /*
