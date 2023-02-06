@@ -1,15 +1,16 @@
 package com.a505.hobbyit.hobbyarticle.domain;
 
+import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleResponse;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,22 +19,90 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
-
     QHobbyArticle hobbyArticle = QHobbyArticle.hobbyArticle;
 
     @Override
-    public Slice<HobbyArticle> findHobbyArticle(Long storedId, Long hobbyId, Pageable pageable) {
+    public Slice<HobbyArticleResponse> findHobbyArticle(Long storedId, Hobby hobby, Pageable pageable) {
         List<HobbyArticle> result = queryFactory
                 .selectFrom(hobbyArticle)
                 .where(
                         //no-offset 페이징 처리
                     ltStoreId(storedId),
+                    // hobby가 일치하며
+                    hobbyArticle.hobby.eq(hobby),
                     // 카테고리가 일반 게시글일 경우
                     hobbyArticle.category.eq(HobbyArticleCategory.GENERAL)
                 ).orderBy(hobbyArticle.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
-        return checkLastPage(pageable, result);
+
+
+        List<HobbyArticleResponse> responses = new ArrayList<>();
+        for (HobbyArticle article : result) {
+            responses.add(new HobbyArticleResponse().of(article));
+        }
+        return checkLastPage(pageable, responses);
+    }
+
+    @Override
+    public Slice<HobbyArticleResponse> searchHobbyArticle(Long storedId, String keyword, Hobby hobby, Pageable pageable) {
+        List<HobbyArticle> result = queryFactory
+                .selectFrom(hobbyArticle)
+                .where(
+                        //no-offset 페이징 처리
+                        ltStoreId(storedId),
+                        // hobby가 일치하는지 확인
+                        hobbyArticle.hobby.eq(hobby),
+                        // 카테고리가 일반 게시글인지 확인
+                        hobbyArticle.title.contains(keyword),
+                        // 검색 키워드를 포함하는지 확인
+                        hobbyArticle.category.eq(HobbyArticleCategory.GENERAL)
+                ).orderBy(hobbyArticle.id.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+        List<HobbyArticleResponse> responses = new ArrayList<>();
+        for (HobbyArticle article : result) {
+            responses.add(new HobbyArticleResponse().of(article));
+        }
+        return checkLastPage(pageable, responses);
+    }
+
+    @Override
+    public Page<HobbyArticleResponse> findHobbyNotice(Hobby hobby, Pageable pageable) {
+        List<HobbyArticle> result = queryFactory
+                .selectFrom(hobbyArticle)
+                .where(
+                        hobbyArticle.category.eq(HobbyArticleCategory.NOTICE)
+                ).orderBy(hobbyArticle.id.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        List<HobbyArticleResponse> responses = new ArrayList<>();
+
+        for (HobbyArticle article : result) {
+            responses.add(new HobbyArticleResponse().of(article));
+        }
+
+        return new PageImpl<>(responses);
+    }
+
+    @Override
+    public Page<HobbyArticleResponse> searchHobbyNotice(Hobby hobby, String keyword, Pageable pageable) {
+        Page<HobbyArticle> result = new PageImpl<>(queryFactory
+                .selectFrom(hobbyArticle)
+                .where(
+                        hobbyArticle.category.eq(HobbyArticleCategory.NOTICE),
+                        hobbyArticle.title.contains(keyword)
+                ).orderBy(hobbyArticle.id.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch());
+
+        List<HobbyArticleResponse> responses = new ArrayList<>();
+
+        for (HobbyArticle article : result)
+            responses.add(new HobbyArticleResponse().of(article));
+
+        return new PageImpl<>(responses);
     }
 
     // no-offset 방식 처리하는 메서드
@@ -46,7 +115,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
     }
 
     // 무한 스크롤 방식 처리하는 메서드
-    private Slice<HobbyArticle> checkLastPage(Pageable pageable, List<HobbyArticle> results) {
+    private Slice<HobbyArticleResponse> checkLastPage(Pageable pageable, List<HobbyArticleResponse> results) {
 
         boolean hasNext = false;
 
@@ -58,4 +127,6 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
 
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
+
 }

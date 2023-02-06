@@ -54,6 +54,8 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	//queryDsl
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 //	annotationProcessor "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"

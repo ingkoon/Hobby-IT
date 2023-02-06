@@ -13,12 +13,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor
 @Table(name = "hobby_article")
 public class HobbyArticle extends BaseEntity {
@@ -47,18 +49,17 @@ public class HobbyArticle extends BaseEntity {
     @Column(nullable = false)
     private int hit = 0;
 
-    @Column(nullable = false)
+    @Column(name="`like`",nullable = false)
     private int like = 0;
 
     @Builder
-    public HobbyArticle(Hobby hobby, Member member, HobbyArticleCategory category, int like, String title, String content, int hit) {
+    public HobbyArticle(Hobby hobby, Member member, HobbyArticleCategory category, String title, String content) {
         this.hobby = hobby;
         this.member = member;
         this.category = category;
         this.title = title;
         this.content = content;
-        this.hit = hit;
-        this.like = like;
+
     }
 
     public void updateTitle(String title){
@@ -69,9 +70,6 @@ public class HobbyArticle extends BaseEntity {
         this.content = content;
     }
 
-//    public void updateImg(String[] imgUrl){
-//        this.img
-//    }
 
     @OneToMany(mappedBy = "hobbyArticle")
     private List<HobbyArticleComment> hobbyArticleComments = new ArrayList<>();

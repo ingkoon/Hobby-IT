@@ -67,12 +67,6 @@ public class Hobby {
     @OneToMany(mappedBy = "hobby")
     private List<HobbyMember> hobbyMembers = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "hobby")
-//    private List<HobbyArticle> groupArticles = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "hobby")
-//    private List<HobbyPostit> postits = new ArrayList<>();
-
     public void updateName(String name){ this.name = name; }
 
     public void updateIntro(String intro){ this.intro = intro; }

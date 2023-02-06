@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 
-
-public interface HobbyArticleRepository extends JpaRepository<HobbyArticle, Long> {
+public interface HobbyArticleRepository extends JpaRepository<HobbyArticle, Long>, HobbyArticleQRepository {
     /*
         검색하는 쿼리 구현할 것
      */
