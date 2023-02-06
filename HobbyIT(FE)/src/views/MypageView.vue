@@ -42,7 +42,8 @@
       </div>
 
       <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
-      <MyPageGroup />
+      <!-- <MyPageGroup /> -->
+      <MyPage1/>
 
       <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
       <MyPageGroup />
@@ -53,11 +54,13 @@
 <script>
 import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import MyPageGroup from '@/components/MyPageGroup.vue';
+import MyPage1 from '@/components/no-content/MyPage1.vue';
 
 export default {
   components: {
     ParticipateGroup,
     MyPageGroup,
+    MyPage1,
   },
   data() {
     return {
