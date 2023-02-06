@@ -63,6 +63,7 @@
     </span>
   </h3>
 
+  <main1/>
   <participate-group />
 
   <h3>오늘의 HOBBY 추천</h3>
@@ -74,9 +75,9 @@
 
 <script>
 import ParticipateGroup from '@/components/ParticipateGroup.vue';
-
+import Main1 from '@/components/no-content/Main1.vue';
 export default {
-  components: { ParticipateGroup },
+  components: { ParticipateGroup, Main1},
   data() {
     return {
       model: '전체',
