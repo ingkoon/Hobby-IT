@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -18,22 +18,23 @@ import java.util.stream.Collectors;
 @Table(name = "member")
 public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String password;
 
-    @Column
+    @Column(length = 128)
     private String intro;
 
     @Column(nullable = false)
@@ -45,17 +46,17 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private String imgUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     @Enumerated(EnumType.STRING)
     private MemberState state;
 
     @Column
     private LocalDateTime resdReqDt;
 
-    @Column
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    private List<String> privilege;
+    private Set<String> privilege;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -89,10 +90,11 @@ public class Member extends BaseEntity implements UserDetails {
         return true;
     }
 
-    public Member() {}
+    public Member() {
+    }
 
     @Builder
-    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, List<String> privilege) {
+    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, Set<String> privilege) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -105,6 +107,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.state = MemberState.ACTIVE;
         this.resdReqDt = resdReqDt;
         this.privilege = privilege;
+    }
+
+
+    public void resetPassword(String password) {
+        this.password = password;
     }
 
 //    @OneToMany(mappedBy = "member")

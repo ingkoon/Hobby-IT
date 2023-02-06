@@ -1,6 +1,6 @@
 package com.a505.hobbyit.member.exception;
 
-public class InvalidedRefreshTokenException extends RuntimeException{
+public class InvalidedRefreshTokenException extends RuntimeException {
     public InvalidedRefreshTokenException(String message) {
         super(message);
     }
