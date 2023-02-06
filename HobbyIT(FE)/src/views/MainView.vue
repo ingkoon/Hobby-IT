@@ -36,7 +36,7 @@
   </v-slide-group>
 
   <v-carousel id="main-carousel" hide-delimiter-background style="width: 100%; height: 450px">
-    <v-carousel-item cover src="../src/assets/gif/main1.gif" style="font-size: 48px; color: white">
+    <v-carousel-item cover src='assets/gif/main1.gif' style="font-size: 48px; color: white">
       <div style="background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex">
         <div style="align-self: center; width: 100%">
           <div>
