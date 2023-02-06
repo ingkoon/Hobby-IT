@@ -61,6 +61,17 @@ const routes = [
     ],
   },
   {
+    path: '/promo',
+    component: () => import('@/layouts/default/MainPage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'promo',
+        component: () => import('@/views/PromoPageView.vue'),
+      },
+    ],
+  },
+  {
     path: '/mypage',
     component: () => import('@/layouts/default/MainPage.vue'),
     children: [
