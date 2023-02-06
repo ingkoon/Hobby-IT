@@ -59,9 +59,12 @@ function getWaitingGroup() {
 export {
   memberSignup,
   memberLogin,
-  memberMyPage,
+  getMyPage,
   memberLogout,
-  memberUpdateMyPage,
-  memberOthersMyPage,
-  memberFindPassword,
+  getWaitingGroup,
+  getParticipatingGroup,
+  getOthersMyPage,
+  updateMyPage,
+  memberDelete,
+  resetPassword,
 };
