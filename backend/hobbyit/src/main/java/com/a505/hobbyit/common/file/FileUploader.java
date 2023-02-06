@@ -2,7 +2,6 @@ package com.a505.hobbyit.common.file;
 
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import lombok.extern.slf4j.Slf4j;
-import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -14,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -28,8 +26,7 @@ public class FileUploader {
 //        String uploadPath = "C:/Users/SSAFY/Desktop/o/img";
 //        String uploadPath = "/Users/orlando/Desktop/img";
 
-
-        String path = uploadPath + File.separator + System.nanoTime() + domain +StringUtils.cleanPath(uploadFile.getOriginalFilename());
+        String path = uploadPath + File.separator + System.nanoTime() + domain + StringUtils.cleanPath(uploadFile.getOriginalFilename());
         Path copyOfLocation = Paths.get(path);
 
         try {
@@ -44,5 +41,4 @@ public class FileUploader {
 
         return path;
     }
-
 }

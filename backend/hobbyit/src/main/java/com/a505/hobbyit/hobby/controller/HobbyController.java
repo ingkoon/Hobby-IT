@@ -25,20 +25,20 @@ public class HobbyController {
     public ResponseEntity<Void> createHobby(
             @RequestHeader("Authorization") final String token,
             @RequestPart("multipartFile") MultipartFile multipartFile,
-            @RequestPart("request") HobbyRequest requestDto){
+            @RequestPart("request") HobbyRequest requestDto) {
         hobbyService.save(token, multipartFile, requestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping(value = "/{hobby-id}")
     public ResponseEntity<HobbyAndMemberResponse> findHobby(@RequestHeader("Authorization") final String token,
-                                                   @PathVariable(value = "hobby-id") final Long hobbyId){
+                                                            @PathVariable(value = "hobby-id") final Long hobbyId) {
         HobbyAndMemberResponse response = hobbyService.findById(token, hobbyId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<HobbyResponse>> findHobbies(){
+    public ResponseEntity<List<HobbyResponse>> findHobbies() {
         List<HobbyResponse> responses = hobbyService.findAll();
         return ResponseEntity.ok(responses);
     }
@@ -50,13 +50,13 @@ public class HobbyController {
     }
 
     @GetMapping(value = "/popular")
-    public ResponseEntity<List<HobbyResponse>> findPopularHobbies(){
+    public ResponseEntity<List<HobbyResponse>> findPopularHobbies() {
         List<HobbyResponse> responses = hobbyService.findPopularHobby();
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping(value = "/fresh")
-    public ResponseEntity<List<HobbyResponse>> findFreshHobbies(){
+    public ResponseEntity<List<HobbyResponse>> findFreshHobbies() {
         List<HobbyResponse> responses = hobbyService.findFreshHobby();
         return ResponseEntity.ok(responses);
     }
@@ -65,25 +65,25 @@ public class HobbyController {
     #18. 모임 회원 명단 확인 API
     */
     @GetMapping(value = "/{hobby-id}/member")
-    public ResponseEntity<List<HobbyMemberResponse>> findHobbyMembers(@PathVariable(value = "hobby-id") Long hobbyId){
+    public ResponseEntity<List<HobbyMemberResponse>> findHobbyMembers(@PathVariable(value = "hobby-id") Long hobbyId) {
         List<HobbyMemberResponse> responses = hobbyService.findHobbyMembers(hobbyId);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
-    @PutMapping (value = "/{hobby-id}")
+    @PutMapping(value = "/{hobby-id}")
     public ResponseEntity<Void> updateHobby(@Parameter(description = "게시할 글의 정보")
-            @RequestHeader("Authorization") final String token,
+                                            @RequestHeader("Authorization") final String token,
                                             @PathVariable("hobby-id") Long hobbyId,
-                                            @RequestPart( "multipartFile") MultipartFile multipartFile,
-                                            @RequestPart("request") HobbyUpdateRequest request){
-        hobbyService.updateHobby(token,  hobbyId, multipartFile, request);
+                                            @RequestPart("multipartFile") MultipartFile multipartFile,
+                                            @RequestPart("request") HobbyUpdateRequest request) {
+        hobbyService.updateHobby(token, hobbyId, multipartFile, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/{hobby-id}")
     public ResponseEntity<Void> deleteHobby(
             @RequestHeader("Authorization") final String token,
-            @PathVariable(value = "hobby-id") final Long hobbyId){
+            @PathVariable(value = "hobby-id") final Long hobbyId) {
 
         hobbyService.deleteHobby(hobbyId, token);
         return ResponseEntity.status(HttpStatus.OK).build();
