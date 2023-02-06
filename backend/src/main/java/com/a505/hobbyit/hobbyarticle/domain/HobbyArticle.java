@@ -70,6 +70,10 @@ public class HobbyArticle extends BaseEntity {
         this.content = content;
     }
 
+    public void updateHit(){
+        this.hit++;
+    }
+
 
     @OneToMany(mappedBy = "hobbyArticle")
     private List<HobbyArticleComment> hobbyArticleComments = new ArrayList<>();
