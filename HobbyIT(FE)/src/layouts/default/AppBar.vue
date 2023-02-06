@@ -27,7 +27,7 @@
 
 <script></script>
 
-<style>
+<style scoped>
 div.v-toolbar__content {
   max-height: 59px;
   /* height: 59px; */
