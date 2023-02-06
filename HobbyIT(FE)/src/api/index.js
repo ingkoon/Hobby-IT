@@ -20,11 +20,11 @@ const fileConfig = {
 
 function createInstance(path, config = defaultConfig) {
   const instance = axios.create({
-    ...defaultConfig,
+    ...config,
     baseURL: API_SERVER_URL + path,
   });
   return instance;
   // return setInterceptors(instance);
 }
 
-export { createInstance };
+export { createInstance, fileConfig };

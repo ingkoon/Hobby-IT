@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { getParticipatingGroup } from '@/api/member';
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -11,6 +12,9 @@ export const useUserStore = defineStore({
   getters: {
     getRefreshToken(state) {
       return localStorage.getItem('refreshToken');
+    },
+    getAccessToken(state) {
+      return state.accessToken;
     },
   },
   actions: {
@@ -35,11 +39,12 @@ export const useUserStore = defineStore({
       this.setUserEmail(email);
       this.setUserNickname(nickname);
     },
-    setUser(data) {
+    async setUser(data) {
       const { nickname, accessToken, refreshToken } = data;
       this.setAccessToken(accessToken);
       this.setRefreshToken(refreshToken);
       this.setUserNickname(nickname);
+      // const hobbyList = await getParticipatingGroup(nickname);
     },
   },
 });
