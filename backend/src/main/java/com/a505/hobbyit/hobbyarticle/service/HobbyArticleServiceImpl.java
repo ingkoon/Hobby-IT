@@ -73,6 +73,7 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     @Override
     public HobbyArticleDetailResponse findById(final String token , final Long hobbyId, final Long articleId) {
         HobbyArticle hobbyArticle = hobbyArticleRepository.getReferenceById(articleId);
+        hobbyArticle.updateHit();
         return new HobbyArticleDetailResponse().of(hobbyArticle);
     }
 
@@ -107,16 +108,5 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     public void delete(Long articleId) {
         HobbyArticle hobbyArticle = hobbyArticleRepository.findById(articleId).orElseThrow(NoSuchHobbyArticleException::new);
         hobbyArticleRepository.delete(hobbyArticle);
-    }
-
-    public Hobby checkPrivilege(Long hobbyId, String token){
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
-        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        HobbyMember hobbyMember = hobbyMemberRepository
-                .findByMemberAndHobby(member, hobby)
-                .orElseThrow(NoSuchHobbyMemberException::new);
-
-        return hobby;
     }
 }
