@@ -51,8 +51,8 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/article/search")
     public ResponseEntity<Slice<HobbyArticleResponse>> searchArticleList(
-            @RequestHeader String token,
-            @PathVariable final Long hobbyId,
+            @RequestHeader("Authorization") String token,
+            @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final Long storedId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
@@ -65,7 +65,7 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice")
     public ResponseEntity<Page<HobbyArticleResponse>> getNoticeList(
-            @RequestHeader String token,
+            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
              final Pageable pageable
     ){
@@ -77,7 +77,7 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice/search")
     public ResponseEntity<Page<HobbyArticleResponse>> searchNoticeList(
-            @RequestHeader String token,
+            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
@@ -94,7 +94,7 @@ public class HobbyArticleController {
     public ResponseEntity<HobbyArticleDetailResponse> getArticle(
             @RequestHeader("Authorization") final String token,
             @PathVariable("hobby-id") final Long hobbyId,
-            @RequestParam("article-id") final Long articleId){
+            @PathVariable("article-id") final Long articleId){
         HobbyArticleDetailResponse response = hobbyArticleService.findById(token, hobbyId, articleId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -102,7 +102,7 @@ public class HobbyArticleController {
     @PutMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<Void> updateArticle(
             @PathVariable("hobby-id") final Long hobbyId,
-            @RequestParam("article-id") final Long articleId,
+            @PathVariable("article-id") final Long articleId,
             @RequestBody HobbyArticleUpdateRequest request) {
         hobbyArticleService.update(articleId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
