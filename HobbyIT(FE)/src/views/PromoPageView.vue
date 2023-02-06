@@ -17,7 +17,7 @@
       </div>
     </div>
     <div>
-      <img id="stars" src="../assets/Fstar.svg" style="z-index:-1; margin-top: -800px;"/>
+      <img id="stars" src="assets/Fstar.svg" style="z-index:-1; margin-top: -800px;"/>
     </div>
     <div style="width:1200px; background: rgba(136, 29, 69, 0.5); border-radius: 30px; margin-top: -600px; padding: 50px 0px 50px 0px;">
       <div style="display: flex;">
@@ -177,6 +177,73 @@ export default {
           created_at: "1995-01-20T07:27:13Z",
           updated_at: "1990-04-21T01:07:51Z",
         },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+        {
+          id: 5,
+          type: "교류",
+          hit: 562,
+          title: "Hair each base dark guess garden accept.",
+          content:
+            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
+          user_nickname: "호방맨",
+          created_at: "1995-01-20T07:27:13Z",
+          updated_at: "1990-04-21T01:07:51Z",
+        },
+
       ],
       addpromo: false,
       no: "",
