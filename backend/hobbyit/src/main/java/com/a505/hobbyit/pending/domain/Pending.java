@@ -5,10 +5,9 @@ import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.pending.enums.PendingAllow;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,8 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pending extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -29,17 +27,14 @@ public class Pending extends BaseEntity {
     @JoinColumn(nullable = false, name = "member_id")
     private Member member;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false, length = 200)
     private String msg;
 
-//    @Column(name = "reg_dt", nullable = false)
-//    private LocalDateTime apply_date;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "state", length = 16)
+    @Column(name = "state")
     private PendingAllow pendingAllow;
 
-    public void updatePendingAllow(PendingAllow pendingALlow) {
+    public void updatePendingAllow(PendingAllow pendingALlow){
         this.pendingAllow = pendingALlow;
     }
 }

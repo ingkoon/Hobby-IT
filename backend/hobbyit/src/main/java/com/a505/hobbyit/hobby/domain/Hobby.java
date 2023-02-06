@@ -18,9 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "hobby")
 public class Hobby {
+
     @Column(nullable = false)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 32)
@@ -44,7 +44,7 @@ public class Hobby {
     @Column(nullable = false)
     private HobbyFree free;
 
-    @Column(name = "reg_dt", nullable = false)
+    @Column(name = "reg_dt",nullable = false)
     private final LocalDateTime createdDateTime = LocalDateTime.now();
 
     @Column(name = "resd_req_dt")
@@ -73,27 +73,22 @@ public class Hobby {
 //    @OneToMany(mappedBy = "hobby")
 //    private List<HobbyPostit> postits = new ArrayList<>();
 
-    public void updateName(String name) {
-        this.name = name;
-    }
+    public void updateName(String name){ this.name = name; }
 
-    public void updateIntro(String intro) {
-        this.intro = intro;
-    }
+    public void updateIntro(String intro){ this.intro = intro; }
 
-    public void updateMaxParticipantsNum(int maxParticipantsNum) {
+    public void updateMaxParticipantsNum(int maxParticipantsNum){
         this.maxMemberCount = maxParticipantsNum;
     }
 
-    public void updateImg(String img) {
+    public void updateImg(String img){
         this.imgUrl = img;
     }
-
-    public void updateCnt() {
+    public void updateCnt(){
         this.currentMemberCount = hobbyMembers.size();
     }
 
-    public void updateHobby(HobbyUpdateRequest request, String imgUrl) {
+    public void updateHobby(HobbyUpdateRequest request, String imgUrl){
         this.name = request.getName();
         this.intro = request.getIntro();
         this.maxMemberCount = request.getMaxParticipantsNum();

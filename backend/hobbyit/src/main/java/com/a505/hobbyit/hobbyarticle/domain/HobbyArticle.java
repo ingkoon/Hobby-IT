@@ -3,8 +3,10 @@ package com.a505.hobbyit.hobbyarticle.domain;
 import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
+import com.a505.hobbyit.hobbyarticle.exception.UnAuthorizedException;
 import com.a505.hobbyit.hobbyarticlecomment.domain.HobbyArticleComment;
 import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
+import com.a505.hobbyit.hobbyarticlelike.domain.HobbyArticleLike;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 
@@ -20,8 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "hobby_article")
 public class HobbyArticle extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -60,11 +61,11 @@ public class HobbyArticle extends BaseEntity {
         this.like = like;
     }
 
-    public void updateTitle(String title) {
+    public void updateTitle(String title){
         this.title = title;
     }
 
-    public void updateContent(String content) {
+    public void updateContent(String content){
         this.content = content;
     }
 
@@ -72,19 +73,34 @@ public class HobbyArticle extends BaseEntity {
 //        this.img
 //    }
 
-    //    @Column(nullable = false)
-//    private LocalDateTime writedDate;
-//
-//    @Column
-//    private LocalDateTime modifiedDate;
-//
-//    @Column
-//    private LocalDateTime deletedDate;
-
-    @OneToMany(mappedBy = "hobbyArticle")
-    private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
-
     @OneToMany(mappedBy = "hobbyArticle")
     private List<HobbyArticleComment> hobbyArticleComments = new ArrayList<>();
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleImg> hobbyArticleImg = new ArrayList<>();
+    @OneToMany(mappedBy = "hobbyArticle")
+    private List<HobbyArticleLike> hobbyArticleLikes = new ArrayList<>();
 
+    public int getCommentCount(){
+        return this.hobbyArticleComments.size();
+    }
+    public int getLikeCount(){
+        return this.hobbyArticleLikes.size();
+    }
+    public String getThumbnailPath(){
+        return this.hobbyArticleImg
+                .get(0)
+                .getImgUrl();
+    }
+
+    // 이미지를 주소를 반환하는 메서드
+    public List<String> getImages(){
+        List<String> images = new ArrayList<>();
+        for (HobbyArticleImg image : hobbyArticleImg) {
+            images.add(image.getImgUrl());
+        }
+        return images;
+    }
+    public void checkAuthor(Member member){
+        if(!this.member.equals(member)) throw new UnAuthorizedException();
+    }
 }

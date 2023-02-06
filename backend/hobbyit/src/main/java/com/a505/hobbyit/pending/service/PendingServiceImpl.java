@@ -12,6 +12,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.pending.DuplicatedPendingException;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.pending.domain.PendingRepository;
@@ -24,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -33,7 +33,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PendingServiceImpl implements PendingService {
+public class PendingServiceImpl implements PendingService{
 
     private final HobbyRepository hobbyRepository;
     private final MemberRepository memberRepository;
@@ -44,14 +44,14 @@ public class PendingServiceImpl implements PendingService {
     @Transactional
     @Override
     public void join(final String token, Long hobbyId, PendingRequest request) {
-        String userEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        String memberEmail = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(InvalidedRefreshTokenException::new);
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
 
-        if (pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
+        if(pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
             throw new DuplicatedPendingException();
 
-        if (hobby.getFree().equals(HobbyFree.FREE)) {
+        if(hobby.getFree().equals(HobbyFree.FREE)){
             HobbyMember hobbyMember = new HobbyMember().ofGeneral(member, hobby);
             hobbyMemberRepository.save(hobbyMember);
             return;
@@ -59,17 +59,18 @@ public class PendingServiceImpl implements PendingService {
 
         Pending pending = request.toEntity(member, hobby);
 
+        log.info(pending.toString());
         pendingRepository.save(pending);
     }
 
     @Override
     public List<PendingResponse> findPendingList(final String token, Long hobbyId) {
         Hobby hobby = checkPrivilege(hobbyId, token);
-//        List<Pending> pendings = hobby.getPendings();
 
         List<Pending> pendings = pendingRepository
-                .getAllByHobbyAndPendingAllow(hobby, PendingAllow.WAIT);
-        log.info(pendings.size() + "");
+                .getAllByHobbyAndPendingAllow(hobby, PendingAllow.WAITING);
+
+        log.info(pendings.size()+"");
         List<PendingResponse> responses = new ArrayList<>();
         for (Pending pending : pendings) {
             PendingResponse response = new PendingResponse().of(pending);
@@ -78,7 +79,6 @@ public class PendingServiceImpl implements PendingService {
 
         return responses;
     }
-
     /*
     # 23 가입 신청 검증
     해당 비즈니스 로직이 수행되면 pending entity가 소멸되고 hobby member에 데이터가 추가된다.
@@ -89,14 +89,14 @@ public class PendingServiceImpl implements PendingService {
     @Transactional
     @Override
     public void allowPending(final String token, final Long hobbyId, PendingAllowRequest request) {
-        checkPrivilege(hobbyId, token);
+       checkPrivilege(hobbyId, token);
 
         Pending pending = pendingRepository
                 .findById(request.getWaitId())
                 .orElseThrow(NoSuchElementException::new);
 
         pending.updatePendingAllow(request.getIsAllowed());
-        if (request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
+        if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
         Hobby findHobby = pending.getHobby();
@@ -105,7 +105,6 @@ public class PendingServiceImpl implements PendingService {
                 .member(findMember)
                 .hobby(findHobby)
                 .state(HobbyMemberState.ACTIVE)
-                .enrollDate(LocalDateTime.now())
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
 
@@ -113,7 +112,7 @@ public class PendingServiceImpl implements PendingService {
     }
 
     @Override
-    public Hobby checkPrivilege(Long hobbyId, String token) {
+    public Hobby checkPrivilege(Long hobbyId, String token){
         String memberEmail = jwtTokenProvider.getUser(token);
         Member member = memberRepository
                 .findByEmail(memberEmail)

@@ -1,6 +1,5 @@
 package com.a505.hobbyit.item.domain;
 
-import com.a505.hobbyit.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,21 +12,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "item")
-public class Item extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+public class Item {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column()
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private Long itemTypeId;
 
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false, length = 30)
     private String name;
 
     @Column(name = "rqd_point", nullable = false)
     private int requiredPoint;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String imgUrl;
 }

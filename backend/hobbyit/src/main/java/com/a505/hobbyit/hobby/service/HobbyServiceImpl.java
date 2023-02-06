@@ -14,6 +14,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HobbyServiceImpl implements HobbyService {
+public class HobbyServiceImpl implements HobbyService{
 
     private final MemberRepository memberRepository;
     private final HobbyMemberRepository hobbyMemberRepository;
@@ -42,7 +43,7 @@ public class HobbyServiceImpl implements HobbyService {
     @Override
     @Transactional
     public void save(final String token, MultipartFile multipartFile, HobbyRequest requestDto) {
-        if (hobbyRepository.existsByName(requestDto.getName())) throw new DuplicatedHobbyException();
+        if(hobbyRepository.existsByName(requestDto.getName())) throw new DuplicatedHobbyException();
         final String domain = requestDto.getName();
 
         String fileUrl = fileUploader.upload(multipartFile, domain);
@@ -52,29 +53,33 @@ public class HobbyServiceImpl implements HobbyService {
 
         String email = jwtTokenProvider.getUser(token);
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(InvalidedRefreshTokenException::new);
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(member)
                 .hobby(hobby)
                 .state(HobbyMemberState.ACTIVE)
-                .enrollDate(LocalDateTime.now())
                 .privilege(HobbyMemberPrivilege.OWNER)
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-
     }
 
     @Override
     public HobbyAndMemberResponse findById(final String token, Long hobbyId) {
         String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
-        ;
+
+        Member member = memberRepository.findByEmail(memberEmail)
+                .orElseThrow(InvalidedRefreshTokenException::new);
+        
         Hobby hobby = hobbyRepository
                 .findById(hobbyId)
-                .orElseThrow(() -> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));
-        HobbyMember hobbyMember = hobbyMemberRepository.findByMemberAndHobby(member, hobby).orElseGet(HobbyMember::new);
+                .orElseThrow(()-> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));
+
+        HobbyMember hobbyMember = hobbyMemberRepository
+                .findByMemberAndHobby(member,hobby)
+                .orElseGet(HobbyMember::new);
 
         log.info("========== 결과 DTO 반환==========");
         return new HobbyAndMemberResponse().of(hobby, hobbyMember);
@@ -135,19 +140,18 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Transactional
     @Override
-    public void updateHobby(String token, Long hobbyId, MultipartFile multipartFile, HobbyUpdateRequest request) {
+    public void updateHobby(String token, Long hobbyId, MultipartFile multipartFile, HobbyUpdateRequest request){
         Hobby hobby = checkPrivilege(hobbyId, token);
         String fileUrl = hobby.getImgUrl();
         log.info(hobby.getImgUrl());
         log.info(multipartFile.getName());
-        if (!hobby.getImgUrl().equals(multipartFile.getName())) {
+        if(!hobby.getImgUrl().equals(multipartFile.getName())){
             final String domain = request.getName();
             log.info("==========파일 저장==========");
             fileUrl = fileUploader.upload(multipartFile, domain);
         }
         hobby.updateHobby(request, fileUrl);
     }
-
     @Transactional
     @Override
     public void deleteHobby(Long hobbyId, String token) {
@@ -156,7 +160,7 @@ public class HobbyServiceImpl implements HobbyService {
     }
 
     @Override
-    public Hobby checkPrivilege(Long hobbyId, String token) {
+    public Hobby checkPrivilege(Long hobbyId, String token){
         String memberEmail = jwtTokenProvider.getUser(token);
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);

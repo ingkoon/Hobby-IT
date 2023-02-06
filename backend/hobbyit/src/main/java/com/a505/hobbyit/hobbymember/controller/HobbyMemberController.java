@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class HobbyMemberController {
     private final HobbyMemberService hobbyMemberService;
-
     @PutMapping("/{hobby-id}/member/{member-id}")
     public ResponseEntity<Void> updateHobbyMember(
             @Parameter(description = "사용자 정보 갱신 API")
             @RequestHeader final String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("member-id") final Long targetId,
-            @RequestBody HobbyMemberUpdateRequest request) {
+            @RequestBody HobbyMemberUpdateRequest request){
 
         hobbyMemberService.updatePrivilege(token, hobbyId, targetId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -30,9 +29,9 @@ public class HobbyMemberController {
 
     @DeleteMapping("/{hobby-id}/member/{member-id}")
     public ResponseEntity<Void> kickHobbyMember(
-            @RequestHeader final String token,
+            @RequestHeader("Authorization") final String token,
             @PathVariable("hobby-id") final Long hobbyId,
-            @PathVariable("member-id") final Long targetId) {
+            @PathVariable("member-id") final Long targetId ){
 
         hobbyMemberService.kickHobbyMember(token, hobbyId, targetId);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -40,8 +39,8 @@ public class HobbyMemberController {
 
     @DeleteMapping("/{hobby-id}/member")
     public ResponseEntity<Void> resignHobbyMember(
-            @RequestHeader final String token,
-            @PathVariable("hobby-id") final Long hobbyId) {
+            @RequestHeader("Authorization") final String token,
+            @PathVariable("hobby-id") final Long hobbyId){
 
         hobbyMemberService.resignHobbyMember(token, hobbyId);
         return ResponseEntity.status(HttpStatus.OK).build();

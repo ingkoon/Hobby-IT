@@ -9,19 +9,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PendingRequest {
+
     @NotNull()
     String message;
 
-    public Pending toEntity(Member member, Hobby hobby) {
+    public Pending toEntity(Member member, Hobby hobby){
         return Pending.builder()
                 .member(member)
                 .hobby(hobby)
                 .msg(message)
-                .pendingAllow(PendingAllow.WAIT)
+                .pendingAllow(PendingAllow.WAITING)
                 .build();
     }
 }

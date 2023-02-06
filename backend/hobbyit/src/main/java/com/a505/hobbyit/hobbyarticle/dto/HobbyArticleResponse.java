@@ -26,18 +26,22 @@ public class HobbyArticleResponse {
 
     LocalDateTime createdAt;
 
-    List<HobbyArticleImg> images;
+    String thumbnail;
 
     int likes;
 
-    public HobbyArticleResponse of(HobbyArticle hobbyArticle) {
+    int commentCount;
+
+    public HobbyArticleResponse of(HobbyArticle hobbyArticle){
         return HobbyArticleResponse.builder()
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
-                .createdAt(hobbyArticle.getRegDt())
-                .images(hobbyArticle.getHobbyArticleImg())
+                .createdAt(hobbyArticle.getWritedDate())
+                .thumbnail(hobbyArticle.getThumbnailPath())
+                .likes(hobbyArticle.getLikeCount())
+                .commentCount(hobbyArticle.getCommentCount())
                 .build();
     }
 }
