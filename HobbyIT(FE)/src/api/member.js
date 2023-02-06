@@ -1,29 +1,31 @@
-import { createInstance } from '@/api/index';
+import { createInstance, fileConfig } from '@/api/index';
 
 const PATH = 'member/';
 
 const instance = createInstance(PATH);
+const multipartInstance = createInstance(PATH, fileConfig);
 
 // 1.회원가입
 function memberSignup(data) {
-  return instance.post('signup', data);
+  return multipartInstance.post('signup', data);
 }
 
 // 2.이메일인증
 
 // 3.로그인
 function memberLogin(data) {
-  return instance.post('login', data);
+  return multipartInstance.post('login', data);
 }
 
 // 4.비밀번호 리셋
 function resetPassword(data) {
-  return instance.post('password/reset', data);
+  return multipartInstance.post('password/reset', data);
 }
 
 // 5.로그아웃
-function memberLogout(nickname) {
-  return instance.get('logout');
+// accessToken 같이 넘기기
+function memberLogout(data) {
+  return multipartInstance.post('logout', data);
 }
 
 // 6.마이페이지(타인)

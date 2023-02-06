@@ -1,18 +1,18 @@
 <template>
-  <div id="background">
-    <div id="backtitle">HOBBY'IT</div>
-    <div id="signup">
+  <div id='background'>
+    <div id='backtitle'>HOBBY'IT</div>
+    <div id='signup'>
       <img
-        alt="main"
-        src="/assets/gif/main1.gif"
-        style="width: 400px; height: 580px; margin: 10px; border-radius: 10px; object-fit: cover"
+        alt='main'
+        src='/assets/gif/main1.gif'
+        style='width: 400px; height: 580px; margin: 10px; border-radius: 10px; object-fit: cover'
       />
-      <div style="flex-grow: 1">
-        <div style="font-size: 32px">회원 <span style="color: #642efe">가입</span></div>
+      <div style='flex-grow: 1'>
+        <div style='font-size: 32px'>회원 <span style='color: #642efe'>가입</span></div>
         <input
-          v-model="userEmail"
-          placeholder="email"
-          style="
+          v-model='userEmail'
+          placeholder='email'
+          style='
             border: 2px solid white;
             border-radius: 30px;
             height: 44px;
@@ -20,14 +20,14 @@
             padding-left: 20px;
             margin: 7px 0 7px;
             color: white;
-          "
-          type="email"
+          '
+          type='email'
         />
-        <div id="checkemail" style="font-size: 12px; color: red">! 이미 등록된 이메일입니다.</div>
+        <div id='checkemail' style='font-size: 12px; color: red'>! 이미 등록된 이메일입니다.</div>
         <input
-          v-model="userPassword"
-          placeholder="password"
-          style="
+          v-model='userPassword'
+          placeholder='password'
+          style='
             border: 2px solid white;
             border-radius: 30px;
             height: 44px;
@@ -35,14 +35,14 @@
             padding-left: 20px;
             margin: 15px 0 7px;
             color: white;
-          "
-          type="password"
+          '
+          type='password'
         />
-        <div id="checkpwd" style="font-size: 12px; color: red">! 비밀번호를 입력해주세요.</div>
+        <div id='checkpwd' style='font-size: 12px; color: red'>! 비밀번호를 입력해주세요.</div>
         <input
-          v-model="username"
-          placeholder="이름"
-          style="
+          v-model='username'
+          placeholder='이름'
+          style='
             border: 2px solid white;
             border-radius: 30px;
             height: 44px;
@@ -50,14 +50,14 @@
             padding-left: 20px;
             margin: 15px 0 7px;
             color: white;
-          "
-          type="text"
+          '
+          type='text'
         />
-        <div id="checkname" style="font-size: 12px; color: red">! 성명을 입력해주세요.</div>
+        <div id='checkname' style='font-size: 12px; color: red'>! 성명을 입력해주세요.</div>
         <input
-          v-model="userNickname"
-          placeholder="활동할 닉네임"
-          style="
+          v-model='userNickname'
+          placeholder='활동할 닉네임'
+          style='
             border: 2px solid white;
             border-radius: 30px;
             height: 44px;
@@ -65,18 +65,18 @@
             padding-left: 20px;
             margin: 15px 0 7px;
             color: white;
-          "
-          type="text"
+          '
+          type='text'
         />
-        <div id="checknickname" style="font-size: 12px; color: red">! 이미 사용중인 닉네임입니다.</div>
+        <div id='checknickname' style='font-size: 12px; color: red'>! 이미 사용중인 닉네임입니다.</div>
         <v-btn
-          color="#EE49FD80"
-          style="width: 270px; height: 44px; border-radius: 20px; color: white; font-size: 24px; margin-top: 20px"
-          @click="handleSignup"
-          >Sign up
+          color='#EE49FD80'
+          style='width: 270px; height: 44px; border-radius: 20px; color: white; font-size: 24px; margin-top: 20px'
+          @click='handleSignup'
+        >Sign up
         </v-btn>
-        <div style="font-size: 15px; text-align: right; margin-right: 60px; margin-top: 5px">
-          이미 계정이 있으신가요? <span id="gologin" @click="gologin">로그인</span>
+        <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 5px'>
+          이미 계정이 있으신가요? <span id='gologin' @click='gologin'>로그인</span>
         </div>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
           password: this.userPassword,
         };
         const res = await memberSignup(signupData);
+        console.log('haha');
         this.userStore.afterSignup(signupData);
 
         const loginData = {
