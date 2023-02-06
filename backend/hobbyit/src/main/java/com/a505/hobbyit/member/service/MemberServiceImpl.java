@@ -4,6 +4,7 @@ import com.a505.hobbyit.member.domain.Mail;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
@@ -168,6 +169,31 @@ public class MemberServiceImpl implements MemberService {
                 + pwd + "</b> 입니다.<br> " + "로그인 후에 비밀번호를 변경을 해주세요.", true);
 //        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/KANG/Desktop/logo.png"));
         javaMailSender.send(mimeMessage);
+    }
+
+    @Override
+    public MypageResponse findByNickname(final String memberNickname) {
+        Member member = memberRepository.findByNickname(memberNickname)
+                .orElseThrow(NoSuchMemberException::new);
+
+        MypageResponse memberPage = MypageResponse.builder()
+                .nickname(member.getNickname())
+                .intro(member.getIntro())
+                .point(member.getPoint())
+                .imgUrl(member.getImgUrl())
+                .build();
+
+        return memberPage;
+    }
+
+    @Override
+    public MypageResponse findByToken(final String token) {
+        String email = jwtTokenProvider.getUser(token);
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(NoSuchMemberException::new);
+
+        return new MypageResponse().of(member);
     }
 
 }

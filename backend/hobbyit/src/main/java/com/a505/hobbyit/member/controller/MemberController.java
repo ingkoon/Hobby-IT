@@ -3,6 +3,7 @@ package com.a505.hobbyit.member.controller;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +69,19 @@ public class MemberController {
         }
         memberService.resetPassword(request, from);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{member-nickname}")
+    public ResponseEntity<MypageResponse> findMemberPage(
+            @PathVariable(value = "member-nickname") final String MemberNickname) {
+        MypageResponse response = memberService.findByNickname(MemberNickname);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<MypageResponse> findMyPage(
+            @RequestHeader("Authorization") final String token) {
+        MypageResponse response = memberService.findByToken(token);
+        return ResponseEntity.ok(response);
     }
 }
