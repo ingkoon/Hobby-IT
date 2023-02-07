@@ -8,6 +8,7 @@ import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
@@ -19,9 +20,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -123,14 +122,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void logout(MemberLogoutRequest request) {
+    public void logout(final String token) {
+        String accessToken = token.split(" ")[1];
+
         // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
+        if (!jwtTokenProvider.validateToken(accessToken)) {
             throw new InvalidedAccessTokenException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
         // 3. Redis 에서 해당 Member email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (stringRedisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
@@ -139,9 +140,8 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(request.getAccessToken());
-        stringRedisTemplate.opsForValue()
-                .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        Long expiration = jwtTokenProvider.getExpiration(token);
+        stringRedisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
     @Transactional
@@ -176,9 +176,38 @@ public class MemberServiceImpl implements MemberService {
         javaMailSender.send(mimeMessage);
     }
 
+    @Override
+    public MypageResponse findMypage(final String token, final String nickname) {
+        String myEmail = jwtTokenProvider.getUser(token);
+
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(NoSuchMemberException::new);
+
+        MypageResponse mypageResponse;
+        if (memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+            mypageResponse = MypageResponse.builder()
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        } else {
+            mypageResponse = MypageResponse.builder()
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        }
+
+        return mypageResponse;
+    }
+
 
     @Override
-    public List<MemberPendingResponse> getPendingList(String token){
+    public List<MemberPendingResponse> getPendingList(String token) {
         String memberEmail = jwtTokenProvider.getUser(token);
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchMemberException::new);
 
@@ -191,7 +220,7 @@ public class MemberServiceImpl implements MemberService {
             responses.add(response);
         }
 
-        return  responses;
+        return responses;
     }
 
 }

@@ -1,4 +1,5 @@
 file:
-  dir: /home/ubuntu/img
+  # dir: /home/ubuntu/img
 #  dir: /Users/orlando/Desktop/img
-#  dir: C:/Users/SSAFY/Desktop
+ dir: C:/Users/SSAFY/Desktop
+

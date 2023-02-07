@@ -4,6 +4,7 @@ import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -48,20 +49,13 @@ public class MemberController {
 
     @PostMapping(value = "/reissue")
     public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
-        try {
-            MemberResponse memberResponse = memberService.reissue(request);
-            return ResponseEntity.ok(memberResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        MemberResponse memberResponse = memberService.reissue(request);
+        return ResponseEntity.ok(memberResponse);
     }
 
-    @PostMapping(value = "/logout")
-    public ResponseEntity<Void> logout(@Validated MemberLogoutRequest request, Errors errors) {
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
-        memberService.logout(request);
+    @GetMapping(value = "/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") final String token) {
+        memberService.logout(token);
         return ResponseEntity.ok().build();
     }
 
@@ -73,6 +67,15 @@ public class MemberController {
         memberService.resetPassword(request, from);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/{member-nickname}")
+    public ResponseEntity<MypageResponse> findMypage(
+            @RequestHeader("Authorization") final String token,
+            @PathVariable(value = "member-nickname") final String nickname) {
+        MypageResponse response = memberService.findMypage(token, nickname);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping(value = "/hobby/pending")
     public ResponseEntity<List<MemberPendingResponse>> findMemberPendings(

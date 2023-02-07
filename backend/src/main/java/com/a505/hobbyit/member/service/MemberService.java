@@ -3,8 +3,8 @@ package com.a505.hobbyit.member.service;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import jakarta.mail.MessagingException;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -15,9 +15,11 @@ public interface MemberService {
 
     MemberResponse reissue(MemberReissueRequest request);
 
-    void logout(MemberLogoutRequest request);
+    void logout(final String token);
 
     void resetPassword(MemberMailRequest request, String from) throws MessagingException;
+
+    MypageResponse findMypage(final String token, final String nickname);
 
     List<MemberPendingResponse> getPendingList(String token);
 }
