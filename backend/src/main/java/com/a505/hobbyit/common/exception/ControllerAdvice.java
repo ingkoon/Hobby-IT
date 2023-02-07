@@ -1,5 +1,7 @@
 package com.a505.hobbyit.common.exception;
 
+import com.a505.hobbyit.article.exception.NoSuchArticleException;
+import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
@@ -41,7 +43,8 @@ public class ControllerAdvice {
             NoSuchMemberException.class,
             NoSuchHobbyException.class,
             NoSuchHobbyMemberException.class,
-            NoSuchPendingException.class })
+            NoSuchPendingException.class,
+            NoSuchArticleException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
@@ -58,7 +61,7 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler({UnAuthorizedHobbyMemberException.class})
+    @ExceptionHandler({UnAuthorizedHobbyMemberException.class, UnAuthorizedArticleException.class})
     public  ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
