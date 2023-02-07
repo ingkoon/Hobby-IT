@@ -5,7 +5,7 @@
     <div id="group">
       <!-- 왼쪽 모임 정보 탭 -->
       <div id="groupinfo">
-        <img src="public/assets/tmpimg.jpeg" />
+        <img src="/assets/tmpimg.jpeg" />
         <div id="title">John, 나 여행가고싶어</div>
         <div id="content">
           따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
@@ -133,6 +133,8 @@ import ArticleAdd from '../components/AddGroupArticle.vue';
 import ArticleModal from '../components/GroupArticle.vue';
 import CanvasAdd from '@/components/CanvasAdd.vue';
 
+import { getGroupInfo } from '@/api/hobby';
+
 export default {
   components: {
     ArticleItem,
@@ -175,6 +177,7 @@ export default {
       canvasmodal: false,
       addarticlemodal: false,
       articlemodal: false,
+      groupinfo : [],
     };
   },
 
@@ -195,7 +198,22 @@ export default {
     closearticle() {
       this.articlemodal = false;
     },
+
+    async getGroupInfo(id) {
+      try {
+        const { data } = await getGroupInfo(id);
+        this.groupinfo = data
+        console.log(this.groupinfo)
+      }
+      catch(e) {
+        console.error(e.message)
+      }
+    }
   },
+
+  created() {
+    this.getGroupInfo(this.$route.params.id)
+  }
 };
 </script>
 

@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     handleGoLoginPage() {
-      this.$router.push('login');
+      this.$router.push({name : "login"});
     },
     async handleLogout() {
       const logoutData = {
