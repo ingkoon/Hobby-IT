@@ -14,6 +14,7 @@ import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.pending.domain.Pending;
+import com.a505.hobbyit.security.SecurityUtil;
 import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -46,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
     private final JavaMailSender javaMailSender;
 
     private final HobbyRepository hobbyRepository;
+    private final SecurityUtil securityUtil;
 
     @Override
     public void signUp(MemberSignupRequest request) {
@@ -80,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member, true, "");
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
@@ -96,8 +98,8 @@ public class MemberServiceImpl implements MemberService {
             throw new InvalidedRefreshTokenException();
         }
 
-        // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
+        // 2. Refresh Token 에서 Member email 을 가져옵니다.
+        Authentication authentication = jwtTokenProvider.getAuthentication(request.getRefreshToken());
 
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
 
@@ -112,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 4. 새로운 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member, false, request.getRefreshToken());
 
         // 5. RefreshToken Redis 업데이트
         stringRedisTemplate.opsForValue()
