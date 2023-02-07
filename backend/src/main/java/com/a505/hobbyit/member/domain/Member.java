@@ -58,7 +58,6 @@ public class Member extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
     private Set<String> privilege;
 
     @Override

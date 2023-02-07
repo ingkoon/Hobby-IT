@@ -8,6 +8,7 @@ import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
@@ -19,9 +20,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -174,6 +173,35 @@ public class MemberServiceImpl implements MemberService {
                 + pwd + "</b> 입니다.<br> " + "로그인 후에 비밀번호를 변경을 해주세요.", true);
 //        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/KANG/Desktop/logo.png"));
         javaMailSender.send(mimeMessage);
+    }
+
+    @Override
+    public MypageResponse findMypage(final String token, final String nickname) {
+        String myEmail = jwtTokenProvider.getUser(token);
+
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(NoSuchMemberException::new);
+
+        MypageResponse mypageResponse;
+        if(memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+            mypageResponse = MypageResponse.builder()
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        } else {
+            mypageResponse = MypageResponse.builder()
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        }
+
+        return mypageResponse;
     }
 
 
