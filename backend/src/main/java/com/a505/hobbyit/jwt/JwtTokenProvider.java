@@ -73,7 +73,6 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        String token = accessToken.substring(8);
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
@@ -119,7 +118,7 @@ public class JwtTokenProvider {
     }
 
     public Long getExpiration(String accessToken) {
-        String token = accessToken.substring(8);
+        String token = accessToken.split(" ")[1];
         // accessToken 남은 유효시간
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
         // 현재 시간

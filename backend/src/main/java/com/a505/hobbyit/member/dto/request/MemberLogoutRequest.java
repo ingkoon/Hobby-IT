@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class MemberLogoutRequest {
-    @JsonProperty("access_token")
+    @JsonProperty("accessToken")
     @NotEmpty(message = "잘못된 요청입니다.")
     private String accessToken;
+
 }
