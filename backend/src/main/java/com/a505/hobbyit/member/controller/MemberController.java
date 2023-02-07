@@ -2,17 +2,22 @@ package com.a505.hobbyit.member.controller;
 
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.service.MemberService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -68,5 +73,22 @@ public class MemberController {
         }
         memberService.resetPassword(request, from);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{member-nickname}")
+    public ResponseEntity<MypageResponse> findMypage(
+            @RequestHeader("Authorization") final String token,
+            @PathVariable(value = "member-nickname") final String nickname) {
+        MypageResponse response = memberService.findMypage(token, nickname);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping(value = "/hobby/pending")
+    public ResponseEntity<List<MemberPendingResponse>> findMemberPendings(
+            @RequestHeader("Authorization") String token
+    ){
+        List<MemberPendingResponse> pendingList = memberService.getPendingList(token);
+        return ResponseEntity.status(HttpStatus.OK).body(pendingList);
     }
 }

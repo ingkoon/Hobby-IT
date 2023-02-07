@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HobbyArticleResponse {
+    Long id;
     String title;
 
     String content;
@@ -34,6 +35,7 @@ public class HobbyArticleResponse {
 
     public HobbyArticleResponse of(HobbyArticle hobbyArticle){
         return HobbyArticleResponse.builder()
+                .id(hobbyArticle.getId())
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getName())

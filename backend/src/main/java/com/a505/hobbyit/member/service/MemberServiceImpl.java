@@ -1,22 +1,26 @@
 package com.a505.hobbyit.member.service;
 
+import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobby.domain.HobbyRepository;
+import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.member.domain.Mail;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.member.dto.response.MypageResponse;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,8 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -41,6 +44,8 @@ public class MemberServiceImpl implements MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final StringRedisTemplate stringRedisTemplate;
     private final JavaMailSender javaMailSender;
+
+    private final HobbyRepository hobbyRepository;
 
     @Override
     public void signUp(MemberSignupRequest request) {
@@ -168,6 +173,53 @@ public class MemberServiceImpl implements MemberService {
                 + pwd + "</b> 입니다.<br> " + "로그인 후에 비밀번호를 변경을 해주세요.", true);
 //        mimeMessageHelper.addInline("logo", new FileDataSource("C:/Users/KANG/Desktop/logo.png"));
         javaMailSender.send(mimeMessage);
+    }
+
+    @Override
+    public MypageResponse findMypage(final String token, final String nickname) {
+        String myEmail = jwtTokenProvider.getUser(token);
+
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(NoSuchMemberException::new);
+
+        MypageResponse mypageResponse;
+        if(memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+            mypageResponse = MypageResponse.builder()
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        } else {
+            mypageResponse = MypageResponse.builder()
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        }
+
+        return mypageResponse;
+    }
+
+
+    @Override
+    public List<MemberPendingResponse> getPendingList(String token){
+        String memberEmail = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchMemberException::new);
+
+        List<Pending> pendings = member.getPendings();
+
+        List<MemberPendingResponse> responses = new ArrayList<>();
+        for (Pending pending : pendings) {
+            Hobby hobby = hobbyRepository.findById(pending.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
+            MemberPendingResponse response = new MemberPendingResponse().of(hobby);
+            responses.add(response);
+        }
+
+        return  responses;
     }
 
 }

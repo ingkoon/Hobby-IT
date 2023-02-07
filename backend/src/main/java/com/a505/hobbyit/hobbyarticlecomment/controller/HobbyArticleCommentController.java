@@ -55,8 +55,7 @@ public class HobbyArticleCommentController {
     public ResponseEntity<Void> deleteComment(
             @PathVariable(value = "hobby-id", required = false) final Long hobbyId,
             @PathVariable(value = "article-id", required = false) final Long articleId,
-            @PathVariable(value = "comment-id") final Long commentId,
-            @RequestBody CommentRequest request
+            @PathVariable(value = "comment-id") final Long commentId
     ){
         hobbyArticleCommentService.deleteComment(commentId);
         return ResponseEntity
