@@ -1,6 +1,5 @@
 package com.a505.hobbyit.member.service;
 
-import com.a505.hobbyit.member.domain.Mail;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
@@ -9,15 +8,12 @@ import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
-import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -172,28 +168,32 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MypageResponse findByNickname(final String memberNickname) {
-        Member member = memberRepository.findByNickname(memberNickname)
+    public MypageResponse findMypage(final String token, final String nickname) {
+        String myEmail = jwtTokenProvider.getUser(token);
+
+        Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(NoSuchMemberException::new);
 
-        MypageResponse memberPage = MypageResponse.builder()
-                .nickname(member.getNickname())
-                .intro(member.getIntro())
-                .point(member.getPoint())
-                .imgUrl(member.getImgUrl())
-                .build();
+        MypageResponse mypageResponse;
+        if(memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+            mypageResponse = MypageResponse.builder()
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        } else {
+            mypageResponse = MypageResponse.builder()
+                    .nickname(member.getNickname())
+                    .intro(member.getIntro())
+                    .point(member.getPoint())
+                    .imgUrl(member.getImgUrl())
+                    .build();
+        }
 
-        return memberPage;
-    }
-
-    @Override
-    public MypageResponse findByToken(final String token) {
-        String email = jwtTokenProvider.getUser(token);
-
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(NoSuchMemberException::new);
-
-        return new MypageResponse().of(member);
+        return mypageResponse;
     }
 
 }

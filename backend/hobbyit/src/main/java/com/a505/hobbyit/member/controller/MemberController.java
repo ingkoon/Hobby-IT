@@ -72,16 +72,11 @@ public class MemberController {
     }
 
     @GetMapping(value = "/{member-nickname}")
-    public ResponseEntity<MypageResponse> findMemberPage(
-            @PathVariable(value = "member-nickname") final String MemberNickname) {
-        MypageResponse response = memberService.findByNickname(MemberNickname);
+    public ResponseEntity<MypageResponse> findMypage(
+            @RequestHeader("Authorization") final String token,
+            @PathVariable(value = "member-nickname") final String nickname) {
+        MypageResponse response = memberService.findMypage(token, nickname);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<MypageResponse> findMyPage(
-            @RequestHeader("Authorization") final String token) {
-        MypageResponse response = memberService.findByToken(token);
-        return ResponseEntity.ok(response);
-    }
 }
