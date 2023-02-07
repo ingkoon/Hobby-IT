@@ -1,5 +1,7 @@
 package com.a505.hobbyit.common.exception;
 
+import com.a505.hobbyit.article.exception.NoSuchArticleException;
+import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
@@ -41,8 +43,9 @@ public class ControllerAdvice {
             NoSuchMemberException.class,
             NoSuchHobbyException.class,
             NoSuchHobbyMemberException.class,
-            NoSuchPendingException.class })
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
+            NoSuchPendingException.class,
+            NoSuchArticleException.class})
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -51,22 +54,22 @@ public class ControllerAdvice {
     @ExceptionHandler({
             DuplicatedMemberException.class,
             DuplicatedHobbyException.class,
-            DuplicatedPendingException.class })
-    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e){
+            DuplicatedPendingException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler({UnAuthorizedHobbyMemberException.class})
-    public  ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e){
+    @ExceptionHandler({UnAuthorizedHobbyMemberException.class, UnAuthorizedArticleException.class})
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
-    public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
