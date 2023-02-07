@@ -49,21 +49,12 @@ public class MemberController {
 
     @PostMapping(value = "/reissue")
     public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
-        System.out.println("AT : "+request.getAccessToken());
-        System.out.println("RT : "+request.getRefreshToken());
-        try {
-            MemberResponse memberResponse = memberService.reissue(request);
-            return ResponseEntity.ok(memberResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        MemberResponse memberResponse = memberService.reissue(request);
+        return ResponseEntity.ok(memberResponse);
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<Void> logout(@Validated MemberLogoutRequest request, Errors errors) {
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Void> logout(@RequestBody MemberLogoutRequest request) {
         memberService.logout(request);
         return ResponseEntity.ok().build();
     }
