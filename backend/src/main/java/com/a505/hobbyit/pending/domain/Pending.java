@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Pending extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +34,13 @@ public class Pending extends BaseEntity {
 
     public void updatePendingAllow(PendingAllow pendingALlow){
         this.pendingAllow = pendingALlow;
+    }
+
+    @Builder
+    public Pending(Hobby hobby, Member member, String msg, PendingAllow pendingAllow) {
+        this.hobby = hobby;
+        this.member = member;
+        this.msg = msg;
+        this.pendingAllow = pendingAllow;
     }
 }

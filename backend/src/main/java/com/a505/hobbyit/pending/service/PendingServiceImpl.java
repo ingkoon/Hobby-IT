@@ -95,11 +95,15 @@ public class PendingServiceImpl implements PendingService{
                 .findById(request.getWaitId())
                 .orElseThrow(NoSuchElementException::new);
 
-        pending.updatePendingAllow(request.getIsAllowed());
+        pending
+                .updatePendingAllow(request.getIsAllowed());
         if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
-        Hobby findHobby = pending.getHobby();
+
+        Hobby findHobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)
@@ -109,6 +113,8 @@ public class PendingServiceImpl implements PendingService{
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
+
+        findHobby.updateCnt();
     }
 
     @Override

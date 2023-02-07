@@ -20,6 +20,10 @@ import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +34,7 @@ import java.util.NoSuchElementException;
 
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class HobbyArticleServiceImpl implements HobbyArticleService{
     private final MemberRepository memberRepository;
@@ -38,20 +43,12 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     private final HobbyArticleImgRepository hobbyArticleImgRepository;
     private final HobbyMemberRepository hobbyMemberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final FileUploader fileUploader;
 
     @Override
-    public List<HobbyArticleResponse> findAll(String token, Long hobbyId, int size) {
+    public Slice<HobbyArticleResponse> findAll(Long storedId, String token, Long hobbyId, Pageable pageable) {
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
-        List<HobbyArticle> hobbyArticles = hobbyArticleRepository.findByHobby(hobby);
-
-        List<HobbyArticleResponse> responses = new ArrayList<>();
-
-        for (HobbyArticle hobbyArticle : hobbyArticles) {
-            responses.add(new HobbyArticleResponse().of(hobbyArticle));
-        }
-        return responses;
+        return hobbyArticleRepository.findHobbyArticle(storedId, hobby, pageable);
     }
 
     @Transactional
@@ -63,6 +60,8 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
 
         HobbyArticle hobbyArticle = hobbyArticleRequest.toEntity(member, hobby);
 
+        log.info(member.getId() + " =========== " + hobby.getId());
+        log.info(hobbyArticle.toString());
         hobbyArticleRepository.save(hobbyArticle);
 
         for (MultipartFile file : files) {
@@ -74,21 +73,26 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     @Override
     public HobbyArticleDetailResponse findById(final String token , final Long hobbyId, final Long articleId) {
         HobbyArticle hobbyArticle = hobbyArticleRepository.getReferenceById(articleId);
-
+        hobbyArticle.updateHit();
         return new HobbyArticleDetailResponse().of(hobbyArticle);
     }
 
     @Override
-    public List<HobbyArticleResponse> findByKeyword(Long hobbyId, String keyword) {
+    public Slice<HobbyArticleResponse> findByKeyword(Long storedId, String token, String keyword, final Long hobbyId, Pageable pageable) {
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
-        List<HobbyArticle> hobbyArticles = hobbyArticleRepository.findByHobbyAndTitleContaining(hobby, keyword);
+        return hobbyArticleRepository.searchHobbyArticle(storedId,  keyword, hobby, pageable);
+    }
 
-        List<HobbyArticleResponse> responses = new ArrayList<>();
+    @Override
+    public Page<HobbyArticleResponse> findAllNotice(final Long hobbyId, Pageable pageable) {
+        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        return hobbyArticleRepository.findHobbyNotice(hobby, pageable);
+    }
 
-        for (HobbyArticle hobbyArticle : hobbyArticles) {
-            responses.add(new HobbyArticleResponse().of(hobbyArticle));
-        }
-        return responses;
+    @Override
+    public Page<HobbyArticleResponse> findNoticeByKeyWord(final Long hobbyId, String keyword, Pageable pageable) {
+        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        return hobbyArticleRepository.searchHobbyNotice(hobby, keyword, pageable);
     }
 
     @Transactional
@@ -104,16 +108,5 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     public void delete(Long articleId) {
         HobbyArticle hobbyArticle = hobbyArticleRepository.findById(articleId).orElseThrow(NoSuchHobbyArticleException::new);
         hobbyArticleRepository.delete(hobbyArticle);
-    }
-
-    public Hobby checkPrivilege(Long hobbyId, String token){
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchElementException::new);
-        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        HobbyMember hobbyMember = hobbyMemberRepository
-                .findByMemberAndHobby(member, hobby)
-                .orElseThrow(NoSuchHobbyMemberException::new);
-
-        return hobby;
     }
 }
