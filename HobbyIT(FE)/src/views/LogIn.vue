@@ -9,6 +9,7 @@
       <div style='flex-grow: 1'>
         <div style='font-size: 32px'>Just Hobby'<span style='color: #642efe'>It</span>!</div>
         <input
+          id='emailinput'
           v-model='userEmail'
           placeholder='email'
           style='
@@ -21,9 +22,11 @@
             color: white;
           '
           type='email'
+          @keyup.enter='handleLogin'
         />
-        <div id='checkemail' style='font-size: 12px; color: red'>! 이미 등록된 이메일입니다.</div>
+        <div id='checkemail' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 아이디를 입력해주세요. </div>
         <input
+          id='pwdinput'
           v-model='userPassword'
           placeholder='password'
           style='
@@ -36,8 +39,9 @@
             color: white;
           '
           type='password'
+          @keyup.enter='handleLogin'
         />
-        <div id='checkpwd' style='font-size: 12px; color: red'>! 비밀번호를 입력해주세요.</div>
+        <div id='checkpwd' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 비밀번호를 입력해주세요.</div>
 
         <v-btn
           color='#EE49FD80'
@@ -86,17 +90,39 @@ export default {
       this.$router.push('signup');
     },
     async handleLogin() {
-      try {
-        const loginData = {
-          email: this.userEmail,
-          password: this.userPassword,
-        };
-        const { data } = await memberLogin(loginData);
-        this.userStore.setUser(data);
-        this.$router.push('/');
-      } catch (e) {
-        console.log(e);
+      const checkemail = document.getElementById('checkemail')
+      const checkpwd = document.getElementById('checkpwd')
+
+      if(this.userEmail === null){
+        checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
       }
+      else{
+        checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: hidden;')
+      }
+      if(this.userPassword === null){
+        checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+      }
+      else{
+        checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: hidden;')
+      }
+
+      if(this.userEmail !== null && this.userPassword !== null) {
+
+        try {
+          const loginData = {
+            email: this.userEmail,
+            password: this.userPassword,
+          };
+          const { data } = await memberLogin(loginData);
+          this.userStore.setUser(data);
+          this.$router.push({name : 'Main'});
+        } catch (e) {
+          checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+          checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+        }
+
+      }
+
     },
   },
 };

@@ -5,14 +5,14 @@
     <div id="group">
       <!-- 왼쪽 모임 정보 탭 -->
       <div id="groupinfo">
-        <img src="/assets/tmpimg.jpeg" />
-        <div id="title">John, 나 여행가고싶어</div>
+        <img :src="groupinfo.img" />
+        <div id="title">{{ groupinfo.name }}</div>
         <div id="content">
-          따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
+          {{ groupinfo.intro }}
 
           <div style="margin-top: 20px">
             <v-icon color="#FA8EB6" icon="mdi-account-multiple" size="small"></v-icon>
-            13/20
+            {{groupinfo.participantsNum}} / {{ groupinfo.maxParticipantsNum }}
           </div>
         </div>
 
@@ -203,7 +203,6 @@ export default {
       try {
         const { data } = await getGroupInfo(id);
         this.groupinfo = data
-        console.log(this.groupinfo)
       }
       catch(e) {
         console.error(e.message)
