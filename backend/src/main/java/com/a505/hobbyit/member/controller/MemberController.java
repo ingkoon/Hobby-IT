@@ -49,6 +49,8 @@ public class MemberController {
 
     @PostMapping(value = "/reissue")
     public ResponseEntity<MemberResponse> reissue(@RequestBody MemberReissueRequest request) {
+        System.out.println("AT : "+request.getAccessToken());
+        System.out.println("RT : "+request.getRefreshToken());
         try {
             MemberResponse memberResponse = memberService.reissue(request);
             return ResponseEntity.ok(memberResponse);
