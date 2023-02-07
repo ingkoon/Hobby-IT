@@ -13,12 +13,11 @@ import lombok.NoArgsConstructor;
 @Table(name="hobby_article_img")
 public class HobbyArticleImg {
 
-    @Id
-    @Column(name = "hobby_art_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     @ManyToOne
-    @MapsId
     @JoinColumn(name = "hobby_art_id", nullable = false)
     private HobbyArticle hobbyArticle;
 

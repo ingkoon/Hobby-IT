@@ -14,10 +14,10 @@ import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentServic
                 .findById(articleId)
                 .orElseThrow(NoSuchHobbyArticleException::new);
 
-        List<HobbyArticleComment> comments = hobbyArticle.getHobbyArticleComments();
+        List<HobbyArticleComment> comments = hobbyArticleCommentRepository.findAllByHobbyArticleOrderByIdDesc(hobbyArticle);
         List<CommentResponse> response = new ArrayList<>();
         for (HobbyArticleComment comment : comments) {
             response.add(new CommentResponse().of(comment));
@@ -54,6 +54,7 @@ public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentServic
         return response;
     }
 
+    @Transactional
     @Override
     public void updateComment(String token, Long commentId, CommentRequest request) {
         HobbyArticleComment comment = hobbyArticleCommentRepository

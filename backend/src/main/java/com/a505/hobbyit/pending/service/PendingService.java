@@ -11,6 +11,5 @@ public interface PendingService {
     public void join(final String token, Long hobbyId, PendingRequest request);
     public List<PendingResponse> findPendingList(final String token, Long hobbyId);
     public void allowPending(final String token,final Long hobbyId, PendingAllowRequest request);
-
     public Hobby checkPrivilege(Long hobbyId, String token);
 }
