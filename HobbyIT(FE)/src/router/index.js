@@ -92,7 +92,7 @@ const routes = [
         component: () => import('@/views/GroupView.vue'),
         children: [
           {
-            path: '',
+            path: ':id',
             name: 'GroupMainPage',
             component: () => import('@/views/GroupPageView.vue'),
           },

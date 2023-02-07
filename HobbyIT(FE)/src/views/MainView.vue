@@ -63,21 +63,28 @@
     </span>
   </h3>
 
-  <main1/>
-  <participate-group />
+  <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
+  <main1 v-else/>
 
   <h3>오늘의 HOBBY 추천</h3>
-  <participate-group />
+  <participate-group v-if="hobbylist.length > 0"/>
+  <main2 v-else/>
 
   <h3>당신만 오면 GO!</h3>
-  <participate-group />
+  <participate-group v-if="hobbylist.length > 0"/>
+  <main3 v-else/>
 </template>
 
 <script>
 import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import Main1 from '@/components/no-content/Main1.vue';
+import Main2 from '@/components/no-content/Main2.vue';
+import Main3 from '@/components/no-content/Main3.vue';
+
+import { getHobbyList } from '@/api/hobby';
+
 export default {
-  components: { ParticipateGroup, Main1},
+  components: { ParticipateGroup, Main1, Main2, Main3},
   data() {
     return {
       model: '전체',
@@ -96,8 +103,22 @@ export default {
         '여행',
         '요리',
       ],
+      hobbylist : [],
     };
   },
+  methods : {
+    async getHobby() {
+      try {
+        const { data } = await getHobbyList();
+        this.hobbylist = data
+      } catch (e) {
+        alert('허걱');
+      }
+    },
+  },
+  created() {
+    this.getHobby()
+  }
 };
 </script>
 

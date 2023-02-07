@@ -1,11 +1,11 @@
 import { createInstance } from '@/api/index';
 
-const PATH = 'hobby/';
+const PATH = 'hobby'; // 여기 슬래시 빼야해!
 
 const instance = createInstance(PATH);
 
 // 12.모임 리스트 확인
-function getHobbyList() {
+export function getHobbyList() {
   return instance.get('');
 }
 
