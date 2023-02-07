@@ -41,6 +41,7 @@ export default {
     return { userStore };
   },
   data() {
+    return {};
   },
   computed: {
     isLoggedIn() {

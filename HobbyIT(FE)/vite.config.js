@@ -32,6 +32,9 @@ export default defineConfig({
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },
   server: {
+    // proxy: {
+    //   '/api': 'http://localhost:8080/api',
+    // },
     port: 3000,
   },
 });

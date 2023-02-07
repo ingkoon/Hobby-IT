@@ -95,7 +95,7 @@ export default {
         this.userStore.setUser(data);
         this.$router.push('/');
       } catch (e) {
-        alert('허걱');
+        console.log(e);
       }
     },
   },
