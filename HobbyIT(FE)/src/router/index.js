@@ -1,6 +1,5 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
-import VideoChat from '@/views/VideoChat.vue';
 
 const routes = [
   {

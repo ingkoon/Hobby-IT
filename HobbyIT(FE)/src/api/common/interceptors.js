@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store/app';
+import { useUserStore } from '@/store/user';
 
 // function getRefreshToken() {
 //   try {
@@ -9,11 +9,11 @@ import { useAppStore } from '@/store/app';
 // };
 
 function setInterceptors(instance) {
-  const userStore = useAppStore();
+  const userStore = useUserStore();
   // 요청 인터셉터 추가하기
   instance.interceptors.request.use(
     function (config) {
-      // config.headers.Authorization = userStore.$state.accessToken;
+      config.headers.Authorization = 'Bearer ' + userStore.getAccessToken;
       return config;
     },
     function (error) {
@@ -34,15 +34,15 @@ function setInterceptors(instance) {
       return Promise.reject(error);
     },
   );
+  return instance;
 }
 
 function setInterceptorsWithNoAuth(instance) {
-  const userStore = useAppStore();
   // 요청 인터셉터 추가하기
   instance.interceptors.request.use(
     function (config) {
       config.headers['Content-Type'] = 'application/json';
-      config.headers.Authorization = userStore.$state.accessToken;
+
       return config;
     },
     function (error) {
