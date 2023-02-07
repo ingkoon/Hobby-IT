@@ -180,6 +180,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MypageResponse findMypage(final String token, final String nickname) {
+//        System.out.println(securityUtil.getCurrentMemberEmail());
         String myEmail = jwtTokenProvider.getUser(token);
 
         Member member = memberRepository.findByNickname(nickname)
