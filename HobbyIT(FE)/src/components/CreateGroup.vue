@@ -1,27 +1,27 @@
 <!--suppress ALL -->
 
 <template>
-  <div class="bg" style="align-self: center">
-    <div style="width: 1000px; border-radius: 20px; background-color: #20225a; padding: 1px">
-      <v-card id="card" style="margin: 12px">
+  <div class='bg' style='align-self: center'>
+    <div style='width: 1000px; border-radius: 20px; background-color: #20225a; padding: 1px'>
+      <v-card id='card' style='margin: 12px'>
         <div
-          id="notopa"
-          style="
+          id='notopa'
+          style='
             color: white;
             height: 60px;
             display: flex;
             justify-content: space-between;
             padding: 10px 5px;
             background: linear-gradient(180deg, rgba(14, 15, 40, 0) 0%, #0e0f28 100%);
-          "
+          '
         >
           <span></span>
-          <span style="font-size: 20px; font-weight: 700; margin-left: 80px">HOBBY 만들기</span>
-          <v-icon icon="mdi-close" size="24" style="margin-right: 10px" @click="closecreategroup"></v-icon>
+          <span style='font-size: 20px; font-weight: 700; margin-left: 80px'>HOBBY 만들기</span>
+          <v-icon icon='mdi-close' size='24' style='margin-right: 10px' @click='closecreategroup'></v-icon>
         </div>
-        <div style="display: flex; background-color: #0e0f28">
+        <div style='display: flex; background-color: #0e0f28'>
           <div
-            style="
+            style='
               width: 350px;
               height: 500px;
               background-color: #0e0f28;
@@ -29,21 +29,21 @@
               align-items: center;
               justify-content: center;
               border: 4px solid #fa8eb6;
-            "
-            @click="uploadimg"
+            '
+            @click='uploadimg'
           >
             <v-icon
-              v-if="!isImage"
-              icon="mdi-plus-circle-outline"
-              style="align-self: center; color: white; z-index: 1"
+              v-if='!isImage'
+              icon='mdi-plus-circle-outline'
+              style='align-self: center; color: white; z-index: 1'
             ></v-icon>
-            <img v-else id="realimg" style="width: 350px; height: 500px; object-fit: cover" />
+            <img v-else id='realimg' style='width: 350px; height: 500px; object-fit: cover' />
           </div>
-          <input id="uploadimg" accept="image/*" required style="display: none" type="file" />
-          <div id="tri1" style=""></div>
+          <input id='uploadimg' accept='image/*' required style='display: none' type='file' />
+          <div id='tri1' style=''></div>
 
-          <div style="background-color: #0e0f28; flex-grow: 1; color: white">
-            <create-steps></create-steps>
+          <div style='background-color: #0e0f28; flex-grow: 1; color: white'>
+            <create-steps @handle-submit='handleSubmit'></create-steps>
           </div>
         </div>
       </v-card>
@@ -53,6 +53,7 @@
 
 <script>
 import CreateSteps from './CreateSteps.vue';
+import { createGroup } from '@/api/hobby';
 
 export default {
   components: {
@@ -62,13 +63,23 @@ export default {
     return {
       rules: [v => v.length <= 200 || '최대 200자까지 작성가능합니다.'],
       content: '',
-      uploadfile: { src: '' },
+      file: null,
       // temp
       isImage: false,
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
+    async handleSubmit(data) {
+      const formData = new FormData();
+      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      formData.append('multipartFile', this.file);
+      console.log(formData);
+
+      const res = await createGroup(formData);
+
+    },
     closecreategroup() {
       this.$emit('closecreategroup');
     },
@@ -81,6 +92,7 @@ export default {
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
+      this.file = files[0];
       console.log(typeof files, files);
       const file = files[0];
 
@@ -104,6 +116,7 @@ export default {
 .bg {
   font-family: 'LINESeedKR-Rg';
 }
+
 @font-face {
   font-family: 'LINESeedKR-Rg';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Rg.woff2') format('woff2');

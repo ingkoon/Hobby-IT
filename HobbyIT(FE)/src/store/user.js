@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { getParticipatingGroup } from '@/api/member';
 
 export const useUserStore = defineStore({
   id: 'user',
