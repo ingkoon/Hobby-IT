@@ -1,6 +1,7 @@
 package com.a505.hobbyit.member.domain;
 
 import com.a505.hobbyit.common.BaseEntity;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.enums.MemberState;
 import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
@@ -112,17 +113,16 @@ public class Member extends BaseEntity implements UserDetails {
         this.privilege = privilege;
     }
 
-
     public void resetPassword(String password) {
         this.password = password;
     }
 
     @OneToMany(mappedBy = "member")
+    private List<HobbyMember> hobbyMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
     private List<Pending> pendings = new ArrayList<>();
 
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<GroupUser> groupUsers = new ArrayList<>();
 //
 //    @OneToMany(mappedBy = "member")
 //    private List<GroupArticle> groupArticles = new ArrayList<>();
