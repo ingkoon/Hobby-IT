@@ -108,7 +108,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
-            throw new InvalidedRefreshTokenException("Refresh Token 이 없습니다.");
+            throw new InvalidedRefreshTokenException("로그아웃 상태입니다.");
         }
         if (!refreshToken.equals(request.getRefreshToken())) {
             throw new InvalidedRefreshTokenException("Refresh Token 정보가 일치하지 않습니다.");
