@@ -214,6 +214,7 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(NoSuchMemberException::new);
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
+    }
 
     @Override
     public List<MemberHobbyResponse> getHobbyList(final String token) {
