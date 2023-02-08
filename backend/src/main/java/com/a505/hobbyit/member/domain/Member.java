@@ -125,6 +125,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.imgUrl = request.getImgUrl();
     }
 
+    public void deleteMember() {
+        this.state = MemberState.WAITING;
+        this.resdReqDt = LocalDateTime.now();
+    }
+
     @OneToMany(mappedBy = "member")
     private List<HobbyMember> hobbyMembers = new ArrayList<>();
 
