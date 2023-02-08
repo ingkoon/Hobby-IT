@@ -1,8 +1,8 @@
 <template>
-  <v-app id="app">
-    <default-bar style="position: fixed" />
+  <v-app id='app'>
+    <default-bar style='position: fixed' />
 
-    <default-view style="" />
+    <default-view style='' />
   </v-app>
 </template>
 
@@ -22,7 +22,9 @@ export default {
     return { userStore };
   },
   created() {
-    console.log(import.meta.env.VITE_API_SERVER_URL);
+    if (!this.userStore.getAccessToken) {
+
+    }
   },
 };
 </script>
