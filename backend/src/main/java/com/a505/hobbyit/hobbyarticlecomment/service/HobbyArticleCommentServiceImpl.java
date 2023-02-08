@@ -9,7 +9,6 @@ import com.a505.hobbyit.hobbyarticlecomment.domain.HobbyArticleCommentRepository
 import com.a505.hobbyit.hobbyarticlecomment.dto.CommentRequest;
 import com.a505.hobbyit.hobbyarticlecomment.dto.CommentResponse;
 import com.a505.hobbyit.hobbyarticlecomment.exception.NoSuchCommentException;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentService{
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final HobbyArticleCommentRepository hobbyArticleCommentRepository;
     private final HobbyArticleRepository hobbyArticleRepository;
 
     @Override
-    public void save(String token, Long articleId, CommentRequest request) {
-        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token))
+    public void save(String memberId, Long articleId, CommentRequest request) {
+        Member member = memberRepository.findById(Long.parseLong(memberId))
                 .orElseThrow(NoSuchHobbyException::new);
         HobbyArticle hobbyArticle = hobbyArticleRepository
                 .findById(articleId)
@@ -56,7 +54,7 @@ public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentServic
 
     @Transactional
     @Override
-    public void updateComment(String token, Long commentId, CommentRequest request) {
+    public void updateComment( Long commentId, CommentRequest request) {
         HobbyArticleComment comment = hobbyArticleCommentRepository
                 .findById(commentId)
                 .orElseThrow(NoSuchCommentException::new);
