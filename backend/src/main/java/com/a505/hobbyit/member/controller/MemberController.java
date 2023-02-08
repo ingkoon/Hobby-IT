@@ -75,6 +75,13 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping
+    public ResponseEntity<Void> updateMember(
+            @RequestHeader("Authorization") final String token,
+            @RequestBody MemberMypageRequest request) {
+        memberService.update(token, request);
+        return ResponseEntity.ok().build();
+
     @GetMapping(value = "/hobby")
     public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
             @RequestHeader("Authorization") final String token) {
@@ -88,4 +95,5 @@ public class MemberController {
         List<MemberPendingResponse> pendingList = memberService.getPendingList(token);
         return ResponseEntity.status(HttpStatus.OK).body(pendingList);
     }
+
 }

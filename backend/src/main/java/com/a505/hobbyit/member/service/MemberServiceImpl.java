@@ -38,14 +38,12 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
-
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final StringRedisTemplate stringRedisTemplate;
     private final JavaMailSender javaMailSender;
-
     private final HobbyRepository hobbyRepository;
     private final SecurityUtil securityUtil;
 
@@ -208,6 +206,14 @@ public class MemberServiceImpl implements MemberService {
 
         return mypageResponse;
     }
+
+    @Transactional
+    @Override
+    public void update(final String token, MemberMypageRequest request) {
+        Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
+                .orElseThrow(NoSuchMemberException::new);
+        member.updateMember(request);
+        member.resetPassword(passwordEncoder.encode(request.getPassword()));
 
     @Override
     public List<MemberHobbyResponse> getHobbyList(final String token) {

@@ -22,6 +22,8 @@ public interface MemberService {
 
     MypageResponse findMypage(final String token, final String nickname);
 
+    void update(final String token, MemberMypageRequest request);
+    
     List<MemberHobbyResponse> getHobbyList(final String token);
 
     List<MemberPendingResponse> getPendingList(final String token);

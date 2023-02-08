@@ -1,6 +1,7 @@
 package com.a505.hobbyit.member.domain;
 
 import com.a505.hobbyit.common.BaseEntity;
+import com.a505.hobbyit.member.dto.request.MemberMypageRequest;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.enums.MemberState;
 import com.a505.hobbyit.pending.domain.Pending;
@@ -115,6 +116,13 @@ public class Member extends BaseEntity implements UserDetails {
 
     public void resetPassword(String password) {
         this.password = password;
+    }
+
+    public void updateMember(MemberMypageRequest request) {
+        this.nickname = request.getNickname();
+        this.password = request.getPassword();
+        this.intro = request.getIntro();
+        this.imgUrl = request.getImgUrl();
     }
 
     @OneToMany(mappedBy = "member")
