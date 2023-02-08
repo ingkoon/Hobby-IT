@@ -12,10 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class MemberReissueRequest {
-    @JsonProperty("accessToken")
-    @NotEmpty(message = "accessToken 을 입력해주세요.")
-    private String accessToken;
-
     @JsonProperty("refreshToken")
     @NotEmpty(message = "refreshToken 을 입력해주세요.")
     private String refreshToken;
