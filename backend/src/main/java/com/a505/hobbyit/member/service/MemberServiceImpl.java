@@ -216,6 +216,14 @@ public class MemberServiceImpl implements MemberService {
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
     }
 
+    @Transactional
+    @Override
+    public void delete(final String token) {
+        Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
+                .orElseThrow(NoSuchMemberException::new);
+        member.deleteMember();
+    }
+
     @Override
     public List<MemberHobbyResponse> getHobbyList(final String token) {
         String id = jwtTokenProvider.getUser(token);

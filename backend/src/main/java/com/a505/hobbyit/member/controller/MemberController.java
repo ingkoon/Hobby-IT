@@ -83,6 +83,12 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping(value = "/delete")
+    public ResponseEntity<Void> deleteMember(@RequestHeader("Authorization") final String token) {
+        memberService.delete(token);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/hobby")
     public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
             @RequestHeader("Authorization") final String token) {

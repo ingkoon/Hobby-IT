@@ -23,6 +23,8 @@ public interface MemberService {
     MypageResponse findMypage(final String token, final String nickname);
 
     void update(final String token, MemberMypageRequest request);
+
+    void delete(final String token);
     
     List<MemberHobbyResponse> getHobbyList(final String token);
 
