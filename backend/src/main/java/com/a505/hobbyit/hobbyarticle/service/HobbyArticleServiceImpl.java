@@ -46,16 +46,15 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     private final FileUploader fileUploader;
 
     @Override
-    public Slice<HobbyArticleResponse> findAll(Long storedId, String token, Long hobbyId, Pageable pageable) {
+    public Slice<HobbyArticleResponse> findAll(Long storedId, Long hobbyId, Pageable pageable) {
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
         return hobbyArticleRepository.findHobbyArticle(storedId, hobby, pageable);
     }
 
     @Transactional
     @Override
-    public void save(String token, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files) {
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchHobbyMemberException::new);
+    public void save(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files) {
+        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
 
         HobbyArticle hobbyArticle = hobbyArticleRequest.toEntity(member, hobby);
@@ -71,14 +70,14 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     }
 
     @Override
-    public HobbyArticleDetailResponse findById(final String token , final Long hobbyId, final Long articleId) {
+    public HobbyArticleDetailResponse findById(final Long hobbyId, final Long articleId) {
         HobbyArticle hobbyArticle = hobbyArticleRepository.getReferenceById(articleId);
         hobbyArticle.updateHit();
         return new HobbyArticleDetailResponse().of(hobbyArticle);
     }
 
     @Override
-    public Slice<HobbyArticleResponse> findByKeyword(Long storedId, String token, String keyword, final Long hobbyId, Pageable pageable) {
+    public Slice<HobbyArticleResponse> findByKeyword(Long storedId, String keyword, final Long hobbyId, Pageable pageable) {
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
         return hobbyArticleRepository.searchHobbyArticle(storedId,  keyword, hobby, pageable);
     }
@@ -106,7 +105,9 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     @Transactional
     @Override
     public void delete(Long articleId) {
-        HobbyArticle hobbyArticle = hobbyArticleRepository.findById(articleId).orElseThrow(NoSuchHobbyArticleException::new);
+        HobbyArticle hobbyArticle = hobbyArticleRepository
+                .findById(articleId)
+                .orElseThrow(NoSuchHobbyArticleException::new);
         hobbyArticleRepository.delete(hobbyArticle);
     }
 }
