@@ -93,17 +93,18 @@ export default {
       const checkemail = document.getElementById('checkemail')
       const checkpwd = document.getElementById('checkpwd')
 
-      if(this.userEmail === null){
-        checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+      if(this.userEmail == '' || this.userEmail == null) {
+        checkemail.style.visibility = 'visible'
       }
       else{
-        checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: hidden;')
+        checkemail.style.visibility = 'hidden'
       }
-      if(this.userPassword === null){
-        checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+
+      if(this.userPassword == '' || this.userPassword == null){
+        checkpwd.style.visibility = 'visible'
       }
       else{
-        checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: hidden;')
+        checkpwd.style.visibility = 'hidden'
       }
 
       if(this.userEmail !== null && this.userPassword !== null) {
@@ -117,8 +118,8 @@ export default {
           this.userStore.setUser(data);
           this.$router.push({name : 'Main'});
         } catch (e) {
-          checkemail.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
-          checkpwd.setAttribute('style', 'font-size: 12px; color: red;visibility: unset;')
+          checkemail.style.visibility = 'visible'
+          checkpwd.style.visibility = 'visible'
         }
 
       }
