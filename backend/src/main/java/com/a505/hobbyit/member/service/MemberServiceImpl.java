@@ -86,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+                .set("RT:" + member.getId(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return tokenInfo;
     }
@@ -98,13 +98,14 @@ public class MemberServiceImpl implements MemberService {
             throw new InvalidedRefreshTokenException();
         }
 
-        // 2. Refresh Token 에서 Member email 을 가져옵니다.
+        // 2. Refresh Token 에서 Member id 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(request.getRefreshToken());
 
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(NoSuchElementException::new);
 
-        // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
-        String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
+        // 3. Redis 에서 Member id 를 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + member.getId());
+
         // 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
             throw new InvalidedRefreshTokenException("Refresh Token 이 없습니다.");
