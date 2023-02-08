@@ -182,13 +182,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MypageResponse findMypage(final String token, final String nickname) {
 //        System.out.println(securityUtil.getCurrentMemberEmail());
-        String myEmail = jwtTokenProvider.getUser(token);
+        String id = jwtTokenProvider.getUser(token);
 
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(NoSuchMemberException::new);
 
         MypageResponse mypageResponse;
-        if (memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+        if (memberRepository.existsByIdAndNickname(id, nickname)) {
             mypageResponse = MypageResponse.builder()
                     .email(member.getEmail())
                     .name(member.getName())
