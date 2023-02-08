@@ -2,6 +2,7 @@ package com.a505.hobbyit.jwt;
 
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
+import com.a505.hobbyit.security.SecurityUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,11 +25,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
-
+    private static final String EMAIL_KEY = "email";
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 2 * 60 * 60 * 1000L;              // 2시간
-//    private static final long ACCESS_TOKEN_EXPIRE_TIME = 3 * 60 * 1000L;              // 3분
+    //    private static final long ACCESS_TOKEN_EXPIRE_TIME = 3 * 60 * 1000L;              // 3분
 //    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;              // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
 
@@ -40,7 +41,7 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public MemberResponse generateToken(Authentication authentication, Member member) {
+    public MemberResponse generateToken(Authentication authentication, Member member, boolean isChangeRT, String rt) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -50,17 +51,24 @@ public class JwtTokenProvider {
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(member.getId().toString())
+                .claim(EMAIL_KEY, authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        String refreshToken = rt;
+        if (isChangeRT) {
+            // Refresh Token 생성
+            refreshToken = Jwts.builder()
+                    .setSubject(member.getId().toString())
+                    .claim(EMAIL_KEY, authentication.getName())
+                    .claim(AUTHORITIES_KEY, authorities)
+                    .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                    .signWith(key, SignatureAlgorithm.HS256)
+                    .compact();
+        }
 
         return MemberResponse.builder()
                 .grantType(BEARER_TYPE)
@@ -73,7 +81,6 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        String token = accessToken.substring(8);
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
@@ -119,7 +126,7 @@ public class JwtTokenProvider {
     }
 
     public Long getExpiration(String accessToken) {
-        String token = accessToken.substring(8);
+        String token = accessToken.split(" ")[1];
         // accessToken 남은 유효시간
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
         // 현재 시간

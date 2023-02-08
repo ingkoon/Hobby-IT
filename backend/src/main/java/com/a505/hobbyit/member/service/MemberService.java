@@ -15,7 +15,7 @@ public interface MemberService {
 
     MemberResponse reissue(MemberReissueRequest request);
 
-    void logout(MemberLogoutRequest request);
+    void logout(final String token);
 
     void resetPassword(MemberMailRequest request, String from) throws MessagingException;
 

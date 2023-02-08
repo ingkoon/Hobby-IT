@@ -14,6 +14,7 @@ import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.pending.domain.Pending;
+import com.a505.hobbyit.security.SecurityUtil;
 import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -46,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
     private final JavaMailSender javaMailSender;
 
     private final HobbyRepository hobbyRepository;
+    private final SecurityUtil securityUtil;
 
     @Override
     public void signUp(MemberSignupRequest request) {
@@ -80,11 +82,11 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member, true, "");
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+                .set("RT:" + member.getId(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return tokenInfo;
     }
@@ -96,23 +98,24 @@ public class MemberServiceImpl implements MemberService {
             throw new InvalidedRefreshTokenException();
         }
 
-        // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
+        // 2. Refresh Token 에서 Member id 을 가져옵니다.
+        Authentication authentication = jwtTokenProvider.getAuthentication(request.getRefreshToken());
 
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(NoSuchElementException::new);
 
-        // 3. Redis 에서 Member email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
-        String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + authentication.getName());
+        // 3. Redis 에서 Member id 를 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        String refreshToken = stringRedisTemplate.opsForValue().get("RT:" + member.getId());
+
         // 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
-            throw new InvalidedRefreshTokenException("Refresh Token 이 없습니다.");
+            throw new InvalidedRefreshTokenException("로그아웃 상태입니다.");
         }
         if (!refreshToken.equals(request.getRefreshToken())) {
             throw new InvalidedRefreshTokenException("Refresh Token 정보가 일치하지 않습니다.");
         }
 
         // 4. 새로운 토큰 생성
-        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member);
+        MemberResponse tokenInfo = jwtTokenProvider.generateToken(authentication, member, false, request.getRefreshToken());
 
         // 5. RefreshToken Redis 업데이트
         stringRedisTemplate.opsForValue()
@@ -122,14 +125,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void logout(MemberLogoutRequest request) {
+    public void logout(final String token) {
+        String accessToken = token.split(" ")[1];
+
         // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
+        if (!jwtTokenProvider.validateToken(accessToken)) {
             throw new InvalidedAccessTokenException();
         }
 
         // 2. Access Token 에서 Member email 을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
         // 3. Redis 에서 해당 Member email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (stringRedisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
@@ -138,9 +143,8 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(request.getAccessToken());
-        stringRedisTemplate.opsForValue()
-                .set(request.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        Long expiration = jwtTokenProvider.getExpiration(token);
+        stringRedisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
     @Transactional
@@ -177,13 +181,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MypageResponse findMypage(final String token, final String nickname) {
-        String myEmail = jwtTokenProvider.getUser(token);
+//        System.out.println(securityUtil.getCurrentMemberEmail());
+        String id = jwtTokenProvider.getUser(token);
 
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(NoSuchMemberException::new);
 
         MypageResponse mypageResponse;
-        if(memberRepository.existsByEmailAndNickname(myEmail, nickname)) {
+        if (memberRepository.existsByIdAndNickname(id, nickname)) {
             mypageResponse = MypageResponse.builder()
                     .email(member.getEmail())
                     .name(member.getName())
@@ -206,9 +211,9 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public List<MemberPendingResponse> getPendingList(String token){
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchMemberException::new);
+    public List<MemberPendingResponse> getPendingList(String token) {
+        String id = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
 
         List<Pending> pendings = member.getPendings();
 
@@ -219,7 +224,7 @@ public class MemberServiceImpl implements MemberService {
             responses.add(response);
         }
 
-        return  responses;
+        return responses;
     }
 
 }

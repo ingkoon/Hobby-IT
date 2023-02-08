@@ -45,7 +45,7 @@ public class ControllerAdvice {
             NoSuchHobbyMemberException.class,
             NoSuchPendingException.class,
             NoSuchArticleException.class})
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -54,22 +54,22 @@ public class ControllerAdvice {
     @ExceptionHandler({
             DuplicatedMemberException.class,
             DuplicatedHobbyException.class,
-            DuplicatedPendingException.class})
-    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
+            DuplicatedPendingException.class })
+    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler({UnAuthorizedHobbyMemberException.class, UnAuthorizedArticleException.class})
-    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
+    public  ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
-    public ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e) {
+    public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
