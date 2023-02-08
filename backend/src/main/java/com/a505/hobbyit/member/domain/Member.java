@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@NamedQuery(name = "findById", query = "select m from Member m where m.id = :id")
 @Table(name = "member")
 public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
