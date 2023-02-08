@@ -14,6 +14,7 @@ function setInterceptors(instance) {
   instance.interceptors.request.use(
     function (config) {
       config.headers.Authorization = 'Bearer ' + userStore.getAccessToken;
+
       return config;
     },
     function (error) {
@@ -41,8 +42,6 @@ function setInterceptorsWithNoAuth(instance) {
   // 요청 인터셉터 추가하기
   instance.interceptors.request.use(
     function (config) {
-      config.headers['Content-Type'] = 'application/json';
-
       return config;
     },
     function (error) {
@@ -64,6 +63,7 @@ function setInterceptorsWithNoAuth(instance) {
       return Promise.reject(error);
     },
   );
+  return instance;
 }
 
 export { setInterceptors, setInterceptorsWithNoAuth };

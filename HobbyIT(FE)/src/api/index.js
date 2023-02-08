@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setInterceptors } from '@/api/common/interceptors';
+import { setInterceptors, setInterceptorsWithNoAuth } from '@/api/common/interceptors';
 import { useUserStore } from '@/store/user';
 
 // const BASE_URL = 'http://i8a505.p.ssafy.io/api/';
@@ -33,7 +33,7 @@ function createInstanceWithNoAuth(path, config = defaultConfig) {
     ...config,
     baseURL: API_SERVER_URL + path,
   });
-  return instance;
+  return setInterceptorsWithNoAuth(instance);
 }
 
 async function reissueRefreshToken(data) {
