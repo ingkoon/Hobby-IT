@@ -212,8 +212,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberPendingResponse> getPendingList(String token) {
-        String memberEmail = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(NoSuchMemberException::new);
+        String id = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
 
         List<Pending> pendings = member.getPendings();
 
