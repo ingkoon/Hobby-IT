@@ -1,6 +1,6 @@
 <template>
   <div style="margin: 50px 13% 0">
-    <h3>이름 들어갈 곳</h3>
+    <h3>{{ groupinfo.name }}</h3>
 
     <div id="group">
       <!-- 왼쪽 모임 정보 탭 -->
