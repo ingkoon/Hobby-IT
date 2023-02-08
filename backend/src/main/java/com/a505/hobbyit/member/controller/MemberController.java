@@ -1,7 +1,7 @@
 package com.a505.hobbyit.member.controller;
 
 import com.a505.hobbyit.member.dto.request.*;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -76,11 +75,16 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(value = "/hobby")
+    public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
+            @RequestHeader("Authorization") final String token) {
+        List<MemberHobbyResponse> hobbyList = memberService.getHobbyList(token);
+        return ResponseEntity.status(HttpStatus.OK).body(hobbyList);
+    }
 
     @GetMapping(value = "/hobby/pending")
     public ResponseEntity<List<MemberPendingResponse>> findMemberPendings(
-            @RequestHeader("Authorization") String token
-    ){
+            @RequestHeader("Authorization") final String token) {
         List<MemberPendingResponse> pendingList = memberService.getPendingList(token);
         return ResponseEntity.status(HttpStatus.OK).body(pendingList);
     }

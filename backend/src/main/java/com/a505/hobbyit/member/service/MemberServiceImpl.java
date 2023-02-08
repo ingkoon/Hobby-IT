@@ -3,9 +3,10 @@ package com.a505.hobbyit.member.service;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
-import com.a505.hobbyit.member.domain.Mail;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
@@ -15,7 +16,6 @@ import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.security.SecurityUtil;
-import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -209,9 +209,25 @@ public class MemberServiceImpl implements MemberService {
         return mypageResponse;
     }
 
+    @Override
+    public List<MemberHobbyResponse> getHobbyList(final String token) {
+        String id = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
+
+        List<HobbyMember> hobbyMembers = member.getHobbyMembers();
+
+        List<MemberHobbyResponse> responses = new ArrayList<>();
+        for (HobbyMember hobbyMember : hobbyMembers) {
+            Hobby hobby = hobbyRepository.findById(hobbyMember.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
+            MemberHobbyResponse response = new MemberHobbyResponse().of(hobby);
+            responses.add(response);
+        }
+
+        return responses;
+    }
 
     @Override
-    public List<MemberPendingResponse> getPendingList(String token) {
+    public List<MemberPendingResponse> getPendingList(final String token) {
         String id = jwtTokenProvider.getUser(token);
         Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
 

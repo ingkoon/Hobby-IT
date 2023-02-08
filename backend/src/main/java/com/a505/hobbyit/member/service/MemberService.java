@@ -1,6 +1,7 @@
 package com.a505.hobbyit.member.service;
 
 import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
@@ -21,5 +22,7 @@ public interface MemberService {
 
     MypageResponse findMypage(final String token, final String nickname);
 
-    List<MemberPendingResponse> getPendingList(String token);
+    List<MemberHobbyResponse> getHobbyList(final String token);
+
+    List<MemberPendingResponse> getPendingList(final String token);
 }
