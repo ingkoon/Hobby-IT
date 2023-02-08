@@ -6,7 +6,7 @@ const instance = createInstance(PATH);
 const multipartInstance = createInstance(PATH, fileConfig);
 
 // 12.모임 리스트 확인
-function getHobbyList() {
+export function getHobbyList() {
   return instance.get('');
 }
 
@@ -20,12 +20,12 @@ function searchHobby(keyword) {
 }
 
 // 14.인기있는 모임 리스트 확인
-function getPopularHobbyList() {
+export function getPopularHobbyList() {
   return instance.get('/popular');
 }
 
 // 15.새로생긴 모임 리스트 확인
-function getFreshHobbyList() {
+export function getFreshHobbyList() {
   return instance.get('/fresh');
 }
 
@@ -36,7 +36,7 @@ function createGroup(data) {
 }
 
 // 17.모임 정보 확인
-function getGroupInfo(hobby_id) {
+export function getGroupInfo(hobby_id) {
   return instance.get(`/${hobby_id}`);
 }
 

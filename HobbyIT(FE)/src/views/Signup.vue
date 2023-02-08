@@ -22,8 +22,9 @@
             color: white;
           '
           type='email'
+          @keyup.enter = 'handleSignup'
         />
-        <div id='checkemail' style='font-size: 12px; color: red'>! 이미 등록된 이메일입니다.</div>
+        <div id='checkemail' style='font-size: 12px; color: red; visibility:hidden'>! 올바른 이메일을 입력해주세요.</div>
         <input
           v-model='userPassword'
           placeholder='password'
@@ -37,8 +38,9 @@
             color: white;
           '
           type='password'
+          @keyup.enter = 'handleSignup'
         />
-        <div id='checkpwd' style='font-size: 12px; color: red'>! 비밀번호를 입력해주세요.</div>
+        <div id='checkpwd' style='font-size: 12px; color: red; visibility:hidden'>! 올바른 비밀번호를 입력해주세요.</div>
         <input
           v-model='username'
           placeholder='이름'
@@ -52,8 +54,9 @@
             color: white;
           '
           type='text'
+          @keyup.enter = 'handleSignup'
         />
-        <div id='checkname' style='font-size: 12px; color: red'>! 성명을 입력해주세요.</div>
+        <div id='checkname' style='font-size: 12px; color: red; visibility:hidden'>! 성명을 입력해주세요.</div>
         <input
           v-model='userNickname'
           placeholder='활동할 닉네임'
@@ -67,8 +70,9 @@
             color: white;
           '
           type='text'
+          @keyup.enter = 'handleSignup'
         />
-        <div id='checknickname' style='font-size: 12px; color: red'>! 이미 사용중인 닉네임입니다.</div>
+        <div id='checknickname' style='font-size: 12px; color: red; visibility:hidden'>! 올바른 닉네임을 입력해주세요.</div>
         <v-btn
           color='#EE49FD80'
           style='width: 270px; height: 44px; border-radius: 20px; color: white; font-size: 24px; margin-top: 20px'
@@ -106,29 +110,67 @@ export default {
       this.$router.push('LogIn');
     },
     async handleSignup() {
-      try {
-        const signupData = {
-          email: this.userEmail,
-          name: this.username,
-          nickname: this.userNickname,
-          password: this.userPassword,
-        };
-        const res = await memberSignup(signupData);
-        console.log('haha');
-        this.userStore.afterSignup(signupData);
+      const checkemail = document.getElementById('checkemail')
+      const checkpwd = document.getElementById('checkpwd')
+      const checkname = document.getElementById('checkname')
+      const checknickname = document.getElementById('checknickname')
 
-        const loginData = {
-          email: this.userEmail,
-          password: this.userPassword,
-        };
+      if(this.userEmail == '' || this.userEmail == null){
+        checkemail.style.visibility = 'visible'
+      } else {
+        checkemail.style.visibility = 'hidden'
+      }
+      if(this.userPassword == '' || this.userPassword == null){
+        checkpwd.style.visibility = 'visible'
+      } else {
+        checkpwd.style.visibility = 'hidden'
+      }
+      if(this.username == '' || this.username == null){
+        checkname.style.visibility = 'visible'
+      } else {
+        checkname.style.visibility = 'hidden'
+      }
+      if(this.userNickname == '' || this.userNickname == null){
+        checknickname.style.visibility = 'visible'
+      } else {
+        checknickname.style.visibility = 'hidden'
+      }
 
-        const { data } = await memberLogin(loginData);
-        console.log(data);
-        this.userStore.setUser(data);
+      if(this.userEmail !== null && this.userPassword !== null && this.userName !== null && this.userNickname !== null){
+        try {
+          const signupData = {
+            email: this.userEmail,
+            name: this.username,
+            nickname: this.userNickname,
+            password: this.userPassword,
+          }
+          const res = await memberSignup(signupData);
+          this.userStore.afterSignup(signupData);
 
-        this.$router.push('/');
-      } catch (err) {
-        console.error(err);
+          const loginData = {
+            email: this.userEmail,
+            password: this.userPassword,
+          };
+
+          const { data } = await memberLogin(loginData);
+          console.log(data);
+          this.userStore.setUser(data);
+
+          this.$router.push({name : 'Main'});
+        } catch (err) {
+          console.log(err);
+          if (err.response.data.message == undefined) {
+            checkemail.innerText = "! 올바른 이메일을 입력해주세요."
+            checkemail.style.visibility = 'visible'
+            checkpwd.style.visibility = 'visible'
+          } else if(err.response.data.message == '중복된 이메일입니다.') {
+            checkemail.innerText = "! 중복된 이메일입니다."
+            checkemail.style.visibility = 'visible'
+          } else if(err.response.data.message == '중복된 닉네임입니다.') {
+            checknickname.innerText = "! 중복된 이메일입니다."
+            checknickname.style.visibility = 'visible'
+          }
+        }
       }
     },
   },

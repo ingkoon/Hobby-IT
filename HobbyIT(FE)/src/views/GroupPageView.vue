@@ -1,18 +1,17 @@
 <template>
-  <div style='margin: 50px 13% 0'>
-    <h3>이름 들어갈 곳</h3>
-
+  <div style="margin: 50px 13% 0">
+    <h3>{{ groupinfo.name }}</h3>
     <div id='group'>
       <!-- 왼쪽 모임 정보 탭 -->
-      <div id='groupinfo'>
-        <img src='/assets/tmpimg.jpeg' />
-        <div id='title'>John, 나 여행가고싶어</div>
-        <div id='content'>
-          따분한 일상에서 벗어나 자유로운 여행을 떠나고 싶은 여행자들의 모임입니다.
+      <div id="groupinfo">
+        <img :src="groupinfo.img" />
+        <div id="title">{{ groupinfo.name }}</div>
+        <div id="content">
+          {{ groupinfo.intro }}
 
-          <div style='margin-top: 20px'>
-            <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
-            13/20
+          <div style="margin-top: 20px">
+            <v-icon color="#FA8EB6" icon="mdi-account-multiple" size="small"></v-icon>
+            {{groupinfo.participantsNum}} / {{ groupinfo.maxParticipantsNum }}
           </div>
         </div>
 
@@ -140,6 +139,8 @@ import ArticleModal from '../components/GroupArticle.vue';
 import CanvasAdd from '@/components/CanvasAdd.vue';
 import InfiniteScrollObserver from '@/components/InfiniteScrollObserver.vue';
 
+import { getGroupInfo } from '@/api/hobby';
+
 export default {
   components: {
     InfiniteScrollObserver,
@@ -183,6 +184,7 @@ export default {
       canvasmodal: false,
       addarticlemodal: false,
       articlemodal: false,
+      groupinfo : [],
       articles: [],
     };
   },
@@ -213,6 +215,15 @@ export default {
     closearticle() {
       this.articlemodal = false;
     },
+    async getGroupInfo(id) {
+      try {
+        const { data } = await getGroupInfo(id);
+        this.groupinfo = data
+      }
+      catch(e) {
+        console.error(e.message)
+      }
+    },
     // only for test
     initArticles() {
       console.log(this.articles, 'hehe');
@@ -230,6 +241,10 @@ export default {
       this.initArticles();
     },
   },
+
+  created() {
+    this.getGroupInfo(this.$route.params.id)
+  }
 };
 </script>
 
