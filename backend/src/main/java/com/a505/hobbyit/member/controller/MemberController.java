@@ -81,6 +81,7 @@ public class MemberController {
             @RequestBody MemberMypageRequest request) {
         memberService.update(token, request);
         return ResponseEntity.ok().build();
+    }
 
     @GetMapping(value = "/hobby")
     public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
