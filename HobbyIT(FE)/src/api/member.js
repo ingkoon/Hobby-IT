@@ -26,8 +26,8 @@ function resetPassword(data) {
 
 // 5.로그아웃
 // accessToken 같이 넘기기
-function memberLogout(data) {
-  return multipartInstance.post('/logout', data);
+function memberLogout() {
+  return multipartInstance.get('/logout');
 }
 
 // 6.마이페이지(타인)

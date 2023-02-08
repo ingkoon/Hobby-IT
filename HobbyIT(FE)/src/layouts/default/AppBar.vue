@@ -53,11 +53,14 @@ export default {
       this.$router.push({name : "login"});
     },
     async handleLogout() {
-      const logoutData = {
-        accessToken: this.userStore.getAccessToken,
-      };
-      const res = await memberLogout(logoutData);
-      console.log(res);
+      try {
+        const res = await memberLogout();
+        this.userStore.accessToken = null;
+        localStorage.clear();
+      } catch (e) {
+        console.error(e);
+      }
+
     },
   },
 
