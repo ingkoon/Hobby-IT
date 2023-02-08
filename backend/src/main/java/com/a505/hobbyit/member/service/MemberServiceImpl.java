@@ -3,8 +3,10 @@ package com.a505.hobbyit.member.service;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
@@ -212,6 +214,22 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(NoSuchMemberException::new);
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
+
+    @Override
+    public List<MemberHobbyResponse> getHobbyList(final String token) {
+        String id = jwtTokenProvider.getUser(token);
+        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
+
+        List<HobbyMember> hobbyMembers = member.getHobbyMembers();
+
+        List<MemberHobbyResponse> responses = new ArrayList<>();
+        for (HobbyMember hobbyMember : hobbyMembers) {
+            Hobby hobby = hobbyRepository.findById(hobbyMember.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
+            MemberHobbyResponse response = new MemberHobbyResponse().of(hobby);
+            responses.add(response);
+        }
+
+        return responses;
     }
 
     @Override

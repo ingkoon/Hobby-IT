@@ -7,7 +7,6 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,24 +25,21 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
     private final MemberRepository memberRepository;
     private final HobbyRepository hobbyRepository;
     private final HobbyMemberRepository hobbyMemberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     @Override
-    public void updatePrivilege(String token, Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
-        checkPrivilege(hobbyId, token);
-
+    public void updatePrivilege(Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findById(targetId)
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
         hobbyMember.updatePrivilege(request.getPrivilege());
-
     }
+
     @Transactional
     @Override
-    public void kickHobbyMember(String token, Long hobbyId, Long targetId) {
-        checkPrivilege(hobbyId, token);
+    public void kickHobbyMember(String memberId, Long hobbyId, Long targetId) {
+        checkPrivilege(hobbyId, memberId);
 
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findById(targetId)
@@ -54,11 +50,10 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
 
     @Transactional
     @Override
-    public void resignHobbyMember(String token, Long hobbyId) {
-        String memberEmail = jwtTokenProvider.getUser(token);
+    public void resignHobbyMember(String memberId, Long hobbyId) {
 
         Member member = memberRepository
-                .findByEmail(memberEmail)
+                .findById(Long.parseLong(memberId))
                 .orElseThrow(NoSuchElementException::new);
 
         Hobby hobby = hobbyRepository
@@ -73,10 +68,9 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
     }
 
     @Override
-    public Hobby checkPrivilege(Long hobbyId, String token){
-        String memberEmail = jwtTokenProvider.getUser(token);
+    public Hobby checkPrivilege(Long hobbyId, String memberId){
         Member member = memberRepository
-                .findByEmail(memberEmail)
+                .findById(Long.parseLong(memberId))
                 .orElseThrow(NoSuchElementException::new);
         Hobby hobby = hobbyRepository
                 .findById(hobbyId)

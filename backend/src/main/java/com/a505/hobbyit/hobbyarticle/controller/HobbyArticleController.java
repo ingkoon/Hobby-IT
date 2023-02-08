@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,37 +29,35 @@ public class HobbyArticleController {
 
     @PostMapping(value = "/{hobby-id}/article")
     public ResponseEntity<Slice<HobbyArticleResponse>> saveArticle(
-            @RequestHeader("Authorization") String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestPart final HobbyArticleRequest request,
             @RequestPart(required = false) final List<MultipartFile> multipartFile
             ){
-        hobbyArticleService.save(token, hobbyId, request, multipartFile);
+        hobbyArticleService.save(userDetails.getUsername(), hobbyId, request, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
     @GetMapping(value = "/{hobby-id}/article")
     public ResponseEntity<Slice<HobbyArticleResponse>> getArticleList(
-            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final Long storedId,
             final Pageable pageable
             ){
         log.info(pageable.getPageSize()+"");
-        Slice<HobbyArticleResponse> response = hobbyArticleService.findAll(storedId, token, hobbyId, pageable);
+        Slice<HobbyArticleResponse> response = hobbyArticleService.findAll(storedId,  hobbyId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/{hobby-id}/article/search")
     public ResponseEntity<Slice<HobbyArticleResponse>> searchArticleList(
-            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final Long storedId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
     ){
-        Slice<HobbyArticleResponse> response = hobbyArticleService.findByKeyword(storedId, token, keyword, hobbyId, pageable);
+        Slice<HobbyArticleResponse> response = hobbyArticleService.findByKeyword(storedId, keyword, hobbyId, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -65,7 +65,6 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice")
     public ResponseEntity<Page<HobbyArticleResponse>> getNoticeList(
-            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
              final Pageable pageable
     ){
@@ -77,7 +76,6 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice/search")
     public ResponseEntity<Page<HobbyArticleResponse>> searchNoticeList(
-            @RequestHeader("Authorization") String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
@@ -92,10 +90,9 @@ public class HobbyArticleController {
     */
     @GetMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<HobbyArticleDetailResponse> getArticle(
-            @RequestHeader("Authorization") final String token,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("article-id") final Long articleId){
-        HobbyArticleDetailResponse response = hobbyArticleService.findById(token, hobbyId, articleId);
+        HobbyArticleDetailResponse response = hobbyArticleService.findById(hobbyId, articleId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -105,6 +102,14 @@ public class HobbyArticleController {
             @PathVariable("article-id") final Long articleId,
             @RequestBody HobbyArticleUpdateRequest request) {
         hobbyArticleService.update(articleId, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping(value = "/{hobby-id}/article/{article-id}")
+    public ResponseEntity<Void> deleteArticle(
+            @PathVariable("hobby-id") final Long hobbyId,
+            @PathVariable("article-id") final Long articleId) {
+        hobbyArticleService.delete(articleId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

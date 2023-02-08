@@ -61,7 +61,7 @@ public class Hobby {
         this.free = free;
     }
 
-    @OneToMany(mappedBy = "hobby")
+    @OneToMany(mappedBy = "hobby", fetch = FetchType.LAZY)
     private List<Pending> pendings = new ArrayList<>();
 
     @OneToMany(mappedBy = "hobby")

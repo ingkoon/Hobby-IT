@@ -6,6 +6,8 @@ import com.a505.hobbyit.hobbyarticlecomment.service.HobbyArticleCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +19,12 @@ public class HobbyArticleCommentController {
     private final HobbyArticleCommentService hobbyArticleCommentService;
     @PostMapping(value = "/{hobby-id}/article/{article-id}/comment")
     public ResponseEntity<Void> save(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "hobby-id", required = false) final Long hobbyId,
             @PathVariable("article-id") final Long articleId,
             @RequestBody CommentRequest request
             ){
-        hobbyArticleCommentService.save(token, articleId, request);
+        hobbyArticleCommentService.save(userDetails.getUsername(), articleId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -39,13 +41,12 @@ public class HobbyArticleCommentController {
 
     @PutMapping(value = "/{hobby-id}/article/{article-id}/comment/{comment-id}")
     public ResponseEntity<Void> updateComment(
-            @RequestHeader("Authorization") final String token,
             @PathVariable(value = "hobby-id", required = false) final Long hobbyId,
             @PathVariable(value = "article-id", required = false) final Long articleId,
             @PathVariable(value = "comment-id") final Long commentId,
             @RequestBody CommentRequest request
     ){
-        hobbyArticleCommentService.updateComment(token,commentId, request);
+        hobbyArticleCommentService.updateComment(commentId, request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

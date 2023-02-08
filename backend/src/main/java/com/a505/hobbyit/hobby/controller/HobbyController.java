@@ -2,12 +2,15 @@ package com.a505.hobbyit.hobby.controller;
 
 import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobby.service.HobbyService;
+import com.a505.hobbyit.member.domain.Member;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,17 +26,20 @@ public class HobbyController {
 
     @PostMapping
     public ResponseEntity<Void> createHobby(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestPart("multipartFile") MultipartFile multipartFile,
             @RequestPart("request") HobbyRequest requestDto) {
-        hobbyService.save(token, multipartFile, requestDto);
+        hobbyService.save(userDetails.getUsername(), multipartFile, requestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping(value = "/{hobby-id}")
-    public ResponseEntity<HobbyAndMemberResponse> findHobby(@RequestHeader("Authorization") final String token,
-                                                            @PathVariable(value = "hobby-id") final Long hobbyId) {
-        HobbyAndMemberResponse response = hobbyService.findById(token, hobbyId);
+    public ResponseEntity<HobbyAndMemberResponse> findHobby(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable(value = "hobby-id") final Long hobbyId) {
+
+        log.info("===============" + userDetails.getUsername() + userDetails.getAuthorities() + "===========================");
+        HobbyAndMemberResponse response = hobbyService.findById(userDetails.getUsername(), hobbyId);
         return ResponseEntity.ok(response);
     }
 
@@ -72,20 +78,20 @@ public class HobbyController {
 
     @PutMapping(value = "/{hobby-id}")
     public ResponseEntity<Void> updateHobby(@Parameter(description = "게시할 글의 정보")
-                                            @RequestHeader("Authorization") final String token,
+                                                @AuthenticationPrincipal UserDetails userDetails,
                                             @PathVariable("hobby-id") Long hobbyId,
                                             @RequestPart("multipartFile") MultipartFile multipartFile,
                                             @RequestPart("request") HobbyUpdateRequest request) {
-        hobbyService.updateHobby(token, hobbyId, multipartFile, request);
+        hobbyService.updateHobby(userDetails.getUsername(), hobbyId, multipartFile, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/{hobby-id}")
     public ResponseEntity<Void> deleteHobby(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "hobby-id") final Long hobbyId) {
 
-        hobbyService.deleteHobby(hobbyId, token);
+        hobbyService.deleteHobby(hobbyId, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

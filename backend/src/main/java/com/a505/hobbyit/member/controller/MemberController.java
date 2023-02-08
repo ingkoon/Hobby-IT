@@ -1,6 +1,7 @@
 package com.a505.hobbyit.member.controller;
 
 import com.a505.hobbyit.member.dto.request.*;
+import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
@@ -74,12 +75,20 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+<<<<<<< backend/src/main/java/com/a505/hobbyit/member/controller/MemberController.java
     @PutMapping
     public ResponseEntity<Void> updateMember(
             @RequestHeader("Authorization") final String token,
             @RequestBody MemberMypageRequest request) {
         memberService.update(token, request);
         return ResponseEntity.ok().build();
+=======
+    @GetMapping(value = "/hobby")
+    public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
+            @RequestHeader("Authorization") final String token) {
+        List<MemberHobbyResponse> hobbyList = memberService.getHobbyList(token);
+        return ResponseEntity.status(HttpStatus.OK).body(hobbyList);
+>>>>>>> backend/src/main/java/com/a505/hobbyit/member/controller/MemberController.java
     }
 
     @GetMapping(value = "/hobby/pending")
