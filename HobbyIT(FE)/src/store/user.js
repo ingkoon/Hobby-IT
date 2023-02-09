@@ -12,6 +12,9 @@ export const useUserStore = defineStore({
     getRefreshToken(state) {
       return localStorage.getItem('refreshToken');
     },
+    getAccessToken(state) {
+      return state.accessToken;
+    },
   },
   actions: {
     setUserNickname(nickname) {
@@ -35,11 +38,12 @@ export const useUserStore = defineStore({
       this.setUserEmail(email);
       this.setUserNickname(nickname);
     },
-    setUser(data) {
+    async setUser(data) {
       const { nickname, accessToken, refreshToken } = data;
       this.setAccessToken(accessToken);
       this.setRefreshToken(refreshToken);
       this.setUserNickname(nickname);
+      // const hobbyList = await getParticipatingGroup(nickname);
     },
   },
 });

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { setInterceptors } from '@/api/common/interceptors';
+import { setInterceptors, setInterceptorsWithNoAuth } from '@/api/common/interceptors';
+import { useUserStore } from '@/store/user';
 
 // const BASE_URL = 'http://i8a505.p.ssafy.io/api/';
 // const BASE_URL = 'http://localhost:8080/api/';
@@ -20,11 +21,23 @@ const fileConfig = {
 
 function createInstance(path, config = defaultConfig) {
   const instance = axios.create({
-    ...defaultConfig,
+    ...config,
     baseURL: API_SERVER_URL + path,
   });
-  return instance;
-  // return setInterceptors(instance);
+
+  return setInterceptors(instance);
 }
 
-export { createInstance };
+function createInstanceWithNoAuth(path, config = defaultConfig) {
+  const instance = axios.create({
+    ...config,
+    baseURL: API_SERVER_URL + path,
+  });
+  return setInterceptorsWithNoAuth(instance);
+}
+
+async function reissueRefreshToken(data) {
+  const res = await axios.post(API_SERVER_URL + '/member/reissue');
+}
+
+export { createInstance, createInstanceWithNoAuth, fileConfig };

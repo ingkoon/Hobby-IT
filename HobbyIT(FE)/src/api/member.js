@@ -1,29 +1,33 @@
-import { createInstance } from '@/api/index';
+import { createInstance, createInstanceWithNoAuth, fileConfig } from '@/api/index';
 
-const PATH = 'member/';
+const PATH = '/member';
 
 const instance = createInstance(PATH);
+const multipartInstance = createInstance(PATH, fileConfig);
+const instanceWithNoAuth = createInstanceWithNoAuth(PATH);
+const multipartInstanceWithNoAuth = createInstanceWithNoAuth(PATH, fileConfig);
 
 // 1.회원가입
 function memberSignup(data) {
-  return instance.post('signup', data);
+  return multipartInstanceWithNoAuth.post('/signup', data);
 }
 
 // 2.이메일인증
 
 // 3.로그인
 function memberLogin(data) {
-  return instance.post('login', data);
+  return multipartInstanceWithNoAuth.post('/login', data);
 }
 
 // 4.비밀번호 리셋
 function resetPassword(data) {
-  return instance.post('password/reset', data);
+  return multipartInstanceWithNoAuth.post('/password/reset', data);
 }
 
 // 5.로그아웃
-function memberLogout(nickname) {
-  return instance.get('logout');
+// accessToken 같이 넘기기
+function memberLogout() {
+  return multipartInstance.get('/logout');
 }
 
 // 6.마이페이지(타인)
@@ -43,17 +47,17 @@ function getMyPage() {
 
 // 9.회원탈퇴
 function memberDelete() {
-  return instance.post('delete');
+  return instance.post('/delete');
 }
 
 // 10.참여중인 모임 리스트 조회
 function getParticipatingGroup(nickname) {
-  return instance.get(`hobby/${nickname}`);
+  return instance.get(`/hobby/${nickname}`);
 }
 
 // 11.대기중인 모임 리스트 조회
 function getWaitingGroup() {
-  return instance.get('hobby');
+  return instance.get('/hobby');
 }
 
 export {

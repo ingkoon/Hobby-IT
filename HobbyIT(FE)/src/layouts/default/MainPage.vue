@@ -1,14 +1,31 @@
 <template>
   <v-app id="app">
     <default-bar style="position: fixed" />
-
-    <default-view style="margin: 50px 13% 0" />
+    <div style="margin: 100px 13% 0" >
+      <router-view/>
+    </div>
   </v-app>
 </template>
 
-<script setup>
+<script>
 import DefaultBar from './AppBar.vue';
-import DefaultView from './View.vue';
+// import DefaultView from './View.vue';
+import { useUserStore } from '@/store/user';
+
+export default {
+  components : {
+    DefaultBar,
+  },
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
+  },
+  created() {
+    if (!this.userStore.getAccessToken) {
+
+    }
+  },
+}
 </script>
 
 <style>
