@@ -26,7 +26,7 @@ public interface MemberService {
 
     void delete(final String token);
     
-    List<MemberHobbyResponse> getHobbyList(final String token);
+    List<MemberHobbyResponse> getHobbyList(final String token, String nickname);
 
     List<MemberPendingResponse> getPendingList(final String token);
 }

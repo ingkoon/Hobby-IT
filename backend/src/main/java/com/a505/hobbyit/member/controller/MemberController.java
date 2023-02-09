@@ -89,10 +89,11 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/hobby")
+    @GetMapping(value = "/hobby/{member-nickname}")
     public ResponseEntity<List<MemberHobbyResponse>> findMemberHobbies(
-            @RequestHeader("Authorization") final String token) {
-        List<MemberHobbyResponse> hobbyList = memberService.getHobbyList(token);
+            @RequestHeader("Authorization") final String token,
+            @PathVariable(value = "member-nickname") final String nickname) {
+        List<MemberHobbyResponse> hobbyList = memberService.getHobbyList(token, nickname);
         return ResponseEntity.status(HttpStatus.OK).body(hobbyList);
     }
 
