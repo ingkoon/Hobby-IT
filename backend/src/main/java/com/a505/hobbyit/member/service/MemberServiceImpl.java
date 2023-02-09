@@ -225,6 +225,7 @@ public class MemberServiceImpl implements MemberService {
     public void delete(final String token) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
+        member.checkWaiting();
         member.deleteMember();
     }
 
