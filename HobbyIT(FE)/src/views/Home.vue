@@ -1,19 +1,19 @@
 <template>
-  <!-- gspa 사용 예제
-  <transition appear @before-enter="beforeEnter" @enter="enter" :css="false">
-    <div class="card"></div>
-  </transition>
-  <transition appear @before-enter="beforeEnter" @enter="enter" :css="false">
-    <div class="card"></div>
-  </transition>
-  -->
-
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
-    <div style="position:relative; display: flex; align-items: center; text-align: center; justify-content: center;
-                width: 800px; height: 150px; margin-top: 200px;">
-      <p style="height:150px">HOBBY'IT</p>
-
+    <div
+    style="
+    position:relative;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 800px; height: 150px;
+    margin-top: 200px;
+    ">
+      <div style="flex-direction: column;">
+        <p id="hbtitle" style="height:150px">HOBBY'IT</p>
+      </div>
       <img id="stars" src="/assets/Fstar.svg" style="position: absolute; top: -100px; z-index: -1" />
     </div>
 
@@ -37,7 +37,7 @@
           margin-top: -3px;
         "
       >
-        <div style="min-width: 500px">
+        <div id="typopage" style="min-width: 500px">
           <div id="text1">Just Hobby'It</div>
           <div id="text2">그냥, 취미해!</div>
           <div id="text3">
@@ -45,9 +45,17 @@
             당신은 어떤 사람인가요<br />회사원? 선생님? 운동선수? 개발자?<br /><br />
             <span style="font-weight: 700; color: #ebb4fe">A. 좋아하는 것들 : 취미</span>로 표현할게요<br />
             #음악 #여행 #스포츠 #코딩 etc...<br /><br />
-            마음에 맞는 동료들과 함께<br />당신의 개성넘치는 부캐라이프,<br />
+            마음에 맞는 동료들과 함께<br />당신의 개성 넘치는 부캐라이프,<br />
             <span style="font-weight: 700; color: #ebb4fe">HOBBY'IT : 호빗</span>
             에서 즐기세요!
+          </div>
+          <div>
+            <a href="#prebox">
+              <img id="emoji" src="/assets/emoji.png" style="position: absolute; top: 1200px; left: 600px; width: 10%;" />
+            </a>
+            <div style="width: 100px; color: #ebb4fe; margin-top: -300px; margin-left: 552px;">
+              click me!
+            </div>
           </div>
         </div>
         <div id="typo">
@@ -109,67 +117,90 @@
       </div>
 
       <!-- <div style="position: absolute; width: 100%; height: 221px; left: 0px; top: 1099px; background: #000211;"></div> -->
-
-      <div style="display: flex; align-items: center; flex-direction: column">
+      <div id="prebox" style="height: 10px; margin-top: 400px;"></div>
+      <div
+      id="boxpage"
+      style="
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 80px;
+      ">
         <div id="box1">
           <h1 style="margin-top: 50px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)">
-            @@@하고 싶은데.. 같이 하지 않을래요?
+           <span id="txtchange" style="color:#642EFE;"></span>&nbsp하고 싶은데.. 같이 하지 않을래요?
           </h1>
           <div style="display: flex; align-items: center">
-            <img src="/assets/people.gif" style="width: 60%; margin: 10px 20px" />
-            <h1 style="font-size: 25px">
+            <img src="/assets/people.gif" style="width: 50%; margin: 0px 50px 0px 50px" />
+            <h1 id="b1txt" style="font-size: 25px">
               혼자보단 둘,<br />둘보단 다같이!<br /><br />관심있는 모임에 들어가거나,<br />동료들을 구해보는건
-              어떨까요?<br />다함께 취미생활을 기록하고 공유하세요.<br />혼자보단 분명 더욱 즐거울겁니다! <br />What's
-              So Special?<br />호빗만의 장점을 더 알아볼까요?
+              어떨까요?<br />다함께 취미생활을 기록하고 공유하세요.<br />혼자보단 분명 더욱 즐거울겁니다! <br />
+              <br />호빗만의 장점을 더 알아볼까요?&nbsp
+              <a href="#prebox2">
+                <v-icon id="anim1" icon="mdi-chat-alert" style="margin-top: -25px;"></v-icon>
+              </a>
             </h1>
           </div>
         </div>
 
-        <div style="display: flex; margin-top: 400px">
+        <div id="prebox2" style="height: 10px; margin-top: 400px;"></div>
+        <div style="display: flex; margin-top: 80px">
           <div id="box2">
-            <h1 style="color: white; margin-top: 50px; font-size: 50px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)">
+            <h1 style="color: white; margin-top: 40px; font-size: 50px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)">
               24/7 즐기는 취미생활
             </h1>
-            <h1 style="color: white; margin-top: 15px; font-size: 20px">
+            <h1 style="color: white; margin-top: 20px; font-size: 24px">
               <span style="color: #5204ba; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)"
                 >사진 공유, 방명록, 화상채팅까지!</span
-              ><br />언제 어디서든 추억을 쌓아갈 수 있습니다.<br /><br />내가 속한 모임마다 특별한 추억들로<br />채워가보세요
+              ><br />언제 어디서든 추억을 쌓아갈 수 있습니다.<br /><br />내가 속한 모임 별로 특별한 추억들로<br />채워가보세요
               :)
             </h1>
-            <img src="/assets/nod.gif" />
+            <img src="/assets/nod.gif" style="width: 50%; margin-top: 0px;"/>
           </div>
 
           <div>
             <div id="box3">
-              <v-icon icon="mdi-lock-open" size="38" style="margin-top: 20px"></v-icon>
+              <v-icon icon="mdi-lock-open-variant" size="38" style="margin-top: 20px; color:#067FB2"></v-icon>
               <h1 style="color: #0e0f28; margin-top: 10px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)">
                 We are Open!
               </h1>
-              <h1 style="color: #0e0f28; margin-top: 20px; font-size: 20px">
+              <h1 style="color: #0e0f28; margin-top: 20px; font-size: 18px">
                 유입 환영!<br />아무나 자유롭게 모임 가입이 바로 가능하군요!<br />취향이 맞는 다양한 사람들을 만날 수
                 있겠어요<br />누구나 welcome!
               </h1>
             </div>
             <div id="box4">
-              <v-icon icon="mdi-lock" size="38" style="margin-top: 20px"></v-icon>
+              <v-icon icon="mdi-lock" size="38" style="margin-top: 20px; color: #E06C30;"></v-icon>
               <h1 style="color: #0e0f28; margin-top: 10px; font-size: 40px; text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25)">
                 Friends & Family!
               </h1>
-              <h1 style="color: #0e0f28; margin-top: 20px; font-size: 20px">
-                좀 더 프라이빗한 모임이었으면 좋겠어요<br />가입신청 인사, 활동 중인 모임 등을<br />확인 후에 신규멤버로
-                초대해볼까요?<br />우리들만의 아지트가 필요할때도 있는 법이죠
+              <h1 style="color: #0e0f28; margin-top: 20px; font-size: 18px">
+                좀 더 프라이빗한 모임을 원하시나요?<br />가입신청 인사, 활동 중인 모임 등을<br />확인 후에
+                초대할수도 있습니다<br />우리들만의 아지트가 필요할때도 있는 법이죠
               </h1>
             </div>
           </div>
         </div>
 
-        <div style="color: #9078b8; margin: 200px; font-size: 40px">Your Hobby, Your Style.</div>
+        <div
+            id="big"
+            style="
+            /* color: #9078b8; */
+            color: white;
+            width: 1700px;
+            text-align: center;
+            margin: 500px 200px 200px 200px;
+            font-size: 170px;
+            display: flex;
+            ">
+          <h3 id="bigl">Your Hobby,&nbsp</h3><h3 id="bigr">Your Style.</h3>
+        </div>
 
-        <div style="height: 1800px">
+        <div id="cards" style="height: 1800px">
           <div style="position: relative">
             <div id="card1">
               <div style="width: 300px; height: 300px; margin-top: 10px">
-                <img src="/assets/home1.gif" style="width: 100%; height: 100%" />
+                <img src="/assets/home3.gif" style="width: 100%; height: 100%; object-fit: cover" />
                 <div
                   style="
                     font-size: 40px;
@@ -181,8 +212,8 @@
                 >
                   끝이 없다!
                 </div>
-                <div style="font-size: 20px; margin-left: 15px; color: white">
-                  하고싶은거 다 해<br />취미엔 끝이 없으니까!
+                <div style="font-size: 24px; margin: 10px 0px 0px 15px; color: white">
+                  하고싶은거 다 해<br />취미엔 끝이 없으니까!<br />어디서? 호빗에서!
                 </div>
               </div>
             </div>
@@ -200,8 +231,8 @@
                 >
                   나 혼자 즐기긴 아깝지
                 </div>
-                <div style="font-size: 20px; color: white; margin-top: 50px; margin-right: 15px">
-                  찍고 올리고, 찍고 올리고<br />기록은 기억보다 선명하니까
+                <div style="font-size: 24px; color: white; margin-top: 50px; margin-right: 15px">
+                  찍고 공유하고, 구경하고 떠들고<br />함께할수록 풍성해지는 내 취미모임<br />만능 온라인 소모임 플랫폼!
                 </div>
               </div>
             </div>
@@ -217,20 +248,21 @@
                     -webkit-text-fill-color: transparent;
                   "
                 >
-                  나를 만드는 것은 나자신!
+                  나를 만드는 것은 나 자신!
                 </div>
-                <div style="font-size: 20px; margin-left: 16px; color: white">
-                  텍스트1<br />텍스트2<br />텍스트3<br />텍스트4
+                <div style="font-size: 24px; margin-left: 16px; color: white">
+                  <br /><br />취미로 개성을 표현하세요<br />다양한 부캐 라이프가 모여서 본캐가 될거에요<br />더 개성있는 "나"를 만들어가세요<br />무엇을 망설이는 건가요?&nbsp&nbsp이제 그냥 HOBBY'IT!
                 </div>
               </div>
             </div>
             <div id="card4">
               <div style="width: 400px; height: 400px; margin-top: 10px">
-                <img src="/assets/home3.gif" style="width: 100%; height: 100%; object-fit: cover" />
+                <img src="/assets/home1.gif" style="width: 100%; height: 100%;" />
                 <div
                   style="
                     font-size: 40px;
                     margin-left: 10px;
+                    margin-right: 10px;
                     background: linear-gradient(180deg, #642efe 0%, #fa8eb6 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
@@ -238,8 +270,8 @@
                 >
                   중요한건 즐기는 마음
                 </div>
-                <div style="font-size: 20px; margin-left: 15px; color: white">
-                  <br />텍스트1<br />텍스트2<br />텍스트3
+                <div style="font-size: 24px; margin-left: 15px; margin-right: 15px; color: white">
+                  <br />가볍게 즐기거나,<br />진심으로 즐기거나,<br />자유롭게 활동하세요!
                 </div>
               </div>
             </div>
@@ -260,15 +292,26 @@
           </div>
         </div>
 
-        <div style="margin-top: 200px; position: relative; margin-right: 1000px">
+
+        <!-- 모달테스트버튼 -->
+        <!-- <div id="testy">
+          <v-btn style="background-color: red;">test
+            <v-dialog v-model="memupdate" activator="parent">
+              <member-update @closememupdate="closememupdate" />
+            </v-dialog>
+          </v-btn>
+        </div> -->
+
+
+        <div id="qwerty" style="position: relative; margin-right: 1000px">
           <div
             id="foot1"
             style="
               position: absolute;
-              width: 27px;
-              height: 86px;
               left: 79px;
               top: 648px;
+              width: 27px;
+              height: 86px;
               background: linear-gradient(180deg, #0e0f28 0%, #f7dada 100%);
               z-index: 5;
             "
@@ -277,10 +320,10 @@
             id="foot2"
             style="
               position: absolute;
-              width: 27px;
-              height: 86px;
               left: 74.57px;
               top: 823.1px;
+              width: 27px;
+              height: 86px;
               background: #f7dada;
               transform: rotate(12.43deg);
               z-index: 5;
@@ -290,10 +333,10 @@
             id="foot3"
             style="
               position: absolute;
-              width: 27px;
-              height: 86px;
               left: 60.89px;
               top: 1013.24px;
+              width: 27px;
+              height: 86px;
               background: #f7dada;
               transform: rotate(-15.66deg);
               z-index: 5;
@@ -451,7 +494,7 @@
             <img src="/assets/greenp.svg" />
           </div>
           <div style="position: absolute; width: 100%; height: 1540px; left: -287px; top: 648px">
-            <img src="/assets/BLOB.svg" style="z-index: 5" />
+            <img src="/assets/BLOB.svg" style="z-index: -4" />
           </div>
         </div>
       </div>
@@ -460,21 +503,111 @@
 </template>
 
 <script>
+// import MemberUpdate from "../components/modals/MemberUpdate.vue";
+
 export default {
-  methods: {},
+  components:{
+    // MemberUpdate,
+  },
+  data() {
+    return{
+      c: -1,
+      txtlist: ["스터디","여 행","운 동","게 임", "맛집탐방", "덕 질", "코 딩", "파 티"],
+      memupdate: false,
+    };
+  },
+  mounted() {
+    setInterval(this.tChange, 1000);
+    this.scrollAnimation();
+    this.animate();
+  },
+
+  methods: {
+    marqueeText(count, element, direction){
+      if (count > element.scrollwidth / 2) {
+        element.style.transform = `transformX(0)`
+        count = 0
+      }
+      element.style.transform = `transformX(${count * direction}px)`
+      return count
+    },
+    animate(){
+      let count1 = 0
+      let count2 = 0
+      count1++
+      count2++
+
+      count1 = this.marqueeText(count1, document.querySelector('.left'), -1)
+      count2 = this.marqueeText(count2, document.querySelector('.right'), 1)
+    },
+
+    openmemupdate() {
+      this.memupdate = true;
+    },
+    closememupdate() {
+      this.memupdate = false;
+    },
+
+    scrollAnimation(){
+      gsap.timeline({
+        scrollTrigger:{
+          trigger: "#typopage",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true,
+        }
+      })
+      .from("#text1",{y:100*-1, opacity:0})
+      .from("#text2",{x:300*1, opacity:0})
+      .from("#text3",{x:50*-1, opacity:0})
+
+      gsap.timeline({
+        scrollTrigger:{
+          trigger: "#big",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true,
+        }
+      })
+      .from("#bigr",{x:300*1, opacity:0})
+      .from("#bigl",{x:300*-1, opacity:0})
+
+      gsap.timeline({
+        scrollTrigger:{
+          trigger: "#cards",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true,
+        }
+      })
+      .from("#card1",{x:300*-1, y:300*-1, opacity:0})
+      .from("#card2",{x:300*1, y:300*-1, opacity:0})
+      .from("#card3",{x:300*-1, y:300*1, opacity:0})
+      .from("#card4",{x:300*1, y:300*1, opacity:0})
+
+      gsap.timeline({
+        scrollTrigger:{
+          trigger: "#qwerty",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true,
+        }
+      })
+      .from("#foot1",{y:50*-1, opacity:0})
+      .from("#foot2",{y:50*-1, opacity:0})
+      .from("#foot3",{y:50*-1, opacity:0})
+      .from("#foot4",{y:50*-1, opacity:0})
+    },
+
+    tChange() {
+      this.c = ++this.c%this.txtlist.length;
+      document.getElementById("txtchange").innerHTML = this.txtlist[this.c];
+    }
+  },
 };
 </script>
 
 <style scoped>
-.card {
-  display: block;
-  margin: 0 auto 0 auto;
-  height: 6.5em;
-  width: 6.5em;
-  border-radius: 1%;
-  background-color: #16c0b0;
-  box-shadow: 0.08em 0.03em 0.4em #ababab;
-}
 
 #bg {
   display: flex;
@@ -483,6 +616,10 @@ export default {
   height: 10000px;
 }
 
+a {
+  text-decoration: none;
+  color: #000211
+}
 p {
   display: flex;
   align-items: center;
@@ -539,10 +676,10 @@ p {
 }
 
 #intro {
-  margin-top: 50px;
+  margin-top: 35px;
   font-style: normal;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 30px;
   display: flex;
   align-items: center;
   text-align: center;
@@ -551,7 +688,88 @@ p {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  padding-bottom: 155px;
+  padding-bottom: 200px;
+}
+
+.left{
+
+}
+
+.right{
+  justify-content: flex-end;
+}
+
+#emoji{
+  -webkit-animation: emoji 1s ease-in-out infinite both;
+	        animation: emoji 1s ease-in-out infinite both;
+}
+@-webkit-keyframes emoji {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-transform-origin: center center;
+            transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+            transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+            transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+}
+@keyframes emoji {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-transform-origin: center center;
+            transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+            transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+            transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
 }
 
 #typo {
@@ -584,6 +802,7 @@ p {
   background: linear-gradient(180deg, #642efe 13.55%, #ffffff 63.55%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin-top: 50px;
   font-size: 40px;
 }
 
@@ -598,14 +817,14 @@ p {
 
 #text3 {
   /*color:#FA8EB6;*/
-  font-size: 26px;
+  font-size: 24px;
   line-height: 48px;
   color: #e9d7dd;
   margin-top: 60px;
 }
 
 #box1 {
-  width: 80%;
+  width: 80%; height: 600px;
   background: linear-gradient(180deg, #f4d1d6 0%, #f4d1d6 23.41%, #f5d2d7 68.11%, #fadfdd 86.61%, #f4d1d6 100%);
   box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
@@ -613,12 +832,11 @@ p {
   align-items: center;
   flex-direction: column;
   text-align: left;
-  margin-top: 100px;
   padding-bottom: 10px;
 }
 
 #box2 {
-  width: auto;
+  width: 700px; height: 600px;
   background: linear-gradient(
     180deg,
     #fa8eb6 0%,
@@ -635,32 +853,33 @@ p {
   flex-direction: column;
   text-align: left;
   padding: 15px;
+  margin-left: -100px;
 }
 
 #box3 {
   width: 100%;
-  height: 320px;
-  background: #deffbe;
-  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  text-align: left;
-  margin: 15px;
-}
-
-#box4 {
-  width: 100%;
-  height: 320px;
+  height: 280px;
   background: #69fce1;
   box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  text-align: left;
+  margin: 0px 15px 40px 45px;
+}
+
+#box4 {
+  width: 100%;
+  height: 280px;
+  background: #deffbe;
+  box-shadow: inset 0 4px 50px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   text-align: right;
-  margin: 15px;
+  margin: 0px 15px 20px 45px;
 }
 
 #pst1 {
@@ -698,7 +917,7 @@ p {
   width: 320px;
   height: 524px;
   left: -400px;
-  top: 0;
+  top: 30px;
   z-index: 2;
   background-color: #000211;
   display: flex;
@@ -746,6 +965,333 @@ p {
   display: flex;
   align-items: center;
   flex-direction: column;
-  text-align: left;
+  text-align: right;
+}
+
+#bigl{
+  color: transparent; -webkit-text-stroke: 1px #fff;
+}
+#bigr{
+  color: transparent; -webkit-text-stroke: 1px #fff;
+  margin-left: -200px;
+}
+#big{
+	-webkit-animation: text-flicker-in-glow 4s linear 2 both;
+	        animation: text-flicker-in-glow 4s linear 2 both;
+}
+@-webkit-keyframes text-flicker-in-glow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  10.1% {
+    opacity: 1;
+    text-shadow: none;
+  }
+  10.2% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  20% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  20.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+  }
+  20.6% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  30% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  30.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  30.5% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  30.6% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  45% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  45.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  55% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  55.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  57% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  57.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35);
+  }
+  60% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35);
+  }
+  60.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  65% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  65.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  75% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  75.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  77% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  77.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.4), 0 0 110px rgba(255, 255, 255, 0.2), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  85% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.4), 0 0 110px rgba(255, 255, 255, 0.2), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  85.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  86% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  86.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+}
+@keyframes text-flicker-in-glow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  10.1% {
+    opacity: 1;
+    text-shadow: none;
+  }
+  10.2% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  20% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  20.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+  }
+  20.6% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  30% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  30.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  30.5% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  30.6% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  45% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  45.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  55% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.25);
+  }
+  55.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  57% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  57.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35);
+  }
+  60% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35);
+  }
+  60.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  65% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  65.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  75% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.35), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  75.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  77% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  77.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.4), 0 0 110px rgba(255, 255, 255, 0.2), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  85% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.4), 0 0 110px rgba(255, 255, 255, 0.2), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  85.1% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  86% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  86.1% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1);
+  }
+}
+
+#anim1{
+  -webkit-animation: jello-vertical 2s infinite both;
+	        animation: jello-vertical 2s infinite both;
+}
+@-webkit-keyframes jello-vertical {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(0.85, 1.15, 1);
+            transform: scale3d(0.85, 1.15, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes jello-vertical {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(0.85, 1.15, 1);
+            transform: scale3d(0.85, 1.15, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
 }
 </style>
