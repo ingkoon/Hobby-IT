@@ -1,7 +1,7 @@
 <template>
   <v-app-bar flat style='background-color: #0e0f28'>
     <v-app-bar-title>
-      <router-link style='display: flex; align-content: center' to='/main'>
+      <router-link style='display: flex; align-content: center' to='/'>
         <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
         <span style='font-family: logofont'>HOBBY'</span>
         <span style='color: #8947e2; font-family: logofont'>IT</span>
@@ -10,8 +10,8 @@
 
     <div id='nav'>
       <router-link to='/about'>이용가이드</router-link>
-      <router-link to='/about'>참여하기</router-link>
-      <router-link to='/about'>공지사항</router-link>
+      <router-link to='/main'>참여하기</router-link>
+      <router-link to='/promo'>홍보게시판</router-link>
     </div>
 
     <span v-if='isLoggedIn'>
@@ -97,5 +97,18 @@ button {
   height: 50px;
   /*margin-left:10px; */
   margin: 5px;
+}
+</style>
+
+<style>
+div.v-toolbar__content {
+  max-height: 59px;
+  /* height: 59px; */
+  border-bottom: 3px solid #642efe;
+  display: flex;
+  color: white;
+  /* justify-content: space-between; */
+  padding: 0 20px;
+  align-items: center;
 }
 </style>

@@ -2,20 +2,20 @@
   <v-app id='app'>
     <default-bar style='position: fixed' />
 
-    <default-view style='' />
+    <router-view/>
   </v-app>
 </template>
 
 <script>
 import DefaultBar from './AppBar.vue';
-import DefaultView from './View.vue';
+// import DefaultView from './View.vue';
 import { useUserStore } from '@/store/user';
 
 export default {
   name: 'HomeDefault',
   components: {
     DefaultBar,
-    DefaultView,
+    // DefaultView,
   },
   setup() {
     const userStore = useUserStore();
