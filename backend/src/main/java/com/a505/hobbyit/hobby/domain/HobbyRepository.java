@@ -11,22 +11,22 @@ public interface HobbyRepository extends JpaRepository<Hobby, Long> {
     Boolean existsByName(String name);
 
     @Query(value = "SELECT h "
-            + "FROM Hobby h "
-            + "WHERE h.name = :keyword "
-            + "OR h.category = :keyword"
+            + "FROM hobby h "
+            + "WHERE h.name like %:keyword%"
+            + "OR h.category like %:keyword%"
             + "DESC", nativeQuery = true)
     List<Hobby> findByKeyword(final String keyword);
 
     List<Hobby> findByNameLikeOrCategoryLikeOrderByIdDesc(String name, String category, Pageable pageable);
 
     @Query(value = "SELECT * "
-            + "FROM HOBBY "
+            + "FROM hobby "
             + "ORDER BY RAND() "
             + "LIMIT 10", nativeQuery = true)
     List<Hobby> findPopularHobby();
 
     @Query(value = "SELECT * "
-            + "FROM HOBBY "
+            + "FROM hobby "
             + "ORDER BY reg_dt, RAND() "
             + "LIMIT 10", nativeQuery = true)
     List<Hobby> findFreshHobby();
