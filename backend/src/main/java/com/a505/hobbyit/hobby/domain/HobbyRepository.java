@@ -27,9 +27,9 @@ public interface HobbyRepository extends JpaRepository<Hobby, Long> {
 
     @Query(value = "SELECT * "
             + "FROM hobby "
-            + "ORDER BY reg_dt, RAND() "
-            + "LIMIT 10"
-            + "DESC", nativeQuery = true)
+            + "ORDER BY reg_dt "
+            + "DESC "
+            + "LIMIT 10 ", nativeQuery = true)
     List<Hobby> findFreshHobby();
 
 }
