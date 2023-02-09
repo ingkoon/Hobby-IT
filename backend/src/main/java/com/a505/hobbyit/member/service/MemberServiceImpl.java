@@ -181,6 +181,7 @@ public class MemberServiceImpl implements MemberService {
     public MypageResponse findMypage(final String token, final String nickname) {
 //        System.out.println(securityUtil.getCurrentMemberEmail());
         String id = jwtTokenProvider.getUser(token);
+        memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
 
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(NoSuchMemberException::new);
