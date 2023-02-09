@@ -242,7 +242,7 @@ public class MemberServiceImpl implements MemberService {
         List<MemberHobbyResponse> responses = new ArrayList<>();
         for (HobbyMember hobbyMember : hobbyMembers) {
             Hobby hobby = hobbyRepository.findById(hobbyMember.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
-            MemberHobbyResponse response = new MemberHobbyResponse().of(hobby);
+            MemberHobbyResponse response = new MemberHobbyResponse().of(hobby, hobbyMember);
             responses.add(response);
         }
 

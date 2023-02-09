@@ -1,10 +1,14 @@
 package com.a505.hobbyit.member.dto.response;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -14,11 +18,15 @@ public class MemberHobbyResponse {
     Long id;
     String name;
     String imgUrl;
+    HobbyMemberPrivilege privilege;
+    LocalDateTime regDt;
 
-    public MemberHobbyResponse of(Hobby hobby){
+    public MemberHobbyResponse of(Hobby hobby, HobbyMember hobbyMember){
         return MemberHobbyResponse.builder()
                 .id(hobby.getId())
                 .name(hobby.getName())
-                .imgUrl(hobby.getImgUrl()).build();
+                .imgUrl(hobby.getImgUrl())
+                .privilege(hobbyMember.getPrivilege())
+                .regDt(hobbyMember.getWritedDate()).build();
     }
 }
