@@ -16,7 +16,7 @@
 
     <span v-if='isLoggedIn'>
       <v-icon color='blue-lighten-2' icon='mdi-account-circle' style='margin-right: 10px'></v-icon>
-      <router-link to='/mypage'>
+      <router-link :to="`/mypage/${nickname}`"  >
         <span style='font-family: linefontbold'>{{ userStore.userNickname }}</span>
         님, 안녕하세요!
       </router-link>
@@ -41,7 +41,9 @@ export default {
     return { userStore };
   },
   data() {
-    return {};
+    return {
+      nickname : this.userStore.userNickname,
+    };
   },
   computed: {
     isLoggedIn() {

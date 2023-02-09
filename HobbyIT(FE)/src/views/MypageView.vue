@@ -4,9 +4,9 @@
     <!-- 왼쪽 정보 탭 -->
     <div id="mypageinfo">
       <div id="profileimg">
-        <div id="img"></div>
+        <img id="img" :src="myinfo.imgUrl" cover>
       </div>
-      <div id="title">호빗러버</div>
+      <div id="title">{{ myinfo.nickname }}</div>
       <div id="content">
         hobbyit@hobbyit.com
 
@@ -36,17 +36,17 @@
     <div id="board" style="flex-grow: 1; font-size: 25px">
       Who am I?
       <div style="font-family: linefont">
-        운동, 댄스, 음악, 코딩, 등 다양한 취미생활을 즐기는 MZ 세대 입니다.
-        <br />
-        insta:@@@@@@
+        {{ myinfo.intro }}
       </div>
 
       <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
-      <!-- <MyPageGroup /> -->
-      <MyPage1/>
+      <MyPageGroup v-if="partigroup.length > 0" :hobbylist="partigroup"/>
+      <MyPage1 v-else/>
 
       <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
-      <MyPageGroup />
+      <ParticipateGroup v-if="waitgroup.length > 0" :hobbylist="waitgroup"/>
+      <MyPage2 v-else/>
+
     </div>
   </div>
 </template>
@@ -55,6 +55,11 @@
 import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import MyPageGroup from '@/components/MyPageGroup.vue';
 import MyPage1 from '@/components/no-content/MyPage1.vue';
+import MyPage2 from '@/components/no-content/MyPage2.vue';
+
+import { getOthersMyPage } from '@/api/member';
+import { getParticipatingGroup } from '@/api/member';
+import { getWaitingGroup } from '@/api/member';
 
 export default {
   components: {
@@ -65,8 +70,48 @@ export default {
   data() {
     return {
       gauge: 55.0,
+      myinfo : [], // 회원 정보
+      partigroup : [], //참여중인 그룹 리스트
+      waitgroup : [], // 승인 대기 그룹 리스트
     };
   },
+  methods : {
+    async getInfo(nickname) {
+      try {
+        const {data} = await getOthersMyPage(nickname)
+        this.myinfo = data
+      }
+      catch (err) {
+        console.log(err)
+      }
+    },
+
+    async getParticiGroup(nickname) {
+      try{
+        console.log(nickname)
+        const {data} = await getParticipatingGroup(nickname)
+        this.partigroup = data
+      }
+      catch(err){
+        console.log(err)
+      }
+    },
+
+    async getLoadGroup(){
+      try {
+        const {data} = await getWaitingGroup()
+        this.waitgroup = data
+      }
+      catch {
+        console.log(err)
+      }
+    }
+  },
+  created() {
+    this.getInfo(this.$route.params.nickname)
+    this.getParticiGroup(this.$route.params.nickname)
+    this.getLoadGroup()
+  }
 };
 </script>
 
@@ -85,7 +130,7 @@ export default {
   width: 240px;
   height: 240px;
 
-  background-image: url('/assets/tmpimg.jpeg');
+  /* background-image: url('/assets/tmpimg.jpeg'); */
   background-size: cover;
   border-radius: 50%;
   margin: 2px;

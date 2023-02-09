@@ -75,9 +75,10 @@ const routes = [
     component: () => import('@/layouts/default/MainPage.vue'),
     children: [
       {
-        path: '',
+        path: ':nickname',
         name: 'MyPage',
         component: () => import('@/views/MypageView.vue'),
+
       },
     ],
   },

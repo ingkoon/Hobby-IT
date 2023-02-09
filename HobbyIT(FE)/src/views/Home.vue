@@ -522,6 +522,10 @@ export default {
     this.animate();
   },
 
+  beforeunmounted() {
+    clearInterval(this.tChange);
+  },
+
   methods: {
     marqueeText(count, element, direction){
       if (count > element.scrollwidth / 2) {
@@ -601,7 +605,10 @@ export default {
 
     tChange() {
       this.c = ++this.c%this.txtlist.length;
-      document.getElementById("txtchange").innerHTML = this.txtlist[this.c];
+      let txt =  document.getElementById("txtchange")
+      if (txt !== null){
+        txt.innerHTML = this.txtlist[this.c];
+      }
     }
   },
 };

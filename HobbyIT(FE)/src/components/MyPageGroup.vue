@@ -21,9 +21,8 @@
       </v-card>
     </v-slide-group-item>
 
-    <v-slide-group-item v-for="n in 7" :key="n">
-      <MyPageGroupItem />
-    </v-slide-group-item>
+    
+    <MyPageGroupItem v-for="lst in hobbylist" :lst="lst"/>
   </v-slide-group>
 </template>
 
@@ -41,6 +40,10 @@ export default {
     return {
       creategroupmodal: false,
     };
+  },
+
+  props : {
+    hobbylist : Object
   },
 
   methods: {
