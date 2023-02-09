@@ -230,9 +230,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberHobbyResponse> getHobbyList(final String token) {
+    public List<MemberHobbyResponse> getHobbyList(final String token, String nickname) {
         String id = jwtTokenProvider.getUser(token);
-        Member member = memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
+        memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
+
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(NoSuchMemberException::new);
 
         List<HobbyMember> hobbyMembers = member.getHobbyMembers();
 
