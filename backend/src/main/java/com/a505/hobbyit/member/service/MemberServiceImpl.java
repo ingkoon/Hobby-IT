@@ -212,6 +212,9 @@ public class MemberServiceImpl implements MemberService {
     public void update(final String token, MemberMypageRequest request) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
+        if(memberRepository.existsByNickname(request.getNickname())) {
+            throw new DuplicatedMemberException();
+        }
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
     }
