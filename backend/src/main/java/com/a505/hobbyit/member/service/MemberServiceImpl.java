@@ -181,6 +181,7 @@ public class MemberServiceImpl implements MemberService {
     public MypageResponse findMypage(final String token, final String nickname) {
 //        System.out.println(securityUtil.getCurrentMemberEmail());
         String id = jwtTokenProvider.getUser(token);
+        memberRepository.findById(Long.parseLong(id)).orElseThrow(NoSuchMemberException::new);
 
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(NoSuchMemberException::new);
@@ -212,6 +213,9 @@ public class MemberServiceImpl implements MemberService {
     public void update(final String token, MemberMypageRequest request) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
+        if(memberRepository.existsByNickname(request.getNickname())) {
+            throw new DuplicatedMemberException("중복된 닉네임입니다");
+        }
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
     }
@@ -221,6 +225,7 @@ public class MemberServiceImpl implements MemberService {
     public void delete(final String token) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
+        member.checkWaiting();
         member.deleteMember();
     }
 
