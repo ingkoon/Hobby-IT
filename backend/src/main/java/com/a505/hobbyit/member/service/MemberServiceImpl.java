@@ -214,7 +214,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
         if(memberRepository.existsByNickname(request.getNickname())) {
-            throw new DuplicatedMemberException();
+            throw new DuplicatedMemberException("중복된 닉네임입니다");
         }
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
