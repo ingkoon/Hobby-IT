@@ -2,7 +2,6 @@ package com.a505.hobbyit.jwt;
 
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
-import com.a505.hobbyit.security.SecurityUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -16,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -99,6 +99,8 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
+
+
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         log.info(token);
@@ -135,8 +137,8 @@ public class JwtTokenProvider {
     }
 
     public String getUser(String accessToken) {
-        log.info("===============" + accessToken + "===================");
-        String token = accessToken.split(" ")[1]; // 8번 째 부터 토큰
+        checkLength(accessToken);
+        String token = accessToken.substring(7);
 
         try {
             return Jwts.parserBuilder()
@@ -153,5 +155,9 @@ public class JwtTokenProvider {
             log.info("JWT claims string is empty.", e);
         }
         return null;
+    }
+
+    public void checkLength(String token){
+        if(token.length() < 7) throw new JwtException("올바르지 않은 토큰 유형입니다.");
     }
 }

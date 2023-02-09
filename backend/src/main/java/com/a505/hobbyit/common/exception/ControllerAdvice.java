@@ -15,6 +15,7 @@ import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -72,5 +73,16 @@ public class ControllerAdvice {
     public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler({
+            JwtException.class,
+            ExpiredJwtException.class,
+            UnsupportedJwtException.class,
+            MalformedJwtException.class,
+            SignatureException.class})
+    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }
