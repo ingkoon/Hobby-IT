@@ -2,46 +2,46 @@
   <div>
     <v-container>
       <v-row>
-        <v-col id="background" :style="{ height: computedHeight + 'px' }"></v-col>
-        <v-col id="leftSidebar" :style="{ height: computedHeight + 'px' }">
-          <v-icon icon="mdi-microphonea" size="36"></v-icon>
-          <v-icon v-if="isAudioEnabled" color="white" icon="mdi-microphone" size="36" @click="handleAudio"></v-icon>
-          <v-icon v-else color="white" icon="mdi-microphone-off" size="36" @click="handleAudio"></v-icon>
-          <v-icon v-if="isVideoEnabled" color="white" icon="mdi-video" size="36" @click="handleMyVideo"></v-icon>
-          <v-icon v-else color="white" icon="mdi-video-off" size="36" @click="handleMyVideo"></v-icon>
+        <v-col id='background' :style="{ height: computedHeight + 'px' }"></v-col>
+        <v-col id='leftSidebar' :style="{ height: computedHeight + 'px' }">
+          <v-icon icon='mdi-microphonea' size='36'></v-icon>
+          <v-icon v-if='isAudioEnabled' color='white' icon='mdi-microphone' size='36' @click='handleAudio'></v-icon>
+          <v-icon v-else color='white' icon='mdi-microphone-off' size='36' @click='handleAudio'></v-icon>
+          <v-icon v-if='isVideoEnabled' color='white' icon='mdi-video' size='36' @click='handleMyVideo'></v-icon>
+          <v-icon v-else color='white' icon='mdi-video-off' size='36' @click='handleMyVideo'></v-icon>
           <v-icon
-            v-if="isScreenShareEnabled"
-            color="white"
-            icon="mdi-monitor-off"
-            size="36"
-            @click="handleScreenShare"
+            v-if='isScreenShareEnabled'
+            color='white'
+            icon='mdi-monitor-off'
+            size='36'
+            @click='handleScreenShare'
           ></v-icon>
-          <v-icon v-else color="white" icon="mdi-monitor" size="36" @click="handleScreenShare"></v-icon>
-          <v-btn icon="mdi-phone-off" style="background-color: red; color: white" @click="handleClickOff"></v-btn>
-          <v-icon color="white" icon="mdi-pencil-box" size="36" @click="handlePaint"></v-icon>
-          <v-icon color="white" icon="mdi-cog-outline" size="36" @click=""></v-icon>
-          <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
-          <v-icon icon="mdi-microphonea" size="24"></v-icon>
+          <v-icon v-else color='white' icon='mdi-monitor' size='36' @click='handleScreenShare'></v-icon>
+          <v-btn icon='mdi-phone-off' style='background-color: red; color: white' @click='handleClickOff'></v-btn>
+          <v-icon color='white' icon='mdi-pencil-box' size='36' @click='handlePaint'></v-icon>
+          <v-icon color='white' icon='mdi-cog-outline' size='36' @click=''></v-icon>
+          <v-icon color='white' icon='mdi-creation' size='36'></v-icon>
+          <v-icon icon='mdi-microphonea' size='24'></v-icon>
         </v-col>
-        <v-row id="circle1" />
-        <v-row id="circle2" />
-        <v-col id="videoList" :style="{ height: computedHeight + 'px' }">
-          <v-row style="margin: 0; height: 126px">
-            <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
+        <v-row id='circle1' />
+        <v-row id='circle2' />
+        <v-col id='videoList' :style="{ height: computedHeight + 'px' }">
+          <v-row style='margin: 0; height: 126px'>
+            <h1 id='title' @click='myCustomMethod'>John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row id="video-container" style="height: 757px; margin: 0; align-items: center; justify-content: center">
-            <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
+          <v-row id='video-container' style='height: 757px; margin: 0; align-items: center; justify-content: center'>
+            <user-video v-for='sub in subscribers' :key='sub.stream.connection.connectionId' :stream-manager='sub'>
               <!--            추가 바람-->
             </user-video>
           </v-row>
         </v-col>
-        <v-col id="rightSidebar" :style="{ height: computedHeight + 'px' }">
-          <VideoMessage @handle-message="sendMessage" />
+        <v-col id='rightSidebar' :style="{ height: computedHeight + 'px' }">
+          <VideoMessage @handle-message='sendMessage' />
         </v-col>
       </v-row>
 
-      <v-dialog v-model="paint">
-        <SharedPaint :canvas-data="canvasData" @send-canvas="sendCanvas" />
+      <v-dialog v-model='paint'>
+        <SharedPaint :canvas-data='canvasData' @send-canvas='sendCanvas' />
       </v-dialog>
     </v-container>
   </div>
@@ -58,7 +58,9 @@ import SharedPaint from '@/components/VideoChat/SharedPaint.vue';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
-const APPLICATION_SERVER_URL = VITE_OPENVIDU_SERVER_URL ? VITE_OPENVIDU_SERVER_URL : 'http://localhost:5000/';
+
+const APPLICATION_SERVER_URL = VITE_OPENVIDU_SERVER_URL;
+// ? VITE_OPENVIDU_SERVER_URL : 'http://localhost:5000/';
 export default {
   name: 'VideoChat',
   components: { SharedPaint, VideoMessage, UserVideo },
@@ -120,7 +122,7 @@ export default {
     },
   },
   watch: {
-    baseUnit: function (newVal, oldVal) {
+    baseUnit: function(newVal, oldVal) {
       this.appStore.baseUnit = newVal;
     },
   },

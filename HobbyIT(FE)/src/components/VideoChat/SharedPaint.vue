@@ -1,72 +1,72 @@
 <!--suppress ALL -->
 
 <template>
-  <div style="align-self: center">
-    <v-card style="width: 650px; height: 500px; background-color: #0e0f28">
-      <div style="color: white; display: flex; justify-content: space-between; margin: 10px 5px">
-        <span id="groupname">To. John, 나 여행가고싶어</span>
-        <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
+  <div style='align-self: center'>
+    <v-card style='width: 650px; height: 500px; background-color: #0e0f28'>
+      <div style='color: white; display: flex; justify-content: space-between; margin: 10px 5px'>
+        <span id='groupname'>To. John, 나 여행가고싶어</span>
+        <v-icon icon='mdi-close' size='small' @click='closemodal'></v-icon>
       </div>
-      <div style="display: flex">
-        <canvas id="canvas" class="new-cursor" height="500" width="500"></canvas>
-        <div style="margin-left: 20px; display: flex">
-          <div style="display: flex; flex-direction: column">
-            <div style="color: white; margin-bottom: 5px">
+      <div style='display: flex'>
+        <canvas id='canvas' class='new-cursor' height='500' width='500'></canvas>
+        <div style='margin-left: 20px; display: flex'>
+          <div style='display: flex; flex-direction: column'>
+            <div style='color: white; margin-bottom: 5px'>
               굵기 :
               <input
-                id="input"
-                color="white"
-                max="100"
-                min="1"
-                style="color: white; border: 1px solid white"
-                type="number"
+                id='input'
+                color='white'
+                max='100'
+                min='1'
+                style='color: white; border: 1px solid white'
+                type='number'
               />
             </div>
             <button
-              style="
+              style='
                 background-color: red;
                 width: 50px;
                 height: 50px;
                 border: solid 1px white;
                 border-radius: 50px;
                 margin: 5px;
-              "
+              '
               @click="colorChange('#ff0000')"
             ></button>
             <button
-              style="
+              style='
                 background-color: blue;
                 width: 50px;
                 height: 50px;
                 border: solid 1px white;
                 border-radius: 50px;
                 margin: 5px;
-              "
+              '
               @click="colorChange('#000AFF')"
             ></button>
             <button
-              style="
+              style='
                 background-color: #ee49fd;
                 width: 50px;
                 height: 50px;
                 border: solid 1px white;
                 border-radius: 50px;
                 margin: 5px;
-              "
+              '
               @click="colorChange('#EE49FD')"
             ></button>
             <button
-              style="
+              style='
                 background-color: black;
                 width: 50px;
                 height: 50px;
                 border: solid 1px white;
                 border-radius: 50px;
                 margin: 5px;
-              "
+              '
               @click="colorChange('#000000')"
             ></button>
-            <button id="eraser"></button>
+            <button id='eraser'></button>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default {
       const canvas = this.canvas;
       const ctx = this.ctx;
       const image = new Image();
-      image.onload = function () {
+      image.onload = function() {
         ctx.drawImage(image, 0, 0);
       };
       image.src = `data:image/png;base64,${newData}`;
@@ -131,12 +131,13 @@ export default {
     input.value = 3;
     ctx.lineWidth = 3;
 
-    input.oninput = function () {
+    input.oninput = function() {
       ctx.lineWidth = input.value;
     };
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     const tempThis = this;
+
     function listener(e) {
       switch (e.type) {
         case 'mousedown':
@@ -169,6 +170,7 @@ export default {
       pos.y = e.offsetY;
       ctx.moveTo(pos.x, pos.y);
     }
+
     function touchStart(e) {
       pos.drawable = true;
       ctx.beginPath();
@@ -176,12 +178,14 @@ export default {
       pos.y = e.touches[0].pageY - rect.top;
       ctx.moveTo(pos.x, pos.y);
     }
+
     function draw(e) {
       ctx.lineTo(e.offsetX, e.offsetY);
       pos.x = e.offsetX;
       pos.y = e.offsetY;
       ctx.stroke();
     }
+
     function touch(e) {
       ctx.lineTo(e.touches[0].pageX - rect.left, e.touches[0].pageY - rect.top);
       pos.x = e.touches[0].pageX - rect.left;
@@ -221,9 +225,8 @@ export default {
 
 <style scoped>
 .new-cursor {
-  cursor: url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>")
-      0 25,
-    auto;
+  cursor: url("data:image/svg+xml;urf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100'><text y='50%'>✏️</text></svg>") 0 25,
+  auto;
 }
 
 #groupname {
@@ -234,7 +237,7 @@ export default {
 }
 
 #eraser {
-  background: url('../assets/eraser.png') no-repeat;
+  background: url('/assets/eraser.png') no-repeat;
   width: 60px;
   height: 107px;
   background-size: cover;
