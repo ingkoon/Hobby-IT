@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "hobby_postit")
 public class HobbyPostit {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -31,10 +34,10 @@ public class HobbyPostit {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String imgUrl;
 
-    @Column(name = "reg_dt", nullable = false)
-    private LocalDateTime writedDate;
-
+    @CreatedDate
+    @Column(name = "reg_dt", nullable = false, updatable = false)
+    private LocalDateTime regDt;
 }

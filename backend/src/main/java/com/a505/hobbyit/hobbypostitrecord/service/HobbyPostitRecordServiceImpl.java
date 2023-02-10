@@ -1,0 +1,47 @@
+package com.a505.hobbyit.hobbypostitrecord.service;
+
+import com.a505.hobbyit.hobby.domain.Hobby;
+import com.a505.hobbyit.hobby.domain.HobbyRepository;
+import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
+import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
+import com.a505.hobbyit.hobbypostitrecord.domain.HobbyPostitRecord;
+import com.a505.hobbyit.hobbypostitrecord.domain.HobbyPostitRecordRepository;
+import com.a505.hobbyit.member.domain.Member;
+import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Transactional(readOnly = true)
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class HobbyPostitRecordServiceImpl implements HobbyPostitRecordService {
+
+    private final HobbyPostitRecordRepository hobbyPostitRecordRepository;
+    private final MemberRepository memberRepository;
+    private final HobbyRepository hobbyRepository;
+    private final HobbyMemberRepository hobbyMemberRepository;
+
+
+    @Override
+    public List<Integer> findHobbyPostitRecords(Long memberId, Long hobbyId, int year, int month) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
+        Hobby hobby = hobbyRepository.findById(hobbyId)
+                .orElseThrow(() -> new NoSuchHobbyException("소모임 정보 오류"));
+        hobbyMemberRepository.findByMemberAndHobby(member, hobby)
+                .orElseThrow(() -> new NoSuchHobbyMemberException("소모임 가입 정보 오류"));
+
+        return hobbyPostitRecordRepository
+                .findByHobbyAndYearAndMonth(hobby, year, month)
+                .stream()
+                .map(HobbyPostitRecord::getDay)
+                .toList();
+    }
+}
