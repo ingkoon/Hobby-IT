@@ -85,7 +85,7 @@
             </div>
             <div style="font-size: 35px; text-align: end; line-height: 42px">Something<br />on your<br />mind?</div>
             <div style="text-align: end">
-              <v-btn icon="mdi-send-outline" style="background-color: pink; transform: rotate(-45deg)"></v-btn>
+              <v-btn @click="sendcanvas" icon="mdi-send-outline" style="background-color: pink; transform: rotate(-45deg)"></v-btn>
             </div>
           </div>
         </div>
@@ -98,6 +98,8 @@
 </template>
 
 <script>
+import {postGroupVisitorBook} from '@/api/hobby';
+
 export default {
   data() {
     return {
@@ -242,6 +244,41 @@ export default {
     clearAll() {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     },
+    // 방명록 전송
+    sendcanvas() {
+      let dataUrl = this.canvas.toDataURL('image/png');
+      let byteString = window.atob(dataUrl.split(',')[1])
+      var array = [];
+      for( let i=0; i< byteString.length; i++){
+        array.push(byteString.charCodeAt(i))
+      }
+      
+      var myBlob = new Blob([new Uint8Array(array)], {type:'image/png'})
+      console.log(myBlob);
+      
+      // Blob -> File 처리
+      let file = new File([myBlob], "blobtofile.png")
+
+      let formData = new FormData()
+      formData.append("file", file)
+
+      console.log(formData.get('file'))
+
+      this.send(formData)
+    },
+
+    async send(file){
+      try {
+        const inputdata = {
+          canvas : file
+        }
+        const { data } = await postGroupVisitorBook(14, inputdata)
+        console.log(data)
+      }
+      catch(e){
+        console.log(e)
+      }
+    }
   },
 };
 </script>
