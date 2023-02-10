@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ArticleRequest {
 
-    @Schema(description = "게시글 글머리", example = "모집")
+    @Schema(description = "게시글 글머리", example = "RECRUITMENT OR MEETUP")
     @NotNull(message = "글머리는 필수 입력 사항입니다.")
     private ArticleHeader header;
 
