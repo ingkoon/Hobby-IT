@@ -2,7 +2,7 @@
   <v-app id='app'>
     <default-bar style='position: fixed' />
 
-    <router-view/>
+    <router-view />
   </v-app>
 </template>
 
