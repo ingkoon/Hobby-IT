@@ -10,7 +10,7 @@
       <div id="content">
         hobbyit@hobbyit.com
 
-        <div style="margin-top: 20px">오늘의 획득량 : 20/30</div>
+        <div id="todayexp" style="margin-top: 20px">오늘의 획득량 : 20/30</div>
         <div style="margin: 10px 0">진척도 보상</div>
 
         <v-progress-linear
@@ -34,7 +34,24 @@
     </div>
     <!-- 오른쪽 게시판 탭 -->
     <div id="board" style="flex-grow: 1; font-size: 25px">
-      Who am I?
+      <div style="display:flex; justify-content: space-between;">
+        <span>
+          Who am I?
+          <span id="introbtn">
+            <v-icon icon="mdi-pencil" size="xs"/>
+          </span>
+        </span>
+
+        <span style="font-family: linefont; font-size: 13px;">
+          <span id="modiInfo" style="margin-right: 10px;">회원정보수정</span>
+          <span id="deleteInfo" @click="opendeleteinfo">
+            회원 탈퇴
+          </span>
+        </span>
+      </div>
+      <v-dialog v-model="deleteinfomodal">
+        <delete-modal @close="closedeleteinfo" @delete="memberDelete"/>
+      </v-dialog> 
       <div style="font-family: linefont">
         {{ myinfo.intro }}
       </div>
@@ -48,6 +65,8 @@
       <MyPage2 v-else/>
 
     </div>
+
+    
   </div>
 </template>
 
@@ -56,16 +75,24 @@ import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import MyPageGroup from '@/components/MyPageGroup.vue';
 import MyPage1 from '@/components/no-content/MyPage1.vue';
 import MyPage2 from '@/components/no-content/MyPage2.vue';
+import deleteModal from '@/components/modals/Resign.vue'
 
 import { getOthersMyPage } from '@/api/member';
 import { getParticipatingGroup } from '@/api/member';
-import { getWaitingGroup } from '@/api/member';
+import { getWaitingGroup, memberDelete } from '@/api/member';
+
+import { useUserStore } from '@/store/user'
 
 export default {
+  setup(){
+    const userStore = useUserStore();
+    return {userStore}
+  },
   components: {
     ParticipateGroup,
     MyPageGroup,
     MyPage1,
+    deleteModal,
   },
   data() {
     return {
@@ -73,6 +100,7 @@ export default {
       myinfo : [], // 회원 정보
       partigroup : [], //참여중인 그룹 리스트
       waitgroup : [], // 승인 대기 그룹 리스트
+      deleteinfomodal : false, // 회원 탈퇴 모달
     };
   },
   methods : {
@@ -105,12 +133,45 @@ export default {
       catch {
         console.log(err)
       }
-    }
+    },
+
+    setModify(nickname) {
+      const modiIntro = document.getElementById('introbtn')
+      const todayexp = document.getElementById('todayexp')
+      const modiInfo = document.getElementById('modiInfo')
+      const deleteInfo = document.getElementById('deleteInfo')
+      if(this.userStore.userNickname !== nickname) {
+        modiIntro.style.visibility = 'hidden'
+        todayexp.style.visibility = 'hidden'
+        modiInfo.style.visibility = 'hidden'
+        deleteInfo.style.visibility = 'hidden'
+      }
+    },
+
+    async memberDelete(){
+      try {
+        const {data} = await memberDelete()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    closedeleteinfo() {
+      this.deleteinfomodal = false;
+    },
+    opendeleteinfo() {
+      this.deleteinfomodal = true;
+    },
   },
   created() {
     this.getInfo(this.$route.params.nickname)
     this.getParticiGroup(this.$route.params.nickname)
     this.getLoadGroup()
+
+  },
+  mounted() {
+    this.setModify(this.$route.params.nickname)
   }
 };
 </script>

@@ -57,7 +57,7 @@ function getParticipatingGroup(nickname) {
 
 // 11.대기중인 모임 리스트 조회
 function getWaitingGroup() {
-  return instance.get('/hobby');
+  return instance.get('/hobby/pending');
 }
 
 export {
