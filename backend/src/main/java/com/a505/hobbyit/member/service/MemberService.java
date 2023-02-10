@@ -12,6 +12,8 @@ import java.util.List;
 public interface MemberService {
     void signUp(MemberSignupRequest request);
 
+    void updateSnsMember(String email, String imgUrl);
+
     MemberResponse login(MemberLoginRequest request);
 
     MemberResponse reissue(MemberReissueRequest request);
@@ -25,7 +27,7 @@ public interface MemberService {
     void update(final String token, MemberMypageRequest request);
 
     void delete(final String token);
-    
+
     List<MemberHobbyResponse> getHobbyList(final String token, String nickname);
 
     List<MemberPendingResponse> getPendingList(final String token);

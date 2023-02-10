@@ -3,6 +3,7 @@ package com.a505.hobbyit.member.domain;
 import com.a505.hobbyit.common.BaseEntity;
 import com.a505.hobbyit.member.dto.request.MemberMypageRequest;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
+import com.a505.hobbyit.member.enums.MemberIsSns;
 import com.a505.hobbyit.member.enums.MemberState;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.domain.Pending;
@@ -60,6 +61,10 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private LocalDateTime resdReqDt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 5)
+    private MemberIsSns isSns;
+
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> privilege;
@@ -100,7 +105,7 @@ public class Member extends BaseEntity implements UserDetails {
     }
 
     @Builder
-    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, Set<String> privilege) {
+    public Member(Long id, String email, String name, String nickname, String password, String intro, int ownedHobbyCnt, int point, String imgUrl, LocalDateTime resdReqDt, MemberIsSns isSns, MemberState state, Set<String> privilege) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -110,9 +115,15 @@ public class Member extends BaseEntity implements UserDetails {
         this.ownedHobbyCnt = ownedHobbyCnt;
         this.point = point;
         this.imgUrl = imgUrl;
-        this.state = MemberState.ACTIVE;
+        this.isSns = isSns;
+        this.state = state;
         this.resdReqDt = resdReqDt;
         this.privilege = privilege;
+    }
+
+    public void updateSnsMember(String imgUrl) {
+        this.isSns = MemberIsSns.TRUE;
+        this.imgUrl = imgUrl;
     }
 
     public void resetPassword(String password) {
@@ -132,7 +143,7 @@ public class Member extends BaseEntity implements UserDetails {
     }
 
     public void checkWaiting() {
-        if(this.state != MemberState.ACTIVE) {
+        if (this.state != MemberState.ACTIVE) {
             throw new NoSuchMemberException("탈퇴할 수 없는 회원입니다.");
         }
     }
