@@ -11,19 +11,16 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberState;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -91,8 +88,18 @@ public class HobbyServiceImpl implements HobbyService{
     }
 
     @Override
-    public List<HobbyResponse> findByKeyword(String keyword, Pageable pageable) {
-        List<Hobby> hobbies = hobbyRepository.findByNameLikeOrCategoryLikeOrderByIdDesc(keyword, keyword, pageable);
+    public List<HobbyResponse> searchByName(String keyword, Pageable pageale) {
+        List<Hobby> hobbies = hobbyRepository.findHobbiesByNameContainingOrderByCurrentMemberCountDesc(keyword, pageale);
+        List<HobbyResponse> responses = new ArrayList<>();
+        for (Hobby hobby : hobbies) {
+            responses.add(new HobbyResponse().of(hobby));
+        }
+        return responses;
+    }
+
+    @Override
+    public List<HobbyResponse> searchByCategory(String keyword, Pageable pageable) {
+        List<Hobby> hobbies = hobbyRepository.findHobbiesByCategoryContainingOrderByCurrentMemberCountDesc(keyword, pageable);
         List<HobbyResponse> responses = new ArrayList<>();
         for (Hobby hobby : hobbies) {
             responses.add(new HobbyResponse().of(hobby));

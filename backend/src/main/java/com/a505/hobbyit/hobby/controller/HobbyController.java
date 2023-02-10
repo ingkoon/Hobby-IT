@@ -2,7 +2,6 @@ package com.a505.hobbyit.hobby.controller;
 
 import com.a505.hobbyit.hobby.dto.*;
 import com.a505.hobbyit.hobby.service.HobbyService;
-import com.a505.hobbyit.member.domain.Member;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,9 +48,14 @@ public class HobbyController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<List<HobbyResponse>> searchHobbies(@RequestParam(value = "keyWord") String keyWord, Pageable pageable) {
-        List<HobbyResponse> responses = hobbyService.findByKeyword(keyWord, pageable);
+    @GetMapping(value = "/search/category")
+    public ResponseEntity<List<HobbyResponse>> searchHobbiesByCategory(@RequestParam(value = "keyword") String keyWord, Pageable pageable) {
+        List<HobbyResponse> responses = hobbyService.searchByCategory(keyWord, pageable);
+        return ResponseEntity.ok(responses);
+    }
+    @GetMapping(value = "/search/name")
+    public ResponseEntity<List<HobbyResponse>> searchHobbiesByName(@RequestParam(value = "keyword") String keyWord, Pageable pageable) {
+        List<HobbyResponse> responses = hobbyService.searchByName(keyWord, pageable);
         return ResponseEntity.ok(responses);
     }
 

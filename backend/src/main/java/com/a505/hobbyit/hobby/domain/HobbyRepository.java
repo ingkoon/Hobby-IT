@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobby.domain;
 
+import com.a505.hobbyit.hobby.dto.HobbyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,9 @@ public interface HobbyRepository extends JpaRepository<Hobby, Long> {
             + "DESC", nativeQuery = true)
     List<Hobby> findByKeyword(final String keyword);
 
+    List<Hobby> findHobbiesByCategoryContainingOrderByCurrentMemberCountDesc(String keyword, Pageable pageable);
+
+    List<Hobby> findHobbiesByNameContainingOrderByCurrentMemberCountDesc(final String keyword, Pageable pageable);
     List<Hobby> findByNameLikeOrCategoryLikeOrderByIdDesc(String name, String category, Pageable pageable);
 
     @Query(value = "SELECT * "
