@@ -4,18 +4,27 @@ import com.a505.hobbyit.member.dto.request.MemberLoginRequest;
 import com.a505.hobbyit.member.dto.request.MemberSignupRequest;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.service.MemberService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/oauth")
 public class OAuthController {
+
     private final OAuthService oAuthService;
+
     private final MemberService memberService;
+
+    @GetMapping("/kakao/login")
+    public void redirectKakao(HttpServletResponse response) throws IOException {
+        response.sendRedirect(oAuthService.redirectKakao());
+    }
 
     @ResponseBody
     @GetMapping(value = "/kakao")
