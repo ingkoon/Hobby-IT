@@ -23,7 +23,7 @@ public class ArticleResponse {
     @Schema(description = "게시글 작성자 닉네임", example = "첫블루안주면던짐")
     private String nickname;
 
-    @Schema(description = "게시글 글머리", example = "교류")
+    @Schema(description = "게시글 글머리", example = "RECRUITMENT OR MEETUP")
     private ArticleHeader header;
 
     @Schema(description = "게시글 제목", example = "'여행 가고 싶어' 회원 모집합니다.")
