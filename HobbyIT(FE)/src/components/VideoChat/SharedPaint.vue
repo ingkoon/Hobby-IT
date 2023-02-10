@@ -8,7 +8,7 @@
         <v-icon icon='mdi-close' size='small' @click='closemodal'></v-icon>
       </div>
       <div style='display: flex'>
-        <canvas id='canvas' class='new-cursor' height='500' width='500'></canvas>
+        <canvas id='canvas' class='new-cursor' height='500' style='background-color: white' width='500'></canvas>
         <div style='margin-left: 20px; display: flex'>
           <div style='display: flex; flex-direction: column'>
             <div style='color: white; margin-bottom: 5px'>
@@ -84,8 +84,9 @@ export default {
       ctx: '',
       canvas: '',
       date: '',
-      background: '',
-      bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
+      temp_pencil_color: null,
+      // background: '',
+      // bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
     };
   },
   watch: {
@@ -93,6 +94,7 @@ export default {
       const canvas = this.canvas;
       const ctx = this.ctx;
       const image = new Image();
+      console.log('image만들자');
       image.onload = function() {
         ctx.drawImage(image, 0, 0);
       };
@@ -108,15 +110,15 @@ export default {
 
     var canvas = document.getElementById('canvas');
 
-    this.background = this.bglist[Math.floor(Math.random() * 4)];
 
-    canvas.setAttribute('style', 'background-color:' + this.background + ';');
-    var background = this.background;
+    // canvas.setAttribute('style', 'background-color:' + this.background + ';');
+
     var ctx = canvas.getContext('2d');
     this.ctx = ctx;
     this.canvas = canvas;
     var rect = canvas.getBoundingClientRect(); // 터치 스크린
-
+    var temp_this = this;
+    console.log(temp_this, this, 'hahahahahah');
     var eraser = document.getElementById('eraser');
 
     eraser.addEventListener('mousedown', mouseclick);
@@ -146,6 +148,7 @@ export default {
           if (pos.drawable) draw(e);
           break;
         case 'mouseout':
+          break;
         case 'mouseup':
           drawEnd();
           break;
@@ -200,11 +203,16 @@ export default {
     }
 
     function mouseclick() {
-      ctx.strokeStyle = background;
+      
+      ctx.strokeStyle = 'white';
+
     }
 
     function mousedouble() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'black';
+      console.log(canvas.toDataURL());
+      tempThis.$emit('sendCanvas', canvas.toDataURL().split(',')[1]);
     }
   },
   methods: {

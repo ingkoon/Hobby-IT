@@ -82,7 +82,7 @@ export default {
       subscribers: [],
       // Join form
       mySessionId: this.$route.params.id,
-      myUserName: this.userStore.getUserNickname,
+      myUserName: this.userStore.getUserNickname ? this.userStore.getUserNickname : Math.random(),
       isAudioEnabled: true,
       isVideoEnabled: true,
       isScreenShareEnabled: false,
@@ -225,6 +225,7 @@ export default {
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
+      this.OV.enableProdMode();
       // --- 2) Init a session ---
       this.session = this.OV.initSession();
       // --- 3) Specify the actions when events take place in the session ---
@@ -261,7 +262,10 @@ export default {
       });
       this.session.on('signal:canvas', event => {
         const from = JSON.parse(event.from.data).clientData;
-        if (JSON.parse(event.from.data).clientData === this.myUserName) {
+        console.log(event);
+        console.log('haha');
+        console.log(from);
+        if (from === this.myUserName) {
           return false;
         }
         this.canvasData = event.data;
