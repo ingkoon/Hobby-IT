@@ -10,8 +10,10 @@ import com.a505.hobbyit.member.dto.response.MemberHobbyResponse;
 import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
+import com.a505.hobbyit.member.enums.MemberIsSns;
 import com.a505.hobbyit.member.enums.MemberPrivilege;
 import com.a505.hobbyit.jwt.JwtTokenProvider;
+import com.a505.hobbyit.member.enums.MemberState;
 import com.a505.hobbyit.member.exception.*;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.pending.domain.Pending;
@@ -62,9 +64,18 @@ public class MemberServiceImpl implements MemberService {
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .isSns(MemberIsSns.FALSE)
+                .state(MemberState.ACTIVE)
                 .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
                 .build();
         memberRepository.save(member);
+    }
+
+    @Transactional
+    @Override
+    public void updateSnsMember(String email, String imgUrl) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(NoSuchMemberException::new);
+        member.updateSnsMember(imgUrl);
     }
 
     @Override
@@ -213,7 +224,7 @@ public class MemberServiceImpl implements MemberService {
     public void update(final String token, MemberMypageRequest request) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
-        if(memberRepository.existsByNickname(request.getNickname())) {
+        if (memberRepository.existsByNickname(request.getNickname())) {
             throw new DuplicatedMemberException("중복된 닉네임입니다");
         }
         member.updateMember(request);
