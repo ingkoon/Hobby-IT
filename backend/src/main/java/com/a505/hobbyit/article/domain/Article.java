@@ -30,19 +30,19 @@ public class Article extends BaseEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private ArticleHeader header;
 
     @NotNull
-    @Column(nullable = false, length = 128)
+    @Column(length = 128)
     private String title;
 
     @NotNull
-    @Column(nullable = false, length = 512)
+    @Column(length = 512)
     private String content;
 
     @NotNull
-    @Column(nullable = false)
+    @Column
     private int hit;
 
     public void updateArticle(ArticleRequest articleRequest) {

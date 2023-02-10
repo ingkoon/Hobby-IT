@@ -17,8 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 
 @Tag(name = "Article API", description = "홍보 게시판 API")
 @Slf4j
@@ -41,10 +42,10 @@ public class ArticleController {
     })
     @PostMapping("/{hobby-id}")
     ResponseEntity<Void> createArticle(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "hobby-id") @Parameter(description = "홍보할 모임 ID") Long hobbyId,
             @RequestBody @Parameter(description = "게시할 글의 정보") ArticleRequest articleRequest) {
-        articleService.save(token, hobbyId, articleRequest);
+        articleService.save(Long.parseLong(userDetails.getUsername()), hobbyId, articleRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -90,10 +91,10 @@ public class ArticleController {
     })
     @PutMapping("/{article-id}")
     ResponseEntity<Void> updateArticle(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "article-id") @Parameter(description = "수정할 글의 id") Long articleId,
             @RequestBody @Parameter(description = "수정할 글의 정보") ArticleRequest articleRequest) {
-        articleService.update(token, articleId, articleRequest);
+        articleService.update(Long.parseLong(userDetails.getUsername()), articleId, articleRequest);
         return ResponseEntity.noContent().build();
     }
 
@@ -109,9 +110,9 @@ public class ArticleController {
     })
     @DeleteMapping("/{article-id}")
     ResponseEntity<Void> deleteArticle(
-            @RequestHeader("Authorization") final String token,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "article-id") @Parameter(description = "삭제할 글의 id") Long articleId) {
-        articleService.deleteById(token, articleId);
+        articleService.deleteById(Long.parseLong(userDetails.getUsername()), articleId);
         return ResponseEntity.noContent().build();
     }
 }
