@@ -114,6 +114,13 @@
             <span style="color: #8947e2">#HOBBY’IT</span> #스터디 #MUSIC #외국어 #coding
           </div>
         </div>
+
+        <div class="marquee" style="--duration: 100s">
+          <div class="marquee group">
+
+          </div>
+
+        </div>
       </div>
 
       <!-- <div style="position: absolute; width: 100%; height: 221px; left: 0px; top: 1099px; background: #000211;"></div> -->
@@ -295,9 +302,17 @@
 
         <!-- 모달테스트버튼 -->
         <!-- <div id="testy">
-          <v-btn style="background-color: red;">test
+          <v-btn style="background-color: red;">test-memberupdate
             <v-dialog v-model="memupdate" activator="parent">
               <member-update @closememupdate="closememupdate" />
+            </v-dialog>
+          </v-btn>
+        </div> -->
+
+        <!-- <div id="testy">
+          <v-btn style="background-color: red;">test-updatehobby
+            <v-dialog v-model="hobupdate" activator="parent">
+              <update-hobby @closehobupdate="closehobupdate" />
             </v-dialog>
           </v-btn>
         </div> -->
@@ -504,16 +519,19 @@
 
 <script>
 // import MemberUpdate from "../components/modals/MemberUpdate.vue";
+// import UpdateHobby from "../components/modals/UpdateHobby.vue";
 
 export default {
   components:{
     // MemberUpdate,
+    // UpdateHobby,
   },
   data() {
     return{
       c: -1,
       txtlist: ["스터디","여 행","운 동","게 임", "맛집탐방", "덕 질", "코 딩", "파 티"],
-      memupdate: false,
+      // memupdate: false,
+      // hobupdate: false,
     };
   },
   mounted() {
@@ -545,12 +563,22 @@ export default {
       count2 = this.marqueeText(count2, document.querySelector('.right'), 1)
     },
 
-    openmemupdate() {
-      this.memupdate = true;
-    },
-    closememupdate() {
-      this.memupdate = false;
-    },
+    // memupdate test
+    // openmemupdate() {
+    //   this.memupdate = true;
+    // },
+    // closememupdate() {
+    //   this.memupdate = false;
+    // },
+
+
+    // hobupdate test
+    // openhobupdate() {
+    //   this.hobupdate = true;
+    // },
+    // closehobupdate() {
+    //   this.hobupdate = false;
+    // },
 
     scrollAnimation(){
       gsap.timeline({
@@ -698,14 +726,6 @@ p {
   padding-bottom: 200px;
 }
 
-.left{
-
-}
-
-.right{
-  justify-content: flex-end;
-}
-
 #emoji{
   -webkit-animation: emoji 1s ease-in-out infinite both;
 	        animation: emoji 1s ease-in-out infinite both;
@@ -782,11 +802,43 @@ p {
 #typo {
   height: 800px;
   overflow: hidden;
-  margin-left: -2300px;
+  margin-left: -2200px;
+}
+.left{
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  animation: scroll 30s linear infinite;
+  animation-direction: reverse;
+}
+
+@keyframes scroll{
+  from{
+    transform: translateX(0);
+  }
+  to{
+    transform: translateX(100);
+  }
+}
+.right{
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  animation: scroll 30s linear infinite;
+}
+@keyframes scroll{
+  from{
+    transform: translateX(0);
+  }
+  to{
+    transform: translateX(100%);
+  }
 }
 
 #typo .right {
-  transform: rotate(-60deg);
+  rotate: -60deg;
   color: white;
   font-size: 60px;
   display: inline-block;
@@ -795,7 +847,7 @@ p {
 }
 
 #typo .left {
-  transform: rotate(-60deg);
+  rotate: -60deg;
   color: white;
   font-size: 60px;
   display: inline-block;
