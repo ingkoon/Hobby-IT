@@ -1035,8 +1035,8 @@ p {
   margin-left: -200px;
 }
 #big{
-	-webkit-animation: text-flicker-in-glow 4s linear 2 both;
-	        animation: text-flicker-in-glow 4s linear 2 both;
+	-webkit-animation: text-flicker-in-glow 1s linear both;
+	        animation: text-flicker-in-glow 1s linear both;
 }
 @-webkit-keyframes text-flicker-in-glow {
   0% {
