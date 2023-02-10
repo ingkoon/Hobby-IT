@@ -78,7 +78,6 @@ const routes = [
         path: ':nickname',
         name: 'MyPage',
         component: () => import('@/views/MypageView.vue'),
-
       },
     ],
   },
@@ -92,14 +91,14 @@ const routes = [
         component: () => import('@/views/GroupView.vue'),
         children: [
           {
+            path: ':id/videochat',
+            component: () => import('@/views/VideoChat.vue'),
+            name: 'VideoChat',
+          },
+          {
             path: ':id',
             name: 'GroupMainPage',
             component: () => import('@/views/GroupPageView.vue'),
-          },
-          {
-            path: 'videochat',
-            component: () => import('@/views/VideoChat.vue'),
-            name: 'VideoChat',
           },
         ],
       },

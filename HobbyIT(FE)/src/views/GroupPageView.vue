@@ -1,17 +1,17 @@
 <template>
-  <div style="margin: 100px 13% 0">
+  <div style='margin: 100px 13% 0'>
     <h3>{{ groupinfo.name }}</h3>
     <div id='group'>
       <!-- 왼쪽 모임 정보 탭 -->
-      <div id="groupinfo">
-        <img :src="groupinfo.img" />
-        <div id="title">{{ groupinfo.name }}</div>
-        <div id="content">
+      <div id='groupinfo'>
+        <img :src='groupinfo.img' />
+        <div id='title'>{{ groupinfo.name }}</div>
+        <div id='content'>
           {{ groupinfo.intro }}
 
-          <div style="margin-top: 20px">
-            <v-icon color="#FA8EB6" icon="mdi-account-multiple" size="small"></v-icon>
-            {{groupinfo.participantsNum}} / {{ groupinfo.maxParticipantsNum }}
+          <div style='margin-top: 20px'>
+            <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
+            {{ groupinfo.participantsNum }} / {{ groupinfo.maxParticipantsNum }}
           </div>
         </div>
 
@@ -184,7 +184,7 @@ export default {
       canvasmodal: false,
       addarticlemodal: false,
       articlemodal: false,
-      groupinfo : [],
+      groupinfo: [],
       articles: [],
     };
   },
@@ -198,9 +198,14 @@ export default {
     },
   },
 
+  created() {
+    this.getGroupInfo(this.$route.params.id);
+  },
+
   methods: {
     onclickVideoChat() {
-      window.open('http://localhost:3000/group/videochat', '_blank');
+      const domain_url = import.meta.env.VITE_DOMAIN_URL;
+      window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
       // this.$router.push({name:'VideoChat',target:'_blank'})
     },
     closeAddedModal() {
@@ -218,10 +223,9 @@ export default {
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
-        this.groupinfo = data
-      }
-      catch(e) {
-        console.error(e.message)
+        this.groupinfo = data;
+      } catch (e) {
+        console.error(e.message);
       }
     },
     // only for test
@@ -241,10 +245,6 @@ export default {
       this.initArticles();
     },
   },
-
-  created() {
-    this.getGroupInfo(this.$route.params.id)
-  }
 };
 </script>
 

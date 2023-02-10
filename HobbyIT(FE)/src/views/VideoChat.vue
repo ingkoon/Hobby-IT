@@ -55,6 +55,7 @@ import { useAppStore } from '@/store/app';
 import VideoMessage from '@/components/VideoMessage.vue';
 import { useMessageStore } from '@/store/message';
 import SharedPaint from '@/components/VideoChat/SharedPaint.vue';
+import { useUserStore } from '@/store/user';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
@@ -67,7 +68,8 @@ export default {
   setup() {
     const appStore = useAppStore();
     const messageStore = useMessageStore();
-    return { appStore, messageStore };
+    const userStore = useUserStore();
+    return { appStore, messageStore, userStore };
   },
   data() {
     return {
@@ -79,8 +81,8 @@ export default {
       publisher: undefined,
       subscribers: [],
       // Join form
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      mySessionId: this.$route.params.id,
+      myUserName: this.userStore.getUserNickname,
       isAudioEnabled: true,
       isVideoEnabled: true,
       isScreenShareEnabled: false,
@@ -91,7 +93,7 @@ export default {
   },
   computed: {
     computedHeight() {
-      console.log(this.windowHeight);
+      // console.log(this.windowHeight);
       return this.windowHeight - 59;
     },
     isOne() {
@@ -144,7 +146,7 @@ export default {
           type: 'canvas',
         })
         .then(() => {
-          console.log('Success');
+          // console.log('Success');
         })
         .catch(err => {
           console.error(err);

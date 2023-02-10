@@ -1,4 +1,6 @@
 import { useUserStore } from '@/store/user';
+import axios from 'axios';
+import { reissueRefreshToken } from '@/api';
 
 // function getRefreshToken() {
 //   try {
@@ -17,8 +19,22 @@ function setInterceptors(instance) {
 
       return config;
     },
-    function (error) {
+    async function (error) {
       // 요청 오류가 있는 작업 수행
+      const {
+        config,
+        response: { status },
+      } = error;
+      if (status === 401 && userStore.getRefreshToken && userStore.getAccessToken) {
+        const originalRequest = config;
+        const refreshToken = userStore.getRefreshToken;
+        const data = {
+          refreshToken,
+        };
+        const res = await reissueRefreshToken;
+        console.log(res);
+      }
+
       return Promise.reject(error);
     },
   );

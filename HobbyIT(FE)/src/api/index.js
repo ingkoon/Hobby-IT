@@ -37,7 +37,8 @@ function createInstanceWithNoAuth(path, config = defaultConfig) {
 }
 
 async function reissueRefreshToken(data) {
-  const res = await axios.post(API_SERVER_URL + '/member/reissue');
+  const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
+  return res;
 }
 
-export { createInstance, createInstanceWithNoAuth, fileConfig };
+export { createInstance, createInstanceWithNoAuth, fileConfig, reissueRefreshToken };
