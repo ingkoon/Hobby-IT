@@ -10,11 +10,20 @@ export function getHobbyList() {
   return instance.get('');
 }
 
-// 13.모임 검색
-function searchHobby(keyword) {
-  return instance.get('', {
+// 13.모임 검색 카테고리
+export function searchHobby(keyword) {
+  return instance.get('/search/category', {
     params: {
-      query: keyword,
+      keyword: keyword,
+    },
+  });
+}
+
+// 13-2.모임 검색 이름
+export function searchNameHobby(keyword) {
+  return instance.get('/search/name', {
+    params: {
+      keyword: keyword,
     },
   });
 }

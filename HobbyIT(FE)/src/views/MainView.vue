@@ -1,7 +1,7 @@
 <template>
   <h3 style='font-size: 36px'>관심 <span>#카테고리</span>를 선택해보세요.</h3>
 
-  <v-slide-group mandatory='force' selected-class='font-family:linefontbold' show-arrows style='margin: 1% 0'>
+  <v-slide-group mandatory='force' selected-class='font-family:linefontbold' v-model='selectCate' show-arrows style='margin: 1% 0;'>
     <v-slide-group-item v-slot='{ isSelected, toggle }'>
       <v-btn
         id='categorybtn'
@@ -49,20 +49,25 @@
       </div>
     </v-carousel-item>
   </v-carousel>
-
+  
   <h3 id='search'>
     당신이 참여중인 HOBBY
     <span>
       <v-text-field
-        clearable
-        placeholder='어떤 취미를 찾으시나요?'
-        prepend-inner-icon='mdi-magnify'
-        style='color: white; width: 334px; height: 44px'
-        variant='outlined'
+      clearable
+      placeholder='어떤 취미를 찾으시나요?'
+      prepend-inner-icon='mdi-magnify'
+      style='color: white; width: 334px; height: 44px;'
+      variant='outlined'
+      @keyup.enter="searchName"
+      v-model="keyword"
       ></v-text-field>
     </span>
   </h3>
-
+  
+  <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/>
+  <participate-group v-if="catelist.length > 0" :hobbylist="catelist"/>
+  
   <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
   <main1 v-else/>
 
@@ -83,7 +88,7 @@ import Main3 from '@/components/no-content/Main3.vue';
 
 import { getHobbyList } from '@/api/hobby';
 import { getPopularHobbyList } from '@/api/hobby';
-import { getFreshHobbyList } from '@/api/hobby';
+import { getFreshHobbyList, searchHobby, searchNameHobby } from '@/api/hobby';
 
 export default {
   components: { ParticipateGroup, Main1, Main2, Main3},
@@ -108,6 +113,10 @@ export default {
       hobbylist : [],
       popularlist : [],
       newlist : [],
+      keyword: '',
+      catelist : [],
+      selectCate : '',
+      searchlist : [],
     };
   },
   methods : {
@@ -135,11 +144,44 @@ export default {
         console.log("새로운 리스트 가져오기 실패 : ", e.message);
       }
     },
+
+    // 카테고리 선택 결과
+    async categorysearch(keyword) {
+      try {
+        const { data } = await searchHobby(keyword)
+        this.catelist = data
+        console.log(this.catelist)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    async namesearch(keyword) {
+      try {
+        const { data } = await searchNameHobby(keyword)
+        this.searchlist = data
+        console.log(this.searchlist)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    // 키워드 검색 결과
+    searchName(){
+      this.namesearch(this.keyword)
+    }
   },
   created() {
     this.getHobby()
     this.getPopularHobby()
     this.getNewHobby()
+  },
+  watch : {
+    selectCate(newres, old){
+      this.categorysearch(this.category[newres])
+    }
   }
 };
 </script>
