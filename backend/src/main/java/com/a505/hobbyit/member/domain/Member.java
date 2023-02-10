@@ -1,7 +1,10 @@
 package com.a505.hobbyit.member.domain;
 
 import com.a505.hobbyit.common.BaseEntity;
+import com.a505.hobbyit.member.dto.request.MemberMypageRequest;
+import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.member.enums.MemberState;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@NamedQuery(name = "findById", query = "select m from Member m where m.id = :id")
 @Table(name = "member")
 public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
@@ -111,17 +115,34 @@ public class Member extends BaseEntity implements UserDetails {
         this.privilege = privilege;
     }
 
-
     public void resetPassword(String password) {
         this.password = password;
     }
 
+    public void updateMember(MemberMypageRequest request) {
+        this.nickname = request.getNickname();
+        this.password = request.getPassword();
+        this.intro = request.getIntro();
+        this.imgUrl = request.getImgUrl();
+    }
+
+    public void deleteMember() {
+        this.state = MemberState.WAITING;
+        this.resdReqDt = LocalDateTime.now();
+    }
+
+    public void checkWaiting() {
+        if(this.state != MemberState.ACTIVE) {
+            throw new NoSuchMemberException("탈퇴할 수 없는 회원입니다.");
+        }
+    }
+
+    @OneToMany(mappedBy = "member")
+    private List<HobbyMember> hobbyMembers = new ArrayList<>();
+
     @OneToMany(mappedBy = "member")
     private List<Pending> pendings = new ArrayList<>();
 
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<GroupUser> groupUsers = new ArrayList<>();
 //
 //    @OneToMany(mappedBy = "member")
 //    private List<GroupArticle> groupArticles = new ArrayList<>();

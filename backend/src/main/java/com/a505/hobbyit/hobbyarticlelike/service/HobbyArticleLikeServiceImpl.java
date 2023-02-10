@@ -5,14 +5,12 @@ import com.a505.hobbyit.hobbyarticle.domain.HobbyArticleRepository;
 import com.a505.hobbyit.hobbyarticle.exception.NoSuchHobbyArticleException;
 import com.a505.hobbyit.hobbyarticlelike.domain.HobbyArticleLike;
 import com.a505.hobbyit.hobbyarticlelike.domain.HobbyArticleLikesRepository;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,13 +19,11 @@ public class HobbyArticleLikeServiceImpl implements HobbyArticleLikeService{
     private final HobbyArticleLikesRepository hobbyArticleLikesRepository;
     private final MemberRepository memberRepository;
     private final HobbyArticleRepository hobbyArticleRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public void like(String token, Long articleId) {
-        String memberEmail = jwtTokenProvider.getUser(token);
+    public void like(String memberId, Long articleId) {
         Member member = memberRepository
-                .findByEmail(memberEmail)
+                .findById(Long.parseLong(memberId))
                 .orElseThrow(NoSuchElementException::new);
         HobbyArticle hobbyArticle = hobbyArticleRepository
                 .findById(articleId)

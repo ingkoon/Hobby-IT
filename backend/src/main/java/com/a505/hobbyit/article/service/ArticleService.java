@@ -11,13 +11,13 @@ import org.springframework.data.web.PageableDefault;
 
 public interface ArticleService {
 
-    void save(String token, Long hobbyId, ArticleRequest articleRequest);
+    void save(Long memberId, Long hobbyId, ArticleRequest articleRequest);
 
     Page<ArticleResponse> findArticlesByPageRequest(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable);
 
     ArticleResponse findById(Long articleId, HttpServletRequest request, HttpServletResponse response);
 
-    void update(String token, Long articleId, ArticleRequest articleRequest);
+    void update(Long memberId, Long articleId, ArticleRequest articleRequest);
 
-    void deleteById(String token, Long articleId);
+    void deleteById(Long memberId, Long articleId);
 }

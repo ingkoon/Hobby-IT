@@ -13,7 +13,6 @@ import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
-import com.a505.hobbyit.jwt.JwtTokenProvider;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
@@ -42,13 +41,12 @@ public class ArticleServiceImpl implements ArticleService {
     private final MemberRepository memberRepository;
     private final HobbyRepository hobbyRepository;
     private final HobbyMemberRepository hobbyMemberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private static final String COOKIE_NAME_FORM = "ViewedArticleID";
 
     @Transactional
     @Override
-    public void save(String token, Long hobbyId, ArticleRequest articleRequest) {
-        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token))
+    public void save(Long memberId, Long hobbyId, ArticleRequest articleRequest) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
         Hobby hobby = hobbyRepository.findById(hobbyId)
                 .orElseThrow(() -> new NoSuchHobbyException("소모임 정보 오류"));
@@ -93,8 +91,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Transactional
     @Override
-    public void update(String token, Long articleId, ArticleRequest articleRequest) {
-        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token))
+    public void update(Long memberId, Long articleId, ArticleRequest articleRequest) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
         Article article = articleRepository
                 .findById(articleId)
@@ -106,8 +104,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Transactional
     @Override
-    public void deleteById(String token, Long articleId) {
-        Member member = memberRepository.findByEmail(jwtTokenProvider.getUser(token))
+    public void deleteById(Long memberId, Long articleId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
         Article article = articleRepository
                 .findById(articleId)
