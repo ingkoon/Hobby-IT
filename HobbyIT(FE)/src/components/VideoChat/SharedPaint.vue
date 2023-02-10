@@ -90,7 +90,6 @@ export default {
   },
   watch: {
     canvasData(newData, oldData) {
-      console.log('hahah');
       const canvas = this.canvas;
       const ctx = this.ctx;
       const image = new Image();
@@ -213,7 +212,7 @@ export default {
       this.$emit('close');
     },
     colorChange(color) {
-      console.log(color);
+      // console.log(color);
       this.ctx.strokeStyle = color;
     },
     clearAll() {

@@ -15,6 +15,9 @@ export const useUserStore = defineStore({
     getAccessToken(state) {
       return state.accessToken;
     },
+    getUserNickname(state) {
+      return state.userNickname;
+    },
   },
   actions: {
     setUserNickname(nickname) {
