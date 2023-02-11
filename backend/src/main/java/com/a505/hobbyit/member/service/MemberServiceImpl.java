@@ -71,6 +71,11 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    @Override
+    public boolean isSns(String email) {
+        return memberRepository.existsByEmailAndIsSns(email, MemberIsSns.TRUE);
+    }
+
     @Transactional
     @Override
     public void updateSnsMember(String email, String imgUrl) {

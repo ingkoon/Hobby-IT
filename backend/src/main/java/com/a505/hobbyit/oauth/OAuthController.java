@@ -33,13 +33,16 @@ public class OAuthController {
         String token = oAuthService.getKakaoToken(code);
         List<String> account = oAuthService.getKakaoMember(token);
 
-        // 2. 사용자 정보를 통해 회원가입을 진행
-        MemberSignupRequest signupRequest =
-                new MemberSignupRequest(account.get(0), account.get(1), account.get(1), account.get(0));
-        memberService.signUp(signupRequest);
-        memberService.updateSnsMember(account.get(0), account.get(2));
+        // 2. kakao 간편 회원가입을 한 사용자인지 확인
+        if(!memberService.isSns(account.get(0))) {
+            // 3. 가입하지 않은 사용자인 경우, 사용자 정보를 통해 회원가입을 진행
+            MemberSignupRequest signupRequest =
+                    new MemberSignupRequest(account.get(0), account.get(1), account.get(1), account.get(0));
+            memberService.signUp(signupRequest);
+            memberService.updateSnsMember(account.get(0), account.get(2));
+        }
 
-        // 3. 회원가입한 정보로 로그인을 진행
+        // 4. 회원가입된 정보로 로그인을 진행
         MemberLoginRequest loginRequest = new MemberLoginRequest(account.get(0), account.get(0));
         MemberResponse response = memberService.login(loginRequest);
 

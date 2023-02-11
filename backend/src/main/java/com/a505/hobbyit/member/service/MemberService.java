@@ -12,6 +12,8 @@ import java.util.List;
 public interface MemberService {
     void signUp(MemberSignupRequest request);
 
+    boolean isSns(String email);
+
     void updateSnsMember(String email, String imgUrl);
 
     MemberResponse login(MemberLoginRequest request);
