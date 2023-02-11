@@ -50,7 +50,7 @@ export function getGroupInfo(hobby_id) {
 }
 
 // 18.모임 회원 명단 확인
-function getGroupMemberList(hobby_id) {
+export function getGroupMemberList(hobby_id) {
   return instance.get(`/${hobby_id}/member`);
 }
 
