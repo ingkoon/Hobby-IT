@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,13 +18,16 @@ import lombok.NoArgsConstructor;
 public class HobbyMemberResponse {
     private Long id;
     private String nickName;
+    private String reg_dt;
     private HobbyMemberPrivilege privilege;
     public HobbyMemberResponse toEntity(HobbyMember hobbyMember){
-        return HobbyMemberResponse
+        HobbyMemberResponse build = HobbyMemberResponse
                 .builder()
                 .id(hobbyMember.getMember().getId())
                 .nickName(hobbyMember.getMember().getNickname())
+                .reg_dt(hobbyMember.getWritedDate().format(DateTimeFormatter.ISO_DATE))
                 .privilege(hobbyMember.getPrivilege())
                 .build();
+        return build;
     }
 }
