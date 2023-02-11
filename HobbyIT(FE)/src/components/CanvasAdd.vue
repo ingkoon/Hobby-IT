@@ -85,7 +85,7 @@
             </div>
             <div style="font-size: 35px; text-align: end; line-height: 42px">Something<br />on your<br />mind?</div>
             <div style="text-align: end">
-              <v-btn icon="mdi-send-outline" style="background-color: pink; transform: rotate(-45deg)"></v-btn>
+              <v-btn @click="sendcanvas" icon="mdi-send-outline" style="background-color: pink; transform: rotate(-45deg)"></v-btn>
             </div>
           </div>
         </div>
@@ -98,16 +98,22 @@
 </template>
 
 <script>
+import {postGroupVisitorBook} from '@/api/hobby';
+
 export default {
   data() {
     return {
       ctx: '',
       canvas: '',
       date: '',
+      senddate : '',
       background: '',
       bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
       bglist2: ['#D3D98F', '#63D382', '#AC94F1', '#DAA6A6'],
     };
+  },
+  props : {
+    groupid : Number,
   },
   mounted() {
     var pos = {
@@ -225,6 +231,7 @@ export default {
     var day = ('0' + today.getDate()).slice(-2);
 
     this.date = year + '.' + month + '.' + day;
+    this.senddate = year + '-' + month + '-' + day;
   },
   methods: {
     closemodal() {
@@ -242,6 +249,41 @@ export default {
     clearAll() {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     },
+    // 방명록 전송
+    sendcanvas() {
+      let dataUrl = this.canvas.toDataURL('image/png');
+      let byteString = window.atob(dataUrl.split(',')[1])
+      var array = [];
+      for( let i=0; i< byteString.length; i++){
+        array.push(byteString.charCodeAt(i))
+      }
+      
+      var myBlob = new Blob([new Uint8Array(array)], {type:'image/png'})
+      console.log(myBlob);
+      
+      // Blob -> File 처리
+      let file = new File([myBlob], this.date + ".png")
+
+      let formData = new FormData()
+      formData.append("file", file)
+
+      console.log(formData.get('file'))
+
+      this.send(file)
+    },
+
+    async send(file){
+      try {
+        const inputdata = {
+          multipartFile : file
+        }
+        const { data } = await postGroupVisitorBook(this.groupid, this.senddate, inputdata)
+        console.log(data)
+      }
+      catch(e){
+        console.log(e)
+      }
+    }
   },
 };
 </script>

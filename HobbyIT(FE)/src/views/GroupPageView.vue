@@ -120,7 +120,7 @@
             </div>
 
             <v-dialog v-model='canvasmodal' activator='parent'>
-              <CanvasAdd @close='closeAddedModal' />
+              <CanvasAdd @close='closeAddedModal' :groupid="groupid" />
             </v-dialog>
           </v-btn>
         </div>
@@ -202,7 +202,7 @@ export default {
   },
 
   created() {
-    this.groupid = this.$route.params.id
+    this.groupid = this.$route.params.id;
     this.getGroupInfo(this.$route.params.id);
   },
 
