@@ -29,7 +29,7 @@ export default {
       console.error(e);
     }
   },
-  unmounted() {
+  beforeunmounted() {
     console.log('disconnected');
     this.observer.value.disconnect();
   },

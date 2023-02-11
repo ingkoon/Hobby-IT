@@ -76,7 +76,7 @@
 
               <v-window-item value='memberlist'>
                 <!-- 회원목록 -->
-                회원 목록
+                <group-member :groupid="groupid"/>
               </v-window-item>
             </v-window>
           </v-card-text>
@@ -133,6 +133,7 @@
 
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
+import GroupMember from '../components/MemberList.vue';
 import ArticleItem from '../components/ArticleItem.vue';
 import ArticleAdd from '../components/AddGroupArticle.vue';
 import ArticleModal from '../components/GroupArticle.vue';
@@ -149,6 +150,7 @@ export default {
     CanvasAdd,
     ArticleAdd,
     ArticleModal,
+    GroupMember
   },
   data() {
     return {
