@@ -214,6 +214,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
+                    .pointLevel(member.getPoint()/100)
+                    .pointExp(member.getPoint()%100)
                     .imgUrl(member.getImgUrl())
                     .build();
         } else {
@@ -221,6 +223,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
+                    .pointLevel(member.getPoint()/100)
+                    .pointExp(member.getPoint()%100)
                     .imgUrl(member.getImgUrl())
                     .build();
         }
