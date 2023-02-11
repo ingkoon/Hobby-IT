@@ -243,6 +243,11 @@ public class MemberServiceImpl implements MemberService {
         }
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
+
+        // sns로그인 사용자는 비밀번호 변경을 못한다.
+        if(member.getIsSns().equals(MemberIsSns.TRUE)) {
+            member.resetPassword(passwordEncoder.encode(member.getEmail()));
+        }
     }
 
     @Transactional
