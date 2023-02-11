@@ -126,6 +126,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.imgUrl = imgUrl;
     }
 
+    public void updateState(MemberState state, LocalDateTime resdReqDt) {
+        this.state = state;
+        this.resdReqDt = resdReqDt;
+    }
+
     public void resetPassword(String password) {
         this.password = password;
     }
@@ -135,11 +140,6 @@ public class Member extends BaseEntity implements UserDetails {
         this.password = request.getPassword();
         this.intro = request.getIntro();
         this.imgUrl = request.getImgUrl();
-    }
-
-    public void deleteMember() {
-        this.state = MemberState.WAITING;
-        this.resdReqDt = LocalDateTime.now();
     }
 
     public void checkWaiting() {

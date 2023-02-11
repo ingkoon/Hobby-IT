@@ -33,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -71,6 +72,11 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    @Override
+    public boolean isSns(String email) {
+        return memberRepository.existsByEmailAndIsSns(email, MemberIsSns.TRUE);
+    }
+
     @Transactional
     @Override
     public void updateSnsMember(String email, String imgUrl) {
@@ -78,6 +84,7 @@ public class MemberServiceImpl implements MemberService {
         member.updateSnsMember(imgUrl);
     }
 
+    @Transactional
     @Override
     public MemberResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
@@ -97,6 +104,8 @@ public class MemberServiceImpl implements MemberService {
         stringRedisTemplate.opsForValue()
                 .set("RT:" + member.getId(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
+        // 5. state 상태를 ACTIVE로 바꾼다.
+        member.updateState(MemberState.ACTIVE, null);
         return tokenInfo;
     }
 
@@ -205,6 +214,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
+                    .pointLevel(member.getPoint()/100)
+                    .pointExp(member.getPoint()%100)
                     .imgUrl(member.getImgUrl())
                     .build();
         } else {
@@ -212,6 +223,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
+                    .pointLevel(member.getPoint()/100)
+                    .pointExp(member.getPoint()%100)
                     .imgUrl(member.getImgUrl())
                     .build();
         }
@@ -224,11 +237,17 @@ public class MemberServiceImpl implements MemberService {
     public void update(final String token, MemberMypageRequest request) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
-        if (memberRepository.existsByNickname(request.getNickname())) {
+        if (!member.getNickname().equals(request.getNickname()) &&
+                memberRepository.existsByNickname(request.getNickname())) {
             throw new DuplicatedMemberException("중복된 닉네임입니다");
         }
         member.updateMember(request);
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
+
+        // sns로그인 사용자는 비밀번호 변경을 못한다.
+        if(member.getIsSns().equals(MemberIsSns.TRUE)) {
+            member.resetPassword(passwordEncoder.encode(member.getEmail()));
+        }
     }
 
     @Transactional
@@ -237,7 +256,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
         member.checkWaiting();
-        member.deleteMember();
+        member.updateState(MemberState.WAITING, LocalDateTime.now());
     }
 
     @Override
@@ -270,7 +289,7 @@ public class MemberServiceImpl implements MemberService {
         List<MemberPendingResponse> responses = new ArrayList<>();
         for (Pending pending : pendings) {
             Hobby hobby = hobbyRepository.findById(pending.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
-            MemberPendingResponse response = new MemberPendingResponse().of(hobby);
+            MemberPendingResponse response = new MemberPendingResponse().of(hobby, pending);
             responses.add(response);
         }
 

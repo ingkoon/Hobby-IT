@@ -22,6 +22,11 @@ public class OAuthService {
 
     private String oauth_token;
 
+    public String redirectKakao() {
+        return  "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY +
+                "&redirect_uri=" + redirect_uri + "&response_type=code";
+    }
+
     public String getKakaoToken(String code) {
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
@@ -106,5 +111,4 @@ public class OAuthService {
 
         return account;
     }
-
 }

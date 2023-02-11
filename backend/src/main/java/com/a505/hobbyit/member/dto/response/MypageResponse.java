@@ -16,6 +16,8 @@ public class MypageResponse {
     private String nickname;
     private String intro;
     private int point;
+    private int pointLevel;
+    private int pointExp;
     private String imgUrl;
     public MypageResponse of(Member member){
         return MypageResponse.builder()
@@ -24,6 +26,8 @@ public class MypageResponse {
                 .nickname(member.getNickname())
                 .intro(member.getIntro())
                 .point(member.getPoint())
+                .pointLevel(member.getPoint()/100)
+                .pointExp(member.getPoint()%100)
                 .imgUrl(member.getImgUrl())
                 .build();
     }
