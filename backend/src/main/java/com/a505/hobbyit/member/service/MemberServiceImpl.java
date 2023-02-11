@@ -229,7 +229,8 @@ public class MemberServiceImpl implements MemberService {
     public void update(final String token, MemberMypageRequest request) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
-        if (memberRepository.existsByNickname(request.getNickname())) {
+        if (!member.getNickname().equals(request.getNickname()) &&
+                memberRepository.existsByNickname(request.getNickname())) {
             throw new DuplicatedMemberException("중복된 닉네임입니다");
         }
         member.updateMember(request);
