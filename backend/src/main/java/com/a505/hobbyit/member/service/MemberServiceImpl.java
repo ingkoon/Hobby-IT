@@ -89,6 +89,16 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
 
+        // 0. 회원의 상태를 확인한다.
+        MemberState state = member.getState();
+        if (state.equals(MemberState.BAN)) {
+            throw new NoSuchMemberException("이용에 제한이 걸린 회원입니다.");
+        } else if(state.equals(MemberState.RESIGNED)) {
+            throw new NoSuchMemberException("탈퇴한 회원입니다.");
+        } else if (state.equals(MemberState.WAITING)) {
+            member.updateState(MemberState.ACTIVE, null);
+        }
+
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
@@ -103,9 +113,6 @@ public class MemberServiceImpl implements MemberService {
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         stringRedisTemplate.opsForValue()
                 .set("RT:" + member.getId(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        // 5. state 상태를 ACTIVE로 바꾼다.
-        member.updateState(MemberState.ACTIVE, null);
         return tokenInfo;
     }
 
@@ -214,8 +221,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
-                    .pointLevel(member.getPoint()/100)
-                    .pointExp(member.getPoint()%100)
+                    .pointLevel(member.getPoint() / 100)
+                    .pointExp(member.getPoint() % 100)
                     .imgUrl(member.getImgUrl())
                     .build();
         } else {
@@ -223,8 +230,8 @@ public class MemberServiceImpl implements MemberService {
                     .nickname(member.getNickname())
                     .intro(member.getIntro())
                     .point(member.getPoint())
-                    .pointLevel(member.getPoint()/100)
-                    .pointExp(member.getPoint()%100)
+                    .pointLevel(member.getPoint() / 100)
+                    .pointExp(member.getPoint() % 100)
                     .imgUrl(member.getImgUrl())
                     .build();
         }
@@ -245,7 +252,7 @@ public class MemberServiceImpl implements MemberService {
         member.resetPassword(passwordEncoder.encode(request.getPassword()));
 
         // sns로그인 사용자는 비밀번호 변경을 못한다.
-        if(member.getIsSns().equals(MemberIsSns.TRUE)) {
+        if (member.getIsSns().equals(MemberIsSns.TRUE)) {
             member.resetPassword(passwordEncoder.encode(member.getEmail()));
         }
     }
