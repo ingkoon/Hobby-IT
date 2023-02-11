@@ -284,7 +284,7 @@ public class MemberServiceImpl implements MemberService {
         List<MemberPendingResponse> responses = new ArrayList<>();
         for (Pending pending : pendings) {
             Hobby hobby = hobbyRepository.findById(pending.getHobby().getId()).orElseThrow(NoSuchHobbyException::new);
-            MemberPendingResponse response = new MemberPendingResponse().of(hobby);
+            MemberPendingResponse response = new MemberPendingResponse().of(hobby, pending);
             responses.add(response);
         }
 
