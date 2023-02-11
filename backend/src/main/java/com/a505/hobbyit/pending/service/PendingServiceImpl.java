@@ -12,7 +12,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
-import com.a505.hobbyit.pending.DuplicatedPendingException;
+import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.pending.domain.PendingRepository;
 import com.a505.hobbyit.pending.dto.PendingAllowRequest;
@@ -52,6 +52,7 @@ public class PendingServiceImpl implements PendingService{
         if(hobby.getFree().equals(HobbyFree.FREE)){
             HobbyMember hobbyMember = new HobbyMember().ofGeneral(member, hobby);
             hobbyMemberRepository.save(hobbyMember);
+            hobby.updateCnt();
             return;
         }
 
@@ -110,7 +111,6 @@ public class PendingServiceImpl implements PendingService{
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-
         findHobby.updateCnt();
     }
 
