@@ -33,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +84,7 @@ public class MemberServiceImpl implements MemberService {
         member.updateSnsMember(imgUrl);
     }
 
+    @Transactional
     @Override
     public MemberResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NoSuchElementException::new);
@@ -102,6 +104,8 @@ public class MemberServiceImpl implements MemberService {
         stringRedisTemplate.opsForValue()
                 .set("RT:" + member.getId(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
+        // 5. state 상태를 ACTIVE로 바꾼다.
+        member.updateState(MemberState.ACTIVE, null);
         return tokenInfo;
     }
 
@@ -243,7 +247,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
         member.checkWaiting();
-        member.deleteMember();
+        member.updateState(MemberState.WAITING, LocalDateTime.now());
     }
 
     @Override

@@ -86,6 +86,7 @@ public class MemberController {
     @PutMapping(value = "/delete")
     public ResponseEntity<Void> deleteMember(@RequestHeader("Authorization") final String token) {
         memberService.delete(token);
+        memberService.logout(token);
         return ResponseEntity.ok().build();
     }
 
@@ -103,5 +104,7 @@ public class MemberController {
         List<MemberPendingResponse> pendingList = memberService.getPendingList(token);
         return ResponseEntity.status(HttpStatus.OK).body(pendingList);
     }
+
+
 
 }
