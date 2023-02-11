@@ -106,10 +106,14 @@ export default {
       ctx: '',
       canvas: '',
       date: '',
+      senddate : '',
       background: '',
       bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
       bglist2: ['#D3D98F', '#63D382', '#AC94F1', '#DAA6A6'],
     };
+  },
+  props : {
+    groupid : Number,
   },
   mounted() {
     var pos = {
@@ -227,6 +231,7 @@ export default {
     var day = ('0' + today.getDate()).slice(-2);
 
     this.date = year + '.' + month + '.' + day;
+    this.senddate = year + '-' + month + '-' + day;
   },
   methods: {
     closemodal() {
@@ -257,14 +262,14 @@ export default {
       console.log(myBlob);
       
       // Blob -> File 처리
-      let file = new File([myBlob], "blobtofile.png")
+      let file = new File([myBlob], this.date + ".png")
 
       let formData = new FormData()
       formData.append("file", file)
 
       console.log(formData.get('file'))
 
-      this.send(formData)
+      this.send(file)
     },
 
     async send(file){
@@ -272,7 +277,7 @@ export default {
         const inputdata = {
           multipartFile : file
         }
-        const { data } = await postGroupVisitorBook(14, inputdata)
+        const { data } = await postGroupVisitorBook(this.groupid, this.senddate, inputdata)
         console.log(data)
       }
       catch(e){
