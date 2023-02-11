@@ -270,7 +270,7 @@ export default {
     async send(file){
       try {
         const inputdata = {
-          canvas : file
+          multipartFile : file
         }
         const { data } = await postGroupVisitorBook(14, inputdata)
         console.log(data)
