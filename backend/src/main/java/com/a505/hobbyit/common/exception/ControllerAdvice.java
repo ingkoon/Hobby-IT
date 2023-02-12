@@ -9,11 +9,13 @@ import com.a505.hobbyit.hobby.exception.InvalidHobbyException;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
+import com.a505.hobbyit.hobbypostit.exception.NoSuchHobbyPostitException;
+import com.a505.hobbyit.hobbypostit.exception.UnAuthorizedHobbyPostitException;
 import com.a505.hobbyit.member.exception.DuplicatedMemberException;
 import com.a505.hobbyit.member.exception.InvalidedAccessTokenException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
-import com.a505.hobbyit.pending.DuplicatedPendingException;
+import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -45,7 +47,8 @@ public class ControllerAdvice {
             NoSuchHobbyException.class,
             NoSuchHobbyMemberException.class,
             NoSuchPendingException.class,
-            NoSuchArticleException.class})
+            NoSuchArticleException.class,
+            NoSuchHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
@@ -55,15 +58,18 @@ public class ControllerAdvice {
     @ExceptionHandler({
             DuplicatedMemberException.class,
             DuplicatedHobbyException.class,
-            DuplicatedPendingException.class })
-    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e){
+            DuplicatedPendingException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler({UnAuthorizedHobbyMemberException.class, UnAuthorizedArticleException.class})
-    public  ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e){
+    @ExceptionHandler({
+            UnAuthorizedHobbyMemberException.class,
+            UnAuthorizedArticleException.class,
+            UnAuthorizedHobbyPostitException.class})
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
