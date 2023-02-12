@@ -40,7 +40,6 @@ export function getFreshHobbyList() {
 
 // 16.모임생성
 function createGroup(data) {
-  console.log(multipartInstance, 'haha');
   return multipartInstance.post('', data);
 }
 
@@ -80,17 +79,17 @@ function verifyGroupJoinRequest(hobby_id, data) {
 }
 
 // 24.모임 탈퇴
-function resignGroup(hobby_id) {
+export function resignGroup(hobby_id) {
   return instance.delete(`/${hobby_id}/member`);
 }
 
 // 25.모임 정보 변경
-function updateGroupInfo(hobby_id, data) {
-  return instance.put(`/${hobby_id}`, data);
+export function updateGroupInfo(hobby_id, data) {
+  return multipartInstance.put(`/${hobby_id}`, data);
 }
 
 // 26.모임 삭제
-function deleteGroup(hobby_id) {
+export function deleteGroup(hobby_id) {
   return instance.delete(`/${hobby_id}`);
 }
 

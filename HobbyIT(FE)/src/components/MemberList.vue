@@ -4,7 +4,7 @@
       <colgroup>
         <col width="7%" />
         <col width="*" />
-        <col width="20%" />
+        <col width="25%" />
         <col width="20%" />
         <col width="20%" />
       </colgroup>
@@ -21,7 +21,7 @@
             <colgroup>
               <col width="7%" />
               <col width="*" />
-              <col width="20%" />
+              <col width="25%" />
               <col width="20%" />
               <col width="20%" />
             </colgroup>
@@ -31,7 +31,15 @@
                 <a>{{ row.nickName }}</a>
               </td>
               <td>
-                <div v-if="row.privilege === 'OWNER'"> 소유자 </div> 
+                <!-- <v-select
+                v-model="select"
+                :items="priItem"
+                density="compact"
+                item-title="state"
+                item-value="abbr"
+                ></v-select> -->
+                <div v-if="row.privilege === 'OWNER'"> 소유자
+                </div> 
                 <div v-else-if="row.privilege === 'GENERAL'"> 회원 </div> 
                 <div v-else> 매니저 </div>
               </td>
@@ -81,7 +89,13 @@ export default {
       keyword: this.$route.query.keyword,
       banmemName: '',
       banmemId : '',
-      banmodal : false
+      banmodal : false,
+      priItem : [
+        {state : '소유자', abbr:'OWNER'},
+        {state : '매니저', abbr:'MANAGER'},
+        {state : '회원', abbr:'GENERAL'},
+      ],
+      select : {state : '소유자', abbr:'OWNER'},
     };
   },
   created() {

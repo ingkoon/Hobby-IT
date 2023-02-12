@@ -39,6 +39,7 @@ export default {
     return {
       title: '',
       content : '',
+      file : undefined,
     }
   },
   props : {
@@ -50,18 +51,19 @@ export default {
     },
     async addnotice() {
       try {
-        const tmp = {
+        const inputdata = {
           title : this.title,
           content : this.content,
           category : "NOTICE",
         }
-        let json = JSON.stringify(tmp)
-        const inputdata = {
-          request : json,
-          multipartFiles : undefined,
-        }
-        console.log(inputdata)
-        const { data } = await postGroupArticle(2, inputdata)
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
+        formData.append('multipartFile', this.file)
+        console.log(formData)
+        console.log(formData.get('request'))
+        console.log(formData.get('multipartFile'))
+
+        const { data } = await postGroupArticle(2, formData)
         console.log(data)
       }
       catch (e){
