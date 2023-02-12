@@ -49,6 +49,17 @@ const routes = [
     ],
   },
   {
+    path: '/about',
+    component: () => import('@/layouts/default/MainPage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'about',
+        component: () => import('@/views/GuideView.vue'),
+      },
+    ],
+  },
+  {
     path: '/main',
     component: () => import('@/layouts/default/MainPage.vue'),
     children: [
