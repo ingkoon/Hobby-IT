@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat style='background-color: #0e0f28'>
+  <v-app-bar flat style="background-color: #0e0f28">
     <v-app-bar-title>
       <router-link style='display: flex; align-content: center' to='/'>
         <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
@@ -14,17 +14,16 @@
       <router-link to='/promo'><span class="left" style="font-size: 24px;">PROMO</span></router-link>
     </div>
 
-    <span v-if='isLoggedIn'>
-      <v-icon color='blue-lighten-2' icon='mdi-account-circle' style='margin-right: 10px'></v-icon>
-      <router-link :to="`/mypage/${nickname}`"  >
-        <span style='font-family: linefontbold'>{{ userStore.userNickname }}</span>
+    <span v-if="isLoggedIn">
+      <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
+      <router-link :to="`/mypage/${nickname}`">
+        <span style="font-family: linefontbold">{{ userStore.userNickname }}</span>
         님, 안녕하세요!
       </router-link>
-      <v-btn color='white' rounded='pill' style='background-color: #8947e2' @click='handleLogout'>로그아웃</v-btn>
+      <v-btn color="white" rounded="pill" style="background-color: #8947e2" @click="handleLogout">로그아웃</v-btn>
     </span>
-    <div v-else style='min-width: 324px;display:flex;justify-content: flex-end'>
-
-      <v-btn color='white' rounded='pill' style='background-color: #8947e2;display:flex;' @click='handleGoLoginPage'>
+    <div v-else style="min-width: 324px; display: flex; justify-content: flex-end">
+      <v-btn color="white" rounded="pill" style="background-color: #8947e2; display: flex" @click="handleGoLoginPage">
         로그인
       </v-btn>
     </div>
@@ -41,18 +40,19 @@ export default {
     return { userStore };
   },
   data() {
-    return {
-      nickname : this.userStore.userNickname,
-    };
+    return {};
   },
   computed: {
     isLoggedIn() {
       return !!this.userStore.getAccessToken;
     },
+    nickname() {
+      return this.userStore.userNickname;
+    },
   },
   methods: {
     handleGoLoginPage() {
-      this.$router.push({name : "login"});
+      this.$router.push({ name: 'login' });
     },
     async handleLogout() {
       try {
@@ -62,10 +62,8 @@ export default {
       } catch (e) {
         console.error(e);
       }
-
     },
   },
-
 };
 </script>
 

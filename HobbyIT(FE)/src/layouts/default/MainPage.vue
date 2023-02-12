@@ -1,8 +1,8 @@
 <template>
   <v-app id="app">
     <default-bar style="position: fixed" />
-    <div style="margin: 100px 13% 0" >
-      <router-view/>
+    <div style="margin: 100px 13% 0">
+      <router-view />
     </div>
   </v-app>
 </template>
@@ -11,21 +11,26 @@
 import DefaultBar from './AppBar.vue';
 // import DefaultView from './View.vue';
 import { useUserStore } from '@/store/user';
+import { reissueRefreshToken } from '@/api/common/interceptors';
 
 export default {
-  components : {
+  components: {
     DefaultBar,
   },
   setup() {
     const userStore = useUserStore();
     return { userStore };
   },
-  created() {
-    if (!this.userStore.getAccessToken) {
-
+  async created() {
+    if (!this.userStore.getAccessToken && this.userStore.getRefreshToken) {
+      const data = {
+        refreshToken: this.userStore.getRefreshToken,
+      };
+      const res = await reissueRefreshToken(data);
+      await this.userStore.setUser(res.data);
     }
   },
-}
+};
 </script>
 
 <style>
