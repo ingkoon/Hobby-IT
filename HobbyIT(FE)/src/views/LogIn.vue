@@ -116,6 +116,7 @@ export default {
           };
           const { data } = await memberLogin(loginData);
           this.userStore.setUser(data);
+          console.log(data)
           this.$router.push({name : 'Main'});
         } catch (e) {
           checkemail.style.visibility = 'visible'

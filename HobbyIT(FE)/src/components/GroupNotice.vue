@@ -187,7 +187,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tbList th {
   border-bottom: 3px solid #642efe;
   padding: 5px 0;
@@ -219,6 +219,11 @@ table {
 }
 
 strong {
-  color: #a3e1f4;
+  color: #fa8eb6;
+}
+
+a {
+  text-decoration: none;
+  color : white;
 }
 </style>

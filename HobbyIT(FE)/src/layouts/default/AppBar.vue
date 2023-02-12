@@ -1,17 +1,17 @@
 <template>
   <v-app-bar flat style="background-color: #0e0f28">
     <v-app-bar-title>
-      <router-link style="display: flex; align-content: center" to="/">
-        <img src="/assets/HBLOGO.svg" style="width: 30px; margin-right: 10px" />
-        <span style="font-family: logofont">HOBBY'</span>
-        <span style="color: #8947e2; font-family: logofont">IT</span>
+      <router-link style='display: flex; align-content: center' to='/'>
+        <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
+        <span class="lo" style='font-family: logofont'>HOBBY'</span>
+        <span class="go" style='color: #8947e2; font-family: logofont'>IT</span>
       </router-link>
     </v-app-bar-title>
 
-    <div id="nav">
-      <router-link to="/about">이용가이드</router-link>
-      <router-link to="/main">참여하기</router-link>
-      <router-link to="/promo">홍보게시판</router-link>
+    <div id='nav'>
+      <router-link to='/about'><span class="right" style="font-size: 24px;">ABOUT</span></router-link>
+      <router-link to='/main'><span class="bottom" style="font-size: 24px;">JOIN</span></router-link>
+      <router-link to='/promo'><span class="left" style="font-size: 24px;">PROMO</span></router-link>
     </div>
 
     <span v-if="isLoggedIn">
@@ -90,6 +90,40 @@ a {
   justify-content: space-evenly;
   width: 50%;
   margin-right: 30px;
+
+  background-color: #0E0F28;
+}
+
+span:not(.lo, .go) {
+  cursor: pointer;
+  -webkit-text-stroke: 0.5px #f9f7f1;
+  background-image: linear-gradient(0deg, #f9f7f1, #f9f7f1);
+  -webkit-background-clip: text;
+  color: transparent;
+  background-repeat: no-repeat;
+  transition: background-size 0.2s ease-in;
+}
+
+span:hover:not(.lo, .go) {
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 4px #f9f7f1);
+}
+
+.left{
+  background-position: 0% 0%;
+  background-size: 0% 100%;
+
+}
+
+.bottom{
+  background-position: 0% 100%;
+  background-size: 100% 0%;
+
+}
+
+.right{
+  background-position: 100% 0%;
+  background-size: 0% 100%;
 }
 
 button {

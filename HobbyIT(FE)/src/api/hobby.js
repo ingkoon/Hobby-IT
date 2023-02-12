@@ -50,7 +50,7 @@ export function getGroupInfo(hobby_id) {
 }
 
 // 18.모임 회원 명단 확인
-function getGroupMemberList(hobby_id) {
+export function getGroupMemberList(hobby_id) {
   return instance.get(`/${hobby_id}/member`);
 }
 
@@ -174,8 +174,8 @@ function deleteGroupNotice(hobby_id, notice_id) {
 }
 
 // 42.모임 방명록 등록
-function postGroupVisitorBook(hobby_id, data) {
-  return instance.post(`/${hobby_id}/postit`, data);
+export function postGroupVisitorBook(hobby_id, date, data) {
+  return instance.post(`/${hobby_id}/postit/${date}`, data);
 }
 
 // 43.모임 방명록 조회

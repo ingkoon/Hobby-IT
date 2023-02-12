@@ -1,6 +1,9 @@
 <template>
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
+     <!-- 높이조절 -->
+    <div style="height: 60px;"></div>
+
     <div
     style="
     position:relative;
@@ -12,7 +15,7 @@
     margin-top: 200px;
     ">
       <div style="flex-direction: column;">
-        <p id="hbtitle" style="height:150px">HOBBY'IT</p>
+        <p class="hbtitle" style="height:150px">HOBBY'IT</p>
       </div>
       <img id="stars" src="/assets/Fstar.svg" style="position: absolute; top: -100px; z-index: -1" />
     </div>
@@ -144,7 +147,7 @@
               어떨까요?<br />다함께 취미생활을 기록하고 공유하세요.<br />혼자보단 분명 더욱 즐거울겁니다! <br />
               <br />호빗만의 장점을 더 알아볼까요?&nbsp
               <a href="#prebox2">
-                <v-icon id="anim1" icon="mdi-chat-alert" style="margin-top: -25px;"></v-icon>
+                <v-icon id="anim1" color="#642EFE" icon="mdi-chat-alert" style="margin-top: -25px;"></v-icon>
               </a>
             </h1>
           </div>
@@ -511,6 +514,9 @@
           <div style="position: absolute; width: 100%; height: 1540px; left: -287px; top: 648px">
             <img src="/assets/BLOB.svg" style="z-index: -4" />
           </div>
+        </div>
+        <div>
+          <img src='/assets/HBLOGO.svg' style='width: 300px; margin-top: 2500px;' />
         </div>
       </div>
     </div>
@@ -1035,8 +1041,8 @@ p {
   margin-left: -200px;
 }
 #big{
-	-webkit-animation: text-flicker-in-glow 4s linear 2 both;
-	        animation: text-flicker-in-glow 4s linear 2 both;
+	-webkit-animation: text-flicker-in-glow 1s linear both;
+	        animation: text-flicker-in-glow 1s linear both;
 }
 @-webkit-keyframes text-flicker-in-glow {
   0% {
@@ -1351,6 +1357,37 @@ p {
   100% {
     -webkit-transform: scale3d(1, 1, 1);
             transform: scale3d(1, 1, 1);
+  }
+}
+
+.hbtitle{
+	-webkit-animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@-webkit-keyframes focus-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+}
+@keyframes focus-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
   }
 }
 </style>
