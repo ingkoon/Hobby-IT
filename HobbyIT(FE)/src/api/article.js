@@ -7,28 +7,31 @@ const multipartInstance = createInstance(PATH, fileConfig);
 const instanceWithNoAuth = createInstanceWithNoAuth(PATH);
 const multipartInstanceWithNoAuth = createInstanceWithNoAuth(PATH, fileConfig);
 
-// 1.회원가입
-function memberSignup(data) {
-  return multipartInstanceWithNoAuth.post('/signup', data);
+// 45.홍보 게시판 게시글 페이지 조회
+function getPromotionArticlePage(page_no) {
+  return instance.get('', {
+    params: {
+      page: page_no,
+    },
+  });
 }
 
-// 42. 모임 방명록 등록
-function hobbyPostitAdd(data) {
-  return multipartInstanceWithNoAuth.post('/');
+// 46.홍보 게시판 게시글 등록
+function createPromotionArticle(data, hobby_id) {
+  return instance.post(`/${hobby_id}`, data);
 }
 
-//43
+// 47.홍보 게시판 게시글 조회
+function getPromotionArticle(article_id) {
+  return instance.get(`/${article_id}`);
+}
 
-//44
+// 48.홍보 게시판 게시글 수정
+function updatePromotionArticle(data, article_id) {
+  return instance.put(`/${article_id}`, data);
+}
 
-//45
-
-//46
-
-//47
-
-//48
-
-//49
-
-//50
+// 49.홍보 게시판 게시글 삭제
+function deletePromotionArticle(article_id) {
+  return instance.delete(`/${article_id}`);
+}
