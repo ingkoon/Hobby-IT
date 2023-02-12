@@ -5,22 +5,35 @@
     <div style="font-size: 36px">강퇴하시겠습니까?</div>
     <div style="font-size: 14px; font-family: linefont">강퇴한 회원은 다시 불러올 수 없습니다.</div>
     <div style="font-size: 20px; font-family: linefont">
-      "<span style="font-family: linefontbold">블라블라</span>"님을 강퇴하시겠습니까
+      "<span style="font-family: linefontbold">{{ memberName[0] }}</span>"님을 강퇴하시겠습니까
     </div>
 
     <div style="display: flex">
-      <span id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
+      <span id="okbtn" @click="deleteMember" style="color: white; margin-right: 20px"> 확인 </span>
       <span id="cancelbtn" style="color: white" @click="close"> 취소 </span>
     </div>
   </v-card>
 </template>
 
 <script>
+import { deleteGroupMember } from '@/api/hobby';
 export default {
+  props:{
+    memberName : Object
+  },
   methods: {
     close() {
       this.$emit('close');
     },
+    async deleteMember(){
+      try {
+        const { data } = await deleteGroupMember(this.memberName[2],this.memberName[1])
+        console.log(data)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
   },
 };
 </script>

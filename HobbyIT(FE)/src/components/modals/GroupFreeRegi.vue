@@ -6,7 +6,7 @@
     <div style="font-size: 14px; font-family: linefont">"블라블라" 모임에 가입이 완료되었습니다!</div>
     <div style="font-size: 20px; font-family: linefont">즐거운 시간 보내세요</div>
 
-    <span id="okbtn" style="color: white"> 확인 </span>
+    <span id="okbtn" style="color: white" @click="close"> 확인 </span>
   </v-card>
 </template>
 

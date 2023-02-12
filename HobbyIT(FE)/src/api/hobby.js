@@ -60,17 +60,17 @@ function updateGroupMemberPrivilege(hobby_id, member_id, data) {
 }
 
 // 20.모임 가입 강제 추방
-function deleteGroupMember(hobby_id, member_id) {
+export function deleteGroupMember(hobby_id, member_id) {
   return instance.delete(`/${hobby_id}/member/${member_id}`);
 }
 
 // 21.모임 가입 신청
-function requestGroupJoin(hobby_id, data) {
+export function requestGroupJoin(hobby_id, data) {
   return instance.post(`/${hobby_id}/join`, data);
 }
-
+       
 // 22.모임 가입 신청 회원 리스트 확인
-function getGroupJoinRequests(hobby_id) {
+export function getGroupJoinRequests(hobby_id) {
   return instance.get(`/${hobby_id}/join`);
 }
 
@@ -100,8 +100,8 @@ function getGroupArticleList(hobby_id) {
 }
 
 // 28.모임 게시판 게시글 작성
-function postGroupArticle(hobby_id, data) {
-  return instance.post(`/${hobby_id}/article`, data);
+export function postGroupArticle(hobby_id, data) {
+  return multipartInstance.post(`/${hobby_id}/article`, data);
 }
 
 // 29.모임 게시판 게시글 검색

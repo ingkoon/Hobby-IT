@@ -3,30 +3,30 @@
     <table class="tbList">
       <colgroup>
         <col width="7%" />
-        <col width="*" />
         <col width="20%" />
+        <col width="*" />
         <col width="20%" />
         <col width="20%" />
       </colgroup>
       <tr>
         <th>no</th>
         <th>닉네임</th>
-        <th>역할</th>
-        <th>가입일자</th>
-        <th>강퇴</th>
+        <th>인삿말</th>
+        <th>신청일자</th>
+        <th>수락/거절</th>
       </tr>
       <tr v-for="(row, idx) in list" id="lst" :key="idx">
         <td colspan="5">
           <table>
             <colgroup>
               <col width="7%" />
-              <col width="*" />
               <col width="20%" />
+              <col width="*" />
               <col width="20%" />
               <col width="20%" />
             </colgroup>
             <tr id="noticetitle">
-              <td>{{ idx+1 }}</td>
+              <td>{{ row.id }}</td>
               <td>
                 <a>{{ row.nickName }}</a>
               </td>
@@ -35,10 +35,12 @@
                 <div v-else-if="row.privilege === 'GENERAL'"> 회원 </div> 
                 <div v-else> 매니저 </div>
               </td>
-              <td> {{ row.reg_dt }} </td>
+              <td> 가입일자 </td>
               <td>
-                
-                <v-btn @click="openbanmem(`${row.id}`, `${row.nickName}`)" style="background-color: #FF052370; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
+                <v-btn style="background-color: #5278FF90; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
+                  <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
+                </v-btn>
+                <v-btn style="background-color: #FF052370; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
                   <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
                 </v-btn>
               </td>
@@ -51,21 +53,13 @@
         <td colspan="4">데이터가 없습니다.</td>
       </tr>
     </table>
-
-    <v-dialog v-model="banmodal">
-      <ben-member :memberName="[banmemName,banmemId,groupid]" @close="closebanmem"/>
-    </v-dialog>
   </div>
 </template>
 
 <script>
-import { getGroupMemberList } from '@/api/hobby';
-import benMember from '@/components/modals/BanMem.vue'
+import { getGroupJoinRequests } from '@/api/hobby';
 
 export default {
-  components :{
-    benMember
-  },  
   props : {
     groupid : Number,
   },
@@ -79,9 +73,7 @@ export default {
       paging: '', //페이징 데이터
       page: this.$route.query.page ? this.$route.query.page : 1,
       keyword: this.$route.query.keyword,
-      banmemName: '',
-      banmemId : '',
-      banmodal : false
+      
     };
   },
   created() {
@@ -91,7 +83,7 @@ export default {
     async getlist(id) {
 
       try {
-        const { data } = await getGroupMemberList(id);
+        const { data } = await getGroupJoinRequests(id);
         this.tmplist = data
       }
       catch (e) {
@@ -107,14 +99,6 @@ export default {
         ipp: 10,
       };
       
-    },
-    openbanmem(id, name) {
-      this.banmemName = name
-      this.banmemId = id
-      this.banmodal = true
-    },
-    closebanmem() {
-      this.banmodal = false
     },
   },
 };
@@ -161,4 +145,10 @@ a {
   color : white;
 }
 
+</style>
+
+<style>
+  .v-tab--selected .v-tab__slider {
+    background-color: #ffffff00;
+  }
 </style>

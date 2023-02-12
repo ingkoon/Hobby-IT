@@ -8,7 +8,9 @@
         <div id='title'>{{ groupinfo.name }}</div>
         <div id='content'>
           {{ groupinfo.intro }}
-
+          <div style="margin-top:10px">
+            #{{ groupinfo.category }}
+          </div>
           <div style='margin-top: 20px'>
             <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
             {{ groupinfo.participantsNum }} / {{ groupinfo.maxParticipantsNum }}
@@ -25,27 +27,36 @@
             </v-dialog>
           </v-btn>
           <!-- 화상채팅 버튼 -->
-          <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%' @click='onclickVideoChat'>
+          <v-btn color='#2B146C' style='color:white; height: 44px; width: 47%' @click='onclickVideoChat'>
             <v-icon icon='mdi-video-account'></v-icon>
           </v-btn>
         </div>
 
+        <div v-if="groupinfo.privilege === 'OWNER'">
+          <v-btn @click="openaddnotice" style="width:100%; color:white; background-color: #2b146c;" > 공지 작성 </v-btn>
+        </div>
+
+        <v-dialog v-model="addnoticemodal">
+            <add-notice @close="closeaddnotice"/>
+        </v-dialog>
+
         <!-- 검색 -->
-        <v-text-field
+        <!-- <v-text-field
           clearable
           placeholder='검색'
           prepend-inner-icon='mdi-magnify'
           style='color: white; height: 40px'
           variant='outlined'
-        ></v-text-field>
+        ></v-text-field> -->
       </div>
       <!-- 오른쪽 게시판 탭 -->
-      <div id='board'>
-        <v-card style='background-color: #00000000'>
+      <div id='board' style="position:relative">
+        <v-card id='tabcard' style='background-color: #00000000' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
           <v-tabs v-model='tab' align-tabs='start' style='color: white; align-items: center; height: 57px'>
             <v-tab value='board'>게시글</v-tab>
             <v-tab value='notice'>공지사항</v-tab>
             <v-tab value='memberlist'>회원목록</v-tab>
+            <v-tab v-if="groupinfo.hobbyMemberId!==null" value='memberregi'>가입신청</v-tab>
             <div style='flex-grow: 1'>
               <div style='float: right'>
                 <v-icon color='white' icon='mdi-calendar' style='padding: 35px' @click.stop='drawer = !drawer'></v-icon>
@@ -78,11 +89,24 @@
                 <!-- 회원목록 -->
                 <group-member :groupid="groupid"/>
               </v-window-item>
+              <v-window-item value='memberregi'>
+                <!-- 가입신청 -->
+                <group-regi :groupid="groupid"/>
+              </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
-      </div>
 
+        <v-btn id="registerbtn" v-if="this.groupinfo.hobbyMemberId===null" @click="openregimodal" style="position: absolute; left:37%; top : 100px;">
+          가입 신청하기
+        </v-btn>
+      </div>
+      <v-dialog v-model='freemodal'>
+        <freeRegi @close="closefreemodal"/>
+      </v-dialog>
+      <v-dialog v-model='unfreemodal'>
+        <unfreeRegi @close="closeunfreemodal"/>
+      </v-dialog>
       <v-dialog v-model='articlemodal'>
         <article-modal @closearticle='closearticle' />
       </v-dialog>
@@ -134,15 +158,25 @@
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
 import GroupMember from '../components/MemberList.vue';
+import GroupRegi from '../components/GroupRegi.vue';
 import ArticleItem from '../components/ArticleItem.vue';
 import ArticleAdd from '../components/AddGroupArticle.vue';
 import ArticleModal from '../components/GroupArticle.vue';
 import CanvasAdd from '@/components/CanvasAdd.vue';
 import InfiniteScrollObserver from '@/components/InfiniteScrollObserver.vue';
+import freeRegi from '@/components/modals/GroupFreeRegi.vue'
+import unfreeRegi from '@/components/modals/GroupRegister.vue'
+import addNotice from '@/components/modals/AddNotice'
 
-import { getGroupInfo } from '@/api/hobby';
+import { useUserStore } from '@/store/user'
+import { getGroupInfo, requestGroupJoin } from '@/api/hobby';
 
 export default {
+  setup(){
+    const userStore = useUserStore();
+    return {userStore}
+  },
+
   components: {
     InfiniteScrollObserver,
     ArticleItem,
@@ -150,7 +184,11 @@ export default {
     CanvasAdd,
     ArticleAdd,
     ArticleModal,
-    GroupMember
+    GroupMember,
+    GroupRegi,
+    freeRegi,
+    unfreeRegi,
+    addNotice
   },
   data() {
     return {
@@ -189,6 +227,9 @@ export default {
       groupinfo: [],
       articles: [],
       groupid : 0,
+      freemodal : false,
+      unfreemodal : false,
+      addnoticemodal : false,
     };
   },
   computed: {
@@ -204,9 +245,15 @@ export default {
   created() {
     this.groupid = this.$route.params.id;
     this.getGroupInfo(this.$route.params.id);
+
   },
 
   methods: {
+    stopFunc(e){
+      e.preventDefault();
+      e.stopPropagation();
+      return false
+    },
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
       window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
@@ -224,6 +271,12 @@ export default {
     closearticle() {
       this.articlemodal = false;
     },
+    openaddnotice(){
+      this.addnoticemodal = true;
+    },
+    closeaddnotice(){
+      this.addnoticemodal = false
+    },
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
@@ -231,10 +284,19 @@ export default {
       } catch (e) {
         console.error(e.message);
       }
+      
+      if(this.groupinfo.hobbyMemberId === null){
+      const articleclick = document.querySelectorAll('#tabcard')
+      for (let idx in articleclick){
+        let el = articleclick[idx]
+        if(el.addEventListener) {
+          el.addEventListener('click', this.stopFunc, true)
+        }
+      }
+    }
     },
     // only for test
     initArticles() {
-      console.log(this.articles, 'hehe');
       const data = {
         title: '제목',
         content: '사람이 살고있다',
@@ -245,9 +307,36 @@ export default {
       }
     },
     loadData() {
-      console.log('hoho');
       this.initArticles();
     },
+    openregimodal() {
+      if (this.groupinfo.freeRegistration === "FREE") {
+        this.freemodal = true
+        this.freeRegister()
+      }
+      else {
+        this.unfreemodal = true
+      }
+    },
+    closefreemodal() {
+      this.freemodal = false
+    },
+    closeunfreemodal() {
+      this.unfreemodal = false
+    },
+    async freeRegister() {
+      try {
+        const inputdata = {
+          message : ''
+        }
+        const { data } = await requestGroupJoin(this.groupid, inputdata)
+        console.log(data)
+      }
+      catch (e) {
+        console.error(e);
+      }
+      
+    }
   },
 };
 </script>
@@ -306,26 +395,27 @@ button {
   color: #642efe;
 }
 
-.v-field--variant-outlined .v-field__outline__end.v-locale--is-ltr,
-.v-locale--is-ltr .v-field--variant-outlined .v-field__outline__end {
-  border-radius: 0 40px 40px 0 !important;
-  opacity: 1;
-}
-
-.v-field--variant-outlined .v-field__outline__start {
-  flex: 1 !important;
-}
-
-.v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr,
-.v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
-  border-radius: 40px 0 0 40px !important;
-  opacity: 1;
-}
-
 #canvasdialog button {
   background: linear-gradient(to bottom, #642efe, #0e0f28);
   width: 120px;
   height: 120px;
   border-radius: 150px;
+}
+
+.v-tab--selected .v-tab__slider {
+    background-color: #ffffff00;
+  }
+
+.v-ripple__container {
+  background-color: #ffffff00;
+}
+
+#registerbtn {
+  background: linear-gradient(to bottom, #fa8eb6, #8e92fa80);
+  width: 200px;
+  height: 200px;
+  border-radius: 150px;
+  border : 1px solid white;
+  color : white;
 }
 </style>

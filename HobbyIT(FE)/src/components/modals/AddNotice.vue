@@ -7,6 +7,7 @@
     </div>
 
     <v-text-field
+      v-model="title"
       color="white"
       placeholder="제목"
       style="margin: 0 10px; width: 100%"
@@ -24,7 +25,7 @@
       variant="outlined"
     ></v-textarea>
 
-    <div style="align-self: end; font-family: linefont; margin-bottom: 5px">
+    <div @click="addnotice" style="align-self: end; font-family: linefont; margin-bottom: 5px">
       작성하기
       <v-icon icon="mdi-pencil"></v-icon>
     </div>
@@ -32,11 +33,41 @@
 </template>
 
 <script>
+import {postGroupArticle} from '@/api/hobby'
 export default {
+  data(){
+    return {
+      title: '',
+      content : '',
+    }
+  },
+  props : {
+    groupid : Number,
+  },
   methods: {
     close() {
       this.$emit('close');
     },
+    async addnotice() {
+      try {
+        const tmp = {
+          title : this.title,
+          content : this.content,
+          category : "NOTICE",
+        }
+        let json = JSON.stringify(tmp)
+        const inputdata = {
+          request : json,
+          multipartFiles : undefined,
+        }
+        console.log(inputdata)
+        const { data } = await postGroupArticle(2, inputdata)
+        console.log(data)
+      }
+      catch (e){
+        console.log(e)
+      }
+    }
   },
 };
 </script>
