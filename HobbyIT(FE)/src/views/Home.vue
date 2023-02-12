@@ -1,6 +1,9 @@
 <template>
   <!-- 인트로 화면 넣으면 돼 -->
   <div id="bg">
+     <!-- 높이조절 -->
+    <div style="height: 60px;"></div>
+
     <div
     style="
     position:relative;
@@ -144,7 +147,7 @@
               어떨까요?<br />다함께 취미생활을 기록하고 공유하세요.<br />혼자보단 분명 더욱 즐거울겁니다! <br />
               <br />호빗만의 장점을 더 알아볼까요?&nbsp
               <a href="#prebox2">
-                <v-icon id="anim1" icon="mdi-chat-alert" style="margin-top: -25px;"></v-icon>
+                <v-icon id="anim1" color="#642EFE" icon="mdi-chat-alert" style="margin-top: -25px;"></v-icon>
               </a>
             </h1>
           </div>
