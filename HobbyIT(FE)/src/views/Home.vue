@@ -15,7 +15,7 @@
     margin-top: 200px;
     ">
       <div style="flex-direction: column;">
-        <p id="hbtitle" style="height:150px">HOBBY'IT</p>
+        <p class="hbtitle" style="height:150px">HOBBY'IT</p>
       </div>
       <img id="stars" src="/assets/Fstar.svg" style="position: absolute; top: -100px; z-index: -1" />
     </div>
@@ -514,6 +514,9 @@
           <div style="position: absolute; width: 100%; height: 1540px; left: -287px; top: 648px">
             <img src="/assets/BLOB.svg" style="z-index: -4" />
           </div>
+        </div>
+        <div>
+          <img src='/assets/HBLOGO.svg' style='width: 300px; margin-top: 2500px;' />
         </div>
       </div>
     </div>
@@ -1354,6 +1357,37 @@ p {
   100% {
     -webkit-transform: scale3d(1, 1, 1);
             transform: scale3d(1, 1, 1);
+  }
+}
+
+.hbtitle{
+	-webkit-animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@-webkit-keyframes focus-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+}
+@keyframes focus-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
   }
 }
 </style>
