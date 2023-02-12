@@ -2,6 +2,7 @@ package com.a505.hobbyit.common.exception;
 
 import com.a505.hobbyit.article.exception.NoSuchArticleException;
 import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
+import com.a505.hobbyit.common.exception.dto.ErrorCode;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
@@ -13,7 +14,7 @@ import com.a505.hobbyit.member.exception.DuplicatedMemberException;
 import com.a505.hobbyit.member.exception.InvalidedAccessTokenException;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
-import com.a505.hobbyit.pending.DuplicatedPendingException;
+import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -47,8 +48,8 @@ public class ControllerAdvice {
             NoSuchPendingException.class,
             NoSuchArticleException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        ErrorCode errorCode = ErrorCode.NOT_FOUND;
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -80,7 +81,7 @@ public class ControllerAdvice {
             ExpiredJwtException.class,
             UnsupportedJwtException.class,
             MalformedJwtException.class,
-            SignatureException.class})
+            })
     public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
