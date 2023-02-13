@@ -14,13 +14,21 @@
       id="head"
       v-model="type"
       :items="types"
-      style="width: 100px;"
+      style="width: 100px; margin-right: 10px;"
+      ></v-select>
+
+      <v-select
+      id="head"
+      v-model="mine"
+      :items="myhobbies"
+      label="Hobby"
+      style="width: 150px;"
       ></v-select>
 
       <v-text-field
         color="white"
         placeholder="제목"
-        style="margin:0 10px; width:515px"
+        style="margin:0 10px; width:350px"
         variant="outlined"
 
       ></v-text-field>
@@ -32,7 +40,7 @@
       auto-grow="false"
       color="white"
       counter
-      placeholder="본문 - 모임링크도 같이 첨부해주세요 :)"
+      placeholder="본문"
       style="margin:0; width:100%"
       variant="outlined"
     ></v-textarea>
@@ -53,6 +61,8 @@ export default {
   data: () => ({
       types: ["모집", "교류"],
       type: "모집",
+      myhobbies: [],
+      mine: "",
   }),
   methods: {
     closeaddpromo() {

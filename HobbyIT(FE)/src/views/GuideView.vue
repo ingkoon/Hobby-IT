@@ -161,7 +161,7 @@
           우측 상단 <span style="color: #167EDF">달력</span> 버튼을 눌러 지난 방명록들을 볼 수 있습니다.<br />
           메모지에 직접 그림을 그리고 <span style="color: #167EDF">익명으로</span> 방명록을 작성해보세요.<br /><br />
           오늘 작성한 방명록은 하루동안 집계가 되고,<br />
-          그 <span style="color: #167EDF">다음날</span> 부터 확인이 가능합니다.<br /><br />
+          그 <span style="color: #167EDF">다음날</span> 부터 확인이 가능합니다. <span style="color: #167EDF; font-size: 18px;">(수정 및 삭제는 불가합니다)</span><br /><br />
           매일 어제 어떤 방명록들이 작성되었는지 확인하는 것도 재미 point!<br />
           방명록 작성하는 걸 잊지 말아주세요!
         </div>

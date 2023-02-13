@@ -113,6 +113,8 @@
 
 <script>
 import AddPromo from "../components/modals/AddPromo.vue";
+//axios작업
+// import { getPromotionArticlePage, createPromotionArticle, getPromotionArticle, updatePromotionArticle, deletePromotionArticle} from '@/api/article';
 
 export default {
   components:{
@@ -157,17 +159,6 @@ export default {
         },
         {
           id: 4,
-          type: "모집",
-          hit: 456,
-          title: "Sit sign share you.",
-          content:
-            "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
-          user_nickname: "호방걸",
-          created_at: "2013-05-29T15:46:17Z",
-          updated_at: "2001-12-09T17:38:01Z",
-        },
-        {
-          id: 5,
           type: "교류",
           hit: 562,
           title: "Hair each base dark guess garden accept.",
@@ -177,73 +168,6 @@ export default {
           created_at: "1995-01-20T07:27:13Z",
           updated_at: "1990-04-21T01:07:51Z",
         },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-
       ],
       addpromo: false,
       no: "",
@@ -259,6 +183,8 @@ export default {
         for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
         return pageNumber;
       },
+      promolist:[],
+
     };
   },
   created() {
@@ -295,7 +221,53 @@ export default {
         this.page = n;
         this.getlist();
       }
+
+      // getPromoList 호출 - backend 통신
     },
+
+    //작업
+    // async getPromoList(page_no){
+    //   try {
+    //     // const { data } = await getPromotionArticlePage();
+    //     await getPromotionArticlePage(({ data }) => {
+    //       console.log("# data 확인: ", data);
+    //       data.list = this.promolist;
+    //       // list[0].article_id
+    //     });
+
+    //   } catch (e) {
+    //     console.log("홍보게시판 리스트 불러오기 실패 : ",e.message)
+    //   }
+    // },
+    // async createPromo(){
+    //   try {
+
+    //   } catch (e) {
+    //     console.log("홍보게시글 작성 실패 : ",e.message)
+    //   }
+    // },
+    // async getPromoArticle(){
+    //   try {
+    //     const { data } = await getPromotionArticle();
+    //   } catch (e) {
+    //     console.log("홍보게시글 불러오기 실패 : ",e.message);
+    //   }
+    // },
+    // async updatePromo(data, article_id){
+    //   try {
+
+    //   } catch (e) {
+    //     console.log("홍보게시글 수정 실패 : ",e.message)
+    //   }
+    // },
+    // async deletePromo(){
+    //   try {
+    //     const { data } = await deletePromotionArticle(article_id);
+    //     console.log(data);
+    //   } catch (e) {
+    //     console.log("홍보게시글 삭제 실패 : ",e.message)
+    //   }
+    // },
   },
 }
 </script>
