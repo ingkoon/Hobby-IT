@@ -32,6 +32,7 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**", "/swagger-ui/**", "/**").permitAll()
+                .requestMatchers("https://kauth.kakao.com/oauth/**").permitAll()
                 .requestMatchers("/api/v1/users/userTest").hasRole("USER")
                 .requestMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .and()
