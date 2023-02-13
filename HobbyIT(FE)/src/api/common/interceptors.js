@@ -1,6 +1,5 @@
 import { useUserStore } from '@/store/user';
 import axios from 'axios';
-import { reissueRefreshToken } from '@/api';
 
 // function getRefreshToken() {
 //   try {
@@ -9,6 +8,12 @@ import { reissueRefreshToken } from '@/api';
 //
 //   }
 // };
+const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
+
+async function reissueRefreshToken(data) {
+  const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
+  return res;
+}
 
 function setInterceptors(instance) {
   const userStore = useUserStore();
@@ -16,25 +21,10 @@ function setInterceptors(instance) {
   instance.interceptors.request.use(
     function (config) {
       config.headers.Authorization = 'Bearer ' + userStore.getAccessToken;
-
       return config;
     },
-    async function (error) {
+    function (error) {
       // 요청 오류가 있는 작업 수행
-      const {
-        config,
-        response: { status },
-      } = error;
-      if (status === 401 && userStore.getRefreshToken && userStore.getAccessToken) {
-        const originalRequest = config;
-        const refreshToken = userStore.getRefreshToken;
-        const data = {
-          refreshToken,
-        };
-        const res = await reissueRefreshToken;
-        console.log(res);
-      }
-
       return Promise.reject(error);
     },
   );
@@ -42,12 +32,29 @@ function setInterceptors(instance) {
   // 응답 인터셉터 추가하기
   instance.interceptors.response.use(
     function (response) {
-      // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-      // 응답 데이터가 있는 작업 수행
+      console.log(response, 'fulfilled');
       return response;
     },
-    function (error) {
-      this;
+    async function (error) {
+      const {
+        config,
+        response: { status },
+      } = error;
+      const originalRequest = config;
+
+      if (status === 401 && !!userStore.getRefreshToken) {
+        const data = {
+          refreshToken: userStore.getRefreshToken,
+        };
+        try {
+          const res = await reissueRefreshToken(data);
+          userStore.setAccessToken(res.data.accessToken);
+          config.headers.Authorization = `Bearer ${res.data.accessToken}`;
+          return axios(config);
+        } catch (e) {
+          console.log(e);
+        }
+      }
       return Promise.reject(error);
     },
   );
@@ -62,6 +69,7 @@ function setInterceptorsWithNoAuth(instance) {
     },
     function (error) {
       // 요청 오류가 있는 작업 수행
+
       return Promise.reject(error);
     },
   );
@@ -75,11 +83,11 @@ function setInterceptorsWithNoAuth(instance) {
     },
     function (error) {
       // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-      // 응답 오류가 있는 작업 수행
+
       return Promise.reject(error);
     },
   );
   return instance;
 }
 
-export { setInterceptors, setInterceptorsWithNoAuth };
+export { setInterceptors, setInterceptorsWithNoAuth, reissueRefreshToken };
