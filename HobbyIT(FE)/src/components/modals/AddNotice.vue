@@ -15,7 +15,7 @@
     ></v-text-field>
 
     <v-textarea
-      :model-value="content"
+      v-model="content"
       :rules="rules"
       auto-grow="false"
       color="white"
@@ -58,12 +58,9 @@ export default {
         }
         const formData = new FormData();
         formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
-        formData.append('multipartFile', this.file)
-        console.log(formData)
-        console.log(formData.get('request'))
-        console.log(formData.get('multipartFile'))
+        formData.append('multipartFile', new Blob(this.file, { type: 'application/json' }))
 
-        const { data } = await postGroupArticle(2, formData)
+        const { data } = await postGroupArticle(this.groupid, formData)
         console.log(data)
       }
       catch (e){

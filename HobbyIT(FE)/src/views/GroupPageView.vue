@@ -62,7 +62,7 @@
         </div>
 
         <v-dialog v-model="addnoticemodal">
-            <add-notice @close="closeaddnotice"/>
+            <add-notice @close="closeaddnotice" :groupid="groupid"/>
         </v-dialog>
         <v-dialog v-model="exitgroupmodal">
           <exit-group @close="closeexitgroup" @send="exitgroup" :groupname="groupinfo.name"/>
@@ -183,7 +183,7 @@
         </div>
       </div>
     </v-navigation-drawer>
-    <InfiniteScrollObserver @infinite-scroll-trigger='loadData' />
+    <InfiniteScrollObserver v-if="groupinfo.hobbyMemberId !== null" @infinite-scroll-trigger='loadData' />
 
   </div>
 </template>
