@@ -7,6 +7,7 @@
     </div>
 
     <v-text-field
+      v-model="title"
       color="white"
       placeholder="제목"
       style="margin: 0 10px; width: 100%"
@@ -14,7 +15,7 @@
     ></v-text-field>
 
     <v-textarea
-      :model-value="content"
+      v-model="content"
       :rules="rules"
       auto-grow="false"
       color="white"
@@ -24,7 +25,7 @@
       variant="outlined"
     ></v-textarea>
 
-    <div style="align-self: end; font-family: linefont; margin-bottom: 5px">
+    <div @click="addnotice" style="align-self: end; font-family: linefont; margin-bottom: 5px">
       작성하기
       <v-icon icon="mdi-pencil"></v-icon>
     </div>
@@ -32,11 +33,40 @@
 </template>
 
 <script>
+import {postGroupArticle} from '@/api/hobby'
 export default {
+  data(){
+    return {
+      title: '',
+      content : '',
+      file : undefined,
+    }
+  },
+  props : {
+    groupid : Number,
+  },
   methods: {
     close() {
       this.$emit('close');
     },
+    async addnotice() {
+      try {
+        const inputdata = {
+          title : this.title,
+          content : this.content,
+          category : "NOTICE",
+        }
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
+        formData.append('multipartFile', new Blob(this.file, { type: 'application/json' }))
+
+        const { data } = await postGroupArticle(this.groupid, formData)
+        console.log(data)
+      }
+      catch (e){
+        console.log(e)
+      }
+    }
   },
 };
 </script>

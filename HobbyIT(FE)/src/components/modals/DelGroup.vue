@@ -7,7 +7,7 @@
     <div style="font-size: 20px; font-family: linefont">정말 모임을 폐쇄시키겠습니까?</div>
 
     <div style="display: flex">
-      <span id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
+      <span @click="send" id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
       <span id="cancelbtn" style="color: white" @click="close"> 취소 </span>
     </div>
   </v-card>
@@ -19,6 +19,9 @@ export default {
     close() {
       this.$emit('close');
     },
+    send() {
+      this.$emit('send')
+    }
   },
 };
 </script>

@@ -7,11 +7,13 @@
     <div style="font-size: 20px; font-family: linefont">자신을 소개할 한마디 적어주세요</div>
     <v-responsive max-height="70px" style="">
       <v-text-field
+        v-model="message"
         append-inner-icon="mdi-send-outline"
         color="#24B1D0"
         placeholder="welcome!"
         style="width: 500px; align-self: center; font-size: 20px"
         variant="outlined"
+        @click:append-inner="sendregi"
       >
       </v-text-field>
     </v-responsive>
@@ -20,9 +22,17 @@
 
 <script>
 export default {
+  data(){
+    return {
+      message : '',
+    }
+  },
   methods: {
     close() {
       this.$emit('close');
+    },
+    sendregi(){
+      this.$emit('send', this.message )
     },
   },
 };
