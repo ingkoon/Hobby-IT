@@ -451,13 +451,16 @@ export default {
           name : this.title,
           intro : this.content,
           max_participants_num : this.groupinfo.maxParticipantsNum,
-          img : this.file
         }
+
+        console.log(inputdata);
+
         const formData = new FormData();
         formData.append('request', new Blob([JSON.stringify(inputdata)], {type:'application/json'}));
-        formData.append('multipartFile', this.file)
+        formData.append('multipartFile', new Blob([JSON.stringify(this.file)], {type:'application/json'}))
 
         const { data } = await updateGroupInfo(this.groupid, formData)
+        console.log(data)
       }
       catch(e){
         console.log(e)
