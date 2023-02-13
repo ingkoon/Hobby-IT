@@ -41,6 +41,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
         List<HobbyArticleResponse> responses = new ArrayList<>();
         for (HobbyArticle article : result) {
             log.info("================================");
+            log.info(article.getThumbnailPath());
             log.info(article.getContent() + " " + article.getId());
         }
         for (HobbyArticle article : result) {
@@ -84,9 +85,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
 
         List<HobbyArticleResponse> responses = new ArrayList<>();
 
-        for (HobbyArticle article : result) {
-            responses.add(new HobbyArticleResponse().of(article));
-        }
+        for (HobbyArticle article : result) responses.add(new HobbyArticleResponse().of(article));
 
         return new PageImpl<>(responses);
     }

@@ -1,11 +1,7 @@
 package com.a505.hobbyit.hobbyarticle.service;
 
 
-import com.a505.hobbyit.hobby.domain.Hobby;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleDetailResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleRequest;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleUpdateRequest;
+import com.a505.hobbyit.hobbyarticle.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,7 +14,8 @@ public interface HobbyArticleService {
     public Slice<HobbyArticleResponse> findByKeyword(String memberId, Long storedId, String keyword, final Long hobbyId, Pageable pageable);
     public Page<HobbyArticleResponse> findAllNotice(String memberId, final Long hobbyId, Pageable pageable);
     public Page<HobbyArticleResponse> findNoticeByKeyWord(String memberId, final Long hobbyId, String keyword, Pageable pageable);
-    public void save(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files);
+    public void saveArticle(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files);
+    public void saveNotice(String memberId, Long hobbyId, HobbyNoticeRequest hobbyNoticeRequest);
     public HobbyArticleDetailResponse findById(String memberId, final Long hobbyId, final Long articleId);
     public void update(String memberId, final Long articleId, HobbyArticleUpdateRequest request);
     public void delete(String memberId, Long hobbyId, Long articleId);

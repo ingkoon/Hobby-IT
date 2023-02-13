@@ -6,10 +6,7 @@ import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticleRepository;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleDetailResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleRequest;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleUpdateRequest;
+import com.a505.hobbyit.hobbyarticle.dto.*;
 import com.a505.hobbyit.hobbyarticle.exception.NoSuchHobbyArticleException;
 import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
 import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImgRepository;
@@ -19,6 +16,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -57,14 +55,13 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
 
     @Transactional
     @Override
-    public void save(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files) {
-        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+    public void saveArticle(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files) {
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
+
         HobbyArticle hobbyArticle = hobbyArticleRequest.toEntity(member, hobby);
 
-        log.info(member.getId() + " =========== " + hobby.getId());
-        log.info(hobbyArticle.toString());
         hobbyArticleRepository.save(hobbyArticle);
 
         for (MultipartFile file : files) {
@@ -73,12 +70,22 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
         }
     }
 
+    @Transactional
+    @Override
+    public void saveNotice(String memberId, Long hobbyId, HobbyNoticeRequest hobbyNoticeRequest) {
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
+        checkMember(member, hobby);
+        HobbyArticle hobbyArticle = hobbyNoticeRequest.toEntity(member, hobby);
+        hobbyArticleRepository.save(hobbyArticle);
+    }
+
     @Override
     public HobbyArticleDetailResponse findById(String memberId, final Long hobbyId, final Long articleId) {
         Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
         Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
         checkMember(member, hobby);
-        HobbyArticle hobbyArticle = hobbyArticleRepository.getReferenceById(articleId);
+        HobbyArticle hobbyArticle = readHobbyArticle(articleId);
         hobbyArticle.updateHit();
 
         return new HobbyArticleDetailResponse().of(hobbyArticle);
@@ -86,24 +93,24 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
 
     @Override
     public Slice<HobbyArticleResponse> findByKeyword(String memberId, Long storedId, String keyword, final Long hobbyId, Pageable pageable) {
-        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
         return hobbyArticleRepository.searchHobbyArticle(storedId,  keyword, hobby, pageable);
     }
 
     @Override
     public Page<HobbyArticleResponse> findAllNotice(String memberId, final Long hobbyId, Pageable pageable) {
-        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
         return hobbyArticleRepository.findHobbyNotice(hobby, pageable);
     }
 
     @Override
     public Page<HobbyArticleResponse> findNoticeByKeyWord(String memberId, final Long hobbyId, String keyword, Pageable pageable) {
-        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
         return hobbyArticleRepository.searchHobbyNotice(hobby, keyword, pageable);
     }
@@ -111,9 +118,7 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     @Transactional
     @Override
     public void update(String memberId, final Long articleId, HobbyArticleUpdateRequest request) {
-        HobbyArticle hobbyArticle = hobbyArticleRepository
-                .findById(articleId)
-                .orElseThrow(NoSuchHobbyArticleException::new);
+        HobbyArticle hobbyArticle = readHobbyArticle(articleId);
         if(hobbyArticle.getMember().getId()!= Long.parseLong(memberId))
             throw new UnAuthorizedHobbyMemberException();
         hobbyArticle.updateTitle(request.getTitle());
@@ -123,19 +128,35 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     @Transactional
     @Override
     public void delete(String memberId,Long hobbyId, Long articleId) {
-        Member member = memberRepository.findById(Long.parseLong(memberId)).orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
-        HobbyArticle hobbyArticle = hobbyArticleRepository
-                .findById(articleId)
-                .orElseThrow(NoSuchHobbyArticleException::new);
+        HobbyArticle hobbyArticle = readHobbyArticle(articleId);
         hobbyArticleRepository.delete(hobbyArticle);
     }
 
     public void checkMember(Member member, Hobby hobby){ // 가입된 회원인지 혹은 탈퇴된회원인지 확인을 위한 method
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findByMemberAndHobby(member, hobby)
-                .orElseThrow(()->new NoSuchHobbyMemberException()); // 없는 경우 hobby member를 찾을 수 없다고 반환
+                .orElseThrow(NoSuchHobbyMemberException::new); // 없는 경우 hobby member를 찾을 수 없다고 반환
         hobbyMember.checkMember(); // hobbymember의 현재 상태가 ACTIVE인지 확인
+    }
+
+    public Member readMember(String memberId){
+        return memberRepository
+                .findById(Long.parseLong(memberId))
+                .orElseThrow(NoSuchMemberException::new);
+    }
+
+    public Hobby readHobby(Long hobbyId){
+        return hobbyRepository
+                .findById(hobbyId)
+                    .orElseThrow(NoSuchHobbyException::new);
+    }
+
+    public HobbyArticle readHobbyArticle(Long hobbyArticleId){
+        return hobbyArticleRepository
+                .findById(hobbyArticleId)
+                .orElseThrow(NoSuchHobbyArticleException::new);
     }
 }
