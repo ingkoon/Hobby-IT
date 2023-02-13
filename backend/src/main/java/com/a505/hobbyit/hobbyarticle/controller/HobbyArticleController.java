@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,12 +28,15 @@ public class HobbyArticleController {
 
     private final HobbyArticleService hobbyArticleService;
 
-    @PostMapping(value = "/{hobby-id}/article")
+
+    @PostMapping(value = "/{hobby-id}/article", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Slice<HobbyArticleResponse>> saveArticle(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
-            @RequestPart final HobbyArticleRequest request,
-            @RequestPart(required = false) final List<MultipartFile> multipartFile
+            @RequestPart(value = "request") final HobbyArticleRequest request,
+            @RequestPart(value = "multipartFile", required = false) final List<MultipartFile> multipartFile
             ){
         hobbyArticleService.save(userDetails.getUsername(), hobbyId, request, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -41,23 +45,26 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/article")
     public ResponseEntity<Slice<HobbyArticleResponse>> getArticleList(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final Long storedId,
             final Pageable pageable
             ){
         log.info(pageable.getPageSize()+"");
-        Slice<HobbyArticleResponse> response = hobbyArticleService.findAll(storedId,  hobbyId, pageable);
+        log.info("storedID is: " + storedId);
+        Slice<HobbyArticleResponse> response = hobbyArticleService.findAll(userDetails.getUsername(), storedId, hobbyId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/{hobby-id}/article/search")
     public ResponseEntity<Slice<HobbyArticleResponse>> searchArticleList(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final Long storedId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
     ){
-        Slice<HobbyArticleResponse> response = hobbyArticleService.findByKeyword(storedId, keyword, hobbyId, pageable);
+        Slice<HobbyArticleResponse> response = hobbyArticleService.findByKeyword(userDetails.getUsername(), storedId, keyword, hobbyId, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -65,10 +72,11 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice")
     public ResponseEntity<Page<HobbyArticleResponse>> getNoticeList(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
              final Pageable pageable
     ){
-        Page<HobbyArticleResponse> response = hobbyArticleService.findAllNotice(hobbyId, pageable);
+        Page<HobbyArticleResponse> response = hobbyArticleService.findAllNotice(userDetails.getUsername(), hobbyId, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -76,11 +84,12 @@ public class HobbyArticleController {
 
     @GetMapping(value = "/{hobby-id}/notice/search")
     public ResponseEntity<Page<HobbyArticleResponse>> searchNoticeList(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
     ){
-        Page<HobbyArticleResponse> response = hobbyArticleService.findNoticeByKeyWord(hobbyId, keyword, pageable);
+        Page<HobbyArticleResponse> response = hobbyArticleService.findNoticeByKeyWord(userDetails.getUsername(), hobbyId, keyword, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -90,26 +99,29 @@ public class HobbyArticleController {
     */
     @GetMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<HobbyArticleDetailResponse> getArticle(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("article-id") final Long articleId){
-        HobbyArticleDetailResponse response = hobbyArticleService.findById(hobbyId, articleId);
+        HobbyArticleDetailResponse response = hobbyArticleService.findById(userDetails.getUsername(), hobbyId, articleId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<Void> updateArticle(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("article-id") final Long articleId,
             @RequestBody HobbyArticleUpdateRequest request) {
-        hobbyArticleService.update(articleId, request);
+        hobbyArticleService.update(userDetails.getUsername(), articleId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<Void> deleteArticle(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("article-id") final Long articleId) {
-        hobbyArticleService.delete(articleId);
+        hobbyArticleService.delete(userDetails.getUsername(), hobbyId, articleId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

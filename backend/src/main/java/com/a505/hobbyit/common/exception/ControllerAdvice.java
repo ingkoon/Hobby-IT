@@ -2,6 +2,7 @@ package com.a505.hobbyit.common.exception;
 
 import com.a505.hobbyit.article.exception.NoSuchArticleException;
 import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
+import com.a505.hobbyit.common.exception.dto.ErrorCode;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
@@ -50,8 +51,8 @@ public class ControllerAdvice {
             NoSuchArticleException.class,
             NoSuchHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        ErrorCode errorCode = ErrorCode.NOT_FOUND;
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -86,7 +87,7 @@ public class ControllerAdvice {
             ExpiredJwtException.class,
             UnsupportedJwtException.class,
             MalformedJwtException.class,
-            SignatureException.class})
+            })
     public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);

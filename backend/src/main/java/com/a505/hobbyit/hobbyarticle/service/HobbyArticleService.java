@@ -14,12 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface HobbyArticleService {
-    public Slice<HobbyArticleResponse> findAll(Long storedId, Long hobbyId, Pageable pageable);
-    public Slice<HobbyArticleResponse> findByKeyword(Long storedId, String keyword, final Long hobbyId, Pageable pageable);
-    public Page<HobbyArticleResponse> findAllNotice(final Long hobbyId, Pageable pageable);
-    public Page<HobbyArticleResponse> findNoticeByKeyWord(final Long hobbyId, String keyword, Pageable pageable);
+    public Slice<HobbyArticleResponse> findAll(String memberId, Long storedId, Long hobbyId, Pageable pageable);
+    public Slice<HobbyArticleResponse> findByKeyword(String memberId, Long storedId, String keyword, final Long hobbyId, Pageable pageable);
+    public Page<HobbyArticleResponse> findAllNotice(String memberId, final Long hobbyId, Pageable pageable);
+    public Page<HobbyArticleResponse> findNoticeByKeyWord(String memberId, final Long hobbyId, String keyword, Pageable pageable);
     public void save(String memberId, Long hobbyId, HobbyArticleRequest hobbyArticleRequest, List<MultipartFile> files);
-    public HobbyArticleDetailResponse findById(final Long hobbyId, final Long articleId);
-    public void update(final Long articleId, HobbyArticleUpdateRequest request);
-    public void delete(Long articleId);
+    public HobbyArticleDetailResponse findById(String memberId, final Long hobbyId, final Long articleId);
+    public void update(String memberId, final Long articleId, HobbyArticleUpdateRequest request);
+    public void delete(String memberId, Long hobbyId, Long articleId);
 }

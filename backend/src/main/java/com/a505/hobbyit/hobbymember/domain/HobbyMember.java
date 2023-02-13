@@ -69,6 +69,10 @@ public class HobbyMember extends BaseEntity {
         if(this.privilege != HobbyMemberPrivilege.OWNER) throw new UnAuthorizedHobbyMemberException();
     }
 
+    public void checkMember(){
+        if(this.state!= HobbyMemberState.ACTIVE) throw new UnAuthorizedHobbyMemberException("접근 권한이 없습니다.");
+    }
+
     public HobbyMember ofGeneral(Member member, Hobby hobby){
         return HobbyMember.builder()
                 .member(member)
