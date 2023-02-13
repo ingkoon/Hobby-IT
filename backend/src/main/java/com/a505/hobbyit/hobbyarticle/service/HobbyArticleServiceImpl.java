@@ -40,15 +40,10 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     private final HobbyMemberRepository hobbyMemberRepository;
     private final FileUploader fileUploader;
 
-    /*
-    모든 소모임 내 게시글을 가져온다.
-    회원Id, 현재 게시글 번호, 소모임Id, size를 매개변수로 받는다.
-     */
     @Override
     public Slice<HobbyArticleResponse> findAll(String memberId, Long storedId, Long hobbyId, Pageable pageable) {
-        Member member = memberRepository.findById(Long.parseLong(memberId))
-                .orElseThrow(NoSuchHobbyMemberException::new);
-        Hobby hobby = hobbyRepository.getReferenceById(hobbyId);
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
         return hobbyArticleRepository.findHobbyArticle(storedId, hobby, pageable);
     }

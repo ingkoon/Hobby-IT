@@ -2,7 +2,6 @@ package com.a505.hobbyit.hobbyarticleimg.domain;
 
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class HobbyArticleImg {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hobby_art_id", nullable = false)
     private HobbyArticle hobbyArticle;
 

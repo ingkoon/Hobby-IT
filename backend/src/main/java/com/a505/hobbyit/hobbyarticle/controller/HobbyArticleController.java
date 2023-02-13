@@ -48,7 +48,6 @@ public class HobbyArticleController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
     @GetMapping(value = "/{hobby-id}/article")
     public ResponseEntity<Slice<HobbyArticleResponse>> getArticleList(
             @AuthenticationPrincipal UserDetails userDetails,
