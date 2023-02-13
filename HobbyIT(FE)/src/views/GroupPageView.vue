@@ -4,18 +4,35 @@
     <div id='group'>
       <!-- 왼쪽 모임 정보 탭 -->
       <div id='groupinfo'>
-        <img :src='groupinfo.img' />
-        <div id='title'>{{ groupinfo.name }}</div>
+        <img id="groupimg" :src='groupinfo.img' />
+        <div id='title'>
+          <div v-if="!inputmode">
+            {{ groupinfo.name }}
+          </div>
+          <div v-else>
+            <input type="text" v-model="title"/>
+          </div>
+        </div>
         <div id='content'>
-          {{ groupinfo.intro }}
-
+          <div v-if="!inputmode">
+            {{ groupinfo.intro }}
+          </div>
+          <div v-else>
+            <textarea v-model="content"></textarea>
+          </div>
+          <div style="margin-top:10px">
+            #{{ groupinfo.category }}
+          </div>
           <div style='margin-top: 20px'>
             <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
             {{ groupinfo.participantsNum }} / {{ groupinfo.maxParticipantsNum }}
+
+            <v-icon v-if="groupinfo.privilege !== 'GENERAL'" @click="changeInfo" icon="mdi-pencil" size="small" style="float: right;"></v-icon>
           </div>
+          <input id="inputimg" type="file" accept="image/*" style="display: none;">
         </div>
 
-        <div style='display: flex; justify-content: space-around'>
+        <div v-if="groupinfo.hobbyMemberId !== null" style='display: flex; justify-content: space-around'>
           <!-- 글작성 모달 -->
           <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%'>
             <v-icon icon='mdi-plus-circle-outline'></v-icon>
@@ -25,27 +42,52 @@
             </v-dialog>
           </v-btn>
           <!-- 화상채팅 버튼 -->
-          <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%' @click='onclickVideoChat'>
+          <v-btn color='#2B146C' style='color:white; height: 44px; width: 47%' @click='onclickVideoChat'>
             <v-icon icon='mdi-video-account'></v-icon>
           </v-btn>
         </div>
 
+        <!-- 공지작성 -->
+        <div v-if="groupinfo.privilege === 'OWNER'">
+          <v-btn @click="openaddnotice" style="width:100%; color:white; background-color: #2b146c; margin: 15px 0;" > 공지 작성 </v-btn>
+        </div>
+
+        <!-- 그룹나가기 -->
+        <div v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null" style="text-align: right; font-family: linefont; margin-top: 20px;">
+          <v-btn @click="openexitgroup" style="background-color: #00000000; color: white;">모임 탈퇴</v-btn>
+        </div>
+        <!-- 그룹삭제 -->
+        <div v-if="groupinfo.privilege === 'OWNER'" style="text-align: right; font-family: linefont; margin-top: 20px;">
+          <v-btn @click="opendeletegroup" style="background-color: #00000000; color: white;">모임 삭제</v-btn>
+        </div>
+
+        <v-dialog v-model="addnoticemodal">
+            <add-notice @close="closeaddnotice" :groupid="groupid"/>
+        </v-dialog>
+        <v-dialog v-model="exitgroupmodal">
+          <exit-group @close="closeexitgroup" @send="exitgroup" :groupname="groupinfo.name"/>
+        </v-dialog>
+        <v-dialog v-model="deletegroupmodal">
+          <del-group @close="closedeletegroup" @send="deletegroup"/>
+        </v-dialog>
+
         <!-- 검색 -->
-        <v-text-field
+        <!-- <v-text-field
           clearable
           placeholder='검색'
           prepend-inner-icon='mdi-magnify'
           style='color: white; height: 40px'
           variant='outlined'
-        ></v-text-field>
+        ></v-text-field> -->
       </div>
       <!-- 오른쪽 게시판 탭 -->
-      <div id='board'>
-        <v-card style='background-color: #00000000'>
+      <div id='board' style="position:relative">
+        <v-card id='tabcard' style='background-color: #00000000' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
           <v-tabs v-model='tab' align-tabs='start' style='color: white; align-items: center; height: 57px'>
             <v-tab value='board'>게시글</v-tab>
             <v-tab value='notice'>공지사항</v-tab>
             <v-tab value='memberlist'>회원목록</v-tab>
+            <v-tab v-if="groupinfo.hobbyMemberId!==null" value='memberregi'>가입신청</v-tab>
             <div style='flex-grow: 1'>
               <div style='float: right'>
                 <v-icon color='white' icon='mdi-calendar' style='padding: 35px' @click.stop='drawer = !drawer'></v-icon>
@@ -78,11 +120,26 @@
                 <!-- 회원목록 -->
                 <group-member :groupid="groupid"/>
               </v-window-item>
+              <v-window-item value='memberregi'>
+                <!-- 가입신청 -->
+                <group-regi :groupid="groupid"/>
+              </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
-      </div>
 
+        <v-btn id="registerbtn" v-if="this.groupinfo.hobbyMemberId===null" @click="openregimodal" style="position: absolute; left:37%; top : 100px;">
+          가입 신청하기
+        </v-btn>
+
+      </div>
+      
+      <v-dialog v-model='freemodal'>
+        <freeRegi @close="closefreemodal" @send="closefreemodal" :groupname="groupinfo.name"/>
+      </v-dialog>
+      <v-dialog v-model='unfreemodal'>
+        <unfreeRegi @close="closeunfreemodal" @send="unfreeRegister"/>
+      </v-dialog>
       <v-dialog v-model='articlemodal'>
         <article-modal @closearticle='closearticle' />
       </v-dialog>
@@ -126,7 +183,7 @@
         </div>
       </div>
     </v-navigation-drawer>
-    <InfiniteScrollObserver @infinite-scroll-trigger='loadData' />
+    <InfiniteScrollObserver v-if="groupinfo.hobbyMemberId !== null" @infinite-scroll-trigger='loadData' />
 
   </div>
 </template>
@@ -134,15 +191,27 @@
 <script>
 import GroupNotice from '../components/GroupNotice.vue';
 import GroupMember from '../components/MemberList.vue';
+import GroupRegi from '../components/GroupRegi.vue';
 import ArticleItem from '../components/ArticleItem.vue';
 import ArticleAdd from '../components/AddGroupArticle.vue';
 import ArticleModal from '../components/GroupArticle.vue';
 import CanvasAdd from '@/components/CanvasAdd.vue';
 import InfiniteScrollObserver from '@/components/InfiniteScrollObserver.vue';
+import freeRegi from '@/components/modals/GroupFreeRegi.vue'
+import unfreeRegi from '@/components/modals/GroupRegister.vue'
+import addNotice from '@/components/modals/AddNotice'
+import exitGroup from '@/components/modals/GroupResign.vue'
+import delGroup from '@/components/modals/DelGroup.vue'
 
-import { getGroupInfo } from '@/api/hobby';
+import { useUserStore } from '@/store/user'
+import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup } from '@/api/hobby';
 
 export default {
+  setup(){
+    const userStore = useUserStore();
+    return {userStore}
+  },
+
   components: {
     InfiniteScrollObserver,
     ArticleItem,
@@ -150,10 +219,19 @@ export default {
     CanvasAdd,
     ArticleAdd,
     ArticleModal,
-    GroupMember
+    GroupMember,
+    GroupRegi,
+    freeRegi,
+    unfreeRegi,
+    addNotice,
+    exitGroup,
+    delGroup,
   },
   data() {
     return {
+      inputmode: false,
+      title : '',
+      content: '',
       tab: null,
       drawer: null,
       today: new Date(),
@@ -189,6 +267,12 @@ export default {
       groupinfo: [],
       articles: [],
       groupid : 0,
+      freemodal : false,
+      unfreemodal : false,
+      addnoticemodal : false,
+      file : '',
+      exitgroupmodal : false,
+      deletegroupmodal : false,
     };
   },
   computed: {
@@ -207,6 +291,11 @@ export default {
   },
 
   methods: {
+    stopFunc(e){
+      e.preventDefault();
+      e.stopPropagation();
+      return false
+    },
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
       window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
@@ -224,17 +313,47 @@ export default {
     closearticle() {
       this.articlemodal = false;
     },
+    openaddnotice(){
+      this.addnoticemodal = true;
+    },
+    closeaddnotice(){
+      this.addnoticemodal = false
+    },
+    openexitgroup(){
+      this.exitgroupmodal = true;
+    },
+    closeexitgroup(){
+      this.exitgroupmodal = false
+    },
+    opendeletegroup(){
+      this.deletegroupmodal = true;
+    },
+    closedeletegroup(){
+      this.deletegroupmodal = false
+    },
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
         this.groupinfo = data;
+        this.title = this.groupinfo.name
+        this.content = this.groupinfo.intro
+        this.file = null
       } catch (e) {
         console.error(e.message);
       }
+      
+      if(this.groupinfo.hobbyMemberId === null){
+      const articleclick = document.querySelectorAll('#tabcard')
+      for (let idx in articleclick){
+        let el = articleclick[idx]
+        if(el.addEventListener) {
+          el.addEventListener('click', this.stopFunc, true)
+        }
+      }
+    }
     },
     // only for test
     initArticles() {
-      console.log(this.articles, 'hehe');
       const data = {
         title: '제목',
         content: '사람이 살고있다',
@@ -245,9 +364,132 @@ export default {
       }
     },
     loadData() {
-      console.log('hoho');
       this.initArticles();
     },
+    openregimodal() {
+      if (this.groupinfo.freeRegistration === "FREE") {
+        this.freemodal = true
+        this.freeRegister()
+      }
+      else {
+        this.unfreemodal = true
+        this.unfreeRegister()
+      }
+    },
+    closefreemodal() {
+      this.freemodal = false
+    },
+    closeunfreemodal() {
+      this.unfreemodal = false
+    },
+    // 자유가입
+    async freeRegister() {
+      try {
+        const inputdata = {
+          message : ''
+        }
+        const { data } = await requestGroupJoin(this.groupid, inputdata)
+        console.log(data)
+      }
+      catch (e) {
+        console.error(e);
+      }
+      
+    },
+    // 비자유 가입
+    async unfreeRegister(msg) {
+      try {
+        const inputdata = {
+          message : msg
+        }
+        const { data } = await requestGroupJoin(this.groupid, inputdata)
+        console.log(data)
+      }
+      catch (e) {
+        console.error(e);
+      }
+      
+    },
+    changeInfo(){
+      this.inputmode = !this.inputmode
+      const img = document.getElementById('groupimg')
+
+      if(this.inputmode){
+        img.addEventListener('click',this.clickimg)
+      }
+      else {
+        this.changeGroupInfo()
+        img.removeEventListener('click',this.clickimg,false)
+      }
+    },
+    clickimg() {
+      const inputbtn = document.getElementById('inputimg')
+      inputbtn.click()
+      inputbtn.addEventListener('change',this.getImageFiles)
+    },
+    getImageFiles(e) {
+      const files = e.currentTarget.files;
+      this.file = files[0];
+      console.log(typeof files, files);
+      const file = files[0];
+
+      // if (!file.type.match("image/.*")) {
+      //     alert('이미지 파일만 업로드가 가능합니다.');
+      //     return
+      // }
+      const reader = new FileReader();
+      reader.onload = e => {
+        const thumbnail = document.getElementById('groupimg');
+        thumbnail.setAttribute('src', e.target.result);
+        thumbnail.setAttribute('data-file', file.name);
+      };
+      reader.readAsDataURL(file);
+    },
+    async changeGroupInfo(){
+      try {
+        const inputdata = {
+          name : this.title,
+          intro : this.content,
+          max_participants_num : this.groupinfo.maxParticipantsNum,
+        }
+
+        console.log(inputdata);
+
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(inputdata)], {type:'application/json'}));
+        formData.append('multipartFile', new Blob([JSON.stringify(this.file)], {type:'application/json'}))
+
+        const { data } = await updateGroupInfo(this.groupid, formData)
+        console.log(data)
+      }
+      catch(e){
+        console.log(e)
+      }
+    },
+    // 그룹 나가기
+    async exitgroup() {
+      try {
+        const { data } = await resignGroup(this.groupid)
+        console.log(data)
+        this.exitgroupmodal = false
+        this.$router.push({name:'Main'})
+      }
+      catch(e) {
+        console.log(e)
+      }  
+    },
+    // 그룹 삭제
+    async deletegroup() {
+      try {
+        const { data } = await deleteGroup(this.groupid)
+        console.log(data)
+        this.deletegroupmodal = false
+        this.$router.push({name:'Main'})
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
   },
 };
 </script>
@@ -286,11 +528,11 @@ h3 {
   font-size: 20px;
   font-family: linefont;
   word-break: keep-all;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 button {
-  margin: 15px 0;
+  margin: 0;
 }
 
 #board {
@@ -306,26 +548,45 @@ button {
   color: #642efe;
 }
 
-.v-field--variant-outlined .v-field__outline__end.v-locale--is-ltr,
-.v-locale--is-ltr .v-field--variant-outlined .v-field__outline__end {
-  border-radius: 0 40px 40px 0 !important;
-  opacity: 1;
-}
-
-.v-field--variant-outlined .v-field__outline__start {
-  flex: 1 !important;
-}
-
-.v-field--variant-outlined .v-field__outline__start.v-locale--is-ltr,
-.v-locale--is-ltr .v-field--variant-outlined .v-field__outline__start {
-  border-radius: 40px 0 0 40px !important;
-  opacity: 1;
-}
-
 #canvasdialog button {
   background: linear-gradient(to bottom, #642efe, #0e0f28);
   width: 120px;
   height: 120px;
   border-radius: 150px;
 }
+
+.v-tab--selected .v-tab__slider {
+    background-color: #ffffff00;
+  }
+
+.v-ripple__container {
+  background-color: #ffffff00;
+}
+
+#registerbtn {
+  background: linear-gradient(to bottom, #fa8eb6, #8e92fa80);
+  width: 200px;
+  height: 200px;
+  border-radius: 150px;
+  border : 1px solid white;
+  color : white;
+}
+
+input {
+  color : white;
+  border : 1px solid white;
+  border-radius: 10px;
+  padding :0 5px;
+  width:100%
+}
+
+textarea {
+  color : white;
+  border : 1px solid white;
+  border-radius: 10px;
+  padding :0 5px;
+  width:100%;
+  font-size:15px;
+}
+
 </style>

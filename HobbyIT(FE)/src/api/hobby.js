@@ -39,8 +39,7 @@ export function getFreshHobbyList() {
 }
 
 // 16.모임생성
-export function createGroup(data) {
-  console.log(multipartInstance, 'haha');
+function createGroup(data) {
   return multipartInstance.post('', data);
 }
 
@@ -68,7 +67,7 @@ export function deleteGroupMember(hobby_id, member_id) {
 export function requestGroupJoin(hobby_id, data) {
   return instance.post(`/${hobby_id}/join`, data);
 }
-
+       
 // 22.모임 가입 신청 회원 리스트 확인
 export function getGroupJoinRequests(hobby_id) {
   return instance.get(`/${hobby_id}/join`);
@@ -86,7 +85,7 @@ export function resignGroup(hobby_id) {
 
 // 25.모임 정보 변경
 export function updateGroupInfo(hobby_id, data) {
-  return instance.put(`/${hobby_id}`, data);
+  return multipartInstance.put(`/${hobby_id}`, data);
 }
 
 // 26.모임 삭제
@@ -101,7 +100,7 @@ export function getGroupArticleList(hobby_id) {
 
 // 28.모임 게시판 게시글 작성
 export function postGroupArticle(hobby_id, data) {
-  return instance.post(`/${hobby_id}/article`, data);
+  return multipartInstance.post(`/${hobby_id}/article`, data);
 }
 
 // 29.모임 게시판 게시글 검색

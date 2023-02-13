@@ -5,11 +5,11 @@
     <div style="font-size: 36px">모임을 탈퇴하시겠습니까?</div>
     <div style="font-size: 14px; font-family: linefont">탈퇴한 모임은 재가입이 어렵습니다</div>
     <div style="font-size: 20px; font-family: linefont">
-      "<span style="font-family: linefontbold">블라블라</span>"에서 떠나시겠습니까?
+      "<span style="font-family: linefontbold">{{ groupname }}</span>"에서 떠나시겠습니까?
     </div>
 
     <div style="display: flex">
-      <span id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
+      <span @click="send" id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
       <span id="cancelbtn" style="color: white" @click="close"> 취소 </span>
     </div>
   </v-card>
@@ -17,10 +17,16 @@
 
 <script>
 export default {
+  props:{
+    groupname : String,
+  },
   methods: {
     close() {
       this.$emit('close');
     },
+    send(){
+      this.$emit('send');
+    }
   },
 };
 </script>

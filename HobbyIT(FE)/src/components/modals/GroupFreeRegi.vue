@@ -3,19 +3,26 @@
     <v-icon icon="mdi-close" style="align-self: end" @click="close"></v-icon>
     <v-icon icon="mdi-party-popper" style="align-self: center"></v-icon>
     <div style="font-size: 36px">Welcome!</div>
-    <div style="font-size: 14px; font-family: linefont">"블라블라" 모임에 가입이 완료되었습니다!</div>
+    <div style="font-size: 14px; font-family: linefont">"{{ groupname }}" 모임에 가입이 완료되었습니다!</div>
     <div style="font-size: 20px; font-family: linefont">즐거운 시간 보내세요</div>
 
-    <span id="okbtn" style="color: white"> 확인 </span>
+    <span id="okbtn" style="color: white" @click="close"> 확인 </span>
   </v-card>
 </template>
 
 <script>
 export default {
+  props : {
+    groupname : String,
+  },
   methods: {
+    
     close() {
       this.$emit('close');
     },
+    send(){
+      this.$emit('send');
+    }
   },
 };
 </script>
