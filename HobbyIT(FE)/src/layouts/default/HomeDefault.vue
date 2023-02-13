@@ -1,6 +1,6 @@
 <template>
-  <v-app id="app">
-    <default-bar style="position: fixed" />
+  <v-app id='app'>
+    <default-bar style='position: fixed' />
 
     <router-view />
   </v-app>
@@ -42,16 +42,16 @@ export default {
 
 @font-face {
   font-family: 'linefontbold';
-  src: url('/assets/fonts/LINESeedKR-Bd.ttf');
+  src: url('/assets/fonts/LINESeedSansKR-Bold.woff2');
 }
 
 @font-face {
   font-family: 'linefont';
-  src: url('/assets/fonts/LINESeedKR-Rg.ttf');
+  src: url('/assets/fonts/LINESeedSansKR-Regular.woff2');
 }
 
 @font-face {
   font-family: 'logofont';
-  src: url('/assets/fonts/FredokaOne-Regular.ttf');
+  src: url('/assets/fonts/FredokaOne-Regular.woff2');
 }
 </style>
