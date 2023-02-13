@@ -92,6 +92,7 @@ export default {
     ParticipateGroup,
     MyPageGroup,
     MyPage1,
+    MyPage2,
     deleteModal,
   },
   data() {
@@ -119,6 +120,7 @@ export default {
         console.log(nickname)
         const {data} = await getParticipatingGroup(nickname)
         this.partigroup = data
+        
       }
       catch(err){
         console.log(err)

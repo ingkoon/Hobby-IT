@@ -39,7 +39,7 @@ export function getFreshHobbyList() {
 }
 
 // 16.모임생성
-function createGroup(data) {
+export function createGroup(data) {
   return multipartInstance.post('', data);
 }
 
