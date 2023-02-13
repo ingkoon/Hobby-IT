@@ -23,6 +23,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -41,6 +42,9 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
+    @Value("${file.img.profile}")
+    private String profileImg;
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -65,6 +69,7 @@ public class MemberServiceImpl implements MemberService {
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .imgUrl(profileImg)
                 .isSns(MemberIsSns.FALSE)
                 .state(MemberState.ACTIVE)
                 .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
@@ -93,7 +98,7 @@ public class MemberServiceImpl implements MemberService {
         MemberState state = member.getState();
         if (state.equals(MemberState.BAN)) {
             throw new NoSuchMemberException("이용에 제한이 걸린 회원입니다.");
-        } else if(state.equals(MemberState.RESIGNED)) {
+        } else if (state.equals(MemberState.RESIGNED)) {
             throw new NoSuchMemberException("탈퇴한 회원입니다.");
         } else if (state.equals(MemberState.WAITING)) {
             member.updateState(MemberState.ACTIVE, null);
