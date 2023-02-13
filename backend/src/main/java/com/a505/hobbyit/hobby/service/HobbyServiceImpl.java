@@ -152,6 +152,7 @@ public class HobbyServiceImpl implements HobbyService{
             log.info("==========파일 저장==========");
             fileUrl = fileUploader.upload(multipartFile, domain);
         }
+        log.info(request.getIntro() + " & "+ request.getName() + " & " + request.getMax_participants_num());
         hobby.updateHobby(request, fileUrl);
     }
     @Transactional
