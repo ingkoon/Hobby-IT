@@ -265,19 +265,16 @@ export default {
       let file = new File([myBlob], this.date + ".png")
 
       let formData = new FormData()
-      formData.append("file", file)
+      formData.append("multipartFile", file)
 
-      console.log(formData.get('file'))
+      console.log(formData.get('multipartFile'))
 
-      this.send(file)
+      this.send(formData)
     },
 
     async send(file){
       try {
-        const inputdata = {
-          multipartFile : file
-        }
-        const { data } = await postGroupVisitorBook(this.groupid, this.senddate, inputdata)
+        const { data } = await postGroupVisitorBook(this.groupid, this.senddate, file)
         console.log(data)
       }
       catch(e){
