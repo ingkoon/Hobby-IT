@@ -60,6 +60,11 @@ function getWaitingGroup() {
   return instance.get('/hobby/pending');
 }
 
+// 카카오로그인 요청
+function getKakao(){
+  return instanceWithNoAuth.get('/oauth/kakao/login')
+}
+
 export {
   memberSignup,
   memberLogin,
@@ -71,4 +76,5 @@ export {
   updateMyPage,
   memberDelete,
   resetPassword,
+  getKakao,
 };

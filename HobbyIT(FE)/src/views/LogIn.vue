@@ -49,10 +49,10 @@
           @click='handleLogin'
         >Log In
         </v-btn>
-        <div style='text-align: right; margin-right: 60px; font-family: linefont'>비밀번호 찾기</div>
+        <div style='text-align: right; margin-top:5px; margin-right: 60px; font-family: linefont'>비밀번호 찾기</div>
 
-        <div id='divsns' style='font-family: linefont; margin-top: 20px'>SNS 로그인</div>
-        <v-btn color='#F7E600' style='width: 270px; height: 44px; font-size: 16px; margin-top: 0'
+        <!-- <div id='divsns' style='font-family: linefont; margin-top: 20px'>SNS 로그인</div> -->
+        <v-btn @click="kakaologin" color='#F7E600' style='width: 270px; height: 44px; font-size: 16px; margin-top: 20px'
         >카카오로 로그인
         </v-btn
         >
@@ -61,7 +61,7 @@
         </v-btn
         >
 
-        <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 5px; font-family: linefont'>
+        <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 10px; font-family: linefont'>
           아직 회원이 아니신가요?
           <span id='gosignin' style='font-family: linefontbold' @click='handleGoSignup'>회원가입</span>
         </div>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { memberLogin } from '@/api/member';
+import { memberLogin, getKakao } from '@/api/member';
 import { useUserStore } from '@/store/user';
 
 export default {
@@ -126,6 +126,10 @@ export default {
       }
 
     },
+    kakaologin() {
+      window.location.replace("https://kauth.kakao.com/oauth/authorize?client_id=65d9de3ecb31d4f1a02eb1e2affe862f&redirect_uri=http://localhost:8080/api/member/oauth/kakao&response_type=code")
+      
+    }
   },
 };
 </script>
