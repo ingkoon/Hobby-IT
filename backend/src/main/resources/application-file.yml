@@ -1,2 +1,4 @@
 file:
   dir: C:/Users/SSAFY/Desktop
+  img:
+    profile: /static/images/defaultprofileimg.png
