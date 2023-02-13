@@ -320,7 +320,6 @@
           </v-btn>
         </div> -->
 
-
         <div id="qwerty" style="position: relative; margin-right: 1000px">
           <div
             id="foot1"
@@ -596,7 +595,7 @@ export default {
         }
       })
       .from("#text1",{y:100*-1, opacity:0})
-      .from("#text2",{x:300*1, opacity:0})
+      .from("#text2",{x:200*1, opacity:0})
       .from("#text3",{x:50*-1, opacity:0})
 
       gsap.timeline({
@@ -626,15 +625,15 @@ export default {
       gsap.timeline({
         scrollTrigger:{
           trigger: "#qwerty",
-          start: "top bottom",
-          end: "bottom bottom",
+          start: "700px",
+          end: "1500px",
           scrub: true,
         }
       })
-      .from("#foot1",{y:50*-1, opacity:0})
-      .from("#foot2",{y:50*-1, opacity:0})
-      .from("#foot3",{y:50*-1, opacity:0})
-      .from("#foot4",{y:50*-1, opacity:0})
+      .from("#pst1",{x: 50, y:50*-1, opacity:0})
+      .from("#pst2",{x:50*-1, y:50, opacity:0})
+      .from("#pst3",{x:50*1, y:50*-1, opacity:0})
+
     },
 
     tChange() {
