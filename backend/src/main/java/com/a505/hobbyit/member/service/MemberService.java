@@ -33,4 +33,10 @@ public interface MemberService {
     List<MemberHobbyResponse> getHobbyList(final String token, String nickname);
 
     List<MemberPendingResponse> getPendingList(final String token);
+
+    String redirectKakao();
+
+    String getKakaoToken(String code);
+
+    List<String> getKakaoMember(String token);
 }
