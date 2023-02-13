@@ -14,5 +14,5 @@ public class HobbyUpdateRequest {
     @NotNull
     private String intro;
     @NotNull
-    private int maxParticipantsNum;
+    private int max_participants_num;
 }
