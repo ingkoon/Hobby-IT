@@ -39,7 +39,7 @@ export function getFreshHobbyList() {
 }
 
 // 16.모임생성
-function createGroup(data) {
+export function createGroup(data) {
   return multipartInstance.post('', data);
 }
 
@@ -174,7 +174,7 @@ export function deleteGroupNotice(hobby_id, notice_id) {
 
 // 42.모임 방명록 등록
 export function postGroupVisitorBook(hobby_id, date, data) {
-  return instance.post(`/${hobby_id}/postit/${date}`, data);
+  return multipartInstance.post(`/${hobby_id}/postit/${date}`, data);
 }
 
 // 43.모임 방명록 조회

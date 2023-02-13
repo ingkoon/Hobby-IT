@@ -26,23 +26,23 @@
               <col width="20%" />
             </colgroup>
             <tr id="noticetitle">
-              <td>{{ row.id }}</td>
+              <td>{{ row.waitId }}</td>
               <td>
-                <a>{{ row.nickName }}</a>
+                <a>{{ row.nickname }}</a>
               </td>
               <td>
-                <div v-if="row.privilege === 'OWNER'"> 소유자 </div> 
-                <div v-else-if="row.privilege === 'GENERAL'"> 회원 </div> 
-                <div v-else> 매니저 </div>
+                {{ row.message }} 
               </td>
-              <td> 가입일자 </td>
+              <td> {{ row.applyDate.substring(0,10) }} </td>
               <td>
-                <v-btn style="background-color: #5278FF90; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
-                  <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
-                </v-btn>
-                <v-btn style="background-color: #FF052370; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
-                  <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
-                </v-btn>
+                <div style="display:flex;">
+                  <v-btn @click="openallow(row.waitId)" style="background-color: #5278FF90; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
+                    <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
+                  </v-btn>
+                  <v-btn @click="opendeny" style="background-color: #FF052370; border : 1px solid #FA8EB6; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
+                    <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
+                  </v-btn>
+                </div>
               </td>
             </tr>
           </table>
@@ -53,27 +53,41 @@
         <td colspan="4">데이터가 없습니다.</td>
       </tr>
     </table>
+
+    <v-dialog v-model="allowmodal">
+      <allow-mem @close="closeallow" :waitid="waitid"/>
+    </v-dialog>
+
+    <v-dialog v-model="denymodal">
+      <deny-mem @close="closedeny" :waitid="waitid"/>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { getGroupJoinRequests } from '@/api/hobby';
+import AllowMem from '@/components/modals/AllowMem.vue'
+import DenyMem from '@/components/modals/DenyMem.vue'
 
 export default {
+  components : {
+    AllowMem,
+    DenyMem,
+    
+  },
   props : {
     groupid : Number,
   },
   data() {
     return {
       list: [],
-      tmplist: [
-        
-      ],
       no: '',
       paging: '', //페이징 데이터
       page: this.$route.query.page ? this.$route.query.page : 1,
       keyword: this.$route.query.keyword,
-      
+      allowmodal : false,
+      denymodal: false,
+      waitid : 0,      
     };
   },
   created() {
@@ -84,12 +98,13 @@ export default {
 
       try {
         const { data } = await getGroupJoinRequests(id);
-        this.tmplist = data
+        this.list = data
+        console.log(this.list)
       }
       catch (e) {
         console.log(e)
       }
-      this.list = this.tmplist
+      
       const paging = {
         totalCount: this.tmplist.length,
         total_page: Math.ceil(this.tmplist.length / 10),
@@ -100,6 +115,20 @@ export default {
       };
       
     },
+
+    openallow(id){
+      this.allowmodal = true;
+      this.waitid = id
+    },
+    closeallow() {
+      this.allowmodal = false
+    },
+    opendeny(){
+      this.denymodal = true;
+    },
+    closedeny() {
+      this.denymodal = false
+    }
   },
 };
 </script>

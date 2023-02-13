@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {postGroupArticle} from '@/api/hobby'
+import {postGroupNotice} from '@/api/hobby'
 export default {
   data(){
     return {
@@ -54,14 +54,11 @@ export default {
         const inputdata = {
           title : this.title,
           content : this.content,
-          category : "NOTICE",
         }
-        const formData = new FormData();
-        formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
-        formData.append('multipartFile', new Blob(this.file, { type: 'application/json' }))
-
-        const { data } = await postGroupArticle(this.groupid, formData)
+        
+        const { data } = await postGroupNotice(this.groupid, JSON.stringify(inputdata))
         console.log(data)
+        this.close()
       }
       catch (e){
         console.log(e)

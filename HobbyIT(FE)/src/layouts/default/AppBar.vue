@@ -1,29 +1,29 @@
 <template>
-  <v-app-bar flat style="background-color: #0e0f28">
+  <v-app-bar flat style='background-color: #0e0f28'>
     <v-app-bar-title>
       <router-link style='display: flex; align-content: center' to='/'>
         <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
-        <span class="lo" style='font-family: logofont'>HOBBY'</span>
-        <span class="go" style='color: #8947e2; font-family: logofont'>IT</span>
+        <span class='lo' style='font-family: logofont'>HOBBY'</span>
+        <span class='go' style='color: #8947e2; font-family: logofont'>IT</span>
       </router-link>
     </v-app-bar-title>
 
-    <div id='nav'>
-      <router-link to='/about'><span class="right" style="font-size: 24px;">ABOUT</span></router-link>
-      <router-link to='/main'><span class="bottom" style="font-size: 24px;">JOIN</span></router-link>
-      <router-link to='/promo'><span class="left" style="font-size: 24px;">PROMO</span></router-link>
+    <div id='nav' class='black-han-sans'>
+      <router-link to='/about'><span class='right' style='font-size: 24px;'>ABOUT</span></router-link>
+      <router-link to='/main'><span class='bottom' style='font-size: 24px;'>JOIN</span></router-link>
+      <router-link to='/promo'><span class='left' style='font-size: 24px;'>PROMO</span></router-link>
     </div>
 
-    <span v-if="isLoggedIn">
-      <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
-      <router-link :to="`/mypage/${nickname}`">
-        <span style="font-family: linefontbold">{{ userStore.userNickname }}</span>
+    <span v-if='isLoggedIn'>
+      <v-icon color='blue-lighten-2' icon='mdi-account-circle' style='margin-right: 10px'></v-icon>
+      <router-link :to='`/mypage/${nickname}`'>
+        <span style='font-family: linefontbold'>{{ userStore.userNickname }}</span>
         님, 안녕하세요!
       </router-link>
-      <v-btn color="white" rounded="pill" style="background-color: #8947e2" @click="handleLogout">로그아웃</v-btn>
+      <v-btn color='white' rounded='pill' style='background-color: #8947e2' @click='handleLogout'>로그아웃</v-btn>
     </span>
-    <div v-else style="min-width: 324px; display: flex; justify-content: flex-end">
-      <v-btn color="white" rounded="pill" style="background-color: #8947e2; display: flex" @click="handleGoLoginPage">
+    <div v-else style='min-width: 324px; display: flex; justify-content: flex-end'>
+      <v-btn color='white' rounded='pill' style='background-color: #8947e2; display: flex' @click='handleGoLoginPage'>
         로그인
       </v-btn>
     </div>
@@ -109,19 +109,19 @@ span:hover:not(.lo, .go) {
   filter: drop-shadow(0 0 4px #f9f7f1);
 }
 
-.left{
+.left {
   background-position: 0% 0%;
   background-size: 0% 100%;
 
 }
 
-.bottom{
+.bottom {
   background-position: 0% 100%;
   background-size: 100% 0%;
 
 }
 
-.right{
+.right {
   background-position: 100% 0%;
   background-size: 0% 100%;
 }
@@ -144,5 +144,14 @@ div.v-toolbar__content {
   /* justify-content: space-between; */
   padding: 0 20px;
   align-items: center;
+}
+
+@font-face {
+  font-family: 'black-han-sans';
+  src: url('/assets/fonts/BlackHanSans-Regular.woff2');
+}
+
+.black-han-sans {
+  font-family: black-han-sans;
 }
 </style>

@@ -404,6 +404,7 @@ export default {
         }
         const { data } = await requestGroupJoin(this.groupid, inputdata)
         console.log(data)
+        this.closeunfreemodal()
       }
       catch (e) {
         console.error(e);
