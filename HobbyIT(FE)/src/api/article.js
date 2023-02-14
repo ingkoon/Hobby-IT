@@ -35,3 +35,8 @@ export function updatePromotionArticle(data, article_id) {
 export function deletePromotionArticle(article_id) {
   return instance.delete(`/${article_id}`);
 }
+
+// 50.홍보 게시판 내가 방장인 모임 가져오기
+export function getMasterList() {
+  return instance.get(`/possession`);
+}

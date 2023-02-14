@@ -1,24 +1,21 @@
 <template>
   <v-card id="notleader">
-    <v-icon icon="mdi-close" style="align-self: end" @click="close"></v-icon>
-    <v-icon icon="mdi-face-agent" style="align-self: center"></v-icon>
+    <v-icon icon="mdi-close" style="align-self: end" @click="closenotleader"></v-icon>
+    <v-icon icon="mdi-face-agent" style="align-self: center; margin-top: -20px;"></v-icon>
     <div style="font-size: 36px">방장 권한이 없습니다</div>
     <div style="font-size: 14px; font-family: linefont">이런! 현재 가입한 모임 중 방장으로 활동 중인 모임이 없는 것 같습니다.</div>
     <div style="font-size: 20px; font-family: linefont">홍보게시판은 모임 방장만 글 작성이 가능합니다.</div>
 
-    <span id="okbtn" style="color: white" @click="close"> 확인 </span>
+    <span id="okbtn" style="color: white" @click="closenotleader"> 확인 </span>
   </v-card>
 </template>
 
 <script>
 export default {
   methods: {
-    close() {
-      this.$emit('close');
+    closenotleader() {
+      this.$emit('closenotleader');
     },
-    // send(){
-    //   this.$emit('send');
-    // },
   },
 };
 </script>

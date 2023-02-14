@@ -34,6 +34,9 @@
           color: #FA8EB6;
           margin: 0px 0px 20px 400px;"
           >홍보글 작성
+          <v-dialog v-model="notleader" activator="parent">
+            <not-leader @closenotleader="closenotleader" />
+          </v-dialog>
           <v-dialog v-model="addpromo" activator="parent">
             <add-promo @closeaddpromo="closeaddpromo" />
           </v-dialog>
@@ -63,19 +66,20 @@
             v-for="(row, idx) in promolist" id="lst" :key="idx"
             style="background-color: #0E0F28; color: white; padding: 0px;"
           ><v-expansion-panel-title expand-icon=none collapse-icon="mdi-close" style="display: flex; align-items: center; text-align: center;">
-            <div style="width:15%; margin-left:-20px; font-weight: 400;">{{ no - idx }}</div>
-            <div style="width:5%;  margin-left:5px; font-weight: 400;">{{ row.header }}</div>
+            <div style="width:15%; margin-left:-20px; font-weight: 400;">{{ row.id }}</div>
+            <div style="width:5%;  margin-left:5px; font-weight: 400;">{{ row.header === 'MEETUP' ? '교류' : '모집' }}</div>
             <div style="width:50%; margin-left:15px;">{{ row.title }}</div>
             <div style="width:10%; margin-left:10px;">{{ row.nickname }}</div>
             <div style="width:20%; margin-right:-120px;">{{ row.regDt.substring(0, 10) }}</div>
           </v-expansion-panel-title>
-          <v-expansion-panel-text :style="row.title === 'MEETUP' ? 'background-color: #2E186B;' : 'background-color: #8A2B6A;' ">
+          <v-expansion-panel-text :style="row.header === 'MEETUP' ? 'background-color: #8A2B6A;' : 'background-color: #2E186B;' ">
             <!-- <div style="text-align: right; margin-left: -150px;  margin-right: 20px;">
               <v-icon icon = "mdi-eye" size="18" style="color: white;"></v-icon>&nbsp;&nbsp;&nbsp;{{row.hit}}
             </div> -->
             <div style="font-size: 24px; margin-top: 10px;">
-              hobby: <span style="color: #EE49FD;">여행갈래</span>
+              <span style="color: #EE49FD; font-size: 30px;">{{ row.hobbyName }}</span> 모임
             </div>
+            <v-divider></v-divider>
             <br />{{ row.content }}
             <div style="text-align:right;">
 
@@ -91,7 +95,7 @@
               <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
                 <v-icon icon="mdi-delete-outline" color="white"></v-icon>
                 <v-dialog v-model="delpromo" activator="parent">
-                  <del-promo @closedelpromo="closedelpromo" />
+                  <del-promo @closedelpromo="closedelpromo" @deletepromo="deletepromo(`${row.id}`)" @afterdelete="afterdelete" />
                 </v-dialog>
               </v-btn>
 
@@ -102,7 +106,7 @@
       </div>
 
       <!--페이징-->
-      <div v-if="paging.totalCount > 0" class="pagination">
+      <!-- <div v-if="paging.totalCount > 0" class="pagination">
         <a class="first" href="javascript:;" @click="fnPage(1)">&lt;&lt;</a>
         <a
           v-if="paging.start_page > 10"
@@ -129,7 +133,7 @@
         <a class="last" href="javascript:;" @click="fnPage(`${paging.total_page}`)"
           >&gt;&gt;</a
         >
-      </div>
+      </div> -->
 
     </div>
   </div>
@@ -138,45 +142,56 @@
 <script>
 import AddPromo from "../components/modals/AddPromo.vue";
 import DelPromo from "../components/modals/DelPromo.vue";
+import NotLeader from "../components/modals/NotLeader.vue";
 
 //axios작업
-import { getPromotionArticlePage, createPromotionArticle, getPromotionArticle, updatePromotionArticle, deletePromotionArticle} from '@/api/article';
+import { getPromotionArticlePage, createPromotionArticle, updatePromotionArticle, deletePromotionArticle, getMasterList} from '@/api/article';
 
 export default {
   components:{
     AddPromo,
     DelPromo,
+    NotLeader,
   },
   data() {
     return {
-      index: 0,
+      pgno: 0,
       list: [],
       addpromo: false,
       delpromo: false,
       updatepromo: false,
-      no: "",
-      paging: "", //페이징 데이터
-      start_page: "", //시작페이지
-      page: this.$route.query.page ? this.$route.query.page : 1,
-      keyword: this.$route.query.keyword,
-      paginavigation: function () {
-        //페이징 처리 for문 커스텀
-        var pageNumber = [];
-        var start_page = this.paging.start_page;
-        var end_page = this.paging.end_page;
-        for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
-        return pageNumber;
-      },
+      notleader: false,
+      // no: "",
+      // paging: "", //페이징 데이터
+      // start_page: "", //시작페이지
+      // page: this.$route.query.page ? this.$route.query.page : 1,
+      // keyword: this.$route.query.keyword,
+      // paginavigation: function () {
+      //   //페이징 처리 for문 커스텀
+      //   var pageNumber = [];
+      //   var start_page = this.paging.start_page;
+      //   var end_page = this.paging.end_page;
+      //   for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
+      //   return pageNumber;
+      // },
       promolist:[],
-
+      masterlist: [],
     };
   },
-  created() {
-    this.getPromoList(this.index);
+  mounted() {
+    this.getPromoList(this.pgno);
+    this.getMasterList();
   },
   methods: {
+    closenotleader(){
+      this.notleader = false;
+    },
     openaddpromo() {
-      this.addpromo = true;
+      if (this.masterlist.length === 0) {
+        this.notleader = true;
+      } else {
+        this.addpromo = true;
+      }
     },
     closeaddpromo() {
       this.addpromo = false;
@@ -192,6 +207,9 @@ export default {
     },
     closeupdatepromo() {
       this.updatepromo = false;
+    },
+    afterdelete(){
+      this.getPromoList(this.pgno);
     },
     getlist() {
       this.list = this.tmplist
@@ -232,20 +250,24 @@ export default {
         console.log("홍보게시판 리스트 불러오기 실패 : ",e.message)
       }
     },
-    // async createPromo(){
-    //   try {
-
-    //   } catch (e) {
-    //     console.log("홍보게시글 작성 실패 : ",e.message)
-    //   }
-    // },
-    // async getPromoArticle(){
-    //   try {
-    //     const { data } = await getPromotionArticle();
-    //   } catch (e) {
-    //     console.log("홍보게시글 불러오기 실패 : ",e.message);
-    //   }
-    // },
+    async getMasterList(){
+      try {
+        // const res =  await getMasterList();
+        // console.log(res);
+        const { data:{ownHobbyList} } = await getMasterList();
+        this.masterlist = ownHobbyList;
+        console.log('ㅎㅎㅎ'+this.masterlist.length);
+      } catch (e) {
+        console.log("방장 리스트 불러오기 실패 : ",e.message)
+      }
+    },
+    async createPromo(data, hobby_id){
+      try {
+        createPromotionArticle(data, hobby_id);
+      } catch (e) {
+        console.log("홍보게시글 작성 실패 : ",e.message)
+      }
+    },
     // async updatePromo(data, article_id){
     //   try {
 
@@ -253,14 +275,14 @@ export default {
     //     console.log("홍보게시글 수정 실패 : ",e.message)
     //   }
     // },
-    // async deletePromo(){
-    //   try {
-    //     const { data } = await deletePromotionArticle(article_id);
-    //     console.log(data);
-    //   } catch (e) {
-    //     console.log("홍보게시글 삭제 실패 : ",e.message)
-    //   }
-    // },
+    async deletepromo(article_id){
+      try {
+        await deletePromotionArticle(article_id);
+        await this.afterdelete();
+      } catch (e) {
+        console.log("홍보게시글 삭제 실패 : ",e.message)
+      }
+    },
   },
 }
 </script>
