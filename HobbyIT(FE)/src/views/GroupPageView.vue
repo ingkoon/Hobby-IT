@@ -34,13 +34,14 @@
 
         <div v-if="groupinfo.hobbyMemberId !== null" style='display: flex; justify-content: space-around'>
           <!-- 글작성 모달 -->
-          <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%'>
+          <v-btn @click="openaddarticle" color='#2B146C' style='color: white; height: 44px; width: 47%'>
             <v-icon icon='mdi-plus-circle-outline'></v-icon>
-
-            <v-dialog v-model='addarticlemodal' activator='parent'>
-              <article-add @closeaddarticle='closeaddarticle' />
-            </v-dialog>
           </v-btn>
+
+          <v-dialog v-model='addarticlemodal'>
+            <article-add @close='closeaddarticle' :group="[groupid, groupinfo.name]"/>
+          </v-dialog>
+
           <!-- 화상채팅 버튼 -->
           <v-btn color='#2B146C' style='color:white; height: 44px; width: 47%' @click='onclickVideoChat'>
             <v-icon icon='mdi-video-account'></v-icon>
@@ -273,9 +274,10 @@ export default {
       file : '',
       exitgroupmodal : false,
       deletegroupmodal : false,
-      lastnum : null,
+      lastnum : '',
       morearticle : true,
       clickid : 0,
+      len : 0,
     };
   },
   computed: {
@@ -306,6 +308,9 @@ export default {
     },
     closeAddedModal() {
       this.canvasmodal = false;
+    },
+    openaddarticle() {
+      this.addarticlemodal = true;
     },
     closeaddarticle() {
       this.addarticlemodal = false;
@@ -366,14 +371,16 @@ export default {
       // for (let i = 0; i < 10; i++) {
       //   this.articles.push(data);
       // }
-
+  
       try {
         const { data } = await getGroupArticleList(this.groupid, this.lastnum)
+        console.log(data)
         for(let i = 0; i < data.content.length; i++){
           this.articles.push(data.content[i])
         }
-        if(data.length > 0){
-          this.lastnum = data.content[9].id
+        if(data.content.length > 0){
+          console.log(data.content.length -1 )
+          this.lastnum = data.content[data.content.length -1 ].id
           if(data.last) {
             this.morearticle = false;
           }

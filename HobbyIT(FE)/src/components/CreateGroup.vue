@@ -92,6 +92,7 @@ export default {
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
+      console.log(files)
       this.file = files[0];
       console.log(typeof files, files);
       const file = files[0];

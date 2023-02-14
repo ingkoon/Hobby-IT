@@ -12,7 +12,7 @@
           background-color: #0e0f28;
         "
       >
-        <span id="groupname">To. John, 나 여행가고싶어</span>
+        <span id="groupname">To. {{ group[1] }}</span>
         <span>게시글 작성</span>
         <v-icon icon="mdi-close" size="small" @click="closeaddarticle"></v-icon>
       </div>
@@ -46,10 +46,10 @@
             다나카
           </div>
 
-          <v-text-field color="white" placeholder="제목" style="margin: 15px 10px"></v-text-field>
+          <v-text-field v-model="title" color="white" placeholder="제목" style="margin: 15px 10px"></v-text-field>
 
           <v-textarea
-            :model-value="content"
+            v-model="content"
             :rules="rules"
             auto-grow="false"
             color="white"
@@ -59,7 +59,7 @@
             variant="outlined"
           ></v-textarea>
 
-          <v-btn color="#FA8EB6" style="color: white; width: 100px; float: right">업로드</v-btn>
+          <v-btn @click="send" color="#FA8EB6" style="color: white; width: 100px; float: right">업로드</v-btn>
         </div>
       </div>
     </v-card>
@@ -67,18 +67,24 @@
 </template>
 
 <script>
+import { postGroupArticle } from '@/api/hobby'
 export default {
+  props : {
+    group : Object,
+  },
   data() {
     return {
       rules: [v => v.length <= 200 || '최대 200자까지 작성가능합니다.'],
       content: '',
       uploadfiles: [{ src: '' }],
+      title : '',
+      file : '',
     };
   },
   mounted() {},
   methods: {
     closeaddarticle() {
-      this.$emit('closeaddarticle');
+      this.$emit('close');
     },
     uploadimg() {
       const realimg = document.getElementById('realimg');
@@ -89,7 +95,7 @@ export default {
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
-      console.log(typeof files, files);
+      this.file = files
 
       if ([...files].length >= 11) {
         alert('이미지는 10개까지 업로드가 가능합니다');
@@ -110,7 +116,6 @@ export default {
               this.uploadfiles = this.uploadfiles.slice(1);
             }
             this.uploadfiles.push(tmp);
-            console.log(this.uploadfiles);
           };
           reader.readAsDataURL(file);
         }
@@ -119,6 +124,30 @@ export default {
       const line = document.getElementById('line');
       line.setAttribute('style', 'display:none');
     },
+
+    async send(){
+      try{
+
+        const inputdata = {
+          title : this.title,
+          content : this.content,
+          category : "GENERAL"
+        }
+        
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(inputdata)], {type:'application/json'}));
+        for(let i = 0 ; i<this.file.length; i++) {
+          formData.append('multipartFile', this.file[i])
+        }
+        
+        const { data } = await postGroupArticle(this.group[0], formData)
+        console.log(data)
+        this.closeaddarticle()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
   },
 };
 </script>
