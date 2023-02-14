@@ -2,6 +2,7 @@ package com.a505.hobbyit.hobby.domain;
 
 import com.a505.hobbyit.hobby.dto.HobbyUpdateRequest;
 import com.a505.hobbyit.hobby.enums.HobbyFree;
+import com.a505.hobbyit.hobby.exception.OverCapacityException;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
@@ -69,6 +70,10 @@ public class Hobby {
 
     public void updateCnt(){
         this.currentMemberCount = hobbyMembers.size();
+    }
+
+    public void checkMemberCount(){
+        if(this.maxMemberCount == this.currentMemberCount) throw new OverCapacityException();
     }
 
     public void updateHobby(HobbyUpdateRequest request, String imgUrl){

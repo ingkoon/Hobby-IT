@@ -41,11 +41,13 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
     public void kickHobbyMember(String memberId, Long hobbyId, Long targetId) {
         checkPrivilege(hobbyId, memberId);
 
+        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findById(targetId)
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
         hobbyMemberRepository.delete(hobbyMember);
+        hobby.updateCnt();
     }
 
     @Transactional
@@ -65,6 +67,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
         hobbyMemberRepository.delete(hobbyMember);
+        hobby.updateCnt();
     }
 
     @Override
