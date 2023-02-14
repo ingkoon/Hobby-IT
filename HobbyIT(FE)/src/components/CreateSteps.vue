@@ -339,7 +339,7 @@ export default {
         name: this.hobbytitle,
         intro: this.groupIntro,
         category: this.tags[this.myValue],
-        free: this.isFree === 0 ? 'FREE' : 'NOT FREE',
+        free: this.isFree === 0 ? 'FREE' : 'NONFREE',
       };
       this.$emit('handleSubmit', data);
     },
