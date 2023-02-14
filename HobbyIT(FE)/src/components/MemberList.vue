@@ -31,17 +31,20 @@
                 <div @click="goprofile(row.nickName)">{{ row.nickName }}</div>
               </td>
               <td>
-                <!-- <v-select
-                v-model="select"
-                :items="priItem"
-                density="compact"
-                item-title="state"
-                item-value="abbr"
-                ></v-select> -->
-                <div v-if="row.privilege === 'OWNER'"> 소유자
-                </div> 
-                <div v-else-if="row.privilege === 'GENERAL'"> 회원 </div> 
-                <div v-else> 매니저 </div>
+                <div style="display:flex; justify-content: center;vertical-align: middle;">
+                  <!-- <v-select
+                  v-model="select"
+                  :items="priItem"
+                  density="compact"
+                  item-title="state"
+                  item-value="abbr"
+                  ></v-select> -->
+                  <div v-if="row.privilege === 'OWNER'" style="margin: auto 0;"> 소유자
+                  </div> 
+                  <div v-else-if="row.privilege === 'GENERAL'" style="margin: auto 0;"> 회원 </div> 
+                  <div v-else style="margin: auto 0;"> 매니저 </div>
+                  <v-btn @click="setcombo(row.privilege)" style="margin-left:10px; background-color: #00000000; color:grey">변경</v-btn>
+                </div>
               </td>
               <td> {{ row.reg_dt }} </td>
               <td>
@@ -83,10 +86,6 @@ export default {
       tmplist: [
         
       ],
-      no: '',
-      paging: '', //페이징 데이터
-      page: this.$route.query.page ? this.$route.query.page : 1,
-      keyword: this.$route.query.keyword,
       banmemName: '',
       banmemId : '',
       banmodal : false,
@@ -112,14 +111,6 @@ export default {
         console.log(e)
       }
       this.list = this.tmplist
-      const paging = {
-        totalCount: this.tmplist.length,
-        total_page: Math.ceil(this.tmplist.length / 10),
-        page: this.page,
-        start_page: Math.ceil(this.page / 10),
-        end_page: Math.ceil(this.page / 10) * 10,
-        ipp: 10,
-      };
       
     },
     openbanmem(id, name) {

@@ -4,7 +4,7 @@
   <div style="align-self: center">
     <v-card style="width: 800px; height: 530px; background-color: #0e0f28">
       <div style="color: white; display: flex; justify-content: space-between; margin: 10px 5px">
-        <span id="groupname">To. John, 나 여행가고싶어</span>
+        <span id="groupname">To. {{ groupname }}</span>
         <span>방명록 작성</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
@@ -19,7 +19,7 @@
                 color="white"
                 max="100"
                 min="1"
-                style="color: white; border: 1px solid white"
+                style="color: white; border: 1px solid white;width:50px"
                 type="number"
               />
             </div>
@@ -114,6 +114,7 @@ export default {
   },
   props : {
     groupid : Number,
+    groupname : String,
   },
   mounted() {
     var pos = {
@@ -127,10 +128,12 @@ export default {
     this.background = this.bglist[randomnum];
 
     var triangle = document.getElementById('tri1');
-    triangle.setAttribute('style', 'border-color:' + this.bglist2[randomnum] + ';');
-    canvas.setAttribute('style', 'background-color:' + this.background + ';');
+    triangle.style.borderColor = this.bglist2[randomnum];
+    // canvas.style.backgroundColor = this.background
     var background = this.background;
     var ctx = canvas.getContext('2d');
+    ctx.fillStyle = this.background
+    ctx.fillRect(0,0,500,500)
     this.ctx = ctx;
     this.canvas = canvas;
     var rect = canvas.getBoundingClientRect(); // 터치 스크린

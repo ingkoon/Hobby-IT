@@ -976,7 +976,7 @@ p {
 #typo {
   height: 800px;
   overflow: hidden;
-  margin-left: -2200px;
+  margin-left: -1800px;
 }
 
 .left {
