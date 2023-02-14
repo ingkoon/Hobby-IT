@@ -6,17 +6,14 @@ import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.hobbymember.domain.HobbyMemberRepository;
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
-import com.a505.hobbyit.hobbymember.dto.OwnHobbyResponse;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
-import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -83,13 +80,5 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .orElseThrow(NoSuchHobbyMemberException::new)
                 .checkPrivilege();
         return hobby;
-    }
-
-    @Override
-    public List<OwnHobbyResponse> getOwnHobby(String memberId) {
-        Member member = memberRepository
-                .findById(Long.parseLong(memberId))
-                .orElseThrow(NoSuchElementException::new);
-        return hobbyMemberRepository.getOwnHobbyList(member);
     }
 }

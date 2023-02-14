@@ -3,6 +3,7 @@ package com.a505.hobbyit.article.domain;
 import com.a505.hobbyit.article.dto.ArticleRequest;
 import com.a505.hobbyit.article.enums.ArticleHeader;
 import com.a505.hobbyit.common.BaseEntity;
+import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,9 +25,14 @@ public class Article extends BaseEntity {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hobby_id")
+    private Hobby hobby;
 
     @NotNull
     @Enumerated(EnumType.STRING)

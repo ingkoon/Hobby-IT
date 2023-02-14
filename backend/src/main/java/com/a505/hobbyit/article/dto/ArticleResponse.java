@@ -23,6 +23,12 @@ public class ArticleResponse {
     @Schema(description = "게시글 작성자 닉네임", example = "첫블루안주면던짐")
     private String nickname;
 
+    @Schema(description = "홍보할 소모임 ID", example = "1")
+    private Long hobbyId;
+
+    @Schema(description = "홍보할 소모임 이름", example = "john, 나 여행가고싶어")
+    private String hobbyName;
+
     @Schema(description = "게시글 글머리", example = "RECRUITMENT OR MEETUP")
     private ArticleHeader header;
 
@@ -45,6 +51,8 @@ public class ArticleResponse {
         return ArticleResponse.builder()
                 .id(article.getId())
                 .nickname(article.getMember().getNickname())
+                .hobbyId(article.getHobby().getId())
+                .hobbyName(article.getHobby().getName())
                 .header(article.getHeader())
                 .title(article.getTitle())
                 .content(article.getContent())

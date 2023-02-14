@@ -2,9 +2,12 @@ package com.a505.hobbyit.article.controller;
 
 import com.a505.hobbyit.article.dto.ArticleRequest;
 import com.a505.hobbyit.article.dto.ArticleResponse;
+import com.a505.hobbyit.article.dto.OwnHobbyResponse;
 import com.a505.hobbyit.article.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,11 +24,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Tag(name = "Article API", description = "홍보 게시판 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/article")
+@RequestMapping("/api/article")
 public class ArticleController {
 
     private final ArticleService articleService;
@@ -37,14 +44,15 @@ public class ArticleController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "게시글 등록 성공"),
-            @ApiResponse(responseCode = "401", description = "게시글 작성 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "401", description = "게시글 작성 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     @PostMapping("/{hobby-id}")
     ResponseEntity<Void> createArticle(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "hobby-id") @Parameter(description = "홍보할 모임 ID") Long hobbyId,
-            @RequestBody @Parameter(description = "게시할 글의 정보") ArticleRequest articleRequest) {
+            @PathVariable("hobby-id") @Parameter(description = "홍보할 모임 ID", example = "1") Long hobbyId,
+            @RequestBody @Parameter(description = "게시할 글의 정보") ArticleRequest articleRequest
+    ) {
         articleService.save(Long.parseLong(userDetails.getUsername()), hobbyId, articleRequest);
         return ResponseEntity.ok().build();
     }
@@ -57,7 +65,9 @@ public class ArticleController {
     @ApiResponse(responseCode = "200", description = "게시글 페이지 반환 성공")
     @GetMapping
     ResponseEntity<Page<ArticleResponse>> findArticlesByPageRequest(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @Parameter(description = "페이지 번호", example = "0")
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         Page<ArticleResponse> articleResponsePage = articleService.findArticlesByPageRequest(pageable);
         return ResponseEntity.ok(articleResponsePage);
     }
@@ -69,14 +79,34 @@ public class ArticleController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "게시글 상세 조회 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     @GetMapping("/{article-id}")
     ResponseEntity<ArticleResponse> findArticle(
-            @PathVariable(value = "article-id") @Parameter(description = "조회할 글의 ID") Long articleId,
-            HttpServletRequest request, HttpServletResponse response) {
+            @PathVariable("article-id") @Parameter(description = "조회할 글의 ID", example = "1") Long articleId,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
         ArticleResponse articleResponse = articleService.findById(articleId, request, response);
         return ResponseEntity.ok(articleResponse);
+    }
+
+
+    @Operation(
+            summary = "홍보 게시판 페이지 수 반환",
+            description = "홍보 게시판의 페이지 수를 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "홍보 게시판 페이지 수 반환 성공",
+            content = @Content(examples =
+                    {@ExampleObject(value = "pageCnt : 4")}
+            )
+    )
+    @GetMapping("/page")
+    ResponseEntity<Map<String, Long>> find() {
+        final int PAGEABLE_SIZE = 10;
+        Map<String, Long> resultMap = new HashMap<>();
+        long pageCnt = articleService.count();
+        resultMap.put("pageCnt", pageCnt / PAGEABLE_SIZE + (pageCnt % PAGEABLE_SIZE == 0 ? 0 : 1));
+        return ResponseEntity.ok(resultMap);
     }
 
 
@@ -86,14 +116,15 @@ public class ArticleController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "게시글 수정 성공"),
-            @ApiResponse(responseCode = "401", description = "게시글 수정 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "401", description = "게시글 수정 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     @PutMapping("/{article-id}")
     ResponseEntity<Void> updateArticle(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "article-id") @Parameter(description = "수정할 글의 id") Long articleId,
-            @RequestBody @Parameter(description = "수정할 글의 정보") ArticleRequest articleRequest) {
+            @PathVariable("article-id") @Parameter(description = "수정할 글의 id", example = "1") Long articleId,
+            @RequestBody @Parameter(description = "수정할 글의 정보") ArticleRequest articleRequest
+    ) {
         articleService.update(Long.parseLong(userDetails.getUsername()), articleId, articleRequest);
         return ResponseEntity.noContent().build();
     }
@@ -105,14 +136,45 @@ public class ArticleController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "게시글 삭제 성공"),
-            @ApiResponse(responseCode = "401", description = "게시글 삭제 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "401", description = "게시글 삭제 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     @DeleteMapping("/{article-id}")
     ResponseEntity<Void> deleteArticle(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "article-id") @Parameter(description = "삭제할 글의 id") Long articleId) {
+            @PathVariable("article-id") @Parameter(description = "삭제할 글의 id", example = "1") Long articleId
+    ) {
         articleService.deleteById(Long.parseLong(userDetails.getUsername()), articleId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(
+            summary = "'소유자' 권한을 가진 소모임 리스트를 반환",
+            description = "로그인 사용자 정보를 이용하여 '소유자' 권한을 가진 소모임 리스트를 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "'소유자' 권한을 가진 소모임 리스트를 반환 성공",
+            content = @Content(examples =
+                    {@ExampleObject(
+                            value = """
+                                    {
+                                        "ownHobbyList": [
+                                            {
+                                                 "id": 1,
+                                                 "name": "john, 나 여행가고싶어"\s
+                                            },\s
+                                        ]
+                                    }"""
+                    )}
+            )
+    )
+    @GetMapping("/possession")
+    public ResponseEntity<Map<String, List<OwnHobbyResponse>>> getOwnHobby(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Map<String, List<OwnHobbyResponse>> resultMap = new HashMap<>();
+        List<OwnHobbyResponse> responses = articleService.getOwnHobbyList(Long.parseLong(userDetails.getUsername()));
+        resultMap.put("ownHobbyList", responses);
+        return ResponseEntity.ok(resultMap);
     }
 }
