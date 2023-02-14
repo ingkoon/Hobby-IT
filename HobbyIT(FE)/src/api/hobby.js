@@ -94,8 +94,8 @@ export function deleteGroup(hobby_id) {
 }
 
 // 27.모임 게시판 게시글 리스트 확인
-export function getGroupArticleList(hobby_id) {
-  return instance.get(`/${hobby_id}/article`);
+export function getGroupArticleList(hobby_id, lastnum) {
+  return instance.get(`/${hobby_id}/article?size=10&storeid=${lastnum}`);
 }
 
 // 28.모임 게시판 게시글 작성

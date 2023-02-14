@@ -99,14 +99,14 @@
             <v-window v-model='tab'>
               <!-- 게시글 -->
               <v-window-item id='boarditem' value='board'>
-                <v-container>
+                <v-container v-if="articles.length > 0">
                   <v-row>
                     <v-col v-for='j in 4' :key='j' cols='12' sm='3'>
                       <article-item
                         v-for='article in filteredArticles(j)'
                         :key='article'
-                        :article-data='article'
-                        :n='j' @click='openmodal' />
+                        :articleData='article'
+                        @click='openmodal(article.id)' />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -141,7 +141,7 @@
         <unfreeRegi @close="closeunfreemodal" @send="unfreeRegister"/>
       </v-dialog>
       <v-dialog v-model='articlemodal'>
-        <article-modal @closearticle='closearticle' />
+        <article-modal @closearticle='closearticle' :info="[groupid, clickid, groupinfo.name]" />
       </v-dialog>
     </div>
 
@@ -204,7 +204,7 @@ import exitGroup from '@/components/modals/GroupResign.vue'
 import delGroup from '@/components/modals/DelGroup.vue'
 
 import { useUserStore } from '@/store/user'
-import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup } from '@/api/hobby';
+import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList } from '@/api/hobby';
 
 export default {
   setup(){
@@ -273,6 +273,9 @@ export default {
       file : '',
       exitgroupmodal : false,
       deletegroupmodal : false,
+      lastnum : null,
+      morearticle : true,
+      clickid : 0,
     };
   },
   computed: {
@@ -307,8 +310,9 @@ export default {
     closeaddarticle() {
       this.addarticlemodal = false;
     },
-    openmodal() {
+    openmodal(id) {
       this.articlemodal = true;
+      this.clickid = id
     },
     closearticle() {
       this.articlemodal = false;
@@ -353,18 +357,35 @@ export default {
     }
     },
     // only for test
-    initArticles() {
-      const data = {
-        title: '제목',
-        content: '사람이 살고있다',
-        author: '사람',
-      };
-      for (let i = 0; i < 10; i++) {
-        this.articles.push(data);
+    async initArticles() {
+      // const data = {
+      //   title: '제목',
+      //   content: '사람이 살고있다',
+      //   author: '사람',
+      // };
+      // for (let i = 0; i < 10; i++) {
+      //   this.articles.push(data);
+      // }
+
+      try {
+        const { data } = await getGroupArticleList(this.groupid, this.lastnum)
+        for(let i = 0; i < data.content.length; i++){
+          this.articles.push(data.content[i])
+        }
+        if(data.length > 0){
+          this.lastnum = data.content[9].id
+          if(data.last) {
+            this.morearticle = false;
+          }
+        }
+      }
+      catch (e) {
+        console.log(e);
       }
     },
     loadData() {
-      this.initArticles();
+      if(this.morearticle)
+        this.initArticles();
     },
     openregimodal() {
       if (this.groupinfo.freeRegistration === "FREE") {
