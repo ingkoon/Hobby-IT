@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class HobbyPostitRecord {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hobby_id", nullable = false)
     private Hobby hobby;
 

@@ -3,7 +3,8 @@ package com.a505.hobbyit.hobbypostitrecord.controller;
 import com.a505.hobbyit.hobbypostitrecord.service.HobbyPostitRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,15 +37,32 @@ public class HobbyPostitRecordController {
             description = "소모임의 방명록 작성일을 조회합니다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "방명록 작성일 반환 성공"),
-            @ApiResponse(responseCode = "401", description = "방명록 작성일 조회 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "200", description = "방명록 작성일 반환 성공",
+                    content = @Content(examples = {
+                            @ExampleObject(value = """
+                                    {
+                                      "days": [
+                                        "1",
+                                        "2",
+                                        "5",
+                                        "10",
+                                        "15",
+                                        "23",
+                                        "28"
+                                      ]
+                                    }
+                                    """)})
+            ),
+            @ApiResponse(responseCode = "401", description = "방명록 작성일 조회 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     @GetMapping("/api/hobby/{hobby-id}/postit/record/{date}")
     ResponseEntity<Map<String, List<Integer>>> findHobbyPostitRecords(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "hobby-id") @Parameter(description = "소속 소모임 ID") Long hobbyId,
-            @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") @Parameter(description = "날짜") LocalDate date) {
+            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
+            @Parameter(description = "날짜", example = "2023-01-01") LocalDate date
+    ) {
         Map<String, List<Integer>> resultMap = new HashMap<>();
         List<Integer> dayList = hobbyPostitRecordService.findHobbyPostitRecords(
                 Long.parseLong(userDetails.getUsername()),

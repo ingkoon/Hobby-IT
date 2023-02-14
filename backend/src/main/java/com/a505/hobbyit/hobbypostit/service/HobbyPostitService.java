@@ -11,4 +11,6 @@ public interface HobbyPostitService {
     void save(Long memberId, Long hobbyId, LocalDate date, MultipartFile multipartFile);
 
     List<HobbyPostitResponse> findHobbyPostits(Long memberId, Long hobbyId, LocalDate date);
+
+    void isPossibleToWritePostit(Long memberId, Long hobbyId);
 }
