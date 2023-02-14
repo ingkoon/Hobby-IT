@@ -39,7 +39,6 @@ public class ControllerAdvice {
             InvalidHobbyException.class})
     public ResponseEntity<ErrorResponse> handleInvalidException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -50,9 +49,8 @@ public class ControllerAdvice {
             NoSuchPendingException.class,
             NoSuchArticleException.class,
             NoSuchHobbyPostitException.class})
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
-        ErrorCode errorCode = ErrorCode.NOT_FOUND;
-        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -62,7 +60,6 @@ public class ControllerAdvice {
             DuplicatedPendingException.class})
     public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
@@ -72,12 +69,11 @@ public class ControllerAdvice {
             UnAuthorizedHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
-    public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -87,8 +83,8 @@ public class ControllerAdvice {
             ExpiredJwtException.class,
             UnsupportedJwtException.class,
             MalformedJwtException.class,
-            })
-    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
+    })
+    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
