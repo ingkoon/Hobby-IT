@@ -83,6 +83,10 @@ INSERT INTO `hobby` (`name`,`category`,`intro`,`cur_mem_cnt`,`max_mem_cnt`,`free
 INSERT INTO `hobby` (`name`,`category`,`intro`,`cur_mem_cnt`,`max_mem_cnt`,`free`,`img_url`,`resd_req_dt`,`reg_dt`) VALUES ('애니 상영회','문화','오타쿠가 아니라능', 1, 12,'FREE','/static/images/defaulthobbyimg.png',NULL, now());
 
 
+INSERT INTO `hobby` (`name`,`category`,`intro`,`cur_mem_cnt`,`max_mem_cnt`,`free`,`img_url`,`resd_req_dt`,`reg_dt`) VALUES ('john, 나 여행가고싶어요','여행','여행가고 싶은 사람들의 모임',1,14,'NONFREE','/static/images/defaulthobbyimg.png',NULL,now());
+INSERT INTO `hobby_member` (`member_id`,`hobby_id`,`state`,`privilege`,`reg_dt`,`chg_dt`,`resd_dt`) VALUES (1,30,'ACTIVE','OWNER',now(), now(),NULL);
+
+
 -- -----------------------------------------------------
 -- insertHobbyMember
 -- -----------------------------------------------------
@@ -594,7 +598,7 @@ CREATE PROCEDURE `IMG_PROC` (
 BEGIN
     -- 변수 선언
     DECLARE IDNUM INTEGER DEFAULT 1;
-     WHILE IDNUM < 80 DO           -- NUM1은 0~9까지 10번반복
+     WHILE IDNUM <= 80 DO           -- NUM1은 0~9까지 10번반복
 		INSERT INTO `hobby_article_img` (`hobby_art_id`, `img_url`) VALUES (IDNUM, '/static/images/defaulthobbyimg.png');
         SET IDNUM = IDNUM + 1;
     END WHILE;
@@ -606,9 +610,14 @@ CALL IMG_PROC();
 
 
 -- -----------------------------------------------------
--- inserthobbyarticleimg PROCEDURE
+--  delete_member_after_7_days EVENT
 -- -----------------------------------------------------
-INSERT INTO `hobby` (`name`,`category`,`intro`,`cur_mem_cnt`,`max_mem_cnt`,`free`,`img_url`,`resd_req_dt`,`reg_dt`) VALUES ('john, 나 여행가고싶어요','여행','여행가고 싶은 사람들의 모임',1,14,'NONFREE','/static/images/defaulthobbyimg.png',NULL,now());
-INSERT INTO `hobby_member` (`member_id`,`hobby_id`,`state`,`privilege`,`reg_dt`,`chg_dt`,`resd_dt`) VALUES (1,30,'ACTIVE','OWNER',now(), now(),NULL);
-select * from hobby;
+DROP EVENT if exists delete_member_after_7_days;
+CREATE EVENT delete_member_after_7_days
+ON SCHEDULE EVERY 1 DAY
+COMMENT '탈퇴 요청일 7일 후 member 테이블의 state 속성값을 WAITING(탈퇴 대기중)에서 RESIGNED(탈퇴)로 변경하는 이벤트를 매일 수행한다.'
+DO
+UPDATE member SET state = 'RESIGNED' WHERE state = 'WAITING' AND DATEDIFF(NOW(), resd_req_dt) >= 7;
+
+
 
