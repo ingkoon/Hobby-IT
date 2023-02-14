@@ -1,6 +1,6 @@
 <template>
   <v-slide-group-item>
-    <v-card class="mx-auto" max-width="180" style="background-color: #ffffff00; padding: 10px" @click=goToGroup(lst.id)>
+    <v-card class="mx-auto" width="180px" style="background-color: #ffffff00; padding: 10px" @click=goToGroup(lst.id)>
       <v-img class="align-end text-white" height="250" :src="lst.img" cover>
       </v-img>
 

@@ -65,19 +65,25 @@
     </span>
   </h3>
   
-  <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/>
+  <!-- <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/> -->
   <participate-group v-if="catelist.length > 0" :hobbylist="catelist"/>
   
   <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
   <main1 v-else/>
 
-  <h3>오늘의 HOBBY 추천</h3>
-  <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
-  <main2 v-else/>
+  <div v-if="searchlist.length < 1 ">
+    <h3>오늘의 HOBBY 추천</h3>
+    <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
+    <main2 v-else/>
 
-  <h3>당신만 오면 GO!</h3>
-  <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
-  <main3 v-else/>
+    <h3>당신만 오면 GO!</h3>
+    <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
+    <main3 v-else/>
+  </div>
+  <div v-else>
+    <h3>검색 결과</h3>
+    <participate-group :hobbylist="searchlist"/>
+  </div>
 </template>
 
 <script>
@@ -117,6 +123,7 @@ export default {
       catelist : [],
       selectCate : '',
       searchlist : [],
+      tmp : -1,
     };
   },
   methods : {
@@ -149,8 +156,7 @@ export default {
     async categorysearch(keyword) {
       try {
         const { data } = await searchHobby(keyword)
-        this.catelist = data
-        console.log(this.catelist)
+        this.searchlist = data
       }
       catch(e) {
         console.log(e)
@@ -180,7 +186,9 @@ export default {
   },
   watch : {
     selectCate(newres, old){
-      this.categorysearch(this.category[newres])
+      this.tmp += 1
+      if(this.tmp !== 0)
+        this.categorysearch(this.category[newres])
     }
   }
 };
