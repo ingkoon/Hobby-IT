@@ -2,7 +2,6 @@ package com.a505.hobbyit.common.exception;
 
 import com.a505.hobbyit.article.exception.NoSuchArticleException;
 import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
-import com.a505.hobbyit.common.exception.dto.ErrorCode;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
@@ -18,7 +17,10 @@ import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -51,8 +53,8 @@ public class ControllerAdvice {
             NoSuchArticleException.class,
             NoSuchHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
-        ErrorCode errorCode = ErrorCode.NOT_FOUND;
-        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -62,7 +64,7 @@ public class ControllerAdvice {
             DuplicatedPendingException.class})
     public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
@@ -72,13 +74,14 @@ public class ControllerAdvice {
             UnAuthorizedHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
     public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -90,6 +93,7 @@ public class ControllerAdvice {
             })
     public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }
