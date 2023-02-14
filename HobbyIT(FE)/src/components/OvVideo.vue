@@ -1,4 +1,5 @@
 <template>
+
   <video
     :style="{
       height: appStore.baseUnit * 2 + 'px',
@@ -6,6 +7,7 @@
     }"
     autoplay
   />
+
 </template>
 
 <script>
@@ -28,5 +30,8 @@ export default {
 <style scoped>
 video {
   margin: 12px 36px;
+  border: 3px solid purple;
+  border-radius: 25px;
 }
+
 </style>

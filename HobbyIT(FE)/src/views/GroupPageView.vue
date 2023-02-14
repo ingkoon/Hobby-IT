@@ -4,35 +4,37 @@
     <div id='group'>
       <!-- 왼쪽 모임 정보 탭 -->
       <div id='groupinfo'>
-        <img id="groupimg" :src='groupinfo.img' />
+        <img id='groupimg' :src='groupinfo.img' />
         <div id='title'>
-          <div v-if="!inputmode">
+          <div v-if='!inputmode'>
             {{ groupinfo.name }}
           </div>
           <div v-else>
-            <input type="text" v-model="title"/>
+            <input v-model='title' type='text' />
           </div>
         </div>
         <div id='content'>
-          <div v-if="!inputmode">
+          <div v-if='!inputmode'>
             {{ groupinfo.intro }}
           </div>
           <div v-else>
-            <textarea v-model="content"></textarea>
+            <textarea v-model='content'></textarea>
           </div>
-          <div style="margin-top:10px">
+          <div style='margin-top:10px'>
             #{{ groupinfo.category }}
           </div>
           <div style='margin-top: 20px'>
             <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
             {{ groupinfo.participantsNum }} / {{ groupinfo.maxParticipantsNum }}
 
-            <v-icon v-if="groupinfo.privilege !== 'GENERAL'" @click="changeInfo" icon="mdi-pencil" size="small" style="float: right;"></v-icon>
+            <v-icon
+v-if="groupinfo.privilege !== 'GENERAL'" icon='mdi-pencil' size='small' style='float: right;'
+                    @click='changeInfo'></v-icon>
           </div>
-          <input id="inputimg" type="file" accept="image/*" style="display: none;">
+          <input id='inputimg' accept='image/*' style='display: none;' type='file'>
         </div>
 
-        <div v-if="groupinfo.hobbyMemberId !== null" style='display: flex; justify-content: space-around'>
+        <div v-if='groupinfo.hobbyMemberId !== null' style='display: flex; justify-content: space-around'>
           <!-- 글작성 모달 -->
           <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%'>
             <v-icon icon='mdi-plus-circle-outline'></v-icon>
@@ -49,26 +51,30 @@
 
         <!-- 공지작성 -->
         <div v-if="groupinfo.privilege === 'OWNER'">
-          <v-btn @click="openaddnotice" style="width:100%; color:white; background-color: #2b146c; margin: 15px 0;" > 공지 작성 </v-btn>
+          <v-btn style='width:100%; color:white; background-color: #2b146c; margin: 15px 0;' @click='openaddnotice'> 공지
+            작성
+          </v-btn>
         </div>
 
         <!-- 그룹나가기 -->
-        <div v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null" style="text-align: right; font-family: linefont; margin-top: 20px;">
-          <v-btn @click="openexitgroup" style="background-color: #00000000; color: white;">모임 탈퇴</v-btn>
+        <div
+v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
+             style='text-align: right; font-family: linefont; margin-top: 20px;'>
+          <v-btn style='background-color: #00000000; color: white;' @click='openexitgroup'>모임 탈퇴</v-btn>
         </div>
         <!-- 그룹삭제 -->
-        <div v-if="groupinfo.privilege === 'OWNER'" style="text-align: right; font-family: linefont; margin-top: 20px;">
-          <v-btn @click="opendeletegroup" style="background-color: #00000000; color: white;">모임 삭제</v-btn>
+        <div v-if="groupinfo.privilege === 'OWNER'" style='text-align: right; font-family: linefont; margin-top: 20px;'>
+          <v-btn style='background-color: #00000000; color: white;' @click='opendeletegroup'>모임 삭제</v-btn>
         </div>
 
-        <v-dialog v-model="addnoticemodal">
-            <add-notice @close="closeaddnotice" :groupid="groupid"/>
+        <v-dialog v-model='addnoticemodal'>
+          <add-notice :groupid='groupid' @close='closeaddnotice' />
         </v-dialog>
-        <v-dialog v-model="exitgroupmodal">
-          <exit-group @close="closeexitgroup" @send="exitgroup" :groupname="groupinfo.name"/>
+        <v-dialog v-model='exitgroupmodal'>
+          <exit-group :groupname='groupinfo.name' @close='closeexitgroup' @send='exitgroup' />
         </v-dialog>
-        <v-dialog v-model="deletegroupmodal">
-          <del-group @close="closedeletegroup" @send="deletegroup"/>
+        <v-dialog v-model='deletegroupmodal'>
+          <del-group @close='closedeletegroup' @send='deletegroup' />
         </v-dialog>
 
         <!-- 검색 -->
@@ -81,13 +87,15 @@
         ></v-text-field> -->
       </div>
       <!-- 오른쪽 게시판 탭 -->
-      <div id='board' style="position:relative">
-        <v-card id='tabcard' style='background-color: #00000000' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''">
+      <div id='board' style='position:relative'>
+        <v-card
+id='tabcard' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''"
+                style='background-color: #00000000'>
           <v-tabs v-model='tab' align-tabs='start' style='color: white; align-items: center; height: 57px'>
             <v-tab value='board'>게시글</v-tab>
             <v-tab value='notice'>공지사항</v-tab>
             <v-tab value='memberlist'>회원목록</v-tab>
-            <v-tab v-if="groupinfo.hobbyMemberId!==null" value='memberregi'>가입신청</v-tab>
+            <v-tab v-if='groupinfo.hobbyMemberId!==null' value='memberregi'>가입신청</v-tab>
             <div style='flex-grow: 1'>
               <div style='float: right'>
                 <v-icon color='white' icon='mdi-calendar' style='padding: 35px' @click.stop='drawer = !drawer'></v-icon>
@@ -118,27 +126,29 @@
 
               <v-window-item value='memberlist'>
                 <!-- 회원목록 -->
-                <group-member :groupid="groupid"/>
+                <group-member :groupid='groupid' />
               </v-window-item>
               <v-window-item value='memberregi'>
                 <!-- 가입신청 -->
-                <group-regi :groupid="groupid"/>
+                <group-regi :groupid='groupid' />
               </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
 
-        <v-btn id="registerbtn" v-if="this.groupinfo.hobbyMemberId===null" @click="openregimodal" style="position: absolute; left:37%; top : 100px;">
+        <v-btn
+v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute; left:37%; top : 100px;'
+               @click='openregimodal'>
           가입 신청하기
         </v-btn>
 
       </div>
-      
+
       <v-dialog v-model='freemodal'>
-        <freeRegi @close="closefreemodal" @send="closefreemodal" :groupname="groupinfo.name"/>
+        <freeRegi :groupname='groupinfo.name' @close='closefreemodal' @send='closefreemodal' />
       </v-dialog>
       <v-dialog v-model='unfreemodal'>
-        <unfreeRegi @close="closeunfreemodal" @send="unfreeRegister"/>
+        <unfreeRegi @close='closeunfreemodal' @send='unfreeRegister' />
       </v-dialog>
       <v-dialog v-model='articlemodal'>
         <article-modal @closearticle='closearticle' />
@@ -177,13 +187,13 @@
             </div>
 
             <v-dialog v-model='canvasmodal' activator='parent'>
-              <CanvasAdd @close='closeAddedModal' :groupid="groupid" />
+              <CanvasAdd :groupid='groupid' @close='closeAddedModal' />
             </v-dialog>
           </v-btn>
         </div>
       </div>
     </v-navigation-drawer>
-    <InfiniteScrollObserver v-if="groupinfo.hobbyMemberId !== null" @infinite-scroll-trigger='loadData' />
+    <InfiniteScrollObserver v-if='groupinfo.hobbyMemberId !== null' @infinite-scroll-trigger='loadData' />
 
   </div>
 </template>
@@ -197,20 +207,16 @@ import ArticleAdd from '../components/AddGroupArticle.vue';
 import ArticleModal from '../components/GroupArticle.vue';
 import CanvasAdd from '@/components/CanvasAdd.vue';
 import InfiniteScrollObserver from '@/components/InfiniteScrollObserver.vue';
-import freeRegi from '@/components/modals/GroupFreeRegi.vue'
-import unfreeRegi from '@/components/modals/GroupRegister.vue'
-import addNotice from '@/components/modals/AddNotice'
-import exitGroup from '@/components/modals/GroupResign.vue'
-import delGroup from '@/components/modals/DelGroup.vue'
+import freeRegi from '@/components/modals/GroupFreeRegi.vue';
+import unfreeRegi from '@/components/modals/GroupRegister.vue';
+import addNotice from '@/components/modals/AddNotice';
+import exitGroup from '@/components/modals/GroupResign.vue';
+import delGroup from '@/components/modals/DelGroup.vue';
 
-import { useUserStore } from '@/store/user'
-import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup } from '@/api/hobby';
+import { useUserStore } from '@/store/user';
+import { getGroupInfo, requestGroupJoin, updateGroupInfo, resignGroup, deleteGroup } from '@/api/hobby';
 
 export default {
-  setup(){
-    const userStore = useUserStore();
-    return {userStore}
-  },
 
   components: {
     InfiniteScrollObserver,
@@ -227,10 +233,14 @@ export default {
     exitGroup,
     delGroup,
   },
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
+  },
   data() {
     return {
       inputmode: false,
-      title : '',
+      title: '',
       content: '',
       tab: null,
       drawer: null,
@@ -266,13 +276,13 @@ export default {
       articlemodal: false,
       groupinfo: [],
       articles: [],
-      groupid : 0,
-      freemodal : false,
-      unfreemodal : false,
-      addnoticemodal : false,
-      file : '',
-      exitgroupmodal : false,
-      deletegroupmodal : false,
+      groupid: 0,
+      freemodal: false,
+      unfreemodal: false,
+      addnoticemodal: false,
+      file: '',
+      exitgroupmodal: false,
+      deletegroupmodal: false,
     };
   },
   computed: {
@@ -291,10 +301,10 @@ export default {
   },
 
   methods: {
-    stopFunc(e){
+    stopFunc(e) {
       e.preventDefault();
       e.stopPropagation();
-      return false
+      return false;
     },
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
@@ -313,44 +323,44 @@ export default {
     closearticle() {
       this.articlemodal = false;
     },
-    openaddnotice(){
+    openaddnotice() {
       this.addnoticemodal = true;
     },
-    closeaddnotice(){
-      this.addnoticemodal = false
+    closeaddnotice() {
+      this.addnoticemodal = false;
     },
-    openexitgroup(){
+    openexitgroup() {
       this.exitgroupmodal = true;
     },
-    closeexitgroup(){
-      this.exitgroupmodal = false
+    closeexitgroup() {
+      this.exitgroupmodal = false;
     },
-    opendeletegroup(){
+    opendeletegroup() {
       this.deletegroupmodal = true;
     },
-    closedeletegroup(){
-      this.deletegroupmodal = false
+    closedeletegroup() {
+      this.deletegroupmodal = false;
     },
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
         this.groupinfo = data;
-        this.title = this.groupinfo.name
-        this.content = this.groupinfo.intro
-        this.file = null
+        this.title = this.groupinfo.name;
+        this.content = this.groupinfo.intro;
+        this.file = null;
       } catch (e) {
         console.error(e.message);
       }
-      
-      if(this.groupinfo.hobbyMemberId === null){
-      const articleclick = document.querySelectorAll('#tabcard')
-      for (let idx in articleclick){
-        let el = articleclick[idx]
-        if(el.addEventListener) {
-          el.addEventListener('click', this.stopFunc, true)
+
+      if (this.groupinfo.hobbyMemberId === null) {
+        const articleclick = document.querySelectorAll('#tabcard');
+        for (let idx in articleclick) {
+          let el = articleclick[idx];
+          if (el.addEventListener) {
+            el.addEventListener('click', this.stopFunc, true);
+          }
         }
       }
-    }
     },
     // only for test
     initArticles() {
@@ -367,66 +377,62 @@ export default {
       this.initArticles();
     },
     openregimodal() {
-      if (this.groupinfo.freeRegistration === "FREE") {
-        this.freemodal = true
-        this.freeRegister()
-      }
-      else {
-        this.unfreemodal = true
-        this.unfreeRegister()
+      if (this.groupinfo.freeRegistration === 'FREE') {
+        this.freemodal = true;
+        this.freeRegister();
+      } else {
+        this.unfreemodal = true;
+        this.unfreeRegister();
       }
     },
     closefreemodal() {
-      this.freemodal = false
+      this.freemodal = false;
     },
     closeunfreemodal() {
-      this.unfreemodal = false
+      this.unfreemodal = false;
     },
     // 자유가입
     async freeRegister() {
       try {
         const inputdata = {
-          message : ''
-        }
-        const { data } = await requestGroupJoin(this.groupid, inputdata)
-        console.log(data)
-      }
-      catch (e) {
+          message: '',
+        };
+        const { data } = await requestGroupJoin(this.groupid, inputdata);
+        console.log(data);
+      } catch (e) {
         console.error(e);
       }
-      
+
     },
     // 비자유 가입
     async unfreeRegister(msg) {
       try {
         const inputdata = {
-          message : msg
-        }
-        const { data } = await requestGroupJoin(this.groupid, inputdata)
-        console.log(data)
-        this.closeunfreemodal()
-      }
-      catch (e) {
+          message: msg,
+        };
+        const { data } = await requestGroupJoin(this.groupid, inputdata);
+        console.log(data);
+        this.closeunfreemodal();
+      } catch (e) {
         console.error(e);
       }
-      
-    },
-    changeInfo(){
-      this.inputmode = !this.inputmode
-      const img = document.getElementById('groupimg')
 
-      if(this.inputmode){
-        img.addEventListener('click',this.clickimg)
-      }
-      else {
-        this.changeGroupInfo()
-        img.removeEventListener('click',this.clickimg,false)
+    },
+    changeInfo() {
+      this.inputmode = !this.inputmode;
+      const img = document.getElementById('groupimg');
+
+      if (this.inputmode) {
+        img.addEventListener('click', this.clickimg);
+      } else {
+        this.changeGroupInfo();
+        img.removeEventListener('click', this.clickimg, false);
       }
     },
     clickimg() {
-      const inputbtn = document.getElementById('inputimg')
-      inputbtn.click()
-      inputbtn.addEventListener('change',this.getImageFiles)
+      const inputbtn = document.getElementById('inputimg');
+      inputbtn.click();
+      inputbtn.addEventListener('change', this.getImageFiles);
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
@@ -446,51 +452,48 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    async changeGroupInfo(){
+    async changeGroupInfo() {
       try {
         const inputdata = {
-          name : this.title,
-          intro : this.content,
-          max_participants_num : this.groupinfo.maxParticipantsNum,
-        }
+          name: this.title,
+          intro: this.content,
+          max_participants_num: this.groupinfo.maxParticipantsNum,
+        };
 
         console.log(inputdata);
 
         const formData = new FormData();
-        formData.append('request', new Blob([JSON.stringify(inputdata)], {type:'application/json'}));
-        formData.append('multipartFile', new Blob([JSON.stringify(this.file)], {type:'application/json'}))
+        formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
+        formData.append('multipartFile', new Blob([JSON.stringify(this.file)], { type: 'application/json' }));
 
-        const { data } = await updateGroupInfo(this.groupid, formData)
-        console.log(data)
-      }
-      catch(e){
-        console.log(e)
+        const { data } = await updateGroupInfo(this.groupid, formData);
+        console.log(data);
+      } catch (e) {
+        console.log(e);
       }
     },
     // 그룹 나가기
     async exitgroup() {
       try {
-        const { data } = await resignGroup(this.groupid)
-        console.log(data)
-        this.exitgroupmodal = false
-        this.$router.push({name:'Main'})
+        const { data } = await resignGroup(this.groupid);
+        console.log(data);
+        this.exitgroupmodal = false;
+        this.$router.push({ name: 'Main' });
+      } catch (e) {
+        console.log(e);
       }
-      catch(e) {
-        console.log(e)
-      }  
     },
     // 그룹 삭제
     async deletegroup() {
       try {
-        const { data } = await deleteGroup(this.groupid)
-        console.log(data)
-        this.deletegroupmodal = false
-        this.$router.push({name:'Main'})
+        const { data } = await deleteGroup(this.groupid);
+        console.log(data);
+        this.deletegroupmodal = false;
+        this.$router.push({ name: 'Main' });
+      } catch (e) {
+        console.log(e);
       }
-      catch(e) {
-        console.log(e)
-      }
-    }
+    },
   },
 };
 </script>
@@ -557,8 +560,8 @@ button {
 }
 
 .v-tab--selected .v-tab__slider {
-    background-color: #ffffff00;
-  }
+  background-color: #ffffff00;
+}
 
 .v-ripple__container {
   background-color: #ffffff00;
@@ -569,25 +572,24 @@ button {
   width: 200px;
   height: 200px;
   border-radius: 150px;
-  border : 1px solid white;
-  color : white;
+  border: 1px solid white;
+  color: white;
 }
 
 input {
-  color : white;
-  border : 1px solid white;
+  color: white;
+  border: 1px solid white;
   border-radius: 10px;
-  padding :0 5px;
-  width:100%
+  padding: 0 5px;
+  width: 100%
 }
 
 textarea {
-  color : white;
-  border : 1px solid white;
+  color: white;
+  border: 1px solid white;
   border-radius: 10px;
-  padding :0 5px;
-  width:100%;
-  font-size:15px;
+  padding: 0 5px;
+  width: 100%;
+  font-size: 15px;
 }
-
 </style>

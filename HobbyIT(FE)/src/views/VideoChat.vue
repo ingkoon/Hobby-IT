@@ -30,6 +30,7 @@
             <h1 id='title' @click='myCustomMethod'>John, 나 여행가고 싶어</h1>
           </v-row>
           <v-row id='video-container' style='height: 757px; width:900px; margin-right: 0; margin: 0; align-items: center; justify-content: center'>
+            <user-video :stream-manager='publisher' />
             <user-video v-for='sub in subscribers' :key='sub.stream.connection.connectionId' :stream-manager='sub'>
               <!--            추가 바람-->
             </user-video>
@@ -381,11 +382,11 @@ export default {
 
 #rightSidebar {
   position: absolute;
-  top: 60px;
+  top: 59px;
   right: 0;
   background-color: #0e0f28;
   width: 483px;
-  padding: 10px;
+  padding: 0;
   margin: 0;
   border-radius: 50px 0 0 0;
   z-index: 4;
