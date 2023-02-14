@@ -7,6 +7,7 @@ import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
 import com.a505.hobbyit.hobby.exception.InvalidHobbyException;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobbyarticlecomment.exception.NoSuchCommentException;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
 import com.a505.hobbyit.hobbypostit.exception.NoSuchHobbyPostitException;
@@ -51,7 +52,8 @@ public class ControllerAdvice {
             NoSuchHobbyMemberException.class,
             NoSuchPendingException.class,
             NoSuchArticleException.class,
-            NoSuchHobbyPostitException.class})
+            NoSuchHobbyPostitException.class,
+            NoSuchCommentException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());

@@ -63,6 +63,7 @@ public class HobbyArticleCommentServiceImpl implements HobbyArticleCommentServic
 
     @Override
     public void deleteComment(Long commentId) {
+        if(!hobbyArticleCommentRepository.existsById(commentId)) throw new NoSuchCommentException("댓글이 존재하지 않습니다.");
         hobbyArticleCommentRepository.deleteById(commentId);
     }
 }
