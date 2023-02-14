@@ -30,5 +30,5 @@ app.use(router);
 app.mount('#app');
 // Use plugin with defaults
 app.use(SetupCalendar, {});
-// app.use(VCalendar, {});
+app.use(VCalendar, {});
 app.use(VueVirtualScroller);

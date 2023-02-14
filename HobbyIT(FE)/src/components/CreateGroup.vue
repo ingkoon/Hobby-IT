@@ -75,8 +75,7 @@ export default {
       const formData = new FormData();
       formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
       formData.append('multipartFile', this.file);
-      console.log(formData);
-
+      this.closecreategroup();
       const res = await createGroup(formData);
 
     },
@@ -92,7 +91,7 @@ export default {
     },
     getImageFiles(e) {
       const files = e.currentTarget.files;
-      console.log(files)
+      console.log(files);
       this.file = files[0];
       console.log(typeof files, files);
       const file = files[0];
