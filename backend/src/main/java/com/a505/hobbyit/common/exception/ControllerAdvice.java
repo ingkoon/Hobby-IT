@@ -7,6 +7,7 @@ import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
 import com.a505.hobbyit.hobby.exception.InvalidHobbyException;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobby.exception.OverCapacityException;
 import com.a505.hobbyit.hobbyarticlecomment.exception.NoSuchCommentException;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
@@ -97,5 +98,17 @@ public class ControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    /*
+    소모임 가입 시, 정원초과 시 발생하는 문제
+     */
+    @ExceptionHandler({
+            OverCapacityException.class
+    })
+    public ResponseEntity<ErrorResponse> overCapacityException(final RuntimeException e){
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }
