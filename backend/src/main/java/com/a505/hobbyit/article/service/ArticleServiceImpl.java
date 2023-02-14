@@ -4,6 +4,7 @@ import com.a505.hobbyit.article.domain.Article;
 import com.a505.hobbyit.article.domain.ArticleRepository;
 import com.a505.hobbyit.article.dto.ArticleRequest;
 import com.a505.hobbyit.article.dto.ArticleResponse;
+import com.a505.hobbyit.article.dto.OwnHobbyResponse;
 import com.a505.hobbyit.article.exception.NoSuchArticleException;
 import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
 import com.a505.hobbyit.hobby.domain.Hobby;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -46,15 +48,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     @Override
     public void save(Long memberId, Long hobbyId, ArticleRequest articleRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
-        Hobby hobby = hobbyRepository.findById(hobbyId)
-                .orElseThrow(() -> new NoSuchHobbyException("소모임 정보 오류"));
-        HobbyMember hobbyMember = hobbyMemberRepository.findByMemberAndHobby(member, hobby)
-                .orElseThrow(() -> new NoSuchHobbyMemberException("소모임 가입 정보 오류"));
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
+        Hobby hobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
+        HobbyMember hobbyMember = hobbyMemberRepository
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new);
         if (!hobbyMember.getPrivilege().equals(HobbyMemberPrivilege.OWNER))
-            throw new UnAuthorizedArticleException("권한 없음");
-        Article article = articleRequest.toEntity(member);
+            throw new UnAuthorizedArticleException();
+        Article article = articleRequest.toEntity(member, hobby);
         articleRepository.save(article);
     }
 
@@ -69,12 +74,13 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResponse findById(Long articleId, HttpServletRequest request, HttpServletResponse response) {
         Article article = articleRepository
                 .findById(articleId)
-                .orElseThrow(() -> new NoSuchArticleException("게시글이 존재하지 않습니다."));
+                .orElseThrow(NoSuchArticleException::new);
         Cookie[] cookies = request.getCookies();
         if (cookies == null ||
                 Arrays.stream(cookies)
                         .filter(cookie -> cookie.getName().equals(COOKIE_NAME_FORM + articleId))
-                        .findAny().isEmpty()) {
+                        .findAny()
+                        .isEmpty()) {
             Cookie cookie = new Cookie(COOKIE_NAME_FORM + articleId, String.valueOf(articleId));
             cookie.setMaxAge(
                     (int) LocalDateTime.now().until(
@@ -89,29 +95,45 @@ public class ArticleServiceImpl implements ArticleService {
         return new ArticleResponse().of(article);
     }
 
+    public long count() {
+        return articleRepository.count();
+    }
+
     @Transactional
     @Override
     public void update(Long memberId, Long articleId, ArticleRequest articleRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
         Article article = articleRepository
                 .findById(articleId)
-                .orElseThrow(() -> new NoSuchArticleException("게시글이 존재하지 않습니다."));
+                .orElseThrow(NoSuchArticleException::new);
         if (!Objects.equals(article.getMember().getId(), member.getId()))
-            throw new UnAuthorizedArticleException("권한 없음");
+            throw new UnAuthorizedArticleException();
         article.updateArticle(articleRequest);
     }
 
     @Transactional
     @Override
     public void deleteById(Long memberId, Long articleId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
         Article article = articleRepository
                 .findById(articleId)
-                .orElseThrow(() -> new NoSuchArticleException("게시글이 존재하지 않습니다."));
+                .orElseThrow(NoSuchArticleException::new);
         if (!Objects.equals(article.getMember().getId(), member.getId()))
-            throw new UnAuthorizedArticleException("권한 없음");
+            throw new UnAuthorizedArticleException();
         articleRepository.deleteById(articleId);
+    }
+
+    @Override
+    public List<OwnHobbyResponse> getOwnHobbyList(Long memberId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
+        System.out.println(member.getId());
+        System.out.println(member.getName());
+        return hobbyMemberRepository.getOwnHobbyList(member);
     }
 }

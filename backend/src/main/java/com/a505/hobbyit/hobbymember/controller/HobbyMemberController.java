@@ -1,9 +1,8 @@
 package com.a505.hobbyit.hobbymember.controller;
 
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
-import com.a505.hobbyit.hobbymember.dto.OwnHobbyResponse;
+import com.a505.hobbyit.article.dto.OwnHobbyResponse;
 import com.a505.hobbyit.hobbymember.service.HobbyMemberService;
-import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,14 +39,6 @@ public class HobbyMemberController {
 
         hobbyMemberService.kickHobbyMember(userDetails.getUsername(), hobbyId, targetId);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @GetMapping("/possession")
-    public ResponseEntity<List<OwnHobbyResponse>> getOwnHobby(
-            @AuthenticationPrincipal UserDetails userDetails
-    ){
-        List<OwnHobbyResponse> responses = hobbyMemberService.getOwnHobby(userDetails.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
     @DeleteMapping("/{hobby-id}/member")
