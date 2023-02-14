@@ -50,7 +50,7 @@
       </tr>
 
       <tr v-if="list.length == 0">
-        <td colspan="4">데이터가 없습니다.</td>
+        <td colspan="5">데이터가 없습니다.</td>
       </tr>
     </table>
 

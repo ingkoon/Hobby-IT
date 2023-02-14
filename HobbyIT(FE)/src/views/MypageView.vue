@@ -57,7 +57,8 @@
       </div>
 
       <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
-      <MyPageGroup v-if="partigroup.length > 0" :hobbylist="partigroup"/>
+      <MyPageGroup v-if="partigroup.length > 0 && nickname === userStore.userNickname  " :hobbylist="partigroup"/>
+      <MyPageGroup2 v-else-if="partigroup.length > 0" :hobbylist="partigroup"/>
       <MyPage1 v-else/>
 
       <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
@@ -73,6 +74,7 @@
 <script>
 import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import MyPageGroup from '@/components/MyPageGroup.vue';
+import MyPageGroup2 from '@/components/MyPage2Group.vue';
 import MyPage1 from '@/components/no-content/MyPage1.vue';
 import MyPage2 from '@/components/no-content/MyPage2.vue';
 import deleteModal from '@/components/modals/Resign.vue'
@@ -91,6 +93,7 @@ export default {
   components: {
     ParticipateGroup,
     MyPageGroup,
+    MyPageGroup2,
     MyPage1,
     MyPage2,
     deleteModal,
@@ -102,6 +105,7 @@ export default {
       partigroup : [], //참여중인 그룹 리스트
       waitgroup : [], // 승인 대기 그룹 리스트
       deleteinfomodal : false, // 회원 탈퇴 모달
+      nickname : '',
     };
   },
   methods : {
@@ -173,6 +177,7 @@ export default {
 
   },
   mounted() {
+    this.nickname = this.$route.params.nickname
     this.setModify(this.$route.params.nickname)
   }
 };
