@@ -25,13 +25,14 @@
         </v-col>
         <v-row id='circle1' />
         <v-row id='circle2' />
-        <v-col id='videoList' :style="{ height: computedHeight + 'px' }">
+        <v-col id='videoList' :style="{ height: computedHeight + 'px' }" style="width:900px;">
           <v-row style='margin: 0; height: 126px'>
             <h1 id='title' @click='myCustomMethod'>John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row id='video-container' style='height: 757px; margin: 0; align-items: center; justify-content: center'>
+          <v-row id='video-container' style='height: 757px; width:900px; margin-right: 0; margin: 0; align-items: center; justify-content: center'>
             <user-video :stream-manager='publisher' />
             <user-video v-for='sub in subscribers' :key='sub.stream.connection.connectionId' :stream-manager='sub'>
+              <!--            추가 바람-->
             </user-video>
           </v-row>
         </v-col>
@@ -262,7 +263,9 @@ export default {
       });
       this.session.on('signal:canvas', event => {
         const from = JSON.parse(event.from.data).clientData;
-
+        console.log(event);
+        console.log('haha');
+        console.log(from);
         if (from === this.myUserName) {
           return false;
         }
