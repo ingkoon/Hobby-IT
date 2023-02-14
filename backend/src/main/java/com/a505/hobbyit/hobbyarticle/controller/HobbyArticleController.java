@@ -1,9 +1,6 @@
 package com.a505.hobbyit.hobbyarticle.controller;
 
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleDetailResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleRequest;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleResponse;
-import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleUpdateRequest;
+import com.a505.hobbyit.hobbyarticle.dto.*;
 import com.a505.hobbyit.hobbyarticle.service.HobbyArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +35,18 @@ public class HobbyArticleController {
             @RequestPart(value = "request") final HobbyArticleRequest request,
             @RequestPart(value = "multipartFile", required = false) final List<MultipartFile> multipartFile
             ){
-        hobbyArticleService.save(userDetails.getUsername(), hobbyId, request, multipartFile);
+        hobbyArticleService.saveArticle(userDetails.getUsername(), hobbyId, request, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PostMapping(value = "/{hobby-id}/notice")
+    public ResponseEntity<Void> saveNotice(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("hobby-id") final Long hobbyId,
+            @RequestBody final HobbyNoticeRequest request){
+        hobbyArticleService.saveNotice(userDetails.getUsername(), hobbyId, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     @GetMapping(value = "/{hobby-id}/article")
     public ResponseEntity<Slice<HobbyArticleResponse>> getArticleList(

@@ -67,17 +67,6 @@ public class Hobby {
     @OneToMany(mappedBy = "hobby")
     private List<HobbyMember> hobbyMembers = new ArrayList<>();
 
-    public void updateName(String name){ this.name = name; }
-
-    public void updateIntro(String intro){ this.intro = intro; }
-
-    public void updateMaxParticipantsNum(int maxParticipantsNum){
-        this.maxMemberCount = maxParticipantsNum;
-    }
-
-    public void updateImg(String img){
-        this.imgUrl = img;
-    }
     public void updateCnt(){
         this.currentMemberCount = hobbyMembers.size();
     }
@@ -85,7 +74,7 @@ public class Hobby {
     public void updateHobby(HobbyUpdateRequest request, String imgUrl){
         this.name = request.getName();
         this.intro = request.getIntro();
-        this.maxMemberCount = request.getMaxParticipantsNum();
+        this.maxMemberCount = request.getMax_participants_num();
         this.imgUrl = imgUrl;
     }
 }
