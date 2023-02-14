@@ -59,9 +59,14 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
 
         hobbyArticleRepository.save(hobbyArticle);
 
+        log.info(files.size()==0 ? "isEmpty" : "isNotEmpty");
+
         for (MultipartFile file : files) {
             String fileUrl = fileUploader.upload(file, hobbyArticle.getTitle());
-            hobbyArticleImgRepository.save(new HobbyArticleImg().toEntity(fileUrl, hobbyArticle));
+            log.info(fileUrl);
+            HobbyArticleImg hobbyArticleImg = new HobbyArticleImg().toEntity(fileUrl, hobbyArticle);
+            hobbyArticleImgRepository.save(hobbyArticleImg);
+            log.info(hobbyArticleImg.getId()+"");
         }
     }
 
@@ -95,7 +100,7 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     }
 
     @Override
-    public Page<HobbyArticleResponse> findAllNotice(String memberId, final Long hobbyId, Pageable pageable) {
+    public Page<HobbyNoticeResponse> findAllNotice(String memberId, final Long hobbyId, Pageable pageable) {
         Member member = readMember(memberId);
         Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
@@ -103,11 +108,20 @@ public class HobbyArticleServiceImpl implements HobbyArticleService{
     }
 
     @Override
-    public Page<HobbyArticleResponse> findNoticeByKeyWord(String memberId, final Long hobbyId, String keyword, Pageable pageable) {
+    public Page<HobbyNoticeResponse> findNoticeByKeyWord(String memberId, final Long hobbyId, String keyword, Pageable pageable) {
         Member member = readMember(memberId);
         Hobby hobby = readHobby(hobbyId);
         checkMember(member, hobby);
         return hobbyArticleRepository.searchHobbyNotice(hobby, keyword, pageable);
+    }
+
+    @Override
+    public HobbyNoticeResponse getNotice(String memberId, Long hobbyId, Long noticeId) {
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
+        checkMember(member, hobby);
+        HobbyArticle hobbyArticle = readHobbyArticle(noticeId);
+        return new HobbyNoticeResponse().of(hobbyArticle);
     }
 
     @Transactional

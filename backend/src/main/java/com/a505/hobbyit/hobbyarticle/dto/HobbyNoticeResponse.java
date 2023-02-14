@@ -1,21 +1,20 @@
 package com.a505.hobbyit.hobbyarticle.dto;
 
 import com.a505.hobbyit.hobbyarticle.domain.HobbyArticle;
-import com.a505.hobbyit.hobbyarticleimg.domain.HobbyArticleImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HobbyArticleAllResponse {
+public class HobbyNoticeResponse {
+    Long id;
     String title;
 
     String content;
@@ -26,18 +25,20 @@ public class HobbyArticleAllResponse {
 
     LocalDateTime createdAt;
 
-    List<HobbyArticleImg> images;
-
     int likes;
 
-    public HobbyArticleAllResponse of(HobbyArticle hobbyArticle){
-        return HobbyArticleAllResponse.builder()
+    int commentCount;
+
+    public HobbyNoticeResponse of(HobbyArticle hobbyArticle){
+        return HobbyNoticeResponse.builder()
+                .id(hobbyArticle.getId())
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
                 .author(hobbyArticle.getMember().getNickname())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
                 .createdAt(hobbyArticle.getWritedDate())
-                .images(hobbyArticle.getHobbyArticleImg())
+                .likes(hobbyArticle.getLikeCount())
+                .commentCount(hobbyArticle.getCommentCount())
                 .build();
     }
 }

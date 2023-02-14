@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,16 +24,15 @@ public class HobbyArticleController {
 
     private final HobbyArticleService hobbyArticleService;
 
-
-    @PostMapping(value = "/{hobby-id}/article", consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Slice<HobbyArticleResponse>> saveArticle(
+    @PostMapping(value = "/{hobby-id}/article")
+    public ResponseEntity<Void> saveArticle(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestPart(value = "request") final HobbyArticleRequest request,
-            @RequestPart(value = "multipartFile", required = false) final List<MultipartFile> multipartFile
+            @RequestParam(value = "multipartFile") List<MultipartFile> multipartFile
             ){
+        log.info(request.getTitle() + " " + request.getContent() + " " + request.getCategory());
+        log.info("file size is : "+ multipartFile.size());
         hobbyArticleService.saveArticle(userDetails.getUsername(), hobbyId, request, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -76,29 +74,39 @@ public class HobbyArticleController {
     }
 
     @GetMapping(value = "/{hobby-id}/notice")
-    public ResponseEntity<Page<HobbyArticleResponse>> getNoticeList(
+    public ResponseEntity<Page<HobbyNoticeResponse>> getNoticeList(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
              final Pageable pageable
     ){
-        Page<HobbyArticleResponse> response = hobbyArticleService.findAllNotice(userDetails.getUsername(), hobbyId, pageable);
+        Page<HobbyNoticeResponse> response = hobbyArticleService.findAllNotice(userDetails.getUsername(), hobbyId, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping(value = "/{hobby-id}/notice/search")
-    public ResponseEntity<Page<HobbyArticleResponse>> searchNoticeList(
+    public ResponseEntity<Page<HobbyNoticeResponse>> searchNoticeList(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @RequestParam(required = false) final String keyword,
             final Pageable pageable
     ){
-        Page<HobbyArticleResponse> response = hobbyArticleService.findNoticeByKeyWord(userDetails.getUsername(), hobbyId, keyword, pageable);
+        Page<HobbyNoticeResponse> response = hobbyArticleService.findNoticeByKeyWord(userDetails.getUsername(), hobbyId, keyword, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @GetMapping(value = "/{hobby-id}/notice/{notice-id}")
+    public ResponseEntity<HobbyNoticeResponse> getNotice(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("hobby-id") final Long hobbyId,
+            @PathVariable("notice-id") final Long noticeId){
+        HobbyNoticeResponse response = hobbyArticleService.getNotice(userDetails.getUsername(), hobbyId, noticeId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     /*
     # 30. 모임 게시판 게시글 조회
     */
