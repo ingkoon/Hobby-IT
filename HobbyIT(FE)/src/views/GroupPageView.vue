@@ -36,13 +36,14 @@ v-if="groupinfo.privilege !== 'GENERAL'" icon='mdi-pencil' size='small' style='f
 
         <div v-if='groupinfo.hobbyMemberId !== null' style='display: flex; justify-content: space-around'>
           <!-- 글작성 모달 -->
-          <v-btn color='#2B146C' style='color: white; height: 44px; width: 47%'>
+          <v-btn @click="openaddarticle" color='#2B146C' style='color: white; height: 44px; width: 47%'>
             <v-icon icon='mdi-plus-circle-outline'></v-icon>
-
-            <v-dialog v-model='addarticlemodal' activator='parent'>
-              <article-add @closeaddarticle='closeaddarticle' />
-            </v-dialog>
           </v-btn>
+
+          <v-dialog v-model='addarticlemodal'>
+            <article-add @close='closeaddarticle' :group="[groupid, groupinfo.name]"/>
+          </v-dialog>
+
           <!-- 화상채팅 버튼 -->
           <v-btn color='#2B146C' style='color:white; height: 44px; width: 47%' @click='onclickVideoChat'>
             <v-icon icon='mdi-video-account'></v-icon>
@@ -107,14 +108,14 @@ id='tabcard' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -web
             <v-window v-model='tab'>
               <!-- 게시글 -->
               <v-window-item id='boarditem' value='board'>
-                <v-container>
+                <v-container v-if="articles.length > 0">
                   <v-row>
                     <v-col v-for='j in 4' :key='j' cols='12' sm='3'>
                       <article-item
                         v-for='article in filteredArticles(j)'
                         :key='article'
-                        :article-data='article'
-                        :n='j' @click='openmodal' />
+                        :articleData='article'
+                        @click='openmodal(article.id)' />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -151,7 +152,7 @@ v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute
         <unfreeRegi @close='closeunfreemodal' @send='unfreeRegister' />
       </v-dialog>
       <v-dialog v-model='articlemodal'>
-        <article-modal @closearticle='closearticle' />
+        <article-modal @closearticle='closearticle' :info="[groupid, clickid, groupinfo.name]" />
       </v-dialog>
     </div>
 
@@ -213,8 +214,8 @@ import addNotice from '@/components/modals/AddNotice';
 import exitGroup from '@/components/modals/GroupResign.vue';
 import delGroup from '@/components/modals/DelGroup.vue';
 
-import { useUserStore } from '@/store/user';
-import { getGroupInfo, requestGroupJoin, updateGroupInfo, resignGroup, deleteGroup } from '@/api/hobby';
+import { useUserStore } from '@/store/user'
+import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList } from '@/api/hobby';
 
 export default {
 
@@ -276,13 +277,17 @@ export default {
       articlemodal: false,
       groupinfo: [],
       articles: [],
-      groupid: 0,
-      freemodal: false,
-      unfreemodal: false,
-      addnoticemodal: false,
-      file: '',
-      exitgroupmodal: false,
-      deletegroupmodal: false,
+      groupid : 0,
+      freemodal : false,
+      unfreemodal : false,
+      addnoticemodal : false,
+      file : '',
+      exitgroupmodal : false,
+      deletegroupmodal : false,
+      lastnum : '',
+      morearticle : true,
+      clickid : 0,
+      len : 0,
     };
   },
   computed: {
@@ -314,11 +319,15 @@ export default {
     closeAddedModal() {
       this.canvasmodal = false;
     },
+    openaddarticle() {
+      this.addarticlemodal = true;
+    },
     closeaddarticle() {
       this.addarticlemodal = false;
     },
-    openmodal() {
+    openmodal(id) {
       this.articlemodal = true;
+      this.clickid = id
     },
     closearticle() {
       this.articlemodal = false;
@@ -363,18 +372,37 @@ export default {
       }
     },
     // only for test
-    initArticles() {
-      const data = {
-        title: '제목',
-        content: '사람이 살고있다',
-        author: '사람',
-      };
-      for (let i = 0; i < 10; i++) {
-        this.articles.push(data);
+    async initArticles() {
+      // const data = {
+      //   title: '제목',
+      //   content: '사람이 살고있다',
+      //   author: '사람',
+      // };
+      // for (let i = 0; i < 10; i++) {
+      //   this.articles.push(data);
+      // }
+  
+      try {
+        const { data } = await getGroupArticleList(this.groupid, this.lastnum)
+        console.log(data)
+        for(let i = 0; i < data.content.length; i++){
+          this.articles.push(data.content[i])
+        }
+        if(data.content.length > 0){
+          console.log(data.content.length -1 )
+          this.lastnum = data.content[data.content.length -1 ].id
+          if(data.last) {
+            this.morearticle = false;
+          }
+        }
+      }
+      catch (e) {
+        console.log(e);
       }
     },
     loadData() {
-      this.initArticles();
+      if(this.morearticle)
+        this.initArticles();
     },
     openregimodal() {
       if (this.groupinfo.freeRegistration === 'FREE') {

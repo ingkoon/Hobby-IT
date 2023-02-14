@@ -9,37 +9,42 @@
           display: flex;
           justify-content: space-between;
           padding: 10px 5px;
-          background-color: #0e0f28;
+          background-color: #0e0f28; 
         "
       >
         <span></span>
-        <span id="groupname">To. John, 나 여행가고싶어</span>
+        <span id="groupname">To. {{ info[2] }}</span>
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display: flex">
         <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630" @click="uploadimg">
-          <v-carousel style="width: 500px">
+          <v-carousel hide-delimiter-background style="width: 500px">
             <v-carousel-item v-for="(item, i) in imgurl" :key="i" :src="item.src" cover></v-carousel-item>
           </v-carousel>
         </div>
 
         <div style="background-color: #0e0f28; color: white">
-          <div style="margin: 5px 10px">
-            <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
-            다나카
+          <div style="margin: 5px 10px; display: flex; justify-content: space-between; ">
             <div>
-              <v-icon color="#000000" icon="mdi-thumb-up" size="small"></v-icon>
-              좋아요 19
+              <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
+              {{ article.author }}
+            </div>
+            <div style="text-align: right;">
+              <v-icon color="white" icon="mdi-thumb-up" size="small"></v-icon>
+              <div>
+                좋아요 {{ article.likes }}
+              </div>
             </div>
           </div>
 
-          <div>배낭 여행 3일차</div>
+          <div style="display:flex; justify-content: space-between;">
+            <div>{{ article.title }}</div>
+            {{ createAt }}
+          </div>
           <hr color="white" style="height: 3px" />
 
           <div style="word-break: keep-all">
-            석촌호수에 도착했다. 커플들이 많이 보인다. 이 근처 맛집 추천가능한가요? 파인애플이 듬뿍 올라간 피자가 먹고
-            싶습니다<br />
-            뜨거운 코트를 가르며~ 너에게 가고있어~
+            {{ article.content }}
           </div>
 
           <div style="text-align: right"><v-icon icon="mdi-eye" size="small"></v-icon> 558</div>
@@ -52,10 +57,14 @@
 </template>
 
 <script>
+import { getGroupArticle } from '@/api/hobby'
 export default {
+  props : {
+    info : Object
+  },
   data() {
     return {
-      content: '',
+      article : [],
       imgurl: [
         {
           src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
@@ -70,14 +79,35 @@ export default {
           src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
         },
       ],
+      createAt : '',
     };
   },
-  mounted() {},
+  mounted() {
+
+  },
   methods: {
     closemodal() {
       this.$emit('closearticle');
     },
+    async getArticle(groupid, articleid){
+      try {
+        const {data} = await getGroupArticle(groupid, articleid)
+        this.article = data
+        this.imgurl = []
+        for (let i=0;i<data.images.length;i++){
+          this.imgurl.push({src : data.images[i]})
+        }
+        console.log(data)
+        this.createAt = data.createdAt.substring(0,10)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
   },
+  created(){
+    this.getArticle(this.info[0], this.info[1]);
+  }
 };
 </script>
 

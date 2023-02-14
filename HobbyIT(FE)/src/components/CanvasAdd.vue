@@ -265,9 +265,7 @@ export default {
       let file = new File([myBlob], this.date + ".png")
 
       let formData = new FormData()
-      formData.append("multipartFile", file)
-
-      console.log(formData.get('multipartFile'))
+      formData.append("file", file)
 
       this.send(formData)
     },
