@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="hobby_member")
+@ToString
 public class HobbyMember extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +40,8 @@ public class HobbyMember extends BaseEntity {
     @Column(nullable = false, length = 10)
     private HobbyMemberState state = HobbyMemberState.ACTIVE;
 
-//    @Column(nullable = false, name = "reg_dt")
-//    private LocalDateTime enrollDate;
+    @Column(nullable = false, name = "postit_reg_dt")
+    private LocalDateTime postitRegDt;
 
     @Column(name = "resd_dt")
     private LocalDateTime resignedDate;
@@ -80,5 +82,9 @@ public class HobbyMember extends BaseEntity {
                 .state(HobbyMemberState.ACTIVE)
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
+    }
+
+    public void updatePostitRegDt(LocalDateTime localDateTime) {
+        this.postitRegDt = localDateTime;
     }
 }
