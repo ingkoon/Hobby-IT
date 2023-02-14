@@ -14,10 +14,10 @@
       <router-link to='/promo'><span class='left' style='font-size: 24px;'>PROMO</span></router-link>
     </div>
 
-    <span v-if='isLoggedIn'>
+    <span class='logbtn' v-if='isLoggedIn'>
       <v-icon color='blue-lighten-2' icon='mdi-account-circle' style='margin-right: 10px'></v-icon>
       <router-link :to='`/mypage/${nickname}`'>
-        <span style='font-family: linefontbold'>{{ userStore.userNickname }}</span>
+        <span class='logid' style='font-family: linefontbold'>{{ userStore.userNickname }}</span>
         님, 안녕하세요!
       </router-link>
       <v-btn color='white' rounded='pill' style='background-color: #8947e2' @click='handleLogout'>로그아웃</v-btn>
@@ -94,7 +94,7 @@ a {
   background-color: #0E0F28;
 }
 
-span:not(.lo, .go) {
+span:not(.lo, .go, .logbtn, .logid) {
   cursor: pointer;
   -webkit-text-stroke: 0.5px #f9f7f1;
   background-image: linear-gradient(0deg, #f9f7f1, #f9f7f1);
@@ -104,7 +104,7 @@ span:not(.lo, .go) {
   transition: background-size 0.2s ease-in;
 }
 
-span:hover:not(.lo, .go) {
+span:hover:not(.lo, .go, .logbtn, .logid) {
   background-size: 100% 100%;
   filter: drop-shadow(0 0 4px #f9f7f1);
 }

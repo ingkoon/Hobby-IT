@@ -5,8 +5,10 @@
         <v-icon icon="mdi-sprout-outline" size="24" style="margin: -3px 10px 0px 0px; color:#FA8EB6;"></v-icon>
         홍보글 작성
       </div>
-      <v-btn variant="flat" icon="mdi-close" @click="closeaddpromo"
-            style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 0px 460px;"></v-btn>
+      <v-btn
+        variant="flat" icon="mdi-close" style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 0px 460px;"
+        @click="closeaddpromo">
+      </v-btn>
     </div>
 
     <div style="display: flex; margin: 20px 0px 0px 12px;">
@@ -36,7 +38,6 @@
 
     <v-textarea
       :model-value="content"
-      :rules="rules"
       auto-grow="false"
       color="white"
       counter
@@ -49,8 +50,10 @@
       <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right;">
         작성하기
       </div>
-      <v-btn variant="flat" icon="mdi-pencil-outline" @click="closeaddpromo"
-            style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 5px -5px;"></v-btn>
+      <v-btn
+        variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 5px -5px;"
+        @click="closeaddpromo">
+      </v-btn>
     </div>
 
   </v-card>

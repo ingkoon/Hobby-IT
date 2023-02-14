@@ -1,13 +1,13 @@
 <template>
   <v-card id="delpromo">
-    <v-icon icon="mdi-close" style="align-self: end" @click="close"></v-icon>
+    <v-icon icon="mdi-close" style="align-self: end" @click="closedelpromo"></v-icon>
     <v-icon icon="mdi-trash-can" style="align-self: center"></v-icon>
     <div style="font-size: 36px">홍보글을 삭제하시겠습니까?</div>
     <div style="font-size: 20px; font-family: linefont">작성한 홍보글이 삭제됩니다.</div>
 
     <div style="display: flex">
       <span @click="send" id="okbtn" style="color: white; margin-right: 20px"> 확인 </span>
-      <span id="cancelbtn" style="color: white" @click="close"> 취소 </span>
+      <span id="cancelbtn" style="color: white" @click="closedelpromo"> 취소 </span>
     </div>
   </v-card>
 </template>
@@ -15,12 +15,12 @@
 <script>
 export default {
   methods: {
-    close() {
-      this.$emit('close');
+    closedelpromo() {
+      this.$emit('closedelpromo')
     },
-    send() {
-      this.$emit('send')
-    }
+    // send() {
+    //   this.$emit('send')
+    // }
   },
 };
 </script>

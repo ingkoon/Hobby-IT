@@ -8,7 +8,7 @@ const instanceWithNoAuth = createInstanceWithNoAuth(PATH);
 const multipartInstanceWithNoAuth = createInstanceWithNoAuth(PATH, fileConfig);
 
 // 45.홍보 게시판 게시글 페이지 조회
-function getPromotionArticlePage(page_no) {
+export function getPromotionArticlePage(page_no) {
   return instance.get('', {
     params: {
       page: page_no,
@@ -17,21 +17,21 @@ function getPromotionArticlePage(page_no) {
 }
 
 // 46.홍보 게시판 게시글 등록
-function createPromotionArticle(data, hobby_id) {
+export function createPromotionArticle(data, hobby_id) {
   return instance.post(`/${hobby_id}`, data);
 }
 
 // 47.홍보 게시판 게시글 조회
-function getPromotionArticle(article_id) {
+export function getPromotionArticle(article_id) {
   return instance.get(`/${article_id}`);
 }
 
 // 48.홍보 게시판 게시글 수정
-function updatePromotionArticle(data, article_id) {
+export function updatePromotionArticle(data, article_id) {
   return instance.put(`/${article_id}`, data);
 }
 
 // 49.홍보 게시판 게시글 삭제
-function deletePromotionArticle(article_id) {
+export function deletePromotionArticle(article_id) {
   return instance.delete(`/${article_id}`);
 }
