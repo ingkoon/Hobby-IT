@@ -25,7 +25,8 @@
           <v-icon icon="mdi-help-circle-outline"></v-icon>
           모집 : 신규회원을 모집하는 글 / 교류 : 모임+모임(collab) 활동을 찾는 글
         </div>
-        <v-btn prepend-icon="mdi-bullhorn-variant-outline"
+        <v-btn
+          prepend-icon="mdi-bullhorn-variant-outline"
           style="
           border-radius: 50px;
           background-color: #0E0F28;
@@ -33,11 +34,16 @@
           color: #FA8EB6;
           margin: 0px 0px 20px 400px;"
           >홍보글 작성
+          <v-dialog v-model="notleader" activator="parent">
+            <not-leader @closenotleader="closenotleader" />
+          </v-dialog>
           <v-dialog v-model="addpromo" activator="parent">
             <add-promo @closeaddpromo="closeaddpromo" />
           </v-dialog>
         </v-btn>
       </div>
+
+      <!--게시판-->
       <div style="display: flex; flex-direction: column; align-items: center;">
         <table style="width: 928px; height: 48px; background-color: #0E0F28; color: white; z-index: 2; border-bottom: 2px solid #FA8EB6">
           <colgroup>
@@ -57,29 +63,50 @@
         </table>
         <v-expansion-panels variant="popout" style="width: 80%;">
           <v-expansion-panel
-            v-for="(row, idx) in list" id="lst" :key="idx"
+            v-for="(row, idx) in promolist" id="lst" :key="idx"
             style="background-color: #0E0F28; color: white; padding: 0px;"
           ><v-expansion-panel-title expand-icon=none collapse-icon="mdi-close" style="display: flex; align-items: center; text-align: center;">
-            <div style="width:15%; margin-left:-20px; font-weight: 400;">{{ no - idx }}</div>
-            <div style="width:5%;  margin-left:5px; font-weight: 400;">{{ row.type }}</div>
+            <div style="width:15%; margin-left:-20px; font-weight: 400;">{{ row.id }}</div>
+            <div style="width:5%;  margin-left:5px; font-weight: 400;">{{ row.header === 'MEETUP' ? '교류' : '모집' }}</div>
             <div style="width:50%; margin-left:15px;">{{ row.title }}</div>
-            <div style="width:10%; margin-left:10px;">{{ row.user_nickname }}</div>
-            <div style="width:20%; margin-right:-120px;">{{ row.created_at.substring(0, 10) }}</div>
+            <div style="width:10%; margin-left:10px;">{{ row.nickname }}</div>
+            <div style="width:20%; margin-right:-120px;">{{ row.regDt.substring(0, 10) }}</div>
           </v-expansion-panel-title>
-          <v-expansion-panel-text :style="row.type === '교류' ? 'background-color: #2E186B;' : 'background-color: #8A2B6A;' ">
-            <div style="text-align: right; margin-left: -150px;  margin-right: 20px;">
+          <v-expansion-panel-text :style="row.header === 'MEETUP' ? 'background-color: #8A2B6A;' : 'background-color: #2E186B;' ">
+            <!-- <div style="text-align: right; margin-left: -150px;  margin-right: 20px;">
               <v-icon icon = "mdi-eye" size="18" style="color: white;"></v-icon>&nbsp;&nbsp;&nbsp;{{row.hit}}
+            </div> -->
+            <div style="font-size: 24px; margin-top: 10px;">
+              <span style="color: #EE49FD; font-size: 30px;">{{ row.hobbyName }}</span> 모임
             </div>
-            {{ row.content }}
+            <v-divider></v-divider>
+            <br />{{ row.content }}
             <div style="text-align:right;">
-              <v-btn variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white;"></v-btn>
-              <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;"></v-btn>
+
+              <!--수정버튼-->
+              <v-btn variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
+                <v-icon icon="mdi-pencil-outline" color="white"></v-icon>
+                <v-dialog v-model="updatepromo" activator="parent">
+                  <add-promo @closeaddpromo="closeupdatepromo" />
+                </v-dialog>
+              </v-btn>
+
+              <!--삭제버튼-->
+              <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
+                <v-icon icon="mdi-delete-outline" color="white"></v-icon>
+                <v-dialog v-model="delpromo" activator="parent">
+                  <del-promo @closedelpromo="closedelpromo" @deletepromo="deletepromo(`${row.id}`)" @afterdelete="afterdelete" />
+                </v-dialog>
+              </v-btn>
+
             </div>
           </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
-      <div v-if="paging.totalCount > 0" class="pagination">
+
+      <!--페이징-->
+      <!-- <div v-if="paging.totalCount > 0" class="pagination">
         <a class="first" href="javascript:;" @click="fnPage(1)">&lt;&lt;</a>
         <a
           v-if="paging.start_page > 10"
@@ -106,170 +133,83 @@
         <a class="last" href="javascript:;" @click="fnPage(`${paging.total_page}`)"
           >&gt;&gt;</a
         >
-      </div>
+      </div> -->
+
     </div>
   </div>
 </template>
 
 <script>
 import AddPromo from "../components/modals/AddPromo.vue";
+import DelPromo from "../components/modals/DelPromo.vue";
+import NotLeader from "../components/modals/NotLeader.vue";
+
+//axios작업
+import { getPromotionArticlePage, createPromotionArticle, updatePromotionArticle, deletePromotionArticle, getMasterList} from '@/api/article';
 
 export default {
   components:{
     AddPromo,
+    DelPromo,
+    NotLeader,
   },
   data() {
     return {
+      pgno: 0,
       list: [],
-      tmplist: [
-        {
-          id: 1,
-          type: "모집",
-          hit: 123,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "Sally",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 2,
-          type: "교류",
-          hit: 321,
-          title: "Sit sign share you.",
-          content:
-            "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
-          user_nickname: "Orlando",
-          created_at: "2013-05-29T15:46:17Z",
-          updated_at: "2001-12-09T17:38:01Z",
-        },
-        {
-          id: 3,
-          type: "모집",
-          hit: 333,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "Eunjin",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 4,
-          type: "모집",
-          hit: 456,
-          title: "Sit sign share you.",
-          content:
-            "Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.",
-          user_nickname: "호방걸",
-          created_at: "2013-05-29T15:46:17Z",
-          updated_at: "2001-12-09T17:38:01Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-        {
-          id: 5,
-          type: "교류",
-          hit: 562,
-          title: "Hair each base dark guess garden accept.",
-          content:
-            "Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.",
-          user_nickname: "호방맨",
-          created_at: "1995-01-20T07:27:13Z",
-          updated_at: "1990-04-21T01:07:51Z",
-        },
-
-      ],
       addpromo: false,
-      no: "",
-      paging: "", //페이징 데이터
-      start_page: "", //시작페이지
-      page: this.$route.query.page ? this.$route.query.page : 1,
-      keyword: this.$route.query.keyword,
-      paginavigation: function () {
-        //페이징 처리 for문 커스텀
-        var pageNumber = [];
-        var start_page = this.paging.start_page;
-        var end_page = this.paging.end_page;
-        for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
-        return pageNumber;
-      },
+      delpromo: false,
+      updatepromo: false,
+      notleader: false,
+      // no: "",
+      // paging: "", //페이징 데이터
+      // start_page: "", //시작페이지
+      // page: this.$route.query.page ? this.$route.query.page : 1,
+      // keyword: this.$route.query.keyword,
+      // paginavigation: function () {
+      //   //페이징 처리 for문 커스텀
+      //   var pageNumber = [];
+      //   var start_page = this.paging.start_page;
+      //   var end_page = this.paging.end_page;
+      //   for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
+      //   return pageNumber;
+      // },
+      promolist:[],
+      masterlist: [],
     };
   },
-  created() {
-    this.getlist();
+  mounted() {
+    this.getPromoList(this.pgno);
+    this.getMasterList();
   },
   methods: {
+    closenotleader(){
+      this.notleader = false;
+    },
     openaddpromo() {
-      this.addpromo = true;
+      if (this.masterlist.length === 0) {
+        this.notleader = true;
+      } else {
+        this.addpromo = true;
+      }
     },
     closeaddpromo() {
       this.addpromo = false;
+    },
+    opendelpromo() {
+      this.delpromo = true;
+    },
+    closedelpromo() {
+      this.delpromo = false;
+    },
+    openupdatepromo() {
+      this.updatepromo = true;
+    },
+    closeupdatepromo() {
+      this.updatepromo = false;
+    },
+    afterdelete(){
+      this.getPromoList(this.pgno);
     },
     getlist() {
       this.list = this.tmplist
@@ -294,6 +234,53 @@ export default {
       if (this.page != n) {
         this.page = n;
         this.getlist();
+      }
+
+      // getPromoList 호출 - backend 통신
+    },
+
+    //작업
+    async getPromoList(page_no){
+      try {
+        // const { data } = await getPromotionArticlePage();
+        const { data:{content} } = await getPromotionArticlePage(page_no);
+        console.log(content);
+        this.promolist = content
+      } catch (e) {
+        console.log("홍보게시판 리스트 불러오기 실패 : ",e.message)
+      }
+    },
+    async getMasterList(){
+      try {
+        // const res =  await getMasterList();
+        // console.log(res);
+        const { data:{ownHobbyList} } = await getMasterList();
+        this.masterlist = ownHobbyList;
+        console.log('ㅎㅎㅎ'+this.masterlist.length);
+      } catch (e) {
+        console.log("방장 리스트 불러오기 실패 : ",e.message)
+      }
+    },
+    async createPromo(data, hobby_id){
+      try {
+        createPromotionArticle(data, hobby_id);
+      } catch (e) {
+        console.log("홍보게시글 작성 실패 : ",e.message)
+      }
+    },
+    // async updatePromo(data, article_id){
+    //   try {
+
+    //   } catch (e) {
+    //     console.log("홍보게시글 수정 실패 : ",e.message)
+    //   }
+    // },
+    async deletepromo(article_id){
+      try {
+        await deletePromotionArticle(article_id);
+        await this.afterdelete();
+      } catch (e) {
+        console.log("홍보게시글 삭제 실패 : ",e.message)
       }
     },
   },
