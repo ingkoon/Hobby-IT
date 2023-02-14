@@ -52,7 +52,7 @@ public class ControllerAdvice {
             NoSuchPendingException.class,
             NoSuchArticleException.class,
             NoSuchHobbyPostitException.class})
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -79,7 +79,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
-    public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -90,8 +90,8 @@ public class ControllerAdvice {
             ExpiredJwtException.class,
             UnsupportedJwtException.class,
             MalformedJwtException.class,
-            })
-    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
+    })
+    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
