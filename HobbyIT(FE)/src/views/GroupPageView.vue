@@ -221,7 +221,7 @@ import delGroup from '@/components/modals/DelGroup.vue';
 import getCanvas from '@/components/modals/Canvas.vue';
 
 import { useUserStore } from '@/store/user'
-import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList } from '@/api/hobby';
+import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList, getGroupVisitorBookCreatedDate } from '@/api/hobby';
 
 export default {
 
@@ -263,21 +263,6 @@ export default {
           },
           dates: new Date(),
         },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 20),
-        },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 18),
-        },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 24),
-        },
       ],
       canvasmodal: false,
       addarticlemodal: false,
@@ -316,6 +301,7 @@ export default {
   created() {
     this.groupid = this.$route.params.id;
     this.getGroupInfo(this.$route.params.id);
+    this.getcanvasdate(new Date())
   },
 
   methods: {
@@ -542,9 +528,31 @@ export default {
       this.getcanvasmodal = false
     },
 
-    async getcanvasdate(){
+    async getcanvasdate(date){
+      console.log("DDDDDDDDDDDDD")
       try {
-        const { data } = await getGroupVisitorBookCreatedDate()
+        // this.attrs = []
+        let year = date.getFullYear()
+        let month = date.getMonth()+1
+        if(month < 10){
+          month = '0'+String(month)
+        }
+        let day = date.getDate()
+        if(day <10){
+          day = '0'+String(day)
+        }
+        const inputdate = year + '-' + month + "-" + day
+        const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate)
+        console.log(data);
+        for(let i=0;i<data.days.length;i++){
+          const tmp = {
+            key : 'visit',
+            dot : true,
+            dates: new Date(year, parseInt(month)-1, data.days[i])
+          }
+          this.attrs.push(tmp)
+        }
+        console.log(this.attrs)
       }
       catch(e) {
         console.log(e);
