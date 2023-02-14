@@ -174,7 +174,7 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
             :attributes='attrs'
             :max-date='today'
             color='purple' 
-            style='background-color: #fbd3de; padding: 10px; width: 85%'
+            style='background-color: #fbd3de; padding: 10px; width: 85%; height: 350px;'
             
           />
         </div>
@@ -182,14 +182,14 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
 
         <div id='canvasdialog' style='text-align: center'>
           <!-- 방명록 생성 모달 -->
-          <v-btn color='white'>
+          <v-btn color='white' style="margin-top:40px">
             <div style='display: flex; flex-direction: column; align-items: center'>
               <v-icon color='white' icon='mdi-calendar-plus-outline'></v-icon>
               <span style='color: white; margin-top: 10px'>방명록<br />작성하기</span>
             </div>
 
             <v-dialog v-model='canvasmodal' activator='parent'>
-              <CanvasAdd :groupid='groupid' @close='closeAddedModal' />
+              <CanvasAdd :groupid='groupid' :groupname='groupinfo.name' @close='closeAddedModal' />
             </v-dialog>
           </v-btn>
         </div>
