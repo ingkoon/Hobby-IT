@@ -28,7 +28,7 @@
             <tr id="noticetitle">
               <td>{{ idx+1 }}</td>
               <td>
-                <a>{{ row.nickName }}</a>
+                <div @click="goprofile(row.nickName)">{{ row.nickName }}</div>
               </td>
               <td>
                 <!-- <v-select
@@ -130,6 +130,9 @@ export default {
     closebanmem() {
       this.banmodal = false
     },
+    goprofile(nickName){
+      this.$router.push({ name: 'MyPage', params: {nickname : nickName } });
+    }
   },
 };
 </script>

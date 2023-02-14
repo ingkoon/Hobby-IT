@@ -89,8 +89,7 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
       </div>
       <!-- 오른쪽 게시판 탭 -->
       <div id='board' style='position:relative'>
-        <v-card
-id='tabcard' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''"
+        <v-card id='tabcard' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''"
                 style='background-color: #00000000'>
           <v-tabs v-model='tab' align-tabs='start' style='color: white; align-items: center; height: 57px'>
             <v-tab value='board'>게시글</v-tab>
