@@ -25,11 +25,14 @@
         </v-col>
         <v-row id='circle1' />
         <v-row id='circle2' />
-        <v-col id='videoList' :style="{ height: computedHeight + 'px' }" style="width:900px;">
+        <v-col id='videoList' :style="{ height: computedHeight + 'px' }" style='width:900px;'>
           <v-row style='margin: 0; height: 126px'>
             <h1 id='title' @click='myCustomMethod'>John, 나 여행가고 싶어</h1>
           </v-row>
-          <v-row id='video-container' style='height: 757px; width:900px; margin-right: 0; margin: 0; align-items: center; justify-content: center'>
+          <v-row
+            id='video-container'
+            style='height: 757px; width:900px; margin-right: 0; margin: 0; align-items: center; justify-content: center'>
+            <user-video :stream-manager='publisher' />
             <user-video v-for='sub in subscribers' :key='sub.stream.connection.connectionId' :stream-manager='sub'>
               <!--            추가 바람-->
             </user-video>
@@ -154,16 +157,14 @@ export default {
     },
 
     myCustomMethod() {
-      this.OV.getUserMedia({
-        videoSource: 'screen',
-      }).then(stream => {
-        const track = stream.getVideoTracks()[0];
-        this.publisher.replaceTrack(track);
-        stream.getAudioTracks().forEach(t => t.stop());
-        console.log(track);
-      });
-
-      // this.session.unpublish(this.publisher)
+      // for (let i = 0; i < 100; i++) {
+      //   const msgData = {
+      //     data: 'hahahoho',
+      //     from: '',
+      //     id: this.messageStore.message.length,
+      //   };
+      //   this.messageStore.message.push(msgData);
+      // }
     },
     sendMessage(msg) {
       this.session
@@ -173,7 +174,7 @@ export default {
           type: 'message',
         })
         .then(() => {
-          console.log('Success');
+
         })
         .catch(err => {
           console.error(err);
@@ -257,6 +258,7 @@ export default {
         const msgData = {
           data: event.data,
           from: from,
+          id: this.messageStore.message.length,
         };
         this.messageStore.message.push(msgData);
       });
@@ -381,11 +383,11 @@ export default {
 
 #rightSidebar {
   position: absolute;
-  top: 60px;
+  top: 59px;
   right: 0;
   background-color: #0e0f28;
   width: 483px;
-  padding: 10px;
+  padding: 0;
   margin: 0;
   border-radius: 50px 0 0 0;
   z-index: 4;
