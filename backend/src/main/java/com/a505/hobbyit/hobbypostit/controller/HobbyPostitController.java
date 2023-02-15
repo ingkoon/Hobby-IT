@@ -43,7 +43,7 @@ public class HobbyPostitController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
-            @Parameter(description = "날짜", example = "2023-01-01") LocalDate date,
+                @Parameter(description = "날짜", example = "2023-01-01") LocalDate date,
             @RequestPart("file") final MultipartFile multipartFile
     ) {
         hobbyPostitService.save(Long.parseLong(userDetails.getUsername()), hobbyId, date, multipartFile);
@@ -65,7 +65,7 @@ public class HobbyPostitController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
-            @Parameter(description = "날짜", example = "2023-01-01") LocalDate date
+                @Parameter(description = "날짜", example = "2023-01-01") LocalDate date
     ) {
         List<HobbyPostitResponse> hobbyPostitResponseList
                 = hobbyPostitService.findHobbyPostits(Long.parseLong(userDetails.getUsername()), hobbyId, date);

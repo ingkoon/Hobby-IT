@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,44 +32,40 @@ public class HobbyPostitRecordController {
 
 
     @Operation(
-            summary = "방명록 작성일 조회",
-            description = "소모임의 방명록 작성일을 조회합니다."
+            summary = "방명록 작성 날짜 조회",
+            description = "특정 소모임의 모든 방명록 작성 날짜를 조회합니다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "방명록 작성일 반환 성공",
+            @ApiResponse(responseCode = "200", description = "방명록 작성 날짜 반환 성공",
                     content = @Content(examples = {
                             @ExampleObject(value = """
                                     {
-                                      "days": [
-                                        "1",
-                                        "2",
-                                        "5",
-                                        "10",
-                                        "15",
-                                        "23",
-                                        "28"
+                                      "dateList": [
+                                        "2022-12-31",
+                                        "2023-01-01",
+                                        "2023-01-01",
+                                        "2023-02-13",
+                                        "2023-02-14",
+                                        "2023-02-15",
+                                        "2023-02-16"
                                       ]
                                     }
                                     """)})
             ),
-            @ApiResponse(responseCode = "401", description = "방명록 작성일 조회 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "401", description = "방명록 작성 날짜 조회 권한이 없음", content = @Content),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
-    @GetMapping("/api/hobby/{hobby-id}/postit/record/{date}")
-    ResponseEntity<Map<String, List<Integer>>> findHobbyPostitRecords(
+    @GetMapping("/api/hobby/{hobby-id}/postit/record")
+    ResponseEntity<Map<String, List<LocalDate>>> findHobbyPostitRecords(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
-            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
-            @Parameter(description = "날짜", example = "2023-01-01") LocalDate date
+            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId
     ) {
-        Map<String, List<Integer>> resultMap = new HashMap<>();
-        List<Integer> dayList = hobbyPostitRecordService.findHobbyPostitRecords(
+        Map<String, List<LocalDate>> resultMap = new HashMap<>();
+        List<LocalDate> regDtList = hobbyPostitRecordService.findHobbyPostitRecordRegDtList(
                 Long.parseLong(userDetails.getUsername()),
-                hobbyId,
-                date.getYear(),
-                date.getMonthValue()
+                hobbyId
         );
-        resultMap.put("days", dayList);
+        resultMap.put("regDtList", regDtList);
         return ResponseEntity.ok(resultMap);
     }
 }

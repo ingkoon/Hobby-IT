@@ -77,15 +77,13 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
         hobbyMember.updatePostitRegDt(curDateTime);
 
         if (hobbyPostitRecordRepository
-                .findByHobbyAndYearAndMonth(hobby, date.getYear(), date.getMonthValue())
+                .findByHobbyAndRegDt(hobby, date)
                 .isEmpty()
         ) {
             hobbyPostitRecordRepository.save(
                     HobbyPostitRecord.builder()
                             .hobby(hobby)
-                            .year(curDateTime.getYear())
-                            .month(curDateTime.getMonthValue())
-                            .day(curDateTime.getDayOfMonth())
+                            .regDt(curDateTime.toLocalDate())
                             .build()
             );
         }
@@ -93,8 +91,8 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
 
     @Override
     public List<HobbyPostitResponse> findHobbyPostits(Long memberId, Long hobbyId, LocalDate date) {
-        if (!LocalDate.now().isAfter(date))
-            throw new UnAuthorizedHobbyPostitException("방명록을 조회할 수 있는 날짜가 아닙니다.");
+//        if (!LocalDate.now().isAfter(date))
+//            throw new UnAuthorizedHobbyPostitException("방명록을 조회할 수 있는 날짜가 아닙니다.");
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
