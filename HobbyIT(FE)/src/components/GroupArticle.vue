@@ -4,7 +4,7 @@
       <div
         id="notopa"
         style="
-          color: white;
+          color: white; 
           height: 60px;
           display: flex;
           justify-content: space-between;
@@ -49,14 +49,14 @@
           </div>
           <hr color="white" style="height: 3px" />
 
-          <div v-if="!changemode" style="word-break: keep-all">
+          <div v-if="!changemode" style="word-break: keep-all; margin:10px">
             {{ article.content }}
           </div>
           <div v-else>
             <textarea v-model="content" style="width: 100%;color : white; border: 1px solid white;"></textarea>
           </div>
 
-          <div style="text-align: right"><v-icon icon="mdi-eye" size="small"></v-icon> 558</div>
+          <!-- <div style="text-align: right"><v-icon icon="mdi-eye" size="small"></v-icon> 558</div> -->
 
           <hr color="#642EFE" style="height: 3px" />
           <div v-if="userStore.userNickname === article.author">
@@ -70,6 +70,46 @@
               <div @click="modifymode">취소</div>
             </div>
           </div>
+
+          <div>
+            <v-text-field
+              v-model="message"
+              append-inner-icon="mdi-send-outline"
+              color="#24B1D0"
+              placeholder="댓글을 입력하세요"
+              style="margin:10px; align-self: center; font-size: 10px"
+              variant="outlined"
+              @click:append-inner="sendreply"
+            >
+            </v-text-field>
+          </div>
+
+          <div style="overflow:scroll; height: 500px;">
+            <div v-for="lst in reply">
+              <div style="margin: 10px">
+                <div style="display: flex; justify-content: space-between;">
+                  <span> {{ lst.author }} </span>
+                  <div>{{ lst.updateAt.substring(0,10) }}</div>
+                </div>
+  
+
+                <div v-if="lst.author !== userStore.userNickname || !replymode" >{{ lst.content }}</div>
+                <input v-model="inputreply" type="text" :name="`${lst.commentId}`" style="visibility: hidden; border:1px solid white; color:white; width: 100%;"/>
+      
+                <div v-if="lst.author === userStore.userNickname" style="text-align: right;">
+                  <div v-if="!replymode">
+                    <v-btn @click="modireply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 수정 </v-btn>
+                    <v-btn @click="delreply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 삭제 </v-btn>
+                  </div>
+                  <div v-else>
+                    <v-btn @click="modireply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 완료 </v-btn>
+                    <v-btn @click="modireplycancle(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 취소 </v-btn>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
         </div>
       </div>
     </v-card>
@@ -77,7 +117,7 @@
 </template>
 
 <script>
-import { getGroupArticle, updateGroupArticle, deleteGroupArticle } from '@/api/hobby'
+import { getGroupArticle, updateGroupArticle, deleteGroupArticle, getGroupArticleCommentList, postGroupArticleComment, updateGroupArticleComment, deleteGroupArticleComment } from '@/api/hobby'
 import { useUserStore } from '@/store/user'
 
 export default {
@@ -97,6 +137,10 @@ export default {
       changemode : false,
       title : '',
       content : '',
+      message : '',
+      reply : [],
+      replymode : false,
+      inputreply : '',
     };
   },
   mounted() {
@@ -150,10 +194,79 @@ export default {
       const { data } = await deleteGroupArticle(this.info[0], this.info[1])
       console.log(data)
       this.closemodal()
+    },
+
+    async getreply() {
+      try {
+        const { data } = await getGroupArticleCommentList(this.info[0], this.info[1])
+        this.reply = data
+        this.inputreply = data.content
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    async sendreply() {
+      try {
+        const inputdata = {
+          content : this.message
+        }
+
+        const { data } = await postGroupArticleComment(this.info[0], this.info[1], new Blob([JSON.stringify(inputdata)], {type:'application/json'}))
+        console.log(data)
+        this.message = ''
+        this.getreply()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    async modireply(id){
+      const area = document.getElementsByName(id)
+      if(this.replymode){
+        try {
+          const inputdata = {
+            'content' : this.inputreply
+          }
+          const { data } = await updateGroupArticleComment(this.info[0], this.info[1], id, new Blob([JSON.stringify(inputdata)], {type:'application/json'}))
+          console.log(data)
+          area[0].style.visibility = 'hidden'
+          this.getreply()
+        }
+        catch(e) {
+          console.log(e)
+        }
+        
+      }
+      else {
+        area[0].style.visibility = 'visible';
+      }
+
+      this.replymode = !this.replymode
+    },
+
+    async delreply(id) {
+      try {
+        const { data } = await deleteGroupArticleComment(this.info[0], this.info[1], id)
+        console.log(data)
+        this.getreply()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    modireplycancle(id){
+      this.replymode = !this.replymode
+      const area = document.getElementsByName(id)
+      area[0].style.visibility = 'hidden'
     }
   },
   created(){
     this.getArticle(this.info[0], this.info[1]);
+    this.getreply()
   }
 };
 </script>
