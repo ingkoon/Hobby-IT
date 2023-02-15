@@ -164,12 +164,12 @@ export function getGroupNotice(hobby_id, notice_id) {
 
 // 40.모임 공지사항 수정
 export function updateGroupNotice(hobby_id, notice_id, data) {
-  return instance.put(`/${hobby_id}/notice/${notice_id}`, data);
+  return instance.put(`/${hobby_id}/article/${notice_id}`, data);
 }
 
 // 41.모임 공지사항 삭제
 export function deleteGroupNotice(hobby_id, notice_id) {
-  return instance.delete(`/${hobby_id}/notice/${notice_id}`);
+  return instance.delete(`/${hobby_id}/article/${notice_id}`);
 }
 
 // 42.모임 방명록 등록

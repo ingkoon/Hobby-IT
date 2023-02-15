@@ -121,7 +121,7 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
               </v-window-item>
               <v-window-item value='notice'>
                 <!-- 공지사항 -->
-                <group-notice />
+                <group-notice :groupid="groupid" />
               </v-window-item>
 
               <v-window-item value='memberlist'>
@@ -137,8 +137,8 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
         </v-card>
 
         <v-btn
-v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute; left:37%; top : 100px;'
-               @click='openregimodal'>
+          v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute; left:37%; top : 100px;'
+          @click='openregimodal'>
           가입 신청하기
         </v-btn>
 
@@ -173,25 +173,31 @@ v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute
             v-model='date'
             :attributes='attrs'
             :max-date='today'
-            color='purple'
-            style='background-color: #fbd3de; padding: 10px; width: 85%'
+            color='purple' 
+            style='background-color: #fbd3de; padding: 10px; width: 85%; height: 350px;'
+            
           />
         </div>
+        <!-- @click="opencanvasmodal" -->
 
         <div id='canvasdialog' style='text-align: center'>
           <!-- 방명록 생성 모달 -->
-          <v-btn color='white'>
+          <v-btn color='white' style="margin-top:40px">
             <div style='display: flex; flex-direction: column; align-items: center'>
               <v-icon color='white' icon='mdi-calendar-plus-outline'></v-icon>
               <span style='color: white; margin-top: 10px'>방명록<br />작성하기</span>
             </div>
 
             <v-dialog v-model='canvasmodal' activator='parent'>
-              <CanvasAdd :groupid='groupid' @close='closeAddedModal' />
+              <CanvasAdd :groupid='groupid' :groupname='groupinfo.name' @close='closeAddedModal' />
             </v-dialog>
           </v-btn>
         </div>
-      </div>
+      </div>    
+      <v-dialog v-model="getcanvasmodal">
+        <get-canvas @close="closecanvasmodal" :data="[date, groupid]"/>
+      </v-dialog>
+      
     </v-navigation-drawer>
     <InfiniteScrollObserver v-if='groupinfo.hobbyMemberId !== null' @infinite-scroll-trigger='loadData' />
 
@@ -212,9 +218,10 @@ import unfreeRegi from '@/components/modals/GroupRegister.vue';
 import addNotice from '@/components/modals/AddNotice';
 import exitGroup from '@/components/modals/GroupResign.vue';
 import delGroup from '@/components/modals/DelGroup.vue';
+import getCanvas from '@/components/modals/Canvas.vue';
 
 import { useUserStore } from '@/store/user'
-import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList } from '@/api/hobby';
+import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList, getGroupVisitorBookCreatedDate } from '@/api/hobby';
 
 export default {
 
@@ -232,6 +239,7 @@ export default {
     addNotice,
     exitGroup,
     delGroup,
+    getCanvas,
   },
   setup() {
     const userStore = useUserStore();
@@ -255,21 +263,6 @@ export default {
           },
           dates: new Date(),
         },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 20),
-        },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 18),
-        },
-        {
-          key: 'visit',
-          dot: true,
-          dates: new Date(2023, 0, 24),
-        },
       ],
       canvasmodal: false,
       addarticlemodal: false,
@@ -286,7 +279,7 @@ export default {
       lastnum : '',
       morearticle : true,
       clickid : 0,
-      len : 0,
+      getcanvasmodal : false,
     };
   },
   computed: {
@@ -299,9 +292,16 @@ export default {
     },
   },
 
+  watch : {
+    date(newdate){
+      this.opencanvasmodal(newdate)
+    }
+  },
+
   created() {
     this.groupid = this.$route.params.id;
     this.getGroupInfo(this.$route.params.id);
+    this.getcanvasdate(new Date())
   },
 
   methods: {
@@ -521,6 +521,44 @@ export default {
         console.log(e);
       }
     },
+    opencanvasmodal(){
+      this.getcanvasmodal = true
+    },
+    closecanvasmodal() {
+      this.getcanvasmodal = false
+    },
+
+    async getcanvasdate(date){
+      console.log("DDDDDDDDDDDDD")
+      try {
+        // this.attrs = []
+        let year = date.getFullYear()
+        let month = date.getMonth()+1
+        if(month < 10){
+          month = '0'+String(month)
+        }
+        let day = date.getDate()
+        if(day <10){
+          day = '0'+String(day)
+        }
+        const inputdate = year + '-' + month + "-" + day
+        const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate)
+        console.log(data);
+        for(let i=0;i<data.days.length;i++){
+          const tmp = {
+            key : 'visit',
+            dot : true,
+            dates: new Date(year, parseInt(month)-1, data.days[i])
+          }
+          this.attrs.push(tmp)
+        }
+        console.log(this.attrs)
+      }
+      catch(e) {
+        console.log(e);
+      }
+    }
+
   },
 };
 </script>

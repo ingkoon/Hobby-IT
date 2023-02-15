@@ -16,7 +16,6 @@
 
     <v-textarea
       v-model="content"
-      :rules="rules"
       auto-grow="false"
       color="white"
       counter
@@ -26,15 +25,14 @@
     ></v-textarea>
 
     <div @click="addnotice" style="align-self: end; font-family: linefont; margin-bottom: 5px">
-      작성하기
+      수정하기
       <v-icon icon="mdi-pencil"></v-icon>
     </div>
-
   </v-card>
 </template>
 
 <script>
-import {postGroupNotice, updateGroupNotice } from '@/api/hobby'
+import { updateGroupNotice } from '@/api/hobby'
 export default {
   data(){
     return {
@@ -44,7 +42,11 @@ export default {
     }
   },
   props : {
-    groupid : Number,
+    data : Object, //[groupid, row.id, row.title, row.content]
+  },
+  created() {
+    this.title = this.data[2]
+    this.content = this.data[3]
   },
   methods: {
     close() {
@@ -57,7 +59,7 @@ export default {
           content : this.content,
         }
         
-        const { data } = await postGroupNotice(this.groupid, JSON.stringify(inputdata))
+        const { data } = await updateGroupNotice(this.data[0], this.data[1], JSON.stringify(inputdata))
         console.log(data)
         this.close()
       }
