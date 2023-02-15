@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -81,8 +82,9 @@ public class MemberController {
     @PutMapping
     public ResponseEntity<Void> updateMember(
             @RequestHeader("Authorization") final String token,
-            @RequestBody MemberMypageRequest request) {
-        memberService.update(token, request);
+            @RequestPart("request") MemberMypageRequest request,
+            @RequestPart("multipartFile") MultipartFile multipartFile) {
+        memberService.update(token, request, multipartFile);
         return ResponseEntity.ok().build();
     }
 

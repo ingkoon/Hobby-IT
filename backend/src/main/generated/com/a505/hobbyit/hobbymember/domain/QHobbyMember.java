@@ -33,6 +33,8 @@ public class QHobbyMember extends EntityPathBase<HobbyMember> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
+    public final DateTimePath<java.time.LocalDateTime> postitRegDt = createDateTime("postitRegDt", java.time.LocalDateTime.class);
+
     public final EnumPath<com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege> privilege = createEnum("privilege", com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege.class);
 
     public final DateTimePath<java.time.LocalDateTime> resignedDate = createDateTime("resignedDate", java.time.LocalDateTime.class);

@@ -1,5 +1,6 @@
 package com.a505.hobbyit.member.service;
 
+import com.a505.hobbyit.common.file.FileUploader;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
@@ -35,6 +36,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -47,8 +49,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
-    @Value("${file.img.profile}")
-    private String profileImg;
     @Value("${oauth.REST_API_KEY}")
     private String REST_API_KEY;
     @Value("${oauth.redirect_uri}")
@@ -62,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
     private final JavaMailSender javaMailSender;
     private final HobbyRepository hobbyRepository;
     private final SecurityUtil securityUtil;
+    private final FileUploader fileUploader;
 
     @Override
     public void signUp(MemberSignupRequest request) {
@@ -78,7 +79,6 @@ public class MemberServiceImpl implements MemberService {
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .imgUrl(profileImg)
                 .isSns(MemberIsSns.FALSE)
                 .state(MemberState.ACTIVE)
                 .privilege(Collections.singleton(MemberPrivilege.GENERAL.name()))
@@ -255,15 +255,27 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void update(final String token, MemberMypageRequest request) {
+    public void update(final String token, MemberMypageRequest request, MultipartFile multipartFile) {
         Member member = memberRepository.findById(Long.parseLong(jwtTokenProvider.getUser(token)))
                 .orElseThrow(NoSuchMemberException::new);
+
+        String imgUrl = fileUploader.upload(multipartFile, "member");
+
+        // 닉네임 공백 체크
+        if ("".equals(request.getNickname())) {
+            throw new NoSuchMemberException("닉네임은 필수 입력 사항입니다.");
+        }
+
+        // 닉네임 중복체크
         if (!member.getNickname().equals(request.getNickname()) &&
                 memberRepository.existsByNickname(request.getNickname())) {
-            throw new DuplicatedMemberException("중복된 닉네임입니다");
+            throw new DuplicatedMemberException("중복된 닉네임입니다.");
         }
-        member.updateMember(request);
-        member.resetPassword(passwordEncoder.encode(request.getPassword()));
+
+        member.updateMember(request, imgUrl);
+        if (!"".equals(request.getPassword())) {
+            member.resetPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         // sns로그인 사용자는 비밀번호 변경을 못한다.
         if (member.getIsSns().equals(MemberIsSns.TRUE)) {
@@ -319,7 +331,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String redirectKakao() {
-        return  "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY +
+        return "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY +
                 "&redirect_uri=" + redirect_uri + "&response_type=code";
     }
 

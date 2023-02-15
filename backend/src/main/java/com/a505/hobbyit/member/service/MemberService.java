@@ -6,6 +6,7 @@ import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
 import jakarta.mail.MessagingException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface MemberService {
 
     MypageResponse findMypage(final String token, final String nickname);
 
-    void update(final String token, MemberMypageRequest request);
+    void update(final String token, MemberMypageRequest request, MultipartFile multipartFile);
 
     void delete(final String token);
 
