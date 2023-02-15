@@ -9,7 +9,7 @@
         icon='mdi-close'
         style='background-color: rgba(0, 0, 0, 0); color: white; text-align: right; margin: 0px 0px 0px 0px;'
         variant='flat'
-        @click='closememupdate'>
+        @click='closeModal'>
       </v-btn>
     </div>
     <div style='display: flex; width: 100%; margin-top: 20px;'>
@@ -44,7 +44,7 @@
           <v-text-field
             color='white'
             label='이름'
-            model-value='김싸피'
+            v-model='username'
             readonly='true'
             style='margin: 20px 10px 0px 0px; width:200px; color: white; background-color: #0e0f28;'
             variant='outlined'
@@ -70,7 +70,6 @@
         <div>
           <v-textarea
             v-model='intro'
-            :rules='rules'
             auto-grow='false'
             color='white'
             counter
@@ -194,6 +193,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+
   },
 };
 </script>

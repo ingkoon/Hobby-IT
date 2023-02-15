@@ -1,18 +1,19 @@
 import { useUserStore } from '@/store/user';
 import axios from 'axios';
 
-// function getRefreshToken() {
-//   try {
-//     const {}
-//   } catch (e) {
-//
-//   }
-// };
 const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
 
 async function reissueRefreshToken(data) {
-  const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
-  return res;
+  try {
+    const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
+    return res;
+  }catch (e) {
+    console.error(e);
+    throw e
+  }
+
+
+
 }
 
 function setInterceptors(instance) {

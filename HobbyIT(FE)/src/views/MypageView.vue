@@ -10,7 +10,7 @@
       <div id='content'>
         {{ myinfo.email }}
 
-        <div id='todayexp' style='margin-top: 20px'>오늘의 획득량 : 20/30</div>
+        <div id='todayexp' style='margin-top: 20px' v-show='isMyPageOwner'>오늘의 획득량 : 20/30</div>
         <div style='margin: 10px 0'>진척도 보상</div>
 
         <v-progress-linear
@@ -37,7 +37,7 @@
       <div style='display:flex; justify-content: space-between;'>
         <span>
           Who am I?
-          <span id='introbtn'>
+          <span id='introbtn' v-show='isMyPageOwner'>
             <v-icon icon='mdi-pencil' size='xs' @click='openUpdateInfoModal' />
           </span>
           <v-dialog v-if='isFetched' v-model='updateInfoModal'>
@@ -52,8 +52,8 @@
         </span>
 
         <span style='font-family: linefont; font-size: 13px;'>
-          <span id='modiInfo' style='margin-right: 10px;'>회원정보수정</span>
-          <v-btn
+          <span id='modiInfo' style='margin-right: 10px;' v-show='isMyPageOwner'>회원정보수정</span>
+          <v-btn v-show='isMyPageOwner'
             id='deleteInfo'
             style='background-color: rgba(0,0,0,0); color: white' variant='flat'
             @click='opendeleteinfo'>
@@ -129,6 +129,9 @@ export default {
     tr() {
       return tr;
     },
+    isMyPageOwner(){
+      return this.$route.params.nickname === this.userStore.getUserNickname
+    },
   },
   async created() {
     await this.getUserInfo(this.$route.params.nickname);
@@ -137,7 +140,7 @@ export default {
   },
   async mounted() {
     this.nickname = this.$route.params.nickname;
-    await this.setModify(this.$route.params.nickname);
+    // await this.setModify(this.$route.params.nickname);
 
   },
   methods: {
@@ -152,7 +155,6 @@ export default {
         const { data } = await getOthersMyPage(nickname);
         console.log(data);
         this.myinfo = data;
-        console.log(data.nickname);
         this.isFetched = true;
 
       } catch (err) {
