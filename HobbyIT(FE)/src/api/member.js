@@ -37,7 +37,7 @@ function getOthersMyPage(nickname) {
 
 // 7.마이페이지 정보수정
 function updateMyPage(data) {
-  return instance.put('', data);
+  return multipartInstance.put('', data);
 }
 
 // 8.마이페이지 (본인)
@@ -61,8 +61,8 @@ function getWaitingGroup() {
 }
 
 // 카카오로그인 요청
-function getKakao(){
-  return instanceWithNoAuth.get('/oauth/kakao/login')
+function getKakao() {
+  return instanceWithNoAuth.get('/oauth/kakao/login');
 }
 
 export {

@@ -32,7 +32,7 @@ function setInterceptors(instance) {
   // 응답 인터셉터 추가하기
   instance.interceptors.response.use(
     function (response) {
-      console.log(response, 'fulfilled');
+      // console.log(response, 'fulfilled');
       return response;
     },
     async function (error) {

@@ -131,5 +131,11 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+router.beforeEach((to, from, next) => {
+  // scroll to the top of the page
+  document.documentElement.scrollTop = 0;
+  // continue with the navigation
+  next();
+});
 
 export default router;
