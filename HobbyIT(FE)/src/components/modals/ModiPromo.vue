@@ -1,20 +1,20 @@
 <template>
-  <v-card id="promo">
+  <v-card id="mpromo">
     <div style="display: flex; align-items: center;">
       <div style="font-size: 18px; margin-top: 20px;">
         <v-icon icon="mdi-sprout-outline" size="24" style="margin: -3px 10px 0px 0px; color:#FA8EB6;"></v-icon>
-        홍보글 작성
+        홍보글 수정
       </div>
       <v-btn
         variant="flat" icon="mdi-close" style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 0px 460px;"
-        @click="closeaddpromo">
+        @click="closemodipromo">
       </v-btn>
     </div>
 
     <div style="display: flex; margin: 20px 0px 0px 12px;">
       <v-select
       id="head"
-      v-model="seltype"
+      v-model="displaytype"
       :items="types"
       label="말머리"
       style="width: 100px; margin-right: 10px;"
@@ -23,13 +23,13 @@
       <v-select
       id="head"
       v-model="mine"
-      :items="getnames"
+      :disabled="true"
       label="Hobby"
       style="width: 150px;"
       ></v-select>
 
       <v-text-field
-        v-model="promotitle"
+        v-model="modititle"
         color="white"
         label="제목"
         style="margin:0 10px; width:350px"
@@ -38,7 +38,7 @@
     </div>
 
     <v-textarea
-      v-model="promocontent"
+      v-model="modicontent"
       :auto-grow="false"
       color="white"
       label="본문"
@@ -48,11 +48,11 @@
 
     <div style="display: flex; align-items: center;">
       <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right;">
-        작성하기
+        수정하기
       </div>
       <v-btn
         variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 5px -5px;"
-        @click="doneaddpromo">
+        @click="donemodipromo">
       </v-btn>
     </div>
 
@@ -62,7 +62,7 @@
 <script>
 export default {
   props:{
-    masterlist:{
+    articleinfo:{
       type: Array,
       required: true
     },
@@ -70,55 +70,57 @@ export default {
   data(){
     return{
       types: ["모집", "교류"],
-      seltype: "모집",
-      mine: this.masterlist[0].name,
-      promotitle: '',
-      promocontent: '',
+      seltype: this.articleinfo[1],
+      displaytype: this.articleinfo[1] === 'MEETUP' ? '교류' : '모집',
+      mine: this.articleinfo[4],
+      modititle: this.articleinfo[2],
+      modicontent: this.articleinfo[3],
     };
   },
   computed:{
-    getnames(){
-      return this.masterlist.map(item => item.name);
-    },
+    // getnames(){
+    //   return this.masterlist.map(item => item.name);
+    // },
   },
   methods: {
-    closeaddpromo(){
-      this.$emit('closeaddpromo')
+    closemodipromo(){
+      console.log('가져온배열값'+this.articleinfo);
+      this.$emit('closemodipromo');
     },
-    doneaddpromo() {
-      const promodata = {
-        title: this.promotitle,
+    donemodipromo() {
+      const modidata = {
         header: this.getseltype(),
-        content: this.promocontent,
+        title: this.modititle,
+        content: this.modicontent,
       };
-      console.log('방장배열길이'+this.masterlist.length);
-      console.log(this.gethobbyid());
+
       // console.log(this.getseltype());
-      console.log(promodata);
-      this.$emit('doneaddpromo', promodata, this.gethobbyid());
-      this.$emit('closeaddpromo');
+      console.log('수정한데이터'+modidata);
+      console.log('글id:'+this.articleinfo[0]);
+      this.$emit('donemodipromo', modidata, this.articleinfo[0]);
+      this.$emit('closemodipromo');
     },
-    gethobbyid(){
-      for (let index = 0; index < this.masterlist.length; index++) {
-        if (this.mine === this.masterlist[index].name) {
-          return this.masterlist[index].id;
-        }
-      }
-    },
+    // gethobbyid(){
+    //   for (let index = 0; index < this.types.length; index++) {
+    //     if (this.mine === this.masterlist[index].name) {
+    //       return this.masterlist[index].id;
+    //     }
+    //   }
+    // },
     getseltype(){
       if (this.seltype === "모집") {
         return "RECRUITMENT";
       } else {
-        return "MEETUP";
+        return "MEETUP"
       }
     },
   },
 }
 </script>
 
-<style>
+<style scoped>
 
-#promo {
+#mpromo {
   width:670px;
   height:auto;
   display:flex;
