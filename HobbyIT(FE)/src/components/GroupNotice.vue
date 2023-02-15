@@ -22,28 +22,38 @@
               <col width="15%" />
               <col width="10%" />
             </colgroup>
-            <tr id="noticetitle">
+            <tr id="noticetitle" @click="godetail(row.id)">
               <td>{{ no - idx }}</td>
               <td class="txt_left">
-                <a href="javascript:;" @click="godetail(`${row.id}`)">{{ row.title }}</a>
+                <div href="javascript:;" >{{ row.title }}</div>
               </td>
-              <td>{{ row.created_at.substring(0, 10) }}</td>
-              <td>{{ row.user_nickname }}</td>
+              <td>{{ row.createdAt.substring(0, 10) }}</td>
+              <td>{{ row.author }}</td>
             </tr>
             <tr :name="`${row.id}`" style="display: none">
               <td id="noticedetail" colspan="4" style="text-align: left; padding: 20px">
                 <div style="font-size: 24px; margin-bottom: 20px; display: flex; justify-content: space-between">
-                  새해 복 많이 받으세요
                   <div>
-                    <v-icon icon="mdi-eye" size="small"></v-icon> 558
+                    {{ row.title }}
+                  </div>
+                  <div>
+                    <!-- <span>
+                      <v-icon icon="mdi-eye" size="small"></v-icon> 558
+                    </span> -->
                     <v-icon icon="mdi-close" size="small" @click="godetail(`${row.id}`)"></v-icon>
                   </div>
                 </div>
-                <div style="font-family: linefont">까치까치 설날은 어저께고요 우리우리 설날은 오늘이래요~</div>
+                <div style="font-family: linefont">{{ row.content }}</div>
                 <div style="text-align: right">
-                  <v-icon icon="mdi-pencil" size="small"></v-icon>
-                  <v-icon icon="mdi-delete" size="small" @click="godetail(`${row.id}`)"></v-icon>
+                  <span>
+                    <v-icon @click="openmodify" icon="mdi-pencil" size="small" style="margin-right:10px"></v-icon>
+                    <v-dialog v-modal="modifymodal" activator="parent">
+                      <modiModal @close="closemodify" :data="[groupid, row.id, row.title, row.content]"/>
+                    </v-dialog>
+                  </span>
+                  <v-icon @click="deletearticle(row.id)" icon="mdi-delete" size="small" ></v-icon>
                 </div>
+
               </td>
             </tr>
           </table>
@@ -53,10 +63,13 @@
       <tr v-if="list.length == 0">
         <td colspan="4">데이터가 없습니다.</td>
       </tr>
+
     </table>
+    
+    
   </div>
 
-  <div v-if="paging.totalCount > 0" class="pagination">
+  <div v-if="paging.totalCount > 0" class="pagination" style="text-align: center; margin-top:20px;">
     <a class="first" href="javascript:;" @click="fnPage(1)">&lt;&lt;</a>
     <a v-if="paging.start_page > 10" class="prev" href="javascript:;" @click="fnPage(`${paging.start_page - 1}`)"
       >&lt;</a
@@ -81,57 +94,21 @@
 </template>
 
 <script>
+import modiModal from '@/components/modals/ModiNotice.vue'
+
+import { getGroupNoticeList, deleteGroupNotice } from '@/api/hobby'
+
 export default {
+  components : {
+    modiModal,
+  },
+  props : {
+    groupid : String,
+  },
   data() {
     return {
       list: [],
-      tmplist: [
-        {
-          id: 1,
-          title: 'Hair each base dark guess garden accept.',
-          content:
-            'Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.',
-          user_nickname: 2,
-          created_at: '1995-01-20T07:27:13Z',
-          updated_at: '1990-04-21T01:07:51Z',
-        },
-        {
-          id: 2,
-          title: 'Sit sign share you.',
-          content:
-            'Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.',
-          user_nickname: 3,
-          created_at: '2013-05-29T15:46:17Z',
-          updated_at: '2001-12-09T17:38:01Z',
-        },
-        {
-          id: 3,
-          title: 'Hair each base dark guess garden accept.',
-          content:
-            'Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.',
-          user_nickname: 2,
-          created_at: '1995-01-20T07:27:13Z',
-          updated_at: '1990-04-21T01:07:51Z',
-        },
-        {
-          id: 4,
-          title: 'Sit sign share you.',
-          content:
-            'Call authority choose discuss yes. Experience century Mrs population company couple million.\nCareer challenge response many throw. Because practice what a allow its consumer.',
-          user_nickname: 3,
-          created_at: '2013-05-29T15:46:17Z',
-          updated_at: '2001-12-09T17:38:01Z',
-        },
-        {
-          id: 5,
-          title: 'Hair each base dark guess garden accept.',
-          content:
-            'Religious ball another laugh light million. Federal public power another.\nDuring always recent maintain major others bank. Say place address. Wife tough outside system must. Develop road especially.',
-          user_nickname: 2,
-          created_at: '1995-01-20T07:27:13Z',
-          updated_at: '1990-04-21T01:07:51Z',
-        },
-      ],
+      tmplist: [],
       no: '',
       paging: '', //페이징 데이터
       start_page: '', //시작페이지
@@ -145,27 +122,47 @@ export default {
         for (var i = start_page; i <= end_page; i++) pageNumber.push(i);
         return pageNumber;
       },
+      modifymodal : false,
     };
   },
-  created() {
+  mounted() {
     this.getlist();
   },
   methods: {
-    getlist() {
-      this.list = this.tmplist.reverse().slice((this.page - 1) * 10, this.page * 10);
-      const paging = {
-        totalCount: this.tmplist.length,
-        total_page: Math.ceil(this.tmplist.length / 10),
-        page: this.page,
-        start_page: Math.ceil(this.page / 10),
-        end_page: Math.ceil(this.page / 10) * 10,
-        ipp: 10,
-      };
-      if (paging.total_page < paging.end_page) {
-        paging.end_page = paging.total_page;
+    openmodify(){
+      this.modifymodal = true
+    },
+    closemodify() {
+      this.modifymodal = false
+      this.getlist()
+    },
+    async getlist() {
+      console.log(this.groupid)
+      try {
+       const { data } = await getGroupNoticeList(this.groupid)
+       this.tmplist = data.content
+
+       const paging = {
+         totalCount: data.totalElements,
+         total_page: data.totalPages,
+         page: this.page,
+         start_page: Math.ceil(this.page / 10),
+         end_page: Math.ceil(this.page / 10) * 10,
+         ipp: 10,
+       };
+
+       this.list = this.tmplist.reverse();
+       if (paging.total_page < paging.end_page) {
+         paging.end_page = paging.total_page;
+       }
+       this.paging = paging;
+       this.no = paging.totalCount - (paging.page - 1) * this.paging.ipp;
+
       }
-      this.paging = paging;
-      this.no = paging.totalCount - (paging.page - 1) * this.paging.ipp;
+      catch(e){
+        console.log(e)
+      }
+
     },
     fnPage(n) {
       //페이징 이동
@@ -176,13 +173,24 @@ export default {
     },
     godetail(id) {
       let clickitem = document.getElementsByName(id);
-      console.log(clickitem[0].getAttribute('style'));
       if (clickitem[0].getAttribute('style') == 'display: none;') {
         clickitem[0].setAttribute('style', '');
       } else {
         clickitem[0].setAttribute('style', 'display: none;');
       }
     },
+
+    async deletearticle(id) {
+      console.log("delete : ", id)
+      try {
+        const { data } = await deleteGroupNotice(this.groupid, id)
+        console.log(data)
+        this.getlist()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
   },
 };
 </script>

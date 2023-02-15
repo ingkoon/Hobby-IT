@@ -121,7 +121,7 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
               </v-window-item>
               <v-window-item value='notice'>
                 <!-- 공지사항 -->
-                <group-notice />
+                <group-notice :groupid="groupid" />
               </v-window-item>
 
               <v-window-item value='memberlist'>
