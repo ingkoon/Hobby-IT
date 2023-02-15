@@ -22,13 +22,9 @@ public class QHobbyPostitRecord extends EntityPathBase<HobbyPostitRecord> {
 
     public static final QHobbyPostitRecord hobbyPostitRecord = new QHobbyPostitRecord("hobbyPostitRecord");
 
-    public final NumberPath<Integer> day = createNumber("day", Integer.class);
-
     public final com.a505.hobbyit.hobby.domain.QHobby hobby;
 
-    public final NumberPath<Integer> month = createNumber("month", Integer.class);
-
-    public final NumberPath<Integer> year = createNumber("year", Integer.class);
+    public final DatePath<java.time.LocalDate> regDt = createDate("regDt", java.time.LocalDate.class);
 
     public QHobbyPostitRecord(String variable) {
         this(HobbyPostitRecord.class, forVariable(variable), INITS);

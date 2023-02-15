@@ -135,11 +135,13 @@ public class Member extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
-    public void updateMember(MemberMypageRequest request) {
+    public void updateMember(MemberMypageRequest request, String imgUrl) {
         this.nickname = request.getNickname();
-        this.password = request.getPassword();
+        if (!"".equals(request.getPassword())) {
+            this.password = request.getPassword();
+        }
         this.intro = request.getIntro();
-        this.imgUrl = request.getImgUrl();
+        this.imgUrl = imgUrl;
     }
 
     public void checkWaiting() {
