@@ -2,12 +2,13 @@ package com.a505.hobbyit.common.exception;
 
 import com.a505.hobbyit.article.exception.NoSuchArticleException;
 import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
-import com.a505.hobbyit.common.exception.dto.ErrorCode;
 import com.a505.hobbyit.common.exception.dto.ErrorResponse;
 import com.a505.hobbyit.common.file.exception.FileStorageException;
 import com.a505.hobbyit.hobby.exception.DuplicatedHobbyException;
 import com.a505.hobbyit.hobby.exception.InvalidHobbyException;
 import com.a505.hobbyit.hobby.exception.NoSuchHobbyException;
+import com.a505.hobbyit.hobby.exception.OverCapacityException;
+import com.a505.hobbyit.hobbyarticlecomment.exception.NoSuchCommentException;
 import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbymember.exception.UnAuthorizedHobbyMemberException;
 import com.a505.hobbyit.hobbypostit.exception.NoSuchHobbyPostitException;
@@ -18,7 +19,10 @@ import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
 import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.exception.NoSuchPendingException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -49,10 +53,11 @@ public class ControllerAdvice {
             NoSuchHobbyMemberException.class,
             NoSuchPendingException.class,
             NoSuchArticleException.class,
-            NoSuchHobbyPostitException.class})
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e){
-        ErrorCode errorCode = ErrorCode.NOT_FOUND;
-        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+            NoSuchHobbyPostitException.class,
+            NoSuchCommentException.class})
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(final RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -62,7 +67,7 @@ public class ControllerAdvice {
             DuplicatedPendingException.class})
     public ResponseEntity<ErrorResponse> handleDuplicatedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
@@ -72,13 +77,14 @@ public class ControllerAdvice {
             UnAuthorizedHobbyPostitException.class})
     public ResponseEntity<ErrorResponse> handleUnAuthorizedException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({NoSuchFileException.class, FileStorageException.class})
-    public  ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e){
+    public ResponseEntity<ErrorResponse> NoSuchFileException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -87,9 +93,22 @@ public class ControllerAdvice {
             ExpiredJwtException.class,
             UnsupportedJwtException.class,
             MalformedJwtException.class,
-            })
-    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e){
+    })
+    public ResponseEntity<ErrorResponse> JwtException(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    /*
+    소모임 가입 시, 정원초과 시 발생하는 문제
+     */
+    @ExceptionHandler({
+            OverCapacityException.class
+    })
+    public ResponseEntity<ErrorResponse> overCapacityException(final RuntimeException e){
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        log.info(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

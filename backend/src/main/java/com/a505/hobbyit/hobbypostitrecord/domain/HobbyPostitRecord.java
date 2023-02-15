@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,19 +20,11 @@ import lombok.NoArgsConstructor;
 public class HobbyPostitRecord {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hobby_id", nullable = false)
     private Hobby hobby;
 
     @Id
     @Column(nullable = false)
-    private int year;
-
-    @Id
-    @Column(nullable = false)
-    private int month;
-
-    @Id
-    @Column(nullable = false)
-    private int day;
+    private LocalDate regDt;
 }

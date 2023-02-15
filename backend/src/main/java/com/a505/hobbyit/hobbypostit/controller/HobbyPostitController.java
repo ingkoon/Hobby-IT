@@ -4,6 +4,7 @@ import com.a505.hobbyit.hobbypostit.dto.HobbyPostitResponse;
 import com.a505.hobbyit.hobbypostit.service.HobbyPostitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,14 +36,16 @@ public class HobbyPostitController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "방명록 등록 성공"),
-            @ApiResponse(responseCode = "401", description = "방명록 작성 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "401", description = "방명록 작성 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     public ResponseEntity<Void> createHobbyPostit(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "hobby-id") @Parameter(description = "소속 소모임 ID") Long hobbyId,
-            @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") @Parameter(description = "날짜") LocalDate date,
-            @RequestPart final MultipartFile multipartFile) {
+            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                @Parameter(description = "날짜", example = "2023-01-01") LocalDate date,
+            @RequestPart("file") final MultipartFile multipartFile
+    ) {
         hobbyPostitService.save(Long.parseLong(userDetails.getUsername()), hobbyId, date, multipartFile);
         return ResponseEntity.ok().build();
     }
@@ -55,15 +58,36 @@ public class HobbyPostitController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "방명록 리스트 반환 성공"),
-            @ApiResponse(responseCode = "401", description = "방명록 조회 권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근")
+            @ApiResponse(responseCode = "401", description = "방명록 조회 권한이 없음", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
     })
     public ResponseEntity<List<HobbyPostitResponse>> findHobbyPostits(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable(value = "hobby-id") @Parameter(description = "소속 소모임 ID") Long hobbyId,
-            @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") @Parameter(description = "날짜") LocalDate date) {
+            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID", example = "1") Long hobbyId,
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                @Parameter(description = "날짜", example = "2023-01-01") LocalDate date
+    ) {
         List<HobbyPostitResponse> hobbyPostitResponseList
                 = hobbyPostitService.findHobbyPostits(Long.parseLong(userDetails.getUsername()), hobbyId, date);
         return ResponseEntity.ok(hobbyPostitResponseList);
+    }
+
+
+    @Operation(
+            summary = "방명록 작성 가능 여부 확인",
+            description = "방명록 작성 가능 여부를 확인합니다. (소모임 당 1일 1회 제한)"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "방명록 작성 가능"),
+            @ApiResponse(responseCode = "401", description = "방명록 작성 불가", content = @Content),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content)
+    })
+    @GetMapping("/api/hobby/{hobby-id}/postit/writable")
+    public ResponseEntity<Void> isPossibleToWritePostit(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("hobby-id") @Parameter(description = "소속 소모임 ID") final Long hobbyId
+    ) {
+        hobbyPostitService.isPossibleToWritePostit(Long.parseLong(userDetails.getUsername()), hobbyId);
+        return ResponseEntity.ok().build();
     }
 }

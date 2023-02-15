@@ -88,30 +88,29 @@ public class PendingServiceImpl implements PendingService{
     @Override
     public void allowPending(String memberId, final Long hobbyId, PendingAllowRequest request) {
        checkPrivilege(hobbyId, memberId);
+       Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
+
+       hobby.checkMemberCount();
 
         Pending pending = pendingRepository
                 .findById(request.getWaitId())
                 .orElseThrow(NoSuchElementException::new);
 
-        pending
-                .updatePendingAllow(request.getIsAllowed());
+        pending.updatePendingAllow(request.getIsAllowed());
         if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
 
-        Hobby findHobby = hobbyRepository
-                .findById(hobbyId)
-                .orElseThrow(NoSuchHobbyException::new);
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)
-                .hobby(findHobby)
+                .hobby(hobby)
                 .state(HobbyMemberState.ACTIVE)
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-        findHobby.updateCnt();
+        hobby.updateCnt();
     }
 
     @Override

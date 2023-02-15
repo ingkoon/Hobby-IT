@@ -2,7 +2,6 @@ package com.a505.hobbyit.hobbymember.service;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbymember.dto.HobbyMemberUpdateRequest;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public interface HobbyMemberService {
     public void updatePrivilege(final Long hobbyId, final Long targetId, HobbyMemberUpdateRequest request);

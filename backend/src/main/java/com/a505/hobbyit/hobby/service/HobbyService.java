@@ -18,7 +18,6 @@ public interface HobbyService {
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId);
     public void updateHobby(String memberId, Long hobbyId, MultipartFile file, HobbyUpdateRequest request);
     public void deleteHobby(Long hobbyId, String token);
-
     public Hobby checkPrivilege(Long hobbyId, String token);
 }
 

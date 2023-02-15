@@ -2,6 +2,7 @@ package com.a505.hobbyit.hobbyarticle.domain;
 
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbyarticle.dto.HobbyArticleResponse;
+import com.a505.hobbyit.hobbyarticle.dto.HobbyNoticeResponse;
 import com.a505.hobbyit.hobbyarticle.enums.HobbyArticleCategory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -41,6 +42,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
         List<HobbyArticleResponse> responses = new ArrayList<>();
         for (HobbyArticle article : result) {
             log.info("================================");
+            log.info(article.getThumbnailPath());
             log.info(article.getContent() + " " + article.getId());
         }
         for (HobbyArticle article : result) {
@@ -73,7 +75,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
     }
 
     @Override
-    public Page<HobbyArticleResponse> findHobbyNotice(Hobby hobby, Pageable pageable) {
+    public Page<HobbyNoticeResponse> findHobbyNotice(Hobby hobby, Pageable pageable) {
         List<HobbyArticle> result = queryFactory
                 .selectFrom(hobbyArticle)
                 .where(
@@ -82,17 +84,15 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
-        List<HobbyArticleResponse> responses = new ArrayList<>();
+        List<HobbyNoticeResponse> responses = new ArrayList<>();
 
-        for (HobbyArticle article : result) {
-            responses.add(new HobbyArticleResponse().of(article));
-        }
+        for (HobbyArticle article : result) responses.add(new HobbyNoticeResponse().of(article));
 
         return new PageImpl<>(responses);
     }
 
     @Override
-    public Page<HobbyArticleResponse> searchHobbyNotice(Hobby hobby, String keyword, Pageable pageable) {
+    public Page<HobbyNoticeResponse> searchHobbyNotice(Hobby hobby, String keyword, Pageable pageable) {
         Page<HobbyArticle> result = new PageImpl<>(queryFactory
                 .selectFrom(hobbyArticle)
                 .where(
@@ -102,10 +102,10 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
                 .limit(pageable.getPageSize()+1)
                 .fetch());
 
-        List<HobbyArticleResponse> responses = new ArrayList<>();
+        List<HobbyNoticeResponse> responses = new ArrayList<>();
 
         for (HobbyArticle article : result)
-            responses.add(new HobbyArticleResponse().of(article));
+            responses.add(new HobbyNoticeResponse().of(article));
 
         return new PageImpl<>(responses);
     }

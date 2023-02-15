@@ -2,6 +2,7 @@ package com.a505.hobbyit.hobby.domain;
 
 import com.a505.hobbyit.hobby.dto.HobbyUpdateRequest;
 import com.a505.hobbyit.hobby.enums.HobbyFree;
+import com.a505.hobbyit.hobby.exception.OverCapacityException;
 import com.a505.hobbyit.hobbymember.domain.HobbyMember;
 import com.a505.hobbyit.pending.domain.Pending;
 import jakarta.persistence.*;
@@ -67,25 +68,18 @@ public class Hobby {
     @OneToMany(mappedBy = "hobby")
     private List<HobbyMember> hobbyMembers = new ArrayList<>();
 
-    public void updateName(String name){ this.name = name; }
-
-    public void updateIntro(String intro){ this.intro = intro; }
-
-    public void updateMaxParticipantsNum(int maxParticipantsNum){
-        this.maxMemberCount = maxParticipantsNum;
-    }
-
-    public void updateImg(String img){
-        this.imgUrl = img;
-    }
     public void updateCnt(){
         this.currentMemberCount = hobbyMembers.size();
+    }
+
+    public void checkMemberCount(){
+        if(this.maxMemberCount == this.currentMemberCount) throw new OverCapacityException();
     }
 
     public void updateHobby(HobbyUpdateRequest request, String imgUrl){
         this.name = request.getName();
         this.intro = request.getIntro();
-        this.maxMemberCount = request.getMaxParticipantsNum();
+        this.maxMemberCount = request.getMax_participants_num();
         this.imgUrl = imgUrl;
     }
 }

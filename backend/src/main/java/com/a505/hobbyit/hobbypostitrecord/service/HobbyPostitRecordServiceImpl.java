@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -30,18 +31,21 @@ public class HobbyPostitRecordServiceImpl implements HobbyPostitRecordService {
 
 
     @Override
-    public List<Integer> findHobbyPostitRecords(Long memberId, Long hobbyId, int year, int month) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchMemberException("회원 정보 오류"));
-        Hobby hobby = hobbyRepository.findById(hobbyId)
-                .orElseThrow(() -> new NoSuchHobbyException("소모임 정보 오류"));
-        hobbyMemberRepository.findByMemberAndHobby(member, hobby)
-                .orElseThrow(() -> new NoSuchHobbyMemberException("소모임 가입 정보 오류"));
+    public List<LocalDate> findHobbyPostitRecordRegDtList(Long memberId, Long hobbyId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
+        Hobby hobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
+        hobbyMemberRepository
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new);
 
         return hobbyPostitRecordRepository
-                .findByHobbyAndYearAndMonth(hobby, year, month)
+                .findByHobby(hobby)
                 .stream()
-                .map(HobbyPostitRecord::getDay)
+                .map(HobbyPostitRecord::getRegDt)
                 .toList();
     }
 }
