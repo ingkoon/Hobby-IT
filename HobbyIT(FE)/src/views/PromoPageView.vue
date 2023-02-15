@@ -36,7 +36,7 @@
           @click="checkleader"
           >홍보글 작성
           <v-dialog v-model="addpromo">
-            <add-promo :masterlist="masterlist" @closeaddpromo="closeaddpromo" />
+            <add-promo :masterlist="masterlist" @closeaddpromo="closeaddpromo" @doneaddpromo="createPromo" />
           </v-dialog>
           <v-dialog v-model="notleader">
             <not-leader @closenotleader="closenotleader" />
@@ -83,22 +83,24 @@
             <v-divider></v-divider>
             <br />{{ row.content }}
             <div style="text-align:right;">
+              <!--본인글만 수정/삭제가능-->
+              <div v-show = "row.nickname === nickname">
+                <!--수정버튼-->
+                <v-btn variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
+                  <v-icon icon="mdi-pencil-outline" color="white"></v-icon>
+                  <v-dialog v-model="updatepromo" activator="parent">
+                    <add-promo @closeaddpromo="closeupdatepromo" />
+                  </v-dialog>
+                </v-btn>
 
-              <!--수정버튼-->
-              <v-btn variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
-                <v-icon icon="mdi-pencil-outline" color="white"></v-icon>
-                <v-dialog v-model="updatepromo" activator="parent">
-                  <add-promo @closeaddpromo="closeupdatepromo" />
-                </v-dialog>
-              </v-btn>
-
-              <!--삭제버튼-->
-              <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
-                <v-icon icon="mdi-delete-outline" color="white"></v-icon>
-                <v-dialog v-model="delpromo" activator="parent">
-                  <del-promo @closedelpromo="closedelpromo" @deletepromo="deletePromo(`${row.id}`)" @afterdelete="afterdelete" />
-                </v-dialog>
-              </v-btn>
+                <!--삭제버튼-->
+                <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
+                  <v-icon icon="mdi-delete-outline" color="white"></v-icon>
+                  <v-dialog v-model="delpromo" activator="parent">
+                    <del-promo @closedelpromo="closedelpromo" @deletepromo="deletePromo(`${row.id}`)" />
+                  </v-dialog>
+                </v-btn>
+              </div>
 
             </div>
           </v-expansion-panel-text>
@@ -144,11 +146,16 @@
 import AddPromo from "../components/modals/AddPromo.vue";
 import DelPromo from "../components/modals/DelPromo.vue";
 import NotLeader from "../components/modals/NotLeader.vue";
+import { useUserStore } from "@/store/user";
 
 //axios작업
 import { getPromotionArticlePage, createPromotionArticle, updatePromotionArticle, deletePromotionArticle, getMasterList} from '@/api/article';
 
 export default {
+  setup(){
+    const userStore = useUserStore();
+    return {userStore};
+  },
   components:{
     AddPromo,
     DelPromo,
@@ -177,11 +184,13 @@ export default {
       // },
       promolist:[],
       masterlist: [],
+      nickname: '',
     };
   },
   mounted() {
     this.getPromoList(this.pgno);
     this.getMasterList();
+    this.nickname = this.userStore.getUserNickname;
   },
   methods: {
     opennotleader(){
@@ -218,8 +227,9 @@ export default {
     closeupdatepromo() {
       this.updatepromo = false;
     },
-    afterdelete(){
+    afterpost(){
       this.getPromoList(this.pgno);
+      console.log('변경완료!')
     },
     getlist() {
       this.list = this.tmplist
@@ -273,22 +283,26 @@ export default {
     },
     async createPromo(data, hobby_id){
       try {
-        createPromotionArticle(data, hobby_id);
+        console.log('createpromo started');
+        await createPromotionArticle(data, hobby_id);
+        await this.afterpost();
       } catch (e) {
         console.log("홍보게시글 작성 실패 : ",e.message)
       }
     },
-    // async updatePromo(data, article_id){
-    //   try {
-
-    //   } catch (e) {
-    //     console.log("홍보게시글 수정 실패 : ",e.message)
-    //   }
-    // },
+    async updatePromo(data, article_id){
+      try {
+        console.log('updatepromo started');
+        await createPromotionArticle(data, article_id);
+        await this.afterpost();
+      } catch (e) {
+        console.log("홍보게시글 수정 실패 : ",e.message)
+      }
+    },
     async deletePromo(article_id){
       try {
         await deletePromotionArticle(article_id);
-        await this.afterdelete();
+        await this.afterpost();
       } catch (e) {
         console.log("홍보게시글 삭제 실패 : ",e.message)
       }

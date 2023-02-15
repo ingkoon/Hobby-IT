@@ -14,7 +14,7 @@
     <div style="display: flex; margin: 20px 0px 0px 12px;">
       <v-select
       id="head"
-      v-model="type"
+      v-model="seltype"
       :items="types"
       label="말머리"
       style="width: 100px; margin-right: 10px;"
@@ -29,19 +29,18 @@
       ></v-select>
 
       <v-text-field
+        v-model="promotitle"
         color="white"
-        placeholder="제목"
+        label="제목"
         style="margin:0 10px; width:350px"
         variant="outlined"
-
       ></v-text-field>
     </div>
 
     <v-textarea
-      :model-value="content"
+      v-model="promocontent"
       :auto-grow="false"
       color="white"
-      counter
       label="본문"
       style="margin:0; width:100%"
       variant="outlined"
@@ -53,7 +52,7 @@
       </div>
       <v-btn
         variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white; align-self:end; margin: 0px -30px 5px -5px;"
-        @click="closeaddpromo">
+        @click="doneaddpromo">
       </v-btn>
     </div>
 
@@ -71,9 +70,10 @@ export default {
   data(){
     return{
       types: ["모집", "교류"],
-      type: "모집",
+      seltype: "모집",
       mine: this.masterlist[0].name,
-      content: null,
+      promotitle: '',
+      promocontent: '',
     };
   },
   computed:{
@@ -82,14 +82,34 @@ export default {
     },
   },
   methods: {
-    closeaddpromo() {
+    closeaddpromo(){
       this.$emit('closeaddpromo')
     },
-    getid(){
-      for (let index = 0; index < this.masterlist.length; index++) {
+    doneaddpromo() {
+      const promodata = {
+        title: this.promotitle,
+        header: this.getseltype(),
+        content: this.promocontent,
+      };
+
+      console.log(this.gethobbyid());
+      // console.log(this.getseltype());
+      console.log(promodata);
+      this.$emit('doneaddpromo', promodata, this.gethobbyid());
+      this.$emit('closeaddpromo');
+    },
+    gethobbyid(){
+      for (let index = 0; index < this.types.length; index++) {
         if (this.mine === this.masterlist[index].name) {
           return this.masterlist[index].id;
         }
+      }
+    },
+    getseltype(){
+      if (this.seltype === "모집") {
+        return "RECRUITMENT";
+      } else {
+        return "MEETUP"
       }
     },
   },
