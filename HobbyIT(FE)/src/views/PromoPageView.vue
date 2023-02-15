@@ -54,7 +54,7 @@
             <col width="10%" />
             <col width="20%" />
           </colgroup>
-          <tr>
+          <tr style="font-size: 18px; color:#9DA0FF">
             <th>no</th>
             <th>종류</th>
             <th>제목</th>
@@ -62,11 +62,18 @@
             <th>작성일</th>
           </tr>
         </table>
-        <v-expansion-panels variant="popout" style="width: 80%;">
+        <v-expansion-panels v-model="isPanelExpanded" variant="popout" style="width: 80%;">
           <v-expansion-panel
             v-for="(row, idx) in promolist" id="lst" :key="idx"
             style="background-color: #0E0F28; color: white; padding: 0px;"
-          ><v-expansion-panel-title expand-icon=none collapse-icon="mdi-close" style="display: flex; align-items: center; text-align: center;">
+          ><v-expansion-panel-title
+            expand-icon=none
+            collapse-icon="mdi-close"
+            style="display: flex;
+            align-items: center;
+            text-align: center;"
+            @click="getarticleinfo(row.id, row.header, row.title, row.content, row.hobbyName)"
+          >
             <div style="width:15%; margin-left:-20px; font-weight: 400;">{{ row.id }}</div>
             <div style="width:5%;  margin-left:5px; font-weight: 400;">{{ row.header === 'MEETUP' ? '교류' : '모집' }}</div>
             <div style="width:50%; margin-left:15px;">{{ row.title }}</div>
@@ -78,18 +85,19 @@
               <v-icon icon = "mdi-eye" size="18" style="color: white;"></v-icon>&nbsp;&nbsp;&nbsp;{{row.hit}}
             </div> -->
             <div style="font-size: 24px; margin-top: 10px;">
-              <span style="color: #EE49FD; font-size: 30px;">{{ row.hobbyName }}</span> 모임
+              from : <span style="color: #EE49FD; font-size: 30px;">{{ row.hobbyName }}</span>
             </div>
             <v-divider></v-divider>
             <br />{{ row.content }}
+
             <div style="text-align:right;">
               <!--본인글만 수정/삭제가능-->
               <div v-show = "row.nickname === nickname">
                 <!--수정버튼-->
                 <v-btn variant="flat" icon="mdi-pencil-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
                   <v-icon icon="mdi-pencil-outline" color="white"></v-icon>
-                  <v-dialog v-model="updatepromo" activator="parent">
-                    <add-promo @closeaddpromo="closeupdatepromo" />
+                  <v-dialog v-model="modipromo" activator="parent">
+                    <modi-promo :articleinfo="articleinfo" @closemodipromo="closemodipromo" @donemodipromo="updatePromo"/>
                   </v-dialog>
                 </v-btn>
 
@@ -97,7 +105,7 @@
                 <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
                   <v-icon icon="mdi-delete-outline" color="white"></v-icon>
                   <v-dialog v-model="delpromo" activator="parent">
-                    <del-promo @closedelpromo="closedelpromo" @deletepromo="deletePromo(`${row.id}`)" />
+                    <del-promo @closedelpromo="closedelpromo"  @deletepromo="deletePromo(`${row.id}`)" />
                   </v-dialog>
                 </v-btn>
               </div>
@@ -144,6 +152,7 @@
 
 <script>
 import AddPromo from "../components/modals/AddPromo.vue";
+import ModiPromo from "../components/modals/ModiPromo.vue";
 import DelPromo from "../components/modals/DelPromo.vue";
 import NotLeader from "../components/modals/NotLeader.vue";
 import { useUserStore } from "@/store/user";
@@ -152,22 +161,24 @@ import { useUserStore } from "@/store/user";
 import { getPromotionArticlePage, createPromotionArticle, updatePromotionArticle, deletePromotionArticle, getMasterList} from '@/api/article';
 
 export default {
+  components:{
+    AddPromo,
+    ModiPromo,
+    DelPromo,
+    NotLeader,
+  },
   setup(){
     const userStore = useUserStore();
     return {userStore};
   },
-  components:{
-    AddPromo,
-    DelPromo,
-    NotLeader,
-  },
   data() {
     return {
+      isPanelExpanded: null,
       pgno: 0,
       list: [],
       addpromo: false,
       delpromo: false,
-      updatepromo: false,
+      modipromo: false,
       notleader: false,
       // no: "",
       // paging: "", //페이징 데이터
@@ -184,6 +195,8 @@ export default {
       // },
       promolist:[],
       masterlist: [],
+      articleinfo: [],
+      saveinfo:[],
       nickname: '',
     };
   },
@@ -221,16 +234,23 @@ export default {
     closedelpromo() {
       this.delpromo = false;
     },
-    openupdatepromo() {
-      this.updatepromo = true;
+    openmodipromo() {
+      this.modipromo = true;
     },
-    closeupdatepromo() {
-      this.updatepromo = false;
+    closemodipromo() {
+      this.modipromo = false;
     },
     afterpost(){
       this.getPromoList(this.pgno);
       console.log('변경완료!')
     },
+    getarticleinfo(arid, arheader, artitle, arcontent, arhobbyname){
+      this.articleinfo = [arid, arheader, artitle, arcontent, arhobbyname];
+      console.log('이거봐라-------'+this.isPanelExpanded);
+    },
+    // savearticleinfo(){
+    //   this.saveinfo = this.articleinfo;
+    // },
     getlist() {
       this.list = this.tmplist
         .reverse()
@@ -276,6 +296,7 @@ export default {
         // console.log(res);
         const { data:{ownHobbyList} } = await getMasterList();
         this.masterlist = ownHobbyList;
+
         console.log('방장개수'+this.masterlist.length);
       } catch (e) {
         console.log("방장 리스트 불러오기 실패 : ",e.message)
@@ -293,8 +314,10 @@ export default {
     async updatePromo(data, article_id){
       try {
         console.log('updatepromo started');
-        await createPromotionArticle(data, article_id);
+        await updatePromotionArticle(data, article_id);
+        // console.log('here error');
         await this.afterpost();
+        this.isPanelExpanded = null;
       } catch (e) {
         console.log("홍보게시글 수정 실패 : ",e.message)
       }
