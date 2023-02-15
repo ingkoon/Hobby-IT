@@ -23,7 +23,7 @@
           </v-carousel>
         </div>
 
-        <div style="background-color: #0e0f28; color: white">
+        <div style="background-color: #0e0f28; color: white; width: 300px;">
           <div style="margin: 5px 10px; display: flex; justify-content: space-between; ">
             <div>
               <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
@@ -38,18 +38,38 @@
           </div>
 
           <div style="display:flex; justify-content: space-between;">
-            <div>{{ article.title }}</div>
-            {{ createAt }}
+            <div v-if="!changemode">{{ article.title }}</div>
+            <div v-else>
+              <input type="text" v-model="title" style="border: 1px solid white; color:white"/>  
+            </div>
+
+            <div>
+              {{ createAt }}
+            </div>
           </div>
           <hr color="white" style="height: 3px" />
 
-          <div style="word-break: keep-all">
+          <div v-if="!changemode" style="word-break: keep-all">
             {{ article.content }}
+          </div>
+          <div v-else>
+            <textarea v-model="content" style="width: 100%;color : white; border: 1px solid white;"></textarea>
           </div>
 
           <div style="text-align: right"><v-icon icon="mdi-eye" size="small"></v-icon> 558</div>
 
           <hr color="#642EFE" style="height: 3px" />
+          <div v-if="userStore.userNickname === article.author">
+
+            <div v-if="!changemode">
+              <div @click="modifymode">수정</div>
+              <div @click="delarticle">삭제</div>
+            </div>
+            <div v-else>
+              <div @click="modify">완료</div>
+              <div @click="modifymode">취소</div>
+            </div>
+          </div>
         </div>
       </div>
     </v-card>
@@ -57,8 +77,14 @@
 </template>
 
 <script>
-import { getGroupArticle } from '@/api/hobby'
+import { getGroupArticle, updateGroupArticle, deleteGroupArticle } from '@/api/hobby'
+import { useUserStore } from '@/store/user'
+
 export default {
+  setup(){
+    const userStore = useUserStore();
+    return {userStore}
+  },
   props : {
     info : Object
   },
@@ -66,24 +92,14 @@ export default {
     return {
       article : [],
       imgurl: [
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-        },
       ],
       createAt : '',
+      changemode : false,
+      title : '',
+      content : '',
     };
   },
   mounted() {
-
   },
   methods: {
     closemodal() {
@@ -93,6 +109,8 @@ export default {
       try {
         const {data} = await getGroupArticle(groupid, articleid)
         this.article = data
+        this.title = data.title
+        this.content = data.content
         this.imgurl = []
         for (let i=0;i<data.images.length;i++){
           this.imgurl.push({src : data.images[i]})
@@ -103,6 +121,35 @@ export default {
       catch(e) {
         console.log(e)
       }
+    },
+
+    modifymode() {
+      this.changemode = !this.changemode
+    },
+    async modify(){
+      try {
+        const inputdata = {
+          title : this.title,
+          content : this.content,
+          category : "GENERAL"
+        }
+
+        const formData = new FormData()
+        formData.append('request', new Blob([JSON.stringify(inputdata)], {type:'application/json'}))
+        const { data } = await updateGroupArticle(this.info[0], this.info[1], inputdata)
+        console.log(data)
+        this.modifymode()
+        this.getArticle(this.info[0], this.info[1])
+      }
+      catch(e) {
+        console.log(e)
+      }
+    },
+
+    async delarticle(){
+      const { data } = await deleteGroupArticle(this.info[0], this.info[1])
+      console.log(data)
+      this.closemodal()
     }
   },
   created(){
