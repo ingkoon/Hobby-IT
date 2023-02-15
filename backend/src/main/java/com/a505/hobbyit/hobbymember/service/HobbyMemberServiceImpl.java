@@ -42,11 +42,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
         checkPrivilege(hobbyId, memberId);
 
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        HobbyMember hobbyMember = hobbyMemberRepository
-                .findById(targetId)
-                .orElseThrow(NoSuchHobbyMemberException::new);
-
-        hobbyMemberRepository.delete(hobbyMember);
+        hobbyMemberRepository.deleteHobbyMember(targetId);
         hobby.updateCnt();
     }
 
@@ -66,7 +62,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .findByMemberAndHobby(member, hobby)
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
-        hobbyMemberRepository.delete(hobbyMember);
+        hobbyMemberRepository.deleteHobbyMember(hobbyMember.getId());
         hobby.updateCnt();
     }
 

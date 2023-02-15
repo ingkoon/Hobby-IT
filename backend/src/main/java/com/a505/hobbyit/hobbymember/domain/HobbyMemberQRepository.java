@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface HobbyMemberQRepository {
     List<OwnHobbyResponse> getOwnHobbyList(Member member);
+    void deleteHobbyMember(Long hobbyMemberId);
 }

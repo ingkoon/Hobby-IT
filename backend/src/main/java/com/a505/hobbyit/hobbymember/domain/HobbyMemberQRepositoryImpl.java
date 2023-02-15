@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public class HobbyMemberQRepositoryImpl implements HobbyMemberQRepository {
 
+    private final EntityManager em;
     private final JPAQueryFactory queryFactory;
     QHobbyMember hobbyMember = QHobbyMember.hobbyMember;
 
@@ -29,5 +30,12 @@ public class HobbyMemberQRepositoryImpl implements HobbyMemberQRepository {
         for (HobbyMember hobbyMember : hobbyMembers)
             result.add(new OwnHobbyResponse().of(hobbyMember));
         return result;
+    }
+
+    @Override
+    public void deleteHobbyMember(Long hobbyMemberId) {
+        queryFactory.delete(hobbyMember)
+                .where(hobbyMember.id.gt(hobbyMemberId)).execute();
+        em.flush();
     }
 }
