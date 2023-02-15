@@ -16,13 +16,14 @@
       id="head"
       v-model="type"
       :items="types"
+      label="말머리"
       style="width: 100px; margin-right: 10px;"
       ></v-select>
 
       <v-select
       id="head"
       v-model="mine"
-      :items="myhobbies"
+      :items="getnames"
       label="Hobby"
       style="width: 150px;"
       ></v-select>
@@ -38,10 +39,10 @@
 
     <v-textarea
       :model-value="content"
-      auto-grow="false"
+      :auto-grow="false"
       color="white"
       counter
-      placeholder="본문"
+      label="본문"
       style="margin:0; width:100%"
       variant="outlined"
     ></v-textarea>
@@ -61,17 +62,37 @@
 
 <script>
 export default {
-  data: () => ({
+  props:{
+    masterlist:{
+      type: Array,
+      required: true
+    }
+  },
+  data(){
+    return{
       types: ["모집", "교류"],
       type: "모집",
-      myhobbies: [],
-      mine: "",
-  }),
+      mine: this.masterlist[0].name,
+      content: null,
+    };
+  },
+  computed:{
+    getnames(){
+      return this.masterlist.map(item => item.name);
+    },
+  },
   methods: {
     closeaddpromo() {
       this.$emit('closeaddpromo')
-    }
-  }
+    },
+    getid(){
+      for (let index = 0; index < this.masterlist.length; index++) {
+        if (this.mine === this.masterlist[index].name) {
+          return this.masterlist[index].id;
+        }
+      }
+    },
+  },
 }
 </script>
 
@@ -102,5 +123,17 @@ div.v-list.v-theme--light.v-list--density-default.v-list--one-line {
   font-family: linefont;
 }
 
+v-textarea::-webkit-scrollbar {
+    width: 10px;
+    background: none;
+    }
+v-textarea::-webkit-scrollbar-track {
+    background-color: #0E0F28;
+    /* border-radius: 100px; */
+}
+v-textarea::-webkit-scrollbar-thumb {
+    background-color: #FA8EB6;
+    border-radius: 100px;
+}
 
 </style>

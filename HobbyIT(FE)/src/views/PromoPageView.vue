@@ -33,12 +33,13 @@
           border: 2px solid #FA8EB6;
           color: #FA8EB6;
           margin: 0px 0px 20px 400px;"
+          @click="checkleader"
           >홍보글 작성
-          <v-dialog v-model="notleader" activator="parent">
-            <not-leader @closenotleader="closenotleader" />
+          <v-dialog v-model="addpromo">
+            <add-promo :masterlist="masterlist" @closeaddpromo="closeaddpromo" />
           </v-dialog>
-          <v-dialog v-model="addpromo" activator="parent">
-            <add-promo @closeaddpromo="closeaddpromo" />
+          <v-dialog v-model="notleader">
+            <not-leader @closenotleader="closenotleader" />
           </v-dialog>
         </v-btn>
       </div>
@@ -95,7 +96,7 @@
               <v-btn variant="flat" icon="mdi-delete-outline" style="background-color: rgba(0, 0, 0, 0); color: white;">
                 <v-icon icon="mdi-delete-outline" color="white"></v-icon>
                 <v-dialog v-model="delpromo" activator="parent">
-                  <del-promo @closedelpromo="closedelpromo" @deletepromo="deletepromo(`${row.id}`)" @afterdelete="afterdelete" />
+                  <del-promo @closedelpromo="closedelpromo" @deletepromo="deletePromo(`${row.id}`)" @afterdelete="afterdelete" />
                 </v-dialog>
               </v-btn>
 
@@ -183,15 +184,24 @@ export default {
     this.getMasterList();
   },
   methods: {
+    opennotleader(){
+      this.notleader = true;
+    },
     closenotleader(){
       this.notleader = false;
     },
-    openaddpromo() {
-      if (this.masterlist.length === 0) {
-        this.notleader = true;
+    checkleader(){
+      if (this.masterlist.length == 0) {
+        this.opennotleader();
+        console.log('방장아님'+this.notleader);
       } else {
-        this.addpromo = true;
+        this.openaddpromo();
+        console.log('글쓰기가능'+this.addpromo);
+        console.log('목록'+this.masterlist);
       }
+    },
+    openaddpromo() {
+      this.addpromo = true;
     },
     closeaddpromo() {
       this.addpromo = false;
@@ -256,7 +266,7 @@ export default {
         // console.log(res);
         const { data:{ownHobbyList} } = await getMasterList();
         this.masterlist = ownHobbyList;
-        console.log('ㅎㅎㅎ'+this.masterlist.length);
+        console.log('방장개수'+this.masterlist.length);
       } catch (e) {
         console.log("방장 리스트 불러오기 실패 : ",e.message)
       }
@@ -275,7 +285,7 @@ export default {
     //     console.log("홍보게시글 수정 실패 : ",e.message)
     //   }
     // },
-    async deletepromo(article_id){
+    async deletePromo(article_id){
       try {
         await deletePromotionArticle(article_id);
         await this.afterdelete();
