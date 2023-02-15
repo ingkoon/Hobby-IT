@@ -132,8 +132,8 @@ public class ArticleServiceImpl implements ArticleService {
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
-        System.out.println(member.getId());
-        System.out.println(member.getName());
+//        System.out.println(member.getId());
+//        System.out.println(member.getName());
         return hobbyMemberRepository.getOwnHobbyList(member);
     }
 }

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -30,7 +31,7 @@ public class HobbyPostitRecordServiceImpl implements HobbyPostitRecordService {
 
 
     @Override
-    public List<Integer> findHobbyPostitRecords(Long memberId, Long hobbyId, int year, int month) {
+    public List<LocalDate> findHobbyPostitRecordRegDtList(Long memberId, Long hobbyId) {
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
@@ -42,9 +43,9 @@ public class HobbyPostitRecordServiceImpl implements HobbyPostitRecordService {
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
         return hobbyPostitRecordRepository
-                .findByHobbyAndYearAndMonth(hobby, year, month)
+                .findByHobby(hobby)
                 .stream()
-                .map(HobbyPostitRecord::getDay)
+                .map(HobbyPostitRecord::getRegDt)
                 .toList();
     }
 }

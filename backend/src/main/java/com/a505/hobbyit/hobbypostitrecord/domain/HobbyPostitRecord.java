@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,13 +26,5 @@ public class HobbyPostitRecord {
 
     @Id
     @Column(nullable = false)
-    private int year;
-
-    @Id
-    @Column(nullable = false)
-    private int month;
-
-    @Id
-    @Column(nullable = false)
-    private int day;
+    private LocalDate regDt;
 }
