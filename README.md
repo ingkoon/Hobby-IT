@@ -8,7 +8,7 @@
 2023.01.09(월) ~ 2023.02.17(금) (40일간 진행)<br>
 SSAFY 8기 2학기 공통 프로젝트
 
-## HOBBY'IT 서비스 개요
+## ✨ HOBBY'IT 서비스 개요
 ### 기획 배경
 - 온라인 소모임, 취미 활동에 대한 수요 증가
 - 비대면 문화와 시장 확대
@@ -16,10 +16,10 @@ SSAFY 8기 2학기 공통 프로젝트
 
 ### 기존 서비스 분석
 1) Naver BAND
-    - 중장년층에 인기
-    - 커뮤니티 기능이 있음
-    - 오프라인 모임 위주의 성향
-    - 화상 회의를 즐길 수 있는 감성과 흥미 컨텐츠가 부족
+   - 중장년층에 인기
+   - 커뮤니티 기능이 있음
+   - 오프라인 모임 위주의 성향
+   - 화상 회의를 즐길 수 있는 감성과 흥미 컨텐츠가 부족
 2) Discord
    - 비용 발생이 적음
    - 기능이 많고, 버그 발생이 잦음
@@ -35,7 +35,7 @@ SSAFY 8기 2학기 공통 프로젝트
    - 시간 및 참여 인원에 제한이 있고, 과금이 필요함
    - 흥미 요소가 적거나 많은 비용이 발생함
 
-## HOBBY'IT 의 이용 목적
+## 🏃 HOBBY'IT 의 이용 목적
 혼자보단 둘,
 둘보단 다같이! 👪
 
@@ -51,41 +51,96 @@ SSAFY 8기 2학기 공통 프로젝트
 내가 속한 모임 별로 특별한 추억들로
 채워가보세요 :)
 
-## 팀원 소개
+## 🌞 팀원 소개
 ### 유쾌한 반란
 호방한 사람들이 될 서울 5반 5조<br>
 박귀렬과 아이들<br>
 
-## ✔ 주요 기능 (Back-End)
-### 
-
-## ✔ 주요 기능 (Front-End)
+## ✔️ 주요 기능
 ### 1) MZ스러운 디자인과 친절한 이용가이드
+![sample_guide.png](/docs/sample_guide.png)
 
 ### 2) '무한 스크롤'과 '다이나믹 스크롤'
 
-### 3) 방명록 페인팅
+### 3) 방명록 캔버스 페인팅
 
 
-## ✔ 주요 기술
-웹/모바일 프로젝트(웹 기술) - Sub PJT 2: WebRTC 기술 학습과 주요 기능 구현
+## ✔️ 주요 기술
+### 1) WebRTC
+- P2P(Peer-to-Peer Network)로 브라우저나 단말 간에 데이터를 주고받는 기술의 웹 표준
+- 웹에서 실시간 미디어 스트림을 송수신할 수 있는 유일한 표준이고 또 유일한 P2P 표준
 
-## ✔ 프로젝트 파일 구조
+## ✔️ 프로젝트 파일 구조
 
-## ✔ 협업 툴
+## ✔️ 협업 툴
 
-## ✔ 협업 환경
+- GitLab
+- Notion
+- Figma
+- JIRA
+- MatterMost
+- Webex
 
-## ✔ 팀원 역할 분배
-### 유쾌한 반란⚡️
-호방한 사람들이 될 서울 5반 5조
+## ✔️ 협업 환경
+- GitLab
+  - 코드의 버전 관리
+  - 개발 이슈 관리 및 해결을 위한 회의
+  - MR와 팀원의 코드리뷰
+- Notion
+  - 기획 단계에서 도출된 아이디어 정리
+  - 회의록과 팀미팅을 기록하여 의견과 해결사항을 정리
+  - 팀 그라운드 룰을 정리
+  - Jira 일정 계획 수립
+  - Git Commit 컨벤션 정리
+  - 참고자료 정리
+  - Back-end, Pront-end별 개발 이슈 정리
+  - API 상태 코드 정리
+  - [유쾌한 반란의 NOTION](https://chipped-cart-851.notion.site/f58b19c1a8bc453e945bc57df8147355)
+- Figma
+  - UI/UX에 초점을 둔 실시간 협업
+  - HOBBY'IT 만의 디자인과 메인 컬러 지정
+  - 애니메이션, gif 이미지 활용
+  - 목업과 와이어프레임 정리
+  - [유쾌한 반란의 FIGMA](https://www.figma.com/file/mKMpSGZU6zQK7NP3aRWG8O/%EC%9C%A0%EC%BE%8C%ED%95%9C%EB%B0%98%EB%9E%80-Hobby'It?node-id=0%3A1&t=WKgF5Q8oLOynJk9c-1)
+- Jira
+  - 일주일 단위로 프로젝트 일정 관리
+  - 23.01.10 ~ 23.02.17 기간의 일정 관리
+  - 기획, 설계, 개발, 발표, 회의, 내부 행사 등
+    <details>
+    <summary>번다운 차트</summary>
+    <div markdown="1">
+  
+      - 1주차 (23.01.09 ~ 23.01.13)
+    ![week1](docs/jira/번다운_차트_week1.png)
+      - 2주차 (23.01.16 ~ 23.01.20)
+    ![week2](docs/jira/번다운_차트_week2.png)
+      - 3주차 (23.01.25 ~ 23.01.27)
+    ![week3](docs/jira/번다운_차트_week3.png)
+      - 4주차 (23.01.30 ~ 23.02.03)
+    ![week4](docs/jira/번다운_차트_week4.png)
+      - 5주차 (23.02.06 ~ 23.02.10)
+    ![week5](docs/jira/번다운_차트_week5.png)
+      - 6주차 (23.02.13 ~ 23.02.17)
+  
+    </div>
+    </details>
+
+## ✔️ 프로젝트 산출물
+[유쾌한 반란의 Google Docs - 요구사항 정의서, 기능 정의서, API 명세서](https://docs.google.com/spreadsheets/d/1xG0EUURGoz_C6ZEwFpiaMvZAMSl8EonA/edit?usp=sharing&ouid=102396324034139789583&rtpof=true&sd=true)
+- 요구사항 정의서
+- 기능 정의서
+- API 명세서
+- 와이어 프레임
+- ERD
+- 컨벤션
+- 회의록
+- 
 
 
-
-## ✔ 프로젝트 산출물
-### [Google Docs - 요구사항 정의서, 기능 정의서, API 명세서](https://docs.google.com/spreadsheets/d/1xG0EUURGoz_C6ZEwFpiaMvZAMSl8EonA/edit?usp=sharing&ouid=102396324034139789583&rtpof=true&sd=true)
-
-## ✔ 프로젝트 결과물
+## ✔️ 프로젝트 결과물
+- 포팅메뉴얼
+- 중간발표자료
+- 최종발표자료
 
 ## 👪 HOBBY'IT 서비스 화면
 
