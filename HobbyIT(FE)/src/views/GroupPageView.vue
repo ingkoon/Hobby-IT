@@ -173,9 +173,9 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
             v-model='date'
             :attributes='attrs'
             :max-date='today'
-            color='purple' 
+            color='purple'
             style='background-color: #fbd3de; padding: 10px; width: 85%; height: 350px;'
-            
+
           />
         </div>
         <!-- @click="opencanvasmodal" -->
@@ -193,11 +193,11 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
             </v-dialog>
           </v-btn>
         </div>
-      </div>    
+      </div>
       <v-dialog v-model="getcanvasmodal">
-        <get-canvas @close="closecanvasmodal" :data="[date, groupid]"/>
+        <get-canvas @close="closecanvasmodal" :data="[date, groupid, groupinfo.name]"/>
       </v-dialog>
-      
+
     </v-navigation-drawer>
     <InfiniteScrollObserver v-if='groupinfo.hobbyMemberId !== null' @infinite-scroll-trigger='loadData' />
 
@@ -312,8 +312,8 @@ export default {
     },
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
-      window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
-      // this.$router.push({name:'VideoChat',target:'_blank'})
+      // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
+      this.$router.push({name:'VideoChat', params:{id:this.groupid}})
     },
     closeAddedModal() {
       this.canvasmodal = false;
@@ -372,14 +372,6 @@ export default {
     },
     // only for test
     async initArticles() {
-      // const data = {
-      //   title: '제목',
-      //   content: '사람이 살고있다',
-      //   author: '사람',
-      // };
-      // for (let i = 0; i < 10; i++) {
-      //   this.articles.push(data);
-      // }
   
       try {
         console.log(this.lastnum)
@@ -529,8 +521,8 @@ export default {
       this.getcanvasmodal = false
     },
 
+    //방명록 날짜 받기
     async getcanvasdate(date){
-      console.log("DDDDDDDDDDDDD")
       try {
         // this.attrs = []
         let year = date.getFullYear()
@@ -545,11 +537,12 @@ export default {
         const inputdate = year + '-' + month + "-" + day
         const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate)
         console.log(data);
-        for(let i=0;i<data.days.length;i++){
+        for(let i=0;i<data.regDtList.length;i++){
+          const tmpdate = data.regDtList[i].split('-')
           const tmp = {
             key : 'visit',
             dot : true,
-            dates: new Date(year, parseInt(month)-1, data.days[i])
+            dates: new Date(tmpdate[0], parseInt(tmpdate[1])-1, tmpdate[2])
           }
           this.attrs.push(tmp)
         }

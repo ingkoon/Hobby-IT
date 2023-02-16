@@ -67,7 +67,7 @@ export function deleteGroupMember(hobby_id, member_id) {
 export function requestGroupJoin(hobby_id, data) {
   return instance.post(`/${hobby_id}/join`, data);
 }
-       
+
 // 22.모임 가입 신청 회원 리스트 확인
 export function getGroupJoinRequests(hobby_id) {
   return instance.get(`/${hobby_id}/join`);
@@ -174,8 +174,9 @@ export function deleteGroupNotice(hobby_id, notice_id) {
 
 // 42.모임 방명록 등록
 export function postGroupVisitorBook(hobby_id, date, data) {
-  return multipartInstance.post(`/${hobby_id}/postit/${date}`, data);
-}
+  return multipartInstance.post(`/${hobby_id}/postit/2023-02-12`, data);
+}  //DATE 꼬꼬꼬꼮ㄲㄲ꼬꼬꼬꼮 수정해야합니다!!!!!!!!!!!!!!!!
+
 
 // 43.모임 방명록 조회
 export function getGroupVisitorBook(hobby_id, date) {
@@ -184,5 +185,10 @@ export function getGroupVisitorBook(hobby_id, date) {
 
 // 44.모임 방명록 작성일 조회
 export function getGroupVisitorBookCreatedDate(hobby_id, date) {
-  return instance.get(`/${hobby_id}/postit/record/${date}`);
+  return instance.get(`/${hobby_id}/postit/record`);
+}
+
+// 소모임 가입 여부 체크
+export function getGroupUserPrivilege(hobby_id){
+  return instance.get(`/${hobby_id}/check`)
 }

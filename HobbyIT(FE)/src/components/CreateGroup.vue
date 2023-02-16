@@ -75,9 +75,14 @@ export default {
       const formData = new FormData();
       formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
       formData.append('multipartFile', this.file);
-      this.closecreategroup();
-      const res = await createGroup(formData);
 
+      try {
+        const res = await createGroup(formData);
+        this.$emit('createSuccess')
+        await this.closecreategroup();
+      }catch (e) {
+        console.error(e);
+      }
     },
     closecreategroup() {
       this.$emit('closecreategroup');
