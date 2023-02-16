@@ -37,7 +37,7 @@
               icon='mdi-plus-circle-outline'
               style='align-self: center; color: white; z-index: 1'
             ></v-icon>
-            <img v-else id='realimg' style='width: 350px; height: 500px; object-fit: cover' />
+            <img v-else id='realimg' style='width: 322px; height: 492px; object-fit: cover' />
           </div>
           <input id='uploadimg' accept='image/*' required style='display: none' type='file' />
           <div id='tri1' style=''></div>

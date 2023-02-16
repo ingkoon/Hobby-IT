@@ -54,7 +54,7 @@
         </span>
 
         <span style='font-family: linefont; font-size: 13px;'>
-          <span id='modiInfo' style='margin-right: 10px;' v-show='isMyPageOwner'>회원정보수정</span>
+          <!-- <span id='modiInfo' style='margin-right: 10px;' v-show='isMyPageOwner'>회원정보수정</span> -->
           <v-btn v-show='isMyPageOwner'
             id='deleteInfo'
             style='background-color: rgba(0,0,0,0); color: white' variant='flat'
@@ -181,7 +181,7 @@ export default {
       try {
         const { data } = await getWaitingGroup();
         this.waitgroup = data;
-      } catch {
+      } catch (err) {
         console.log(err);
       }
     },
