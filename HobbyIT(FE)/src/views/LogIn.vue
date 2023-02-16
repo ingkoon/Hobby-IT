@@ -11,7 +11,7 @@
         <input
           id='emailinput'
           v-model='userEmail'
-          placeholder='email'
+          placeholder='이메일'
           style='
             border: 2px solid white;
             border-radius: 30px;
@@ -24,11 +24,11 @@
           type='email'
           @keyup.enter='handleLogin'
         />
-        <div id='checkemail' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 아이디를 입력해주세요. </div>
+        <div id='checkemail' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 이메일을 입력해주세요. </div>
         <input
           id='pwdinput'
           v-model='userPassword'
-          placeholder='password'
+          placeholder='비밀번호'
           style='
             border: 2px solid white;
             border-radius: 30px;
@@ -49,17 +49,19 @@
           @click='handleLogin'
         >Log In
         </v-btn>
-        <div style='text-align: right; margin-top:5px; margin-right: 60px; font-family: linefont'>비밀번호 찾기</div>
+        <div style='text-align: right; margin-top:10px; margin-right: 60px; font-family: linefontbold'>
+          <span id="findPassword" @click='handleGoResetPassword'>비밀번호 찾기</span>
+        </div>
 
         <!-- <div id='divsns' style='font-family: linefont; margin-top: 20px'>SNS 로그인</div> -->
-        <v-btn @click="kakaologin" color='#F7E600' style='width: 270px; height: 44px; font-size: 16px; margin-top: 20px'
+        <!-- <v-btn @click="kakaologin" color='#F7E600' style='width: 270px; height: 44px; font-size: 16px; margin-top: 20px'
         >카카오로 로그인
         </v-btn
         >
         <v-btn color='#ffffff' style='width: 270px; height: 44px; font-size: 16px; margin-top: 10px'
         >구글로 로그인
         </v-btn
-        >
+        > -->
 
         <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 10px; font-family: linefont'>
           아직 회원이 아니신가요?
@@ -89,6 +91,9 @@ export default {
     handleGoSignup() {
       this.$router.push('signup');
     },
+    handleGoResetPassword() {
+      this.$router.push('resetPassword');
+    },
     async handleLogin() {
       const checkemail = document.getElementById('checkemail')
       const checkpwd = document.getElementById('checkpwd')
@@ -107,7 +112,7 @@ export default {
         checkpwd.style.visibility = 'hidden'
       }
 
-      if(this.userEmail !== null && this.userPassword !== null) {
+      if(this.userEmail !== null && this.userEmail !== '' && this.userPassword !== null && this.userPassword !== '') {
 
         try {
           const loginData = {
@@ -166,6 +171,7 @@ export default {
   color: white;
 }
 
+#findPassword,
 #gosignin {
   color: #fa8eb6;
   font-size: 15px;

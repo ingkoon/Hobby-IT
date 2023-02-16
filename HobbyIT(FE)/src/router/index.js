@@ -50,6 +50,17 @@ const routes = [
     ],
   },
   {
+    path: '/resetPassword',
+    component: () => import('@/layouts/default/HomeDefault.vue'),
+    children: [
+      {
+        path: '',
+        name: 'resetPassword',
+        component: () => import('@/views/resetPassword.vue'),
+      },
+    ],
+  },
+  {
     path: '/about',
     component: () => import('@/layouts/default/MainPage.vue'),
     children: [
