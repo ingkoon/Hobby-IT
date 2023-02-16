@@ -18,6 +18,9 @@ export const useUserStore = defineStore({
     getUserNickname(state) {
       return state.userNickname;
     },
+    isLoggedIn(state) {
+      return !!state.accessToken;
+    },
   },
   actions: {
     setUserNickname(nickname) {
@@ -36,11 +39,11 @@ export const useUserStore = defineStore({
     setUserHobbyList(list) {
       this.userHobbyList = list;
     },
-    clearUserInfo(){
-      this.setUserNickname(null)
-      this.setUserEmail(null)
-      this.setAccessToken(null)
-      localStorage.removeItem('refreshToken')
+    clearUserInfo() {
+      this.setUserNickname(null);
+      this.setUserEmail(null);
+      this.setAccessToken(null);
+      localStorage.removeItem('refreshToken');
     },
     afterSignup(data) {
       const { email, nickname } = data;
