@@ -1,5 +1,6 @@
 package com.a505.hobbyit.hobbypostit.service;
 
+import com.a505.hobbyit.article.exception.UnAuthorizedArticleException;
 import com.a505.hobbyit.common.file.FileUploader;
 import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobby.domain.HobbyRepository;
@@ -10,6 +11,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.hobbypostit.domain.HobbyPostit;
 import com.a505.hobbyit.hobbypostit.domain.HobbyPostitRepository;
 import com.a505.hobbyit.hobbypostit.dto.HobbyPostitResponse;
+import com.a505.hobbyit.hobbypostit.exception.UnAuthorizedHobbyPostitException;
 import com.a505.hobbyit.hobbypostitrecord.domain.HobbyPostitRecord;
 import com.a505.hobbyit.hobbypostitrecord.domain.HobbyPostitRecordRepository;
 import com.a505.hobbyit.member.domain.Member;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +43,12 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
     @Transactional
     @Override
     public void save(Long memberId, Long hobbyId, LocalDate date, MultipartFile multipartFile) {
-//        LocalDateTime curDateTime = LocalDateTime.now();      // for real service
-        LocalDateTime curDateTime = LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), 0, 0, 0);  // for demonstrate
+        LocalDateTime curDateTime = LocalDateTime.now();      // for real service
 
-        // for real service
-//        if (!date.isEqual(curDateTime.toLocalDate())
-//                || (curDateTime.getHour() == 23 && 55 < curDateTime.getMinute())) {
-//            throw new UnAuthorizedHobbyPostitException("방명록 작성 가능 시간은 당일 00시 00분 ~ 23시 55분입니다.");
-//        }
+        if (!date.isEqual(curDateTime.toLocalDate())
+                || (curDateTime.getHour() == 23 && 55 < curDateTime.getMinute())) {
+            throw new UnAuthorizedHobbyPostitException("방명록 작성 가능 시간은 당일 00시 00분 ~ 23시 55분입니다.");
+        }
 
         Member member = memberRepository
                 .findById(memberId)
@@ -59,11 +60,10 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
                 .findByMemberAndHobby(member, hobby)
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
-        // for real service
-//        if (hobbyMember.getPostitRegDt() != null
-//                && Objects.equals(hobbyMember.getPostitRegDt().toLocalDate(), curDateTime.toLocalDate())) {
-//            throw new UnAuthorizedArticleException("오늘은 이미 방명록을 작성하였습니다.");
-//        }
+        if (hobbyMember.getPostitRegDt() != null
+                && Objects.equals(hobbyMember.getPostitRegDt().toLocalDate(), curDateTime.toLocalDate())) {
+            throw new UnAuthorizedArticleException("오늘은 이미 방명록을 작성하였습니다.");
+        }
 
         String imgUrl = fileUploader.upload(multipartFile, hobbyId, date);
         HobbyPostit hobbyPostit =
@@ -92,9 +92,8 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
 
     @Override
     public List<HobbyPostitResponse> findHobbyPostits(Long memberId, Long hobbyId, LocalDate date) {
-        // for real service
-//        if (!LocalDate.now().isAfter(date))
-//            throw new UnAuthorizedHobbyPostitException("방명록을 조회할 수 있는 날짜가 아닙니다.");
+        if (!LocalDate.now().isAfter(date))
+            throw new UnAuthorizedHobbyPostitException("방명록을 조회할 수 있는 날짜가 아닙니다.");
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
@@ -125,13 +124,13 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
         LocalDateTime now = LocalDateTime.now();
-        // for real service
-//        if (now.getHour() == 23 && 55 < now.getMinute())
-//            throw new UnAuthorizedHobbyPostitException("방명록 작성 가능 시간은 당일 00시 00분 ~ 23시 55분입니다.");
-//
-//        if (hobbyMember.getPostitRegDt() != null
-//                && Objects.equals(hobbyMember.getPostitRegDt().toLocalDate(), LocalDate.now())) {
-//            throw new UnAuthorizedArticleException("오늘은 이미 방명록을 작성하였습니다.");
-//        }
+
+        if (now.getHour() == 23 && 55 < now.getMinute())
+            throw new UnAuthorizedHobbyPostitException("방명록 작성 가능 시간은 당일 00시 00분 ~ 23시 55분입니다.");
+
+        if (hobbyMember.getPostitRegDt() != null
+                && Objects.equals(hobbyMember.getPostitRegDt().toLocalDate(), LocalDate.now())) {
+            throw new UnAuthorizedArticleException("오늘은 이미 방명록을 작성하였습니다.");
+        }
     }
 }
