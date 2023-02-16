@@ -1,87 +1,91 @@
 <!--suppress ALL -->
 <template>
-  <div id='mypage'>
-    <div id='mypageinfo'>
-      <div id='profileimg'>
-        <img id='img' :src='myinfo.imgUrl' cover>
+  <div id="mypage">
+    <div id="mypageinfo">
+      <div id="profileimg">
+        <img id="img" :src="myinfo.imgUrl" cover />
       </div>
-      <div id='title'>{{ myinfo.nickname }}</div>
-      <div id='content'>
+      <div id="title">{{ myinfo.nickname }}</div>
+      <div id="content">
         {{ myinfo.email }}
 
-        <div id='todayexp' style='margin-top: 20px' v-show='isMyPageOwner'>오늘의 획득량 : 20/30</div>
-        <div style='margin: 10px 0'>진척도 보상</div>
+        <div v-show="isMyPageOwner" id="todayexp" style="margin-top: 20px"></div>
+        <div style="margin: 10px 0">진척도 보상</div>
 
         <v-progress-linear
-          v-model='gauge'
-          bg-color='#642efe'
-          bg-opacity='1'
-          color='#fa8eb6'
-          height='20px'
+          v-model="myinfo.pointExp"
+          bg-color="#642efe"
+          bg-opacity="1"
+          color="#fa8eb6"
+          height="20px"
           rounded
           rounded-bar
-          style='border: 2px solid white; border-radius: 20px; width: 90%'
+          style="border: 2px solid white; border-radius: 20px; width: 90%"
         >
-          <div style='font-size: 14px; margin: 5px'>{{ Math.ceil(gauge) }} %</div>
+          <div style="font-size: 14px; margin: 5px">{{ Math.ceil(myinfo.pointExp) }} %</div>
         </v-progress-linear>
 
-        <div style='display: flex; justify-content: space-between; margin: 5px 5% 0'>
-          <span>Lv.10</span>
-          <span>Lv.11</span>
+        <div style="display: flex; justify-content: space-between; margin: 5px 5% 0">
+          <span>{{ myinfo.pointLevel }}</span>
+          <span>{{ myinfo.pointLevel + 1 }}</span>
         </div>
       </div>
     </div>
     <!-- 오른쪽 게시판 탭 -->
-    <div id='board' style='flex-grow: 1; font-size: 25px'>
-      <div style='display:flex; justify-content: space-between;'>
+    <div id="board" style="flex-grow: 1; font-size: 25px">
+      <div style="display: flex; justify-content: space-between">
         <span>
           Who am I?
-          <span id='introbtn' v-show='isMyPageOwner'>
-            <v-icon icon='mdi-pencil' size='xs' @click='openUpdateInfoModal' />
+          <span v-show="isMyPageOwner" id="introbtn">
+            <v-icon icon="mdi-pencil" size="xs" @click="openUpdateInfoModal" />
           </span>
-          <v-dialog v-if='isFetched' v-model='updateInfoModal'>
+          <v-dialog v-if="isFetched" v-model="updateInfoModal">
             <member-update
-              :prop-intro='myinfo.intro'
-              :prop-nickname='userStore.getUserNickname'
-              :prop-username='myinfo.name'
-              @close='closeUpdateInfoModal'
-              @update-user-info='updateUserInfo'
-              @close-modal='closeUpdateInfoModal'
-              @after-update-success='afterUpdateSuccess'
+              :prop-intro="myinfo.intro"
+              :prop-nickname="userStore.getUserNickname"
+              :prop-username="myinfo.name"
+              @close="closeUpdateInfoModal"
+              @update-user-info="updateUserInfo"
+              @close-modal="closeUpdateInfoModal"
+              @after-update-success="afterUpdateSuccess"
             >
             </member-update>
           </v-dialog>
         </span>
 
-        <span style='font-family: linefont; font-size: 13px;'>
+        <span style="font-family: linefont; font-size: 13px">
           <!-- <span id='modiInfo' style='margin-right: 10px;' v-show='isMyPageOwner'>회원정보수정</span> -->
-          <v-btn v-show='isMyPageOwner'
-            id='deleteInfo'
-            style='background-color: rgba(0,0,0,0); color: white' variant='flat'
-            @click='opendeleteinfo'>
+          <v-btn
+            v-show="isMyPageOwner"
+            id="deleteInfo"
+            style="background-color: rgba(0, 0, 0, 0); color: white"
+            variant="flat"
+            @click="opendeleteinfo"
+          >
             회원 탈퇴
           </v-btn>
         </span>
       </div>
-      <v-dialog v-model='deleteinfomodal'>
-        <delete-modal @close='closedeleteinfo' @deleteMember='deleteMember' />
+      <v-dialog v-model="deleteinfomodal">
+        <delete-modal @close="closedeleteinfo" @deleteMember="deleteMember" />
       </v-dialog>
-      <div style='font-family: linefont'>
+      <div style="font-family: linefont">
         {{ myinfo.intro }}
       </div>
 
-      <div style='font-size: 36px; margin-top: 20px'>MY HOBBY!</div>
-      <MyPageGroup @create-success='createSuccess' v-if='partigroup.length > 0 && $route.params.nickname === userStore.userNickname' :hobbylist='partigroup' />
-      <MyPageGroup2 v-else-if='partigroup.length > 0' :hobbylist='partigroup' />
+      <div style="font-size: 36px; margin-top: 20px">MY HOBBY!</div>
+      <MyPageGroup
+        v-if="partigroup.length > 0 && $route.params.nickname === userStore.userNickname"
+        :hobbylist="partigroup"
+        @create-success="createSuccess"
+      />
+      <MyPageGroup2 v-else-if="partigroup.length > 0" :hobbylist="partigroup" />
       <MyPage1 v-else />
 
-      <div style='font-size: 36px; margin-top: 20px'>가입 대기중인 HOBBY...</div>
-      <ParticipateGroup v-if='waitgroup.length > 0' :hobbylist='waitgroup' />
+      <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
+      <ParticipateGroup v-if="waitgroup.length > 0" :hobbylist="waitgroup" />
       <MyPage2 v-else />
-
     </div>
-
-
   </div>
 </template>
 
@@ -130,8 +134,8 @@ export default {
     tr() {
       return tr;
     },
-    isMyPageOwner(){
-      return this.$route.params.nickname === this.userStore.getUserNickname
+    isMyPageOwner() {
+      return this.$route.params.nickname === this.userStore.getUserNickname;
     },
   },
   async created() {
@@ -139,13 +143,11 @@ export default {
     await this.getParticiGroup(this.$route.params.nickname);
     await this.getLoadGroup();
   },
-  async mounted() {
-
-  },
+  async mounted() {},
   methods: {
-    afterUpdateSuccess(){
-      this.closeUpdateInfoModal()
-      this.$router.push({name: 'MyPage', params:{nickname : this.userStore.getUserNickname}})
+    afterUpdateSuccess() {
+      this.closeUpdateInfoModal();
+      this.$router.push({ name: 'MyPage', params: { nickname: this.userStore.getUserNickname } });
     },
     openUpdateInfoModal() {
       this.updateInfoModal = true;
@@ -153,7 +155,7 @@ export default {
     closeUpdateInfoModal() {
       this.updateInfoModal = false;
     },
-    createSuccess(){
+    createSuccess() {
       this.getParticiGroup(this.$route.params.nickname);
     },
     async getUserInfo(nickname) {
@@ -162,7 +164,6 @@ export default {
 
         this.myinfo = data;
         this.isFetched = true;
-
       } catch (err) {
         console.log(err);
       }
@@ -201,7 +202,7 @@ export default {
       try {
         const { data } = await memberDelete();
         this.userStore.clearUserInfo();
-        this.$router.push({name:'Home'})
+        this.$router.push({ name: 'Home' });
       } catch (e) {
         console.log(e);
       }
