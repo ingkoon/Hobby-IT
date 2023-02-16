@@ -19,7 +19,7 @@
       </div>
       <div style="display: flex">
         <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630" @click="uploadimg">
-          <v-carousel hide-delimiter-background style="width: 500px">
+          <v-carousel hide-delimiter-background hide-delimiters show-arrows="hover" style="width: 500px">
             <v-carousel-item v-for="(item, i) in imgurl" :key="i" :src="item.src" cover></v-carousel-item>
           </v-carousel>
         </div>
@@ -64,12 +64,15 @@
           <div v-if="userStore.userNickname === article.author">
 
             <div v-if="!changemode">
-              <div @click="modifymode">수정</div>
-              <div @click="delarticle">삭제</div>
+              <div style="display:flex">
+
+                <v-btn @click="modifymode" variant="flat" style="background-color: rgba(0,0,0,0); color: white;">수정</v-btn>
+                <v-btn @click="delarticle" variant="flat" style="background-color: rgba(0,0,0,0); color: white;">삭제</v-btn>
+              </div>
             </div>
             <div v-else>
-              <div @click="modify">완료</div>
-              <div @click="modifymode">취소</div>
+              <v-btn @click="modify" variant="flat" style="background-color: rgba(0,0,0,0); color: white;">완료</v-btn>
+              <v-btn @click="modifymode" variant="flat" style="background-color: rgba(0,0,0,0); color: white;">취소</v-btn>
             </div>
           </div>
 
@@ -137,6 +140,8 @@ export default {
     return {
       article : [],
       imgurl: [
+        "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+        "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
       ],
       createAt : '',
       changemode : false,
@@ -160,7 +165,7 @@ export default {
         this.article = data
         this.title = data.title
         this.content = data.content
-        this.imgurl = []
+        // this.imgurl = []
         for (let i=0;i<data.images.length;i++){
           this.imgurl.push({src : data.images[i]})
         }
