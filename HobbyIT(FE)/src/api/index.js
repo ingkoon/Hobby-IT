@@ -22,7 +22,6 @@ function createInstance(path, config = defaultConfig) {
     ...config,
     baseURL: API_SERVER_URL + path,
   });
-
   return setInterceptors(instance);
 }
 

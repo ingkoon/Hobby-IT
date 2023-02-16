@@ -12,7 +12,7 @@
             </div>
             <v-icon icon="mdi-plus" style="align-self:center; color:#FA8EB6"></v-icon>
             <v-dialog v-model="creategroupmodal" activator="parent">
-              <create-group @closecreategroup="closecreategroup" />
+              <create-group @create-success='createSuccess' @closecreategroup="closecreategroup" />
             </v-dialog>
           </div>
         </v-img>
@@ -21,7 +21,7 @@
       </v-card>
     </v-slide-group-item>
 
-    
+
     <MyPageGroupItem v-for="lst in hobbylist" :lst="lst"/>
   </v-slide-group>
 </template>
@@ -47,6 +47,9 @@ export default {
   },
 
   methods: {
+    createSuccess(){
+      this.$emit('createSuccess')
+    },
     opencreategroup() {
       this.creategroupmodal = true;
     },
