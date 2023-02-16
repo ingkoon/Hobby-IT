@@ -272,15 +272,15 @@ Repository
     <div markdown="1">
   
       - 1주차 (23.01.09 ~ 23.01.13)
-    ![week1](docs/jira/번다운_차트_week1.png)
+    ![week1](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week1.png)
       - 2주차 (23.01.16 ~ 23.01.20)
-    ![week2](docs/jira/번다운_차트_week2.png)
+    ![week2](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week2.png)
       - 3주차 (23.01.25 ~ 23.01.27)
-    ![week3](docs/jira/번다운_차트_week3.png)
+    ![week3](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week3.png)
       - 4주차 (23.01.30 ~ 23.02.03)
-    ![week4](docs/jira/번다운_차트_week4.png)
+    ![week4](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week4.png)
       - 5주차 (23.02.06 ~ 23.02.10)
-    ![week5](docs/jira/번다운_차트_week5.png)
+    ![week5](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week5.png)
       - 6주차 (23.02.13 ~ 23.02.17)
   
     </div>
