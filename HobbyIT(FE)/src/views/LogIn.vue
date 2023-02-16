@@ -24,7 +24,7 @@
           type='email'
           @keyup.enter='handleLogin'
         />
-        <div id='checkemail' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 아이디를 입력해주세요. </div>
+        <div id='checkemail' style='font-size: 12px; color: red; visibility: hidden;'>! 올바른 이메일을 입력해주세요. </div>
         <input
           id='pwdinput'
           v-model='userPassword'
