@@ -79,7 +79,7 @@
           @click='handleSignup'
         >Sign up
         </v-btn>
-        <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 5px'>
+        <div style='font-size: 15px; text-align: right; margin-right: 60px; margin-top: 10px'>
           이미 계정이 있으신가요? <span id='gologin' @click='gologin'>로그인</span>
         </div>
       </div>
