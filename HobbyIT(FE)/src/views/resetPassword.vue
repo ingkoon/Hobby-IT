@@ -11,7 +11,7 @@
         <div style='font-size: 32px'>비밀번호 <span style='color: #642efe'>찾기</span></div>
         <input
           v-model='userEmail'
-          placeholder='email'
+          placeholder='이메일'
           style='
             border: 2px solid white;
             border-radius: 30px;
@@ -40,7 +40,7 @@
           type='text'
           @keyup.enter = 'handleResetPassword'
         />
-        <div id='checkname' style='font-size: 12px; color: red; visibility:hidden'>! 성명을 입력해주세요.</div>
+        <div id='checkname' style='font-size: 12px; color: red; visibility:hidden'>! 올바른 이름을 입력해주세요.</div>
         <v-btn
           color='#EE49FD80'
           style='width: 270px; height: 44px; border-radius: 20px; color: white; font-size: 24px; margin-top: 20px'

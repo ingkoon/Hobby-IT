@@ -11,7 +11,7 @@
         <input
           id='emailinput'
           v-model='userEmail'
-          placeholder='email'
+          placeholder='이메일'
           style='
             border: 2px solid white;
             border-radius: 30px;
@@ -28,7 +28,7 @@
         <input
           id='pwdinput'
           v-model='userPassword'
-          placeholder='password'
+          placeholder='비밀번호'
           style='
             border: 2px solid white;
             border-radius: 30px;
