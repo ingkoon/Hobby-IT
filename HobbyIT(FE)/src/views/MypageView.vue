@@ -64,14 +64,14 @@
         </span>
       </div>
       <v-dialog v-model='deleteinfomodal'>
-        <delete-modal @close='closedeleteinfo' @delete='memberDelete' />
+        <delete-modal @close='closedeleteinfo' @deleteMember='deleteMember' />
       </v-dialog>
       <div style='font-family: linefont'>
         {{ myinfo.intro }}
       </div>
 
       <div style='font-size: 36px; margin-top: 20px'>MY HOBBY!</div>
-      <MyPageGroup v-if='partigroup.length > 0 && nickname === userStore.userNickname  ' :hobbylist='partigroup' />
+      <MyPageGroup @create-success='createSuccess' v-if='partigroup.length > 0 && $route.params.nickname === userStore.userNickname' :hobbylist='partigroup' />
       <MyPageGroup2 v-else-if='partigroup.length > 0' :hobbylist='partigroup' />
       <MyPage1 v-else />
 
@@ -153,10 +153,13 @@ export default {
     closeUpdateInfoModal() {
       this.updateInfoModal = false;
     },
+    createSuccess(){
+      this.getParticiGroup(this.$route.params.nickname);
+    },
     async getUserInfo(nickname) {
       try {
         const { data } = await getOthersMyPage(nickname);
-        console.log(data);
+
         this.myinfo = data;
         this.isFetched = true;
 
@@ -169,7 +172,6 @@ export default {
       try {
         const { data } = await getParticipatingGroup(nickname);
         this.partigroup = data;
-
       } catch (err) {
         console.log(err);
       }
@@ -183,7 +185,6 @@ export default {
         console.log(err);
       }
     },
-
     setModify(nickname) {
       if (this.userStore.userNickname !== nickname) {
         const modiIntro = document.getElementById('introbtn');
@@ -196,9 +197,11 @@ export default {
         deleteInfo.style.visibility = 'hidden';
       }
     },
-    async memberDelete() {
+    async deleteMember() {
       try {
         const { data } = await memberDelete();
+        this.userStore.clearUserInfo();
+        this.$router.push({name:'Home'})
       } catch (e) {
         console.log(e);
       }

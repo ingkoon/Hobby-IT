@@ -47,7 +47,7 @@ function getMyPage() {
 
 // 9.회원탈퇴
 function memberDelete() {
-  return instance.post('/delete');
+  return instance.put('/delete');
 }
 
 // 10.참여중인 모임 리스트 조회

@@ -173,9 +173,9 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
             v-model='date'
             :attributes='attrs'
             :max-date='today'
-            color='purple' 
+            color='purple'
             style='background-color: #fbd3de; padding: 10px; width: 85%; height: 350px;'
-            
+
           />
         </div>
         <!-- @click="opencanvasmodal" -->
@@ -193,11 +193,11 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
             </v-dialog>
           </v-btn>
         </div>
-      </div>    
+      </div>
       <v-dialog v-model="getcanvasmodal">
         <get-canvas @close="closecanvasmodal" :data="[date, groupid, groupinfo.name]"/>
       </v-dialog>
-      
+
     </v-navigation-drawer>
     <InfiniteScrollObserver v-if='groupinfo.hobbyMemberId !== null' @infinite-scroll-trigger='loadData' />
 
@@ -312,8 +312,8 @@ export default {
     },
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
-      window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
-      // this.$router.push({name:'VideoChat',target:'_blank'})
+      // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
+      this.$router.push({name:'VideoChat', params:{id:this.groupid}})
     },
     closeAddedModal() {
       this.canvasmodal = false;

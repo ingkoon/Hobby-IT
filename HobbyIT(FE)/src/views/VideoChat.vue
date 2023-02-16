@@ -59,6 +59,7 @@ import VideoMessage from '@/components/VideoMessage.vue';
 import { useMessageStore } from '@/store/message';
 import SharedPaint from '@/components/VideoChat/SharedPaint.vue';
 import { useUserStore } from '@/store/user';
+import { getGroupUserPrivilege } from '@/api/hobby';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
@@ -66,6 +67,16 @@ const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
 const APPLICATION_SERVER_URL = VITE_OPENVIDU_SERVER_URL;
 // ? VITE_OPENVIDU_SERVER_URL : 'http://localhost:5000/';
 export default {
+  async beforeRouteEnter(to,from){
+    const groupId = to.params.id
+    try{
+      const res = await getGroupUserPrivilege(groupId)
+    } catch (e) {
+      console.log('error!!');
+      return {name:'Home'}
+    }
+
+  },
   name: 'VideoChat',
   components: { SharedPaint, VideoMessage, UserVideo },
   setup() {

@@ -6,7 +6,7 @@
     <div style="font-size: 20px; font-family: linefont">Hobby'It에서 떠나시겠습니까?</div>
 
     <div style="display: flex">
-      <span id="okbtn" @click="delete" style="color: white; margin-right: 20px"> 확인 </span>
+      <span id="okbtn" @click='deleteMember' style="color: white; margin-right: 20px"> 확인 </span>
       <span id="cancelbtn" style="color: white" @click="close"> 취소 </span>
     </div>
   </v-card>
@@ -18,8 +18,8 @@ export default {
     close() {
       this.$emit('close');
     },
-    delete() {
-      this.$emit('delete')
+    deleteMember() {
+      this.$emit('deleteMember')
     }
   },
 };

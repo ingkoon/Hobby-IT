@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '@/store/user';
 
 const routes = [
   {
@@ -105,6 +106,7 @@ const routes = [
             path: ':id/videochat',
             component: () => import('@/views/VideoChat.vue'),
             name: 'VideoChat',
+            meta: { isGroupUser: true}
           },
           {
             path: ':id',
@@ -131,11 +133,13 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-router.beforeEach((to, from, next) => {
-  // scroll to the top of the page
+router.beforeEach((to, from) => {
+
   document.documentElement.scrollTop = 0;
-  // continue with the navigation
-  next();
+  if(to.name !== 'Home' && !from.name){
+    return {name:'Home'}
+  }
+  return true
 });
 
 export default router;
