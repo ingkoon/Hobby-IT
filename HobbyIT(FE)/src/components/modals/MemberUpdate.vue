@@ -106,7 +106,7 @@
         </div>
         <div
           style='display: flex; justify-content: center; align-items: center; text-align: center; margin-left: 270px;'>
-          <div style='font-size: 16px; margin: 0px 0px 0px 0px; text-align: right;'>
+          <div style='font-size: 16px; margin: 0px 0px 0px 0px; text-align: right; cursor: pointer;' @click='handleSubmit'>
             수정하기
           </div>
           <v-btn
