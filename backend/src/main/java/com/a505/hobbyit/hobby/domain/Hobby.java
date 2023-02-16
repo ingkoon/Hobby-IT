@@ -82,4 +82,8 @@ public class Hobby {
         this.maxMemberCount = request.getMax_participants_num();
         this.imgUrl = imgUrl;
     }
+
+    public void isCheckOverCapacity(){
+        if(this.currentMemberCount == maxMemberCount) throw new OverCapacityException("모임 인원이 가득 차 더이상 참여할 수 업습니다.");
+    }
 }

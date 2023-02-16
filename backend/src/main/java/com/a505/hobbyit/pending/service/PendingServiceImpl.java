@@ -49,6 +49,8 @@ public class PendingServiceImpl implements PendingService{
         if(pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
             throw new DuplicatedPendingException();
 
+        hobby.isCheckOverCapacity();
+
         if(hobby.getFree().equals(HobbyFree.FREE)){
             HobbyMember hobbyMember = new HobbyMember().ofGeneral(member, hobby);
             hobbyMemberRepository.save(hobbyMember);
