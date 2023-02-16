@@ -5,10 +5,34 @@
         <div style='align-self: center; width: 100%'>
           <div>
             부캐 전성시대,<br />
-            그 시작은 Hobby'IT에서
+            그 시작은 HOBBY'IT에서
           </div>
 
           <div style='float: right'>지금이 바로 시작할 때!</div>
+        </div>
+      </div>
+    </v-carousel-item>
+    <v-carousel-item cover src='assets/people.gif' style='font-size: 48px; color: white'>
+      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
+        <div style='align-self: center; width: 100%'>
+          <div>
+            관심사는 같은<br />
+            다양한 사람들을
+          </div>
+
+          <div style='float: right'>HOBBY'IT 에서 만나봐요!</div>
+        </div>
+      </div>
+    </v-carousel-item>
+    <v-carousel-item cover src='assets/home1.gif' style='font-size: 48px; color: white'>
+      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
+        <div style='align-self: center; width: 100%'>
+          <div>
+            모임을 통해<br />
+            매일 쌓이는 추억들을
+          </div>
+
+          <div style='float: right'>HOBBY'IT 에서 기록하세요!</div>
         </div>
       </div>
     </v-carousel-item>
