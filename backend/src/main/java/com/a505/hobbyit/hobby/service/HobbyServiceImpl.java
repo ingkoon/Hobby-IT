@@ -128,7 +128,7 @@ public class HobbyServiceImpl implements HobbyService{
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId) {
         Hobby hobby = readHobby(hobbyId);
         List<HobbyMemberResponse> responses = new ArrayList<>();
-        List<HobbyMember> members = hobby.getHobbyMembers();
+        List<HobbyMember> members = hobbyMemberRepository.findByHobbyId(hobby);
 
         for (HobbyMember member : members) {
             responses.add(new HobbyMemberResponse().toEntity(member));
