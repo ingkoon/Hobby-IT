@@ -66,6 +66,7 @@
             style='margin:0 10px; width:350px;'
             variant='underlined'
           ></v-text-field>
+          <div id='checknickname' style='font-size: 12px; color: red; visibility:hidden'>! 중복된 닉네임입니다.</div>
         </div>
         <div>
           <v-textarea
@@ -82,7 +83,7 @@
             variant='outlined'
           ></v-textarea>
         </div>
-        <div>
+        <div class="pw">
           <v-text-field
             v-model='password'
             color='white'
@@ -92,7 +93,7 @@
             variant='underlined'
           ></v-text-field>
         </div>
-        <div>
+        <div class="pw">
           <v-text-field
             v-model='checkpassword'
             color='white'
@@ -101,8 +102,8 @@
             type='password'
             variant='underlined'
           ></v-text-field>
+          <div id='checkpwd' style='font-size: 12px; color: red; visibility:hidden'>! 입력한 비밀번호가 일치하지 않습니다.</div>
         </div>
-        <div id='checkpwd' style='font-size: 12px; color: red; visibility:hidden'>! 입력한 비밀번호가 일치하지 않습니다.</div>
         <div
           style='display: flex; justify-content: center; align-items: center; text-align: center; margin-left: 270px;'>
           <div style='font-size: 16px; margin: 0px 0px 0px 0px; text-align: right;'>
@@ -152,6 +153,7 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      const checknickname = document.getElementById('checknickname')
       const checkpwd = document.getElementById('checkpwd')
       if (this.password !== this.checkpassword) {
         checkpwd.style.visibility = 'visible'
@@ -174,8 +176,14 @@ export default {
           const res = await updateMyPage(formData);
           this.$emit('updateUserInfo', data);
           this.$emit('afterUpdateSuccess')
-        } catch (e) {
-          console.error(e);
+        } catch (err) {
+          console.error(err);
+          if(err.response.data.message == '중복된 닉네임입니다.') {
+            checknickname.innerText = "! 중복된 닉네임입니다."
+            checknickname.style.visibility = 'visible'
+          } else {
+            checknickname.style.visibility = 'hidden'
+          }
         }
       }
     },
@@ -236,5 +244,16 @@ div.v-list.v-theme--light.v-list--density-default.v-list--one-line {
   font-family: linefont;
 }
 
+#checknickname, 
+#checkpwd {
+  text-align: start;
+  margin-left: 10px;
+  margin-top: -19px;
+  margin-bottom: 13px;
+}
+
+.pw {
+  height: 60px;
+}
 
 </style>
