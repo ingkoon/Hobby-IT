@@ -278,9 +278,9 @@ Repository
       - 3주차 (23.01.25 ~ 23.01.27)
     ![week3](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week3.png)
       - 4주차 (23.01.30 ~ 23.02.03)
-    ![week4](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week4.png)
+    ![week4](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week4.png)
       - 5주차 (23.02.06 ~ 23.02.10)
-    ![week5](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/jira/번다운_차트_week5.png)
+    ![week5](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week5.png)
       - 6주차 (23.02.13 ~ 23.02.17)
   
     </div>
