@@ -109,6 +109,6 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> overCapacityException(final RuntimeException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         log.info(e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }

@@ -1,6 +1,7 @@
 package com.a505.hobbyit.hobbymember.domain;
 
 import com.a505.hobbyit.article.dto.OwnHobbyResponse;
+import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.hobbymember.enums.HobbyMemberPrivilege;
 import com.a505.hobbyit.member.domain.Member;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,5 +38,13 @@ public class HobbyMemberQRepositoryImpl implements HobbyMemberQRepository {
         queryFactory.delete(hobbyMember)
                 .where(hobbyMember.id.gt(hobbyMemberId)).execute();
         em.flush();
+    }
+
+    @Override
+    public List<HobbyMember> findByHobbyId(Hobby hobby) {
+        return queryFactory.selectFrom(hobbyMember)
+                .where(hobbyMember.hobby.eq(hobby))
+                .orderBy(hobbyMember.privilege.desc(), hobbyMember.member.nickname.asc())
+                .fetch();
     }
 }
