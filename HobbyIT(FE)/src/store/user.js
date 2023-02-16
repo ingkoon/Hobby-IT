@@ -36,6 +36,12 @@ export const useUserStore = defineStore({
     setUserHobbyList(list) {
       this.userHobbyList = list;
     },
+    clearUserInfo(){
+      this.setUserNickname(null)
+      this.setUserEmail(null)
+      this.setAccessToken(null)
+      localStorage.removeItem('refreshToken')
+    },
     afterSignup(data) {
       const { email, nickname } = data;
       this.setUserEmail(email);

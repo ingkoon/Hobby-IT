@@ -122,7 +122,7 @@ export default {
       });
 
       const line = document.getElementById('line');
-      line.setAttribute('style', 'display:none');
+      line.style.display = 'none';
     },
 
     async send(){

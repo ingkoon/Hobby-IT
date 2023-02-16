@@ -382,6 +382,7 @@ export default {
       // }
   
       try {
+        console.log(this.lastnum)
         const { data } = await getGroupArticleList(this.groupid, this.lastnum)
         console.log(data)
         for(let i = 0; i < data.content.length; i++){
