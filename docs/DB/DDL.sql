@@ -47,6 +47,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `hobby_it`.`article` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `member_id` BIGINT NOT NULL,
+  `hobby_id` BIGINT NOT NULL,
   `header` VARCHAR(16) NOT NULL CHECK(`header` IN ('RECRUITMENT', 'MEETUP')),
   `title` VARCHAR(128) NOT NULL,
   `content` VARCHAR(512) NOT NULL,
@@ -54,10 +55,16 @@ CREATE TABLE IF NOT EXISTS `hobby_it`.`article` (
   `reg_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `chg_dt` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `FKcfdd1p99rw06ec5o5tgfitslm` (`member_id` ASC) VISIBLE,
-  CONSTRAINT `FKcfdd1p99rw06ec5o5tgfitslm`
+  INDEX `fk_article_member1_idx` (`member_id` ASC) VISIBLE,
+  INDEX `fk_article_hobby1_idx` (`hobby_id` ASC) VISIBLE,
+  CONSTRAINT `fk_article_member1_idx`
     FOREIGN KEY (`member_id`)
     REFERENCES `hobby_it`.`member` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_article_hobby1_idx`    
+    FOREIGN KEY (`hobby_id`)
+    REFERENCES `hobby_it`.`hobby` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -170,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `hobby_it`.`hobby_member` (
   `hobby_id` BIGINT NOT NULL,
   `state` VARCHAR(16) NOT NULL CHECK(`state` IN ('ACTIVE', 'RESIGNED', 'KICKED')) DEFAULT 'ACTIVE',
   `privilege` VARCHAR(16) NOT NULL CHECK(`privilege` IN ('OWNER', 'MANAGER', 'GENERAL')) DEFAULT 'GENERAL',
+  `postit_reg_dt` DATETIME NULL DEFAULT NULL,
   `reg_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `chg_dt` DATETIME NOT NULL,
   `resd_dt` DATETIME NULL DEFAULT NULL,
@@ -199,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `hobby_it`.`hobby_postit` (
   `hobby_id` BIGINT NOT NULL,
   `member_id` BIGINT NOT NULL,
   `img_url` VARCHAR(255) NOT NULL,
-  `reg_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reg_dt` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `FKh915heilkj6vqg9ok842k7abs` (`hobby_id` ASC) VISIBLE,
   INDEX `FK1gpbmbgtd2j24s4t6vk2u0oi8` (`member_id` ASC) VISIBLE,
@@ -353,10 +361,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `hobby_it`.`hobby_postit_record` (
   `hobby_id` BIGINT NOT NULL,
-  `year` INT NOT NULL,
-  `month` INT NOT NULL,
-  `day` INT NOT NULL,
-  PRIMARY KEY (`hobby_id`, `year`, `month`, `day`),
+  `reg_dt` DATE NOT NULL,
+  PRIMARY KEY (`hobby_id`, `reg_dt`),
   CONSTRAINT `fk_hobby_postit_record_hobby_it1`
     FOREIGN KEY (`hobby_id`)
     REFERENCES `hobby_it`.`hobby` (`id`)
@@ -368,3 +374,4 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- use hobby_it;
