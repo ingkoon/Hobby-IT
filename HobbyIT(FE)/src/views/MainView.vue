@@ -16,7 +16,7 @@
       <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
         <div style='align-self: center; width: 100%'>
           <div>
-            관심사는 같은<br />
+            관심사가 같은<br />
             다양한 사람들을
           </div>
 
@@ -96,11 +96,7 @@
   <div style="height: 30px;"></div>
 
   <h3>당신이 참여중인 HOBBY</h3>
-  
-  <!-- <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/> -->
-  <participate-group v-if="catelist.length > 0" :hobbylist="catelist"/>
-  
-  <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
+  <participate-group v-if="participatinglist.length > 0" :hobbylist="participatinglist"/>
   <main1 v-else/>
 
   <h3>오늘의 HOBBY 추천</h3>
@@ -119,12 +115,17 @@ import Main2 from '@/components/no-content/Main2.vue';
 import Main3 from '@/components/no-content/Main3.vue';
 import Main4 from '@/components/no-content/Main4.vue';
 
-import { getHobbyList } from '@/api/hobby';
+import { useUserStore } from '@/store/user';
+import { getParticipatingGroup } from '@/api/member';
 import { getPopularHobbyList } from '@/api/hobby';
 import { getFreshHobbyList, searchHobby, searchNameHobby } from '@/api/hobby';
 
 export default {
   components: { ParticipateGroup, Main1, Main2, Main3, Main4},
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
+  },
   data() {
     return {
       model: '전체',
@@ -143,7 +144,7 @@ export default {
         '여행',
         '요리',
       ],
-      hobbylist : [],
+      participatinglist : [],
       popularlist : [],
       newlist : [],
       keyword: '',
@@ -155,10 +156,10 @@ export default {
     };
   },
   methods : {
-    async getHobby() { // 내 모임 리스트 받아오기
+    async getParticipatingHobby() { // 내 모임 리스트 받아오기
       try {
-        const { data } = await getHobbyList();
-        this.hobbylist = data
+        const { data } = await getParticipatingGroup(this.userStore.getUserNickname);
+        this.participatinglist = data
       } catch (e) {
         console.log("내 리스트 가져오기 실패 : ", e.message);
       }
@@ -210,7 +211,7 @@ export default {
     }
   },
   created() {
-    this.getHobby()
+    this.getParticipatingHobby()
     this.getPopularHobby()
     this.getNewHobby()
   },
