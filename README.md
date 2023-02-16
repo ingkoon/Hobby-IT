@@ -66,13 +66,13 @@ SSAFY 8기 2학기 공통 프로젝트
 ![architecture](docs/img/architecture.png)
 
 ## ✔️ 주요 기능
-### 1) JWT 토큰과 Spring Security 로그인 및 Redis 저장소 활용
-- Redis 저장소를 활용해 메모리상에서 빠르게 토큰을 검사하여 회원 정보를 조회
-
-### 2) 모임 구성원 간의 화상 통화와 채팅 기능 - WebRTC
+### 1) 모임 구성원 간의 화상 통화와 채팅 기능 - WebRTC
 - WebRTC 기술을 사용하여, 웹상에서 빠른 속도로 화상 통화와 채팅이 가능
 - 개인 카메라와 오디오 설정
 - 화상 통화 도중에도 캔버스 페인팅 가능
+
+### 2) JWT 토큰과 Spring Security 로그인 및 Redis 저장소 활용
+- Redis 저장소를 활용해 메모리상에서 빠르게 토큰을 검사하여 회원 정보를 조회
 
 ### 3) 모임 관리자의 가입 신청 회원 및 모임 활동 관리
 - 모임을 처음 생성한 사람은 해당 모임의 소유자가 됨
@@ -86,6 +86,7 @@ SSAFY 8기 2학기 공통 프로젝트
 - 하루에 한 번 캔버스 다이어리 작성
 - 하루 전 날짜의 작성일을 가진 방명록들만 조회 가능
 - 모임 활동에 대한 기대와 관심, 동기 부여를 위해 익일부터 조회할 수 있도록 설정
+![sample_canvas.png](/docs/img/sample_canvas.png)
 
 ### 6) MZ스러운 디자인과 친절한 이용 가이드
 - GSAP 애니메이션 효과와 다크모드 디자인, 짙은 보랏빛 컬러
@@ -100,17 +101,16 @@ SSAFY 8기 2학기 공통 프로젝트
 ### 2) JWT 토큰과 Spring Security 로그인 및 Redis 저장소 활용
 - JWT 토큰을 통해 사용자 정보를 암호화하여 보안성을 높임
 - Spring Security를 통해 로그인한 사용자의 정보를 편하게 인가 받음
-- Redis 저장소를 활용해 메모리상에서 빠르게 토큰을 검사하여 회원 정보를 조회
 - Redis 저장소에 key-value 형태로 memberId-RefreshToken 정보를 저장함
+- 메모리상에서 빠르게 토큰을 검사하여 회원 정보를 조회
 
-### 3) '무한 스크롤'과 '다이나믹 스크롤'을 통한 UX
-
-### 4) 캔버스 페인팅
+### 3) canvas 페인팅
+- 바닐라 자바스크립트에 canvas API를 이용
+- 웹 소켓 기술을 활용하여 같은 세션에 있는 사용자에게 그림판을 공유할 수 있는 기능
 
 ## ✔️ 프로젝트 파일 구조
 
 ## ✔️ 협업 툴
-
 - GitLab
 - Notion
 - Figma
@@ -167,12 +167,12 @@ SSAFY 8기 2학기 공통 프로젝트
 - 요구사항 정의서
 - 기능 정의서
 - API 명세서
-- 와이어 프레임(https://www.figma.com/file/mKMpSGZU6zQK7NP3aRWG8O/%EC%9C%A0%EC%BE%8C%ED%95%9C%EB%B0%98%EB%9E%80-Hobby'It?node-id=0%3A1&t=GyGk1I5SxVuR7l80-0)
-- ![ERD](docs/img/ERD.png)
+- [와이어 프레임](https://www.figma.com/file/mKMpSGZU6zQK7NP3aRWG8O/%EC%9C%A0%EC%BE%8C%ED%95%9C%EB%B0%98%EB%9E%80-Hobby'It?node-id=0%3A1&t=WKgF5Q8oLOynJk9c-1)
+- [ERD](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/img/ERD.png)
 
 ## ✔️ 프로젝트 결과물
 - 포팅메뉴얼
-- 중간발표 자료
+- [중간발표 자료](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/서울_5반_A505_중간발표자료.pptx)
 - 최종 발표 자료
 
 ## 👪 HOBBY'IT 서비스 화면
