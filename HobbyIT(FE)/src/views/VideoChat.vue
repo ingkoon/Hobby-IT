@@ -32,18 +32,20 @@
           <v-row
             id="video-container"
             style="
-              height: 757px;
-              width: 900px;
-              margin-right: 0;
-              margin: 0;
+              height: 600px;
+              width: 1000px;
+              display: flex;
               align-items: center;
               justify-content: center;
             "
           >
-            <user-video :stream-manager="publisher" />
-            <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
-              <!--            추가 바람-->
-            </user-video>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center">
+
+              <user-video :stream-manager="publisher" :besize="subscribers.length"/>
+              <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" :besize="subscribers.length">
+  
+              </user-video>
+            </div>
           </v-row>
         </v-col>
         <v-col id="rightSidebar" :style="{ height: computedHeight + 'px' }">
@@ -417,7 +419,7 @@ export default {
   top: 59px;
   right: 0;
   background-color: #0e0f28;
-  width: 483px;
+  width: 350px;
   padding: 0;
   margin: 0;
   border-radius: 50px 0 0 0;

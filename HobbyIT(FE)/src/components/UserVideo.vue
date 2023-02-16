@@ -1,6 +1,10 @@
 <template>
-  <div v-if='streamManager' class='video-container'>
-    <ov-video :stream-manager='streamManager' />
+  <div v-if='streamManager' class='video-container' style="">
+    <ov-video :stream-manager='streamManager'
+      :style="
+        besize > 3
+          ? (besize > 5 ? 'width:180px; height: 120px; margin : 10px 20px' : 'width:240px; height: 160px; margin : 10px 20px' )
+          : 'width:360px; height: 240px;'" />
     <p class='video-caption' style='color: white; text-align: center'>{{ clientData }}</p>
   </div>
 </template>
@@ -15,6 +19,7 @@ export default {
   },
   props: {
     streamManager: Object,
+    besize : Number,
   },
   computed: {
     clientData() {
