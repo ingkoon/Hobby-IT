@@ -1,32 +1,32 @@
 <template>
-  <v-app-bar flat style='background-color: #0e0f28'>
+  <v-app-bar flat style="background-color: #0e0f28">
     <v-app-bar-title>
-      <router-link style='display: flex; align-content: center; width:10px;' to='/'>
-        <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
-        <span class='lo' style='font-family: logofont'>HOBBY'</span>
-        <span class='go' style='color: #8947e2; font-family: logofont'>IT</span>
+      <router-link style="display: flex; align-content: center; width: 10px" to="/">
+        <img src="/assets/HBLOGO.svg" style="width: 30px; margin-right: 10px" />
+        <span class="lo" style="font-family: logofont">HOBBY'</span>
+        <span class="go" style="color: #8947e2; font-family: logofont">IT</span>
       </router-link>
     </v-app-bar-title>
 
-    <div id='nav' class='black-han-sans' style="margin-top: 5px;">
-      <router-link to='/about'><span class='right' style='font-size: 24px;'>ABOUT</span></router-link>
-      <router-link to='/main'><span class='bottom' style='font-size: 24px;'>JOIN</span></router-link>
-      <router-link to='/promo'><span class='left' style='font-size: 24px;'>PROMO</span></router-link>
+    <div id="nav" class="black-han-sans" style="margin-top: 5px">
+      <router-link to="/about"><span class="right" style="font-size: 24px">ABOUT</span></router-link>
+      <router-link to="/main"><span class="bottom" style="font-size: 24px">JOIN</span></router-link>
+      <router-link to="/promo"><span class="left" style="font-size: 24px">PROMO</span></router-link>
     </div>
 
-    <span class='logbtn' v-if='isLoggedIn' style="margin-top: 5px;">
-      <v-icon color='blue-lighten-2' icon='mdi-account-circle' style='margin-right: 10px'></v-icon>
-      <router-link :to='`/mypage/${nickname}`'>
-        <span class='logid' style='font-family: linefontbold; margin-top: 15px;'>{{ userStore.userNickname }}</span>
+    <span v-if="isLoggedIn" class="logbtn" style="margin-top: 5px">
+      <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
+      <router-link :to="`/mypage/${nickname}`">
+        <span class="logid" style="font-family: linefontbold; margin-top: 15px">{{ userStore.userNickname }}</span>
         님, 안녕하세요!
       </router-link>
-      <v-btn color='white' rounded='pill' style='background-color: #8947e2; margin-top: 0px;' @click='handleLogout'>
-        <span class="logout" style="margin-top: 4px;">logout</span>
+      <v-btn color="white" rounded="pill" style="background-color: #8947e2; margin-top: 0px" @click="handleLogout">
+        <span class="logout" style="margin-top: 4px">logout</span>
       </v-btn>
     </span>
-    <div v-else style='min-width: 324px; display: flex; justify-content: flex-end'>
-      <v-btn color='white' rounded='pill' style='background-color: #8947e2; display: flex' @click='handleGoLoginPage'>
-        <span class="login" style="margin-top: 4px;">login</span>
+    <div v-else style="min-width: 324px; display: flex; justify-content: flex-end">
+      <v-btn color="white" rounded="pill" style="background-color: #8947e2; display: flex" @click="handleGoLoginPage">
+        <span class="login" style="margin-top: 4px">login</span>
       </v-btn>
     </div>
   </v-app-bar>
@@ -59,7 +59,8 @@ export default {
     async handleLogout() {
       try {
         const res = await memberLogout();
-        this.userStore.clearUserInfo()
+        this.userStore.clearUserInfo();
+        this.$router.push({ name: 'Home' });
       } catch (e) {
         console.error(e);
       }
@@ -92,7 +93,7 @@ a {
   width: 50%;
   margin-right: 30px;
 
-  background-color: #0E0F28;
+  background-color: #0e0f28;
 }
 
 span:not(.lo, .go, .logbtn, .logid, .login, .logout) {
@@ -113,13 +114,11 @@ span:hover:not(.lo, .go, .logbtn, .logid, .login, .logout) {
 .left {
   background-position: 0% 0%;
   background-size: 0% 100%;
-
 }
 
 .bottom {
   background-position: 0% 100%;
   background-size: 100% 0%;
-
 }
 
 .right {
@@ -135,7 +134,7 @@ button {
 }
 
 .v-toolbar-title__placeholder {
-  width : 150px;
+  width: 150px;
 }
 </style>
 

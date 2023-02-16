@@ -146,6 +146,7 @@
         <v-btn
           v-if="groupinfo.hobbyMemberId === null"
           id="registerbtn"
+          :disabled="isGroupFull"
           style="position: absolute; left: 37%; top: 100px"
           @click="openregimodal"
         >
@@ -188,7 +189,6 @@
         </div>
 
         <div id="canvasdialog" style="text-align: center">
-          <!-- 방명록 생성 모달 -->
           <v-btn color="white" style="margin-top: 40px">
             <div style="display: flex; flex-direction: column; align-items: center">
               <v-icon color="white" icon="mdi-calendar-plus-outline"></v-icon>
@@ -302,6 +302,11 @@ export default {
       //     return (i%4 === num : true ? false)});
       // }}
     },
+    isGroupFull() {
+      const maxParticipants = this.groupinfo.maxParticipantsNum;
+      const currentParticipants = this.groupinfo.participantsNum;
+      return maxParticipants === currentParticipants;
+    },
   },
 
   watch: {
@@ -327,14 +332,31 @@ export default {
       // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
       this.$router.push({ name: 'VideoChat', params: { id: this.groupid } });
     },
-    closeAddedModal() {
+    async closeAddedModal() {
       this.canvasmodal = false;
       this.getcanvasdate(new Date())
     },
     openaddarticle() {
       this.addarticlemodal = true;
     },
-    closeaddarticle() {
+    async closeaddarticle() {
+      this.lastnum = '';
+      this.articles = [];
+      try {
+        const { data } = await getGroupArticleList(this.groupid, this.lastnum);
+        for (let i = 0; i < data.content.length; i++) {
+          this.articles.push(data.content[i]);
+        }
+        if (data.content.length > 0) {
+          console.log(data.content.length - 1);
+          this.lastnum = data.content[data.content.length - 1].id;
+          if (data.last) {
+            this.morearticle = false;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
       this.addarticlemodal = false;
     },
     openmodal(id) {
@@ -365,7 +387,6 @@ export default {
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
-        console.log(data, 'hahaha');
         this.groupinfo = data;
         this.title = this.groupinfo.name;
         this.content = this.groupinfo.intro;
@@ -384,17 +405,13 @@ export default {
         }
       }
     },
-    // only for test
     async initArticles() {
       try {
-        console.log(this.lastnum);
         const { data } = await getGroupArticleList(this.groupid, this.lastnum);
-        console.log(data);
         for (let i = 0; i < data.content.length; i++) {
           this.articles.push(data.content[i]);
         }
         if (data.content.length > 0) {
-          console.log(data.content.length - 1);
           this.lastnum = data.content[data.content.length - 1].id;
           if (data.last) {
             this.morearticle = false;
@@ -418,7 +435,6 @@ export default {
     },
     closeFreeModal() {
       this.freemodal = false;
-      console.log('hahahahahaha');
       this.$router.push({ path: this.$route.path });
     },
     closeunfreemodal() {
@@ -431,7 +447,6 @@ export default {
           message: '',
         };
         const { data } = await requestGroupJoin(this.groupid, inputdata);
-        console.log(data);
       } catch (e) {
         console.error(e);
       }
@@ -443,7 +458,6 @@ export default {
           message: msg,
         };
         const { data } = await requestGroupJoin(this.groupid, inputdata);
-        console.log(data);
         this.closeunfreemodal();
       } catch (e) {
         console.error(e);
@@ -468,7 +482,6 @@ export default {
     getImageFiles(e) {
       const files = e.currentTarget.files;
       this.file = files[0];
-      console.log(typeof files, files);
       const file = files[0];
 
       // if (!file.type.match("image/.*")) {
@@ -491,14 +504,11 @@ export default {
           max_participants_num: this.groupinfo.maxParticipantsNum,
         };
 
-        console.log(inputdata);
-
         const formData = new FormData();
         formData.append('request', new Blob([JSON.stringify(inputdata)], { type: 'application/json' }));
         formData.append('multipartFile', new Blob([JSON.stringify(this.file)], { type: 'application/json' }));
 
         const { data } = await updateGroupInfo(this.groupid, formData);
-        console.log(data);
       } catch (e) {
         console.log(e);
       }
@@ -507,7 +517,6 @@ export default {
     async exitgroup() {
       try {
         const { data } = await resignGroup(this.groupid);
-        console.log(data);
         this.exitgroupmodal = false;
         this.$router.push({ name: 'Main' });
       } catch (e) {
@@ -518,7 +527,6 @@ export default {
     async deletegroup() {
       try {
         const { data } = await deleteGroup(this.groupid);
-        console.log(data);
         this.deletegroupmodal = false;
         this.$router.push({ name: 'Main' });
       } catch (e) {
@@ -547,7 +555,6 @@ export default {
         }
         const inputdate = year + '-' + month + '-' + day;
         const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate);
-        console.log(data);
         for (let i = 0; i < data.regDtList.length; i++) {
           const tmpdate = data.regDtList[i].split('-');
           const tmp = {
@@ -557,7 +564,6 @@ export default {
           };
           this.attrs.push(tmp);
         }
-        console.log(this.attrs);
       } catch (e) {
         console.log(e);
       }
