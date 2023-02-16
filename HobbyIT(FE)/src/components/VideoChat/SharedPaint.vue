@@ -5,7 +5,7 @@
     <v-card style='width: 650px; height: 500px; background-color: #0e0f28'>
       <div style='color: white; display: flex; justify-content: space-between; margin: 10px 5px'>
         <span id='groupname'>To. John, 나 여행가고싶어</span>
-        <v-icon icon='mdi-close' size='small' @click='closemodal'></v-icon>
+        <v-icon icon='mdi-close' size='small' @click='closeModal'></v-icon>
       </div>
       <div style='display: flex'>
         <canvas id='canvas' class='new-cursor' height='500' style='background-color: white' width='500'></canvas>
@@ -110,7 +110,6 @@ export default {
 
     var canvas = document.getElementById('canvas');
 
-
     // canvas.setAttribute('style', 'background-color:' + this.background + ';');
 
     var ctx = canvas.getContext('2d');
@@ -203,24 +202,21 @@ export default {
     }
 
     function mouseclick() {
-      
       ctx.strokeStyle = 'white';
-
     }
 
     function mousedouble() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = 'black';
-      console.log(canvas.toDataURL());
-      tempThis.$emit('sendCanvas', canvas.toDataURL().split(',')[1]);
+      tempThis.$emit('clearCanvas');
     }
   },
   methods: {
-    closemodal() {
-      this.$emit('close');
+    closeModal() {
+      this.$emit('closeCanvas');
     },
     colorChange(color) {
-      // console.log(color);
+
       this.ctx.strokeStyle = color;
     },
     clearAll() {

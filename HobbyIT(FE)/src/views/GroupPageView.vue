@@ -1,81 +1,84 @@
 <template>
-  <div style='margin: 100px 13% 0'>
+  <div style="margin: 100px 13% 0">
     <h3>{{ groupinfo.name }}</h3>
-    <div id='group'>
+    <div id="group">
       <!-- 왼쪽 모임 정보 탭 -->
-      <div id='groupinfo'>
-        <img id='groupimg' :src='groupinfo.img' />
-        <div id='title'>
-          <div v-if='!inputmode'>
+      <div id="groupinfo">
+        <img id="groupimg" :src="groupinfo.img" />
+        <div id="title">
+          <div v-if="!inputmode">
             {{ groupinfo.name }}
           </div>
           <div v-else>
-            <input v-model='title' type='text' />
+            <input v-model="title" type="text" />
           </div>
         </div>
-        <div id='content'>
-          <div v-if='!inputmode'>
+        <div id="content">
+          <div v-if="!inputmode">
             {{ groupinfo.intro }}
           </div>
           <div v-else>
-            <textarea v-model='content'></textarea>
+            <textarea v-model="content"></textarea>
           </div>
-          <div style='margin-top:10px'>
-            #{{ groupinfo.category }}
-          </div>
-          <div style='margin-top: 20px'>
-            <v-icon color='#FA8EB6' icon='mdi-account-multiple' size='small'></v-icon>
+          <div style="margin-top: 10px">#{{ groupinfo.category }}</div>
+          <div style="margin-top: 20px">
+            <v-icon color="#FA8EB6" icon="mdi-account-multiple" size="small"></v-icon>
             {{ groupinfo.participantsNum }} / {{ groupinfo.maxParticipantsNum }}
 
             <v-icon
-v-if="groupinfo.privilege !== 'GENERAL'" icon='mdi-pencil' size='small' style='float: right;'
-                    @click='changeInfo'></v-icon>
+              v-if="groupinfo.privilege !== 'GENERAL'"
+              icon="mdi-pencil"
+              size="small"
+              style="float: right"
+              @click="changeInfo"
+            ></v-icon>
           </div>
-          <input id='inputimg' accept='image/*' style='display: none;' type='file'>
+          <input id="inputimg" accept="image/*" style="display: none" type="file" />
         </div>
 
-        <div v-if='groupinfo.hobbyMemberId !== null' style='display: flex; justify-content: space-around'>
+        <div v-if="groupinfo.hobbyMemberId !== null" style="display: flex; justify-content: space-around">
           <!-- 글작성 모달 -->
-          <v-btn @click="openaddarticle" color='#2B146C' style='color: white; height: 44px; width: 47%'>
-            <v-icon icon='mdi-plus-circle-outline'></v-icon>
+          <v-btn color="#2B146C" style="color: white; height: 44px; width: 47%" @click="openaddarticle">
+            <v-icon icon="mdi-plus-circle-outline"></v-icon>
           </v-btn>
 
-          <v-dialog v-model='addarticlemodal'>
-            <article-add @close='closeaddarticle' :group="[groupid, groupinfo.name]"/>
+          <v-dialog v-model="addarticlemodal">
+            <article-add :group="[groupid, groupinfo.name]" @close="closeaddarticle" />
           </v-dialog>
 
           <!-- 화상채팅 버튼 -->
-          <v-btn color='#2B146C' style='color:white; height: 44px; width: 47%' @click='onclickVideoChat'>
-            <v-icon icon='mdi-video-account'></v-icon>
+          <v-btn color="#2B146C" style="color: white; height: 44px; width: 47%" @click="onclickVideoChat">
+            <v-icon icon="mdi-video-account"></v-icon>
           </v-btn>
         </div>
 
         <!-- 공지작성 -->
         <div v-if="groupinfo.privilege === 'OWNER'">
-          <v-btn style='width:100%; color:white; background-color: #2b146c; margin: 15px 0;' @click='openaddnotice'> 공지
-            작성
+          <v-btn style="width: 100%; color: white; background-color: #2b146c; margin: 15px 0" @click="openaddnotice">
+            공지 작성
           </v-btn>
         </div>
 
         <!-- 그룹나가기 -->
         <div
-v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
-             style='text-align: right; font-family: linefont; margin-top: 20px;'>
-          <v-btn style='background-color: #00000000; color: white;' @click='openexitgroup'>모임 탈퇴</v-btn>
+          v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
+          style="text-align: right; font-family: linefont; margin-top: 20px"
+        >
+          <v-btn style="background-color: #00000000; color: white" @click="openexitgroup">모임 탈퇴</v-btn>
         </div>
         <!-- 그룹삭제 -->
-        <div v-if="groupinfo.privilege === 'OWNER'" style='text-align: right; font-family: linefont; margin-top: 20px;'>
-          <v-btn style='background-color: #00000000; color: white;' @click='opendeletegroup'>모임 삭제</v-btn>
+        <div v-if="groupinfo.privilege === 'OWNER'" style="text-align: right; font-family: linefont; margin-top: 20px">
+          <v-btn style="background-color: #00000000; color: white" @click="opendeletegroup">모임 삭제</v-btn>
         </div>
 
-        <v-dialog v-model='addnoticemodal'>
-          <add-notice :groupid='groupid' @close='closeaddnotice' />
+        <v-dialog v-model="addnoticemodal">
+          <add-notice :groupid="groupid" @close="closeaddnotice" />
         </v-dialog>
-        <v-dialog v-model='exitgroupmodal'>
-          <exit-group :groupname='groupinfo.name' @close='closeexitgroup' @send='exitgroup' />
+        <v-dialog v-model="exitgroupmodal">
+          <exit-group :groupname="groupinfo.name" @close="closeexitgroup" @send="exitgroup" />
         </v-dialog>
-        <v-dialog v-model='deletegroupmodal'>
-          <del-group @close='closedeletegroup' @send='deletegroup' />
+        <v-dialog v-model="deletegroupmodal">
+          <del-group @close="closedeletegroup" @send="deletegroup" />
         </v-dialog>
 
         <!-- 검색 -->
@@ -88,119 +91,121 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
         ></v-text-field> -->
       </div>
       <!-- 오른쪽 게시판 탭 -->
-      <div id='board' style='position:relative'>
-        <v-card id='tabcard' :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''"
-                style='background-color: #00000000'>
-          <v-tabs v-model='tab' align-tabs='start' style='color: white; align-items: center; height: 57px'>
-            <v-tab value='board'>게시글</v-tab>
-            <v-tab value='notice'>공지사항</v-tab>
-            <v-tab value='memberlist'>회원목록</v-tab>
-            <v-tab v-if='groupinfo.hobbyMemberId!==null' value='memberregi'>가입신청</v-tab>
-            <div style='flex-grow: 1'>
-              <div style='float: right'>
-                <v-icon color='white' icon='mdi-calendar' style='padding: 35px' @click.stop='drawer = !drawer'></v-icon>
+      <div id="board" style="position: relative">
+        <v-card
+          id="tabcard"
+          :style="groupinfo.hobbyMemberId === null ? 'filter: blur(5px); -webkit-filter: blur(5px);' : ''"
+          style="background-color: #00000000"
+        >
+          <v-tabs v-model="tab" align-tabs="start" style="color: white; align-items: center; height: 57px">
+            <v-tab value="board">게시글</v-tab>
+            <v-tab value="notice">공지사항</v-tab>
+            <v-tab value="memberlist">회원목록</v-tab>
+            <v-tab v-if="groupinfo.hobbyMemberId !== null" value="memberregi">가입신청</v-tab>
+            <div style="flex-grow: 1">
+              <div style="float: right">
+                <v-icon color="white" icon="mdi-calendar" style="padding: 35px" @click.stop="drawer = !drawer"></v-icon>
               </div>
             </div>
           </v-tabs>
-          <hr style='margin-top: 0; border: 2px solid #fa8eb6' />
+          <hr style="margin-top: 0; border: 2px solid #fa8eb6" />
           <v-card-text>
-            <v-window v-model='tab'>
+            <v-window v-model="tab">
               <!-- 게시글 -->
-              <v-window-item id='boarditem' value='board'>
+              <v-window-item id="boarditem" value="board">
                 <v-container v-if="articles.length > 0">
                   <v-row>
-                    <v-col v-for='j in 4' :key='j' cols='12' sm='3'>
+                    <v-col v-for="j in 4" :key="j" cols="12" sm="3">
                       <article-item
-                        v-for='article in filteredArticles(j)'
-                        :key='article'
-                        :articleData='article'
-                        @click='openmodal(article.id)' />
+                        v-for="article in filteredArticles(j)"
+                        :key="article"
+                        :articleData="article"
+                        @click="openmodal(article.id)"
+                      />
                     </v-col>
                   </v-row>
                 </v-container>
               </v-window-item>
-              <v-window-item value='notice'>
+              <v-window-item value="notice">
                 <!-- 공지사항 -->
                 <group-notice :groupid="groupid" />
               </v-window-item>
 
-              <v-window-item value='memberlist'>
+              <v-window-item value="memberlist">
                 <!-- 회원목록 -->
                 <group-member :propdata='[groupid, groupinfo.privilege]'/>
               </v-window-item>
-              <v-window-item value='memberregi'>
+              <v-window-item value="memberregi">
                 <!-- 가입신청 -->
-                <group-regi :groupid='groupid' />
+                <group-regi :groupid="groupid" />
               </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
 
         <v-btn
-          v-if='groupinfo.hobbyMemberId===null' id='registerbtn' style='position: absolute; left:37%; top : 100px;'
-          @click='openregimodal'>
+          v-if="groupinfo.hobbyMemberId === null"
+          id="registerbtn"
+          style="position: absolute; left: 37%; top: 100px"
+          @click="openregimodal"
+        >
           가입 신청하기
         </v-btn>
-
       </div>
 
-      <v-dialog v-model='freemodal'>
-        <freeRegi :groupname='groupinfo.name' @close='closefreemodal' @send='closefreemodal' />
+      <v-dialog v-model="freemodal">
+        <freeRegi :groupname="groupinfo.name" @close="closeFreeModal" @send="closeFreeModal" />
       </v-dialog>
-      <v-dialog v-model='unfreemodal'>
-        <unfreeRegi @close='closeunfreemodal' @send='unfreeRegister' />
+      <v-dialog v-model="unfreemodal">
+        <unfreeRegi @close="closeunfreemodal" @send="unfreeRegister" />
       </v-dialog>
-      <v-dialog v-model='articlemodal'>
-        <article-modal @closearticle='closearticle' :info="[groupid, clickid, groupinfo.name]" />
+      <v-dialog v-model="articlemodal">
+        <article-modal :info="[groupid, clickid, groupinfo.name]" @closearticle="closearticle" />
       </v-dialog>
     </div>
 
     <!-- 방명록 사이드바 -->
     <v-navigation-drawer
-      v-model='drawer'
-      location='right'
-      style='width: 30%; background-color: #0e0f28; border-left: 5px solid #fa8eb6; position: fixed; top: 59px'
+      v-model="drawer"
+      location="right"
+      style="width: 30%; background-color: #0e0f28; border-left: 5px solid #fa8eb6; position: fixed; top: 59px"
       temporary
     >
       <div>
-        <v-list-item style='color: white'>
-          <div style='font-size: 40px; margin: 7px'>방명록</div>
-          <span style='font-size: 16px; margin-left: 10px'>오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
+        <v-list-item style="color: white">
+          <div style="font-size: 40px; margin: 7px">방명록</div>
+          <span style="font-size: 16px; margin-left: 10px">오늘 작성된 방명록들은 다음 날부터 열람 가능합니다</span>
         </v-list-item>
 
-        <div style='text-align: center; margin: 20px'>
+        <div style="text-align: center; margin: 20px">
           <v-date-picker
-            v-model='date'
-            :attributes='attrs'
-            :max-date='today'
-            color='purple'
-            style='background-color: #fbd3de; padding: 10px; width: 85%; height: 350px;'
-
+            v-model="date"
+            :attributes="attrs"
+            :max-date="today"
+            color="purple"
+            style="background-color: #fbd3de; padding: 10px; width: 85%; height: 350px"
           />
         </div>
-        <!-- @click="opencanvasmodal" -->
 
-        <div id='canvasdialog' style='text-align: center'>
+        <div id="canvasdialog" style="text-align: center">
           <!-- 방명록 생성 모달 -->
-          <v-btn color='white' style="margin-top:40px">
-            <div style='display: flex; flex-direction: column; align-items: center'>
-              <v-icon color='white' icon='mdi-calendar-plus-outline'></v-icon>
-              <span style='color: white; margin-top: 10px'>방명록<br />작성하기</span>
+          <v-btn color="white" style="margin-top: 40px">
+            <div style="display: flex; flex-direction: column; align-items: center">
+              <v-icon color="white" icon="mdi-calendar-plus-outline"></v-icon>
+              <span style="color: white; margin-top: 10px">방명록<br />작성하기</span>
             </div>
 
-            <v-dialog v-model='canvasmodal' activator='parent'>
-              <CanvasAdd :groupid='groupid' :groupname='groupinfo.name' @close='closeAddedModal' />
+            <v-dialog v-model="canvasmodal" activator="parent">
+              <CanvasAdd :groupid="groupid" :groupname="groupinfo.name" @close="closeAddedModal" />
             </v-dialog>
           </v-btn>
         </div>
       </div>
       <v-dialog v-model="getcanvasmodal">
-        <get-canvas @close="closecanvasmodal" :data="[date, groupid, groupinfo.name]"/>
+        <get-canvas :data="[date, groupid, groupinfo.name]" @close="closecanvasmodal" />
       </v-dialog>
-
     </v-navigation-drawer>
-    <InfiniteScrollObserver v-if='groupinfo.hobbyMemberId !== null' @infinite-scroll-trigger='loadData' />
-
+    <InfiniteScrollObserver v-if="groupinfo.hobbyMemberId !== null" @infinite-scroll-trigger="loadData" />
   </div>
 </template>
 
@@ -220,11 +225,18 @@ import exitGroup from '@/components/modals/GroupResign.vue';
 import delGroup from '@/components/modals/DelGroup.vue';
 import getCanvas from '@/components/modals/Canvas.vue';
 
-import { useUserStore } from '@/store/user'
-import { getGroupInfo, requestGroupJoin, updateGroupInfo,resignGroup, deleteGroup, getGroupArticleList, getGroupVisitorBookCreatedDate } from '@/api/hobby';
+import { useUserStore } from '@/store/user';
+import {
+  getGroupInfo,
+  requestGroupJoin,
+  updateGroupInfo,
+  resignGroup,
+  deleteGroup,
+  getGroupArticleList,
+  getGroupVisitorBookCreatedDate,
+} from '@/api/hobby';
 
 export default {
-
   components: {
     InfiniteScrollObserver,
     ArticleItem,
@@ -269,22 +281,22 @@ export default {
       articlemodal: false,
       groupinfo: [],
       articles: [],
-      groupid : 0,
-      freemodal : false,
-      unfreemodal : false,
-      addnoticemodal : false,
-      file : '',
-      exitgroupmodal : false,
-      deletegroupmodal : false,
-      lastnum : '',
-      morearticle : true,
-      clickid : 0,
-      getcanvasmodal : false,
+      groupid: 0,
+      freemodal: false,
+      unfreemodal: false,
+      addnoticemodal: false,
+      file: '',
+      exitgroupmodal: false,
+      deletegroupmodal: false,
+      lastnum: '',
+      morearticle: true,
+      clickid: 0,
+      getcanvasmodal: false,
     };
   },
   computed: {
     filteredArticles() {
-      return num => this.articles.filter((element, index) => (index % 4) + 1 === num ? true : false);
+      return num => this.articles.filter((element, index) => ((index % 4) + 1 === num ? true : false));
       // {
       //   return this.articles.filter((el, i) => {
       //     return (i%4 === num : true ? false)});
@@ -292,16 +304,16 @@ export default {
     },
   },
 
-  watch : {
-    date(newdate){
-      this.opencanvasmodal(newdate)
-    }
+  watch: {
+    date(newdate) {
+      this.opencanvasmodal(newdate);
+    },
   },
 
   created() {
     this.groupid = this.$route.params.id;
     this.getGroupInfo(this.$route.params.id);
-    this.getcanvasdate(new Date())
+    this.getcanvasdate(new Date());
   },
 
   methods: {
@@ -313,7 +325,7 @@ export default {
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
       // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
-      this.$router.push({name:'VideoChat', params:{id:this.groupid}})
+      this.$router.push({ name: 'VideoChat', params: { id: this.groupid } });
     },
     closeAddedModal() {
       this.canvasmodal = false;
@@ -327,7 +339,7 @@ export default {
     },
     openmodal(id) {
       this.articlemodal = true;
-      this.clickid = id
+      this.clickid = id;
     },
     closearticle() {
       this.articlemodal = false;
@@ -353,6 +365,7 @@ export default {
     async getGroupInfo(id) {
       try {
         const { data } = await getGroupInfo(id);
+        console.log(data, 'hahaha');
         this.groupinfo = data;
         this.title = this.groupinfo.name;
         this.content = this.groupinfo.intro;
@@ -373,29 +386,26 @@ export default {
     },
     // only for test
     async initArticles() {
-  
       try {
-        console.log(this.lastnum)
-        const { data } = await getGroupArticleList(this.groupid, this.lastnum)
-        console.log(data)
-        for(let i = 0; i < data.content.length; i++){
-          this.articles.push(data.content[i])
+        console.log(this.lastnum);
+        const { data } = await getGroupArticleList(this.groupid, this.lastnum);
+        console.log(data);
+        for (let i = 0; i < data.content.length; i++) {
+          this.articles.push(data.content[i]);
         }
-        if(data.content.length > 0){
-          console.log(data.content.length -1 )
-          this.lastnum = data.content[data.content.length -1 ].id
-          if(data.last) {
+        if (data.content.length > 0) {
+          console.log(data.content.length - 1);
+          this.lastnum = data.content[data.content.length - 1].id;
+          if (data.last) {
             this.morearticle = false;
           }
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e);
       }
     },
     loadData() {
-      if(this.morearticle)
-        this.initArticles();
+      if (this.morearticle) this.initArticles();
     },
     openregimodal() {
       if (this.groupinfo.freeRegistration === 'FREE') {
@@ -406,8 +416,10 @@ export default {
         this.unfreeRegister();
       }
     },
-    closefreemodal() {
+    closeFreeModal() {
       this.freemodal = false;
+      console.log('hahahahahaha');
+      this.$router.push({ path: this.$route.path });
     },
     closeunfreemodal() {
       this.unfreemodal = false;
@@ -423,7 +435,6 @@ export default {
       } catch (e) {
         console.error(e);
       }
-
     },
     // 비자유 가입
     async unfreeRegister(msg) {
@@ -437,7 +448,6 @@ export default {
       } catch (e) {
         console.error(e);
       }
-
     },
     changeInfo() {
       this.inputmode = !this.inputmode;
@@ -515,45 +525,43 @@ export default {
         console.log(e);
       }
     },
-    opencanvasmodal(){
-      this.getcanvasmodal = true
+    opencanvasmodal() {
+      this.getcanvasmodal = true;
     },
     closecanvasmodal() {
-      this.getcanvasmodal = false
+      this.getcanvasmodal = false;
     },
 
     //방명록 날짜 받기
-    async getcanvasdate(date){
+    async getcanvasdate(date) {
       try {
         // this.attrs = []
-        let year = date.getFullYear()
-        let month = date.getMonth()+1
-        if(month < 10){
-          month = '0'+String(month)
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        if (month < 10) {
+          month = '0' + String(month);
         }
-        let day = date.getDate()
-        if(day <10){
-          day = '0'+String(day)
+        let day = date.getDate();
+        if (day < 10) {
+          day = '0' + String(day);
         }
-        const inputdate = year + '-' + month + "-" + day
-        const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate)
+        const inputdate = year + '-' + month + '-' + day;
+        const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate);
         console.log(data);
-        for(let i=0;i<data.regDtList.length;i++){
-          const tmpdate = data.regDtList[i].split('-')
+        for (let i = 0; i < data.regDtList.length; i++) {
+          const tmpdate = data.regDtList[i].split('-');
           const tmp = {
-            key : 'visit',
-            dot : true,
-            dates: new Date(tmpdate[0], parseInt(tmpdate[1])-1, tmpdate[2])
-          }
-          this.attrs.push(tmp)
+            key: 'visit',
+            dot: true,
+            dates: new Date(tmpdate[0], parseInt(tmpdate[1]) - 1, tmpdate[2]),
+          };
+          this.attrs.push(tmp);
         }
-        console.log(this.attrs)
-      }
-      catch(e) {
+        console.log(this.attrs);
+      } catch (e) {
         console.log(e);
       }
-    }
-
+    },
   },
 };
 </script>
@@ -641,7 +649,7 @@ input {
   border: 1px solid white;
   border-radius: 10px;
   padding: 0 5px;
-  width: 100%
+  width: 100%;
 }
 
 textarea {

@@ -45,9 +45,11 @@
       style="margin:0; width:100%"
       variant="outlined"
     ></v-textarea>
+    
+    <div id='checkpromo'>! 제목과 본문은 필수 입력 내용입니다.</div>
 
     <div style="display: flex; align-items: center;">
-      <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right;">
+      <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right; cursor: pointer;" @click="donemodipromo">
         수정하기
       </div>
       <v-btn
@@ -88,17 +90,22 @@ export default {
       this.$emit('closemodipromo');
     },
     donemodipromo() {
+      const checkpromo = document.getElementById('checkpromo')
       const modidata = {
         header: this.getseltype(),
         title: this.modititle,
         content: this.modicontent,
       };
-
-      // console.log(this.getseltype());
-      console.log('수정한데이터'+modidata);
-      console.log('글id:'+this.articleinfo[0]);
-      this.$emit('donemodipromo', modidata, this.articleinfo[0]);
-      this.$emit('closemodipromo');
+      if(this.modititle == '' || this.modicontent == ''){
+        checkpromo.style.visibility = 'visible'
+      } else {
+        checkpromo.style.visibility = 'hidden'
+        // console.log(this.getseltype());
+        console.log('수정한데이터'+modidata);
+        console.log('글id:'+this.articleinfo[0]);
+        this.$emit('donemodipromo', modidata, this.articleinfo[0]);
+        this.$emit('closemodipromo');
+      }
     },
     // gethobbyid(){
     //   for (let index = 0; index < this.types.length; index++) {
@@ -156,6 +163,15 @@ v-textarea::-webkit-scrollbar-track {
 v-textarea::-webkit-scrollbar-thumb {
     background-color: #FA8EB6;
     border-radius: 100px;
+}
+
+#checkpromo {
+  font-size: 12px;
+  color: red;
+  visibility:hidden;
+  margin: -15px;
+  width: 100%;
+  text-align: left;
 }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <v-app id='app'>
-    <default-bar style='position: fixed' />
+  <v-app id="app">
+    <default-bar style="position: fixed" />
 
     <router-view />
   </v-app>
@@ -8,7 +8,6 @@
 
 <script>
 import DefaultBar from './AppBar.vue';
-// import DefaultView from './View.vue';
 import { useUserStore } from '@/store/user';
 import { reissueRefreshToken } from '@/api/common/interceptors';
 
@@ -16,7 +15,6 @@ export default {
   name: 'HomeDefault',
   components: {
     DefaultBar,
-    // DefaultView,
   },
   setup() {
     const userStore = useUserStore();
