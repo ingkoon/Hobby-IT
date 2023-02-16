@@ -198,7 +198,7 @@ export default {
 h3 {
   color: #ffffff;
   margin: 1% 0;
-  font-size: 48px;
+  font-size: 37px;
 }
 
 #search {
