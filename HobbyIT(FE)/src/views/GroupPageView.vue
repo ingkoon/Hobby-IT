@@ -133,7 +133,7 @@
 
               <v-window-item value="memberlist">
                 <!-- 회원목록 -->
-                <group-member :groupid="groupid" />
+                <group-member :propdata='[groupid, groupinfo.privilege]'/>
               </v-window-item>
               <v-window-item value="memberregi">
                 <!-- 가입신청 -->
@@ -334,6 +334,7 @@ export default {
     },
     async closeAddedModal() {
       this.canvasmodal = false;
+      this.getcanvasdate(new Date())
     },
     openaddarticle() {
       this.addarticlemodal = true;

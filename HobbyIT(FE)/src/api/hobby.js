@@ -174,8 +174,8 @@ export function deleteGroupNotice(hobby_id, notice_id) {
 
 // 42.모임 방명록 등록
 export function postGroupVisitorBook(hobby_id, date, data) {
-  return multipartInstance.post(`/${hobby_id}/postit/2023-02-12`, data);
-}  //DATE 꼬꼬꼬꼮ㄲㄲ꼬꼬꼬꼮 수정해야합니다!!!!!!!!!!!!!!!!
+  return multipartInstance.post(`/${hobby_id}/postit/${date}`, data);
+}
 
 
 // 43.모임 방명록 조회

@@ -1,6 +1,6 @@
 <template>
   <v-slide-group-item >
-    <v-card class="mx-auto" width="250px" style="background-color: #ffffff00; padding: 10px">
+    <v-card class="mx-auto" width="250px" style="background-color: #ffffff00; padding: 10px" @click="goToGroup(lst.id)">
       <div style="display: flex; position: relative">
         <v-img class="align-end text-white" height="250" :src="lst.imgUrl" cover>
         </v-img>
@@ -18,6 +18,11 @@
 export default {
   props : {
     lst : Object,
+  },
+  methods : {
+    goToGroup(id) { 
+      this.$router.push({name : 'GroupMainPage', params : {id}})
+    }
   }
 };
 </script>
