@@ -1,7 +1,8 @@
 <template>
   <div style="align-self: center">
     <v-card id="card" style="width: 800px; height: 560px">
-      <div
+    <!-- <v-card id="card" style="width: 800px; height: 560px"> -->
+    <div
         id="notopa"
         style="
           color: white; 
@@ -23,21 +24,22 @@
           </v-carousel>
         </div>
 
-        <div style="background-color: #0e0f28; color: white; width: 300px;">
+        <!-- 오른쪽 부분 -->
+        <div style="background-color: #0e0f28; color: white; width: 300px; height: 100%;">
           <div style="margin: 5px 10px; display: flex; justify-content: space-between; ">
-            <div>
+            <div style="margin-bottom: 15px;">
               <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
               {{ article.author }}
             </div>
-            <div style="text-align: right;">
+            <!-- <div style="text-align: right;">
               <v-icon color="white" icon="mdi-thumb-up" size="small"></v-icon>
               <div>
                 좋아요 {{ article.likes }}
               </div>
-            </div>
+            </div> -->
           </div>
 
-          <div style="display:flex; justify-content: space-between;">
+          <div style="display:flex; justify-content: space-between; margin: 0 10px 5px;">
             <div v-if="!changemode">{{ article.title }}</div>
             <div v-else>
               <input type="text" v-model="title" style="border: 1px solid white; color:white"/>  
@@ -77,14 +79,16 @@
               append-inner-icon="mdi-send-outline"
               color="#24B1D0"
               placeholder="댓글을 입력하세요"
-              style="margin:10px; align-self: center; font-size: 10px"
+              style="margin:10px 10px 0 10px; align-self: center; font-size: 10px"
               variant="outlined"
               @click:append-inner="sendreply"
             >
             </v-text-field>
           </div>
 
-          <div style="overflow:scroll; height: 500px;">
+
+          <!-- 댓글 -->
+          <div style="overflow:scroll; height: 300px;">
             <div v-for="lst in reply">
               <div style="margin: 10px">
                 <div style="display: flex; justify-content: space-between;">
@@ -93,16 +97,17 @@
                 </div>
   
 
-                <div v-if="lst.author !== userStore.userNickname || !replymode" >{{ lst.content }}</div>
-                <input v-model="inputreply" type="text" :name="`${lst.commentId}`" style="visibility: hidden; border:1px solid white; color:white; width: 100%;"/>
+                <div :name="`${lst.commentId}`" >{{ lst.content }}</div>
+                <input v-model="inputreply" type="text" :name="`${lst.commentId}`+'input'" style="display:none; border:1px solid white; color:white; width: 100%;"/>
       
                 <div v-if="lst.author === userStore.userNickname" style="text-align: right;">
-                  <div v-if="!replymode">
-                    <v-btn @click="modireply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 수정 </v-btn>
+                <!-- <div style="text-align: right;"> -->
+                  <div :name="`${lst.commentId}`+'btn1'" style="display: unset;">
+                    <v-btn @click="modireply(lst.commentId, lst.content)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 수정 </v-btn>
                     <v-btn @click="delreply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 삭제 </v-btn>
                   </div>
-                  <div v-else>
-                    <v-btn @click="modireply(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 완료 </v-btn>
+                  <div :name="`${lst.commentId}`+'btn2'" style="display: none;">
+                    <v-btn @click="modireply(lst.commentId, lst.content)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 완료 </v-btn>
                     <v-btn @click="modireplycancle(lst.commentId)" variant="flat" size="small" style="background-color: rgba(0,0,0,0); color: white;"> 취소 </v-btn>
                   </div>
                 </div>
@@ -223,8 +228,8 @@ export default {
       }
     },
 
-    async modireply(id){
-      const area = document.getElementsByName(id)
+    async modireply(id, msg){
+
       if(this.replymode){
         try {
           const inputdata = {
@@ -232,7 +237,7 @@ export default {
           }
           const { data } = await updateGroupArticleComment(this.info[0], this.info[1], id, new Blob([JSON.stringify(inputdata)], {type:'application/json'}))
           console.log(data)
-          area[0].style.visibility = 'hidden'
+          this.hidereplay(id)
           this.getreply()
         }
         catch(e) {
@@ -241,7 +246,9 @@ export default {
         
       }
       else {
-        area[0].style.visibility = 'visible';
+        console.log(msg)
+        this.showreply(id)
+        this.inputreply = msg
       }
 
       this.replymode = !this.replymode
@@ -251,7 +258,9 @@ export default {
       try {
         const { data } = await deleteGroupArticleComment(this.info[0], this.info[1], id)
         console.log(data)
+        this.hidereplay(id)
         this.getreply()
+        this.replymode = !this.replymode
       }
       catch(e) {
         console.log(e)
@@ -259,9 +268,32 @@ export default {
     },
 
     modireplycancle(id){
+      this.hidereplay(id)
       this.replymode = !this.replymode
+    },
+    // 수정모드로 바꾸기
+    showreply(id){
+      const inputarea = document.getElementsByName(id+"input") //inputtag
       const area = document.getElementsByName(id)
-      area[0].style.visibility = 'hidden'
+      const btn1 = document.getElementsByName(id+"btn1")
+      const btn2 = document.getElementsByName(id+"btn2")
+
+      area[0].style.display = 'none'
+      inputarea[0].style.display = 'unset';
+      btn1[0].style.display = 'none'
+      btn2[0].style.display = 'unset'
+    },
+    //일반모드로 바꾸기
+    hidereplay(id){
+      const inputarea = document.getElementsByName(id+"input") //inputtag
+      const area = document.getElementsByName(id)
+      const btn1 = document.getElementsByName(id+"btn1")
+      const btn2 = document.getElementsByName(id+"btn2")
+
+      area[0].style.display = 'unset'
+      inputarea[0].style.display = 'none';
+      btn1[0].style.display = 'unset'
+      btn2[0].style.display = 'none'
     }
   },
   created(){
