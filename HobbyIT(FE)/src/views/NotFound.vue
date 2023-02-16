@@ -11,10 +11,11 @@ export default {};
 <style scoped>
 div {
   height: 100vh;
-  background: url(assets/gif/SPACEMAN.gif) no-repeat center;
+  background: url('/assets/gif/SPACEMAN.gif') no-repeat center;
   background-size: cover;
   position: relative;
 }
+
 h3 {
   color: white;
   text-align: center;

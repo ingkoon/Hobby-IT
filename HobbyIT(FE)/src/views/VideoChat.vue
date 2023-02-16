@@ -2,49 +2,63 @@
   <div>
     <v-container>
       <v-row>
-        <v-col id='background' :style="{ height: computedHeight + 'px' }"></v-col>
-        <v-col id='leftSidebar' :style="{ height: computedHeight + 'px' }">
-          <v-icon icon='mdi-microphonea' size='36'></v-icon>
-          <v-icon v-if='isAudioEnabled' color='white' icon='mdi-microphone' size='36' @click='handleAudio'></v-icon>
-          <v-icon v-else color='white' icon='mdi-microphone-off' size='36' @click='handleAudio'></v-icon>
-          <v-icon v-if='isVideoEnabled' color='white' icon='mdi-video' size='36' @click='handleMyVideo'></v-icon>
-          <v-icon v-else color='white' icon='mdi-video-off' size='36' @click='handleMyVideo'></v-icon>
+        <v-col id="background" :style="{ height: computedHeight + 'px' }"></v-col>
+        <v-col id="leftSidebar" :style="{ height: computedHeight + 'px' }">
+          <v-icon icon="mdi-microphonea" size="36"></v-icon>
+          <v-icon v-if="isAudioEnabled" color="white" icon="mdi-microphone" size="36" @click="handleAudio"></v-icon>
+          <v-icon v-else color="white" icon="mdi-microphone-off" size="36" @click="handleAudio"></v-icon>
+          <v-icon v-if="isVideoEnabled" color="white" icon="mdi-video" size="36" @click="handleMyVideo"></v-icon>
+          <v-icon v-else color="white" icon="mdi-video-off" size="36" @click="handleMyVideo"></v-icon>
           <v-icon
-            v-if='isScreenShareEnabled'
-            color='white'
-            icon='mdi-monitor-off'
-            size='36'
-            @click='handleScreenShare'
+            v-if="isScreenShareEnabled"
+            color="white"
+            icon="mdi-monitor-off"
+            size="36"
+            @click="handleScreenShare"
           ></v-icon>
-          <v-icon v-else color='white' icon='mdi-monitor' size='36' @click='handleScreenShare'></v-icon>
-          <v-btn icon='mdi-phone-off' style='background-color: red; color: white' @click='handleClickOff'></v-btn>
-          <v-icon color='white' icon='mdi-pencil-box' size='36' @click='handlePaint'></v-icon>
-          <v-icon color='white' icon='mdi-cog-outline' size='36' @click=''></v-icon>
-          <v-icon color='white' icon='mdi-creation' size='36'></v-icon>
-          <v-icon icon='mdi-microphonea' size='24'></v-icon>
+          <v-icon v-else color="white" icon="mdi-monitor" size="36" @click="handleScreenShare"></v-icon>
+          <v-btn icon="mdi-phone-off" style="background-color: red; color: white" @click="handleClickOff"></v-btn>
+          <v-icon color="white" icon="mdi-pencil-box" size="36" @click="handlePaint"></v-icon>
+          <v-icon color="white" icon="mdi-cog-outline" size="36" @click=""></v-icon>
+          <v-icon color="white" icon="mdi-creation" size="36"></v-icon>
+          <v-icon icon="mdi-microphonea" size="24"></v-icon>
         </v-col>
-        <v-row id='circle1' />
-        <v-row id='circle2' />
-        <v-col id='videoList' :style="{ height: computedHeight + 'px' }" style='width:900px;'>
-          <v-row style='margin: 0; height: 126px'>
-            <h1 id='title' @click='myCustomMethod'>John, 나 여행가고 싶어</h1>
+        <v-row id="circle1" />
+        <v-row id="circle2" />
+        <v-col id="videoList" :style="{ height: computedHeight + 'px' }" style="width: 900px">
+          <v-row style="margin: 0; height: 126px">
+            <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
           </v-row>
           <v-row
-            id='video-container'
-            style='height: 757px; width:900px; margin-right: 0; margin: 0; align-items: center; justify-content: center'>
-            <user-video :stream-manager='publisher' />
-            <user-video v-for='sub in subscribers' :key='sub.stream.connection.connectionId' :stream-manager='sub'>
+            id="video-container"
+            style="
+              height: 757px;
+              width: 900px;
+              margin-right: 0;
+              margin: 0;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <user-video :stream-manager="publisher" />
+            <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub">
               <!--            추가 바람-->
             </user-video>
           </v-row>
         </v-col>
-        <v-col id='rightSidebar' :style="{ height: computedHeight + 'px' }">
-          <VideoMessage @handle-message='sendMessage' />
+        <v-col id="rightSidebar" :style="{ height: computedHeight + 'px' }">
+          <VideoMessage @handle-message="sendMessage" />
         </v-col>
       </v-row>
 
-      <v-dialog v-model='paint'>
-        <SharedPaint :canvas-data='canvasData' @send-canvas='sendCanvas' />
+      <v-dialog v-model="paint">
+        <SharedPaint
+          ref="sharedPaint"
+          :canvas-data="canvasData"
+          @close-canvas="closeCanvas"
+          @clear-canvas="clearCanvas"
+          @send-canvas="sendCanvas"
+        />
       </v-dialog>
     </v-container>
   </div>
@@ -65,17 +79,18 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const VITE_OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL;
 
 const APPLICATION_SERVER_URL = VITE_OPENVIDU_SERVER_URL;
-// ? VITE_OPENVIDU_SERVER_URL : 'http://localhost:5000/';
 export default {
-  async beforeRouteEnter(to,from){
-    const groupId = to.params.id
-    try{
-      const res = await getGroupUserPrivilege(groupId)
+  beforeUnmount(to, from) {
+    this.leaveSession();
+  },
+  async beforeRouteEnter(to, from) {
+    const groupId = to.params.id;
+    try {
+      const res = await getGroupUserPrivilege(groupId);
     } catch (e) {
       console.log('error!!');
-      return {name:'Home'}
+      return { name: 'Home' };
     }
-
   },
   name: 'VideoChat',
   components: { SharedPaint, VideoMessage, UserVideo },
@@ -96,7 +111,7 @@ export default {
       subscribers: [],
       // Join form
       mySessionId: this.$route.params.id,
-      myUserName: this.userStore.getUserNickname ? this.userStore.getUserNickname : Math.random(),
+      myUserName: this.userStore.getUserNickname,
       isAudioEnabled: true,
       isVideoEnabled: true,
       isScreenShareEnabled: false,
@@ -138,7 +153,7 @@ export default {
     },
   },
   watch: {
-    baseUnit: function(newVal, oldVal) {
+    baseUnit: function (newVal, oldVal) {
       this.appStore.baseUnit = newVal;
     },
   },
@@ -149,6 +164,9 @@ export default {
     this.joinSession();
   },
   methods: {
+    closeCanvas() {
+      this.paint = false;
+    },
     handlePaint() {
       this.paint = true;
     },
@@ -166,16 +184,17 @@ export default {
           console.error(err);
         });
     },
-
-    myCustomMethod() {
-      // for (let i = 0; i < 100; i++) {
-      //   const msgData = {
-      //     data: 'hahahoho',
-      //     from: '',
-      //     id: this.messageStore.message.length,
-      //   };
-      //   this.messageStore.message.push(msgData);
-      // }
+    clearCanvas() {
+      this.session
+        .signal({
+          data: null,
+          to: [],
+          type: 'erase-canvas',
+        })
+        .then(() => {})
+        .catch(err => {
+          console.error(err);
+        });
     },
     sendMessage(msg) {
       this.session
@@ -184,9 +203,7 @@ export default {
           to: [],
           type: 'message',
         })
-        .then(() => {
-
-        })
+        .then(() => {})
         .catch(err => {
           console.error(err);
         });
@@ -200,8 +217,7 @@ export default {
       this.isAudioEnabled = !this.isAudioEnabled;
     },
     handleClickOff() {
-      window.open('', '_self').close();
-      return false;
+      this.$router.push({ name: 'GroupMainPage', params: { id: this.$route.params.id } });
     },
     handleScreenShare() {
       if (this.isScreenShareEnabled) {
@@ -275,16 +291,19 @@ export default {
       });
       this.session.on('signal:canvas', event => {
         const from = JSON.parse(event.from.data).clientData;
-        console.log(event);
-        console.log('haha');
-        console.log(from);
         if (from === this.myUserName) {
-          return false;
+          return;
         }
         this.canvasData = event.data;
       });
-      // --- 4) Connect to the session with a valid user token ---
-      // Get a token from the OpenVidu deployment
+      this.session.on('signal:erase-canvas', event => {
+        const from = JSON.parse(event.from.data).clientData;
+        if (from === this.myUserName) {
+          return false;
+        }
+        console.log('clear!');
+        this.$refs.sharedPaint.clearAll();
+      });
       this.getToken(this.mySessionId).then(token => {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
@@ -327,6 +346,7 @@ export default {
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
+
       // Remove beforeunload listener
       window.removeEventListener('beforeunload', this.leaveSession);
     },
