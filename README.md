@@ -90,7 +90,7 @@ SSAFY 8기 2학기 공통 프로젝트
 ### 6) MZ스러운 디자인과 친절한 이용 가이드
 - GSAP 애니메이션 효과와 다크모드 디자인, 짙은 보랏빛 컬러
 - 사용자를 위한 이용가이드 페이지 제공
-![sample_guide.png](/docs/img/sample_guide.png)
+![sample_guideline.png](/docs/img/sample_guideline.png)
 
 ## ✔️ 주요 기술
 ### 1) WebRTC
@@ -108,6 +108,130 @@ SSAFY 8기 2학기 공통 프로젝트
 ### 4) 캔버스 페인팅
 
 ## ✔️ 프로젝트 파일 구조
+```
+Repository
+ ├─ README.md
+ │
+ ├─ docs
+ │     │
+ │     ├── DB
+ │     │    ├── ...
+ │     │
+ │     ├── Jira
+ │     │    ├── ...
+ │     │
+ │     ├── img
+ │          ├── ...
+ │
+ │
+ ├─ backend
+ │     │
+ │     ├── gradle
+ │     │     ├──wrapper
+ │     │     	   ├── gradle-wrapper.jar
+ │     │     	   ├── gradle-wrapper.properties
+ │     │
+ │     ├── src
+ │     │     ├── main
+ │     │     	    ├── generated
+ │     │     	    ├── resources
+ │     │     	    │           ├── static
+ │     │     	    │                ├── img
+ │     │     	    │	                    ├── ...
+ │     │     	    ├── java
+ │     │                ├── com
+ │     │     	               ├── a505
+ │     │                           ├── hobby
+ │     │                                 ├── article
+ │     │     	                           ├── common
+ │     │     	                           ├── hobby
+ │     │     	                           ├── hobbyarticle
+ │     │     	                           ├── hobbyarticlecomment
+ │     │     	                           ├── hobbyarticleimg
+ │     │     	                           ├── hobbyarticlelike
+ │     │     	                           ├── hobbymember
+ │     │     	                           ├── hobbypostit
+ │     │     	                           ├── hobbypostitrecord
+ │     │     	                           ├── item
+ │     │     	                           ├── jwt
+ │     │     	                           ├── member
+ │     │     	                           ├── pending
+ │     │     	                           ├── security
+ │     │     	                           ├── HobbyitApplication.java
+ │     │
+ │     ├── .gitignore
+ │     ├── build.gradle
+ │     ├── gradlew
+ │     ├── gradlew.bat
+ │     ├── settings.gradle
+ │
+ │ 
+ ├─ HobbyIT(FE)
+ │     ├─ README.md
+ │     │
+ │     ├─ public
+ │     │      ├─ assets
+ │     │              ├─ fonts
+ │     │              │    ├─ ...
+ │     │              │
+ │     │              ├─ gif
+ │     │              │    ├─ ...
+ │     │              │
+ │     │              ├─ postit
+ │     │              │    ├─ ...
+ │     │              │
+ │     │              ├─ ...
+ │     │
+ │     ├── src
+ │     │       ├── api
+ │     │       │       ├── common
+ │     │       │       │      ├── ...
+ │     │       │       │
+ │     │       │       ├── ...
+ │     │       │
+ │     │       ├── components
+ │     │       │       ├── VideoChat
+ │     │       │       │      ├── ...
+ │     │       │       │
+ │     │       │       ├── modals
+ │     │       │       │      ├── ...
+ │     │       │       │
+ │     │       │       ├── no-content
+ │     │       │       │      ├── ...
+ │     │       │       │
+ │     │       │       ├── ...
+ │     │       │
+ │     │       ├── layouts
+ │     │       │       ├── default
+ │     │       │              ├── ...
+ │     │       │
+ │     │       ├── plugins
+ │     │       │       ├── index.js
+ │     │       │       ├── vuetify.js
+ │     │       │       ├── webfontloader.js
+ │     │       │
+ │     │       ├── router
+ │     │       │       ├── index.js
+ │     │       │
+ │     │       ├── store
+ │     │       │       ├── app.js
+ │     │       │       ├── index.js
+ │     │       │       ├── message.js
+ │     │       │       ├── user.js
+ │     │       │
+ │     │       ├── styles
+ │     │       │       ├── settings.scss
+ │     │       │
+ │     │       ├── views
+ │     │       │       ├── ...
+ │     │       │
+ │     │       ├── App.vue
+ │     │       ├── main.js
+ │     │
+ │     ├── ...
+ │     │
+``` 
+
 
 ## ✔️ 협업 툴
 
@@ -168,7 +292,7 @@ SSAFY 8기 2학기 공통 프로젝트
 - 기능 정의서
 - API 명세서
 - 와이어 프레임(https://www.figma.com/file/mKMpSGZU6zQK7NP3aRWG8O/%EC%9C%A0%EC%BE%8C%ED%95%9C%EB%B0%98%EB%9E%80-Hobby'It?node-id=0%3A1&t=GyGk1I5SxVuR7l80-0)
-- ![ERD](docs/img/ERD.png)
+- ![ER-Diagram](docs/img/ER-Diagram.png)
 
 ## ✔️ 프로젝트 결과물
 - 포팅메뉴얼
