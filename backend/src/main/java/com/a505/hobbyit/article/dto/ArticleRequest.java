@@ -2,6 +2,7 @@ package com.a505.hobbyit.article.dto;
 
 import com.a505.hobbyit.article.domain.Article;
 import com.a505.hobbyit.article.enums.ArticleHeader;
+import com.a505.hobbyit.hobby.domain.Hobby;
 import com.a505.hobbyit.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ArticleRequest {
 
-    @Schema(description = "게시글 글머리", example = "모집")
+    @Schema(description = "게시글 글머리", example = "RECRUITMENT OR MEETUP")
     @NotNull(message = "글머리는 필수 입력 사항입니다.")
     private ArticleHeader header;
 
@@ -26,9 +27,10 @@ public class ArticleRequest {
     @NotNull(message = "본문은 필수 입력 사항입니다.")
     private String content;
 
-    public Article toEntity(Member member) {
+    public Article toEntity(Member member, Hobby hobby) {
         return Article.builder()
                 .member(member)
+                .hobby(hobby)
                 .header(header)
                 .title(title)
                 .content(content)

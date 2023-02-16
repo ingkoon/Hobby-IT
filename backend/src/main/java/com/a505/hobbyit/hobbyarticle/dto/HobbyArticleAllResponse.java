@@ -34,7 +34,7 @@ public class HobbyArticleAllResponse {
         return HobbyArticleAllResponse.builder()
                 .title(hobbyArticle.getTitle())
                 .content(hobbyArticle.getContent())
-                .author(hobbyArticle.getMember().getName())
+                .author(hobbyArticle.getMember().getNickname())
                 .authorImage(hobbyArticle.getMember().getImgUrl())
                 .createdAt(hobbyArticle.getWritedDate())
                 .images(hobbyArticle.getHobbyArticleImg())

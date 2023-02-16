@@ -1,7 +1,7 @@
 package com.a505.hobbyit.member.dto.request;
 
 import com.a505.hobbyit.member.domain.Member;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class MemberMypageRequest {
-    @NotNull(message = "별명은 필수 입력 사항입니다.")
+    @NotEmpty(message = "별명은 필수 입력 사항입니다.")
     private String nickname;
 
-    @NotNull(message = "비밀번호는 필수 입력 사항입니다.")
     private String password;
 
     private String imgUrl;

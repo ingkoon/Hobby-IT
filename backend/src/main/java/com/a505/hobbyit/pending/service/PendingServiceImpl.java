@@ -12,7 +12,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
-import com.a505.hobbyit.pending.DuplicatedPendingException;
+import com.a505.hobbyit.pending.exception.DuplicatedPendingException;
 import com.a505.hobbyit.pending.domain.Pending;
 import com.a505.hobbyit.pending.domain.PendingRepository;
 import com.a505.hobbyit.pending.dto.PendingAllowRequest;
@@ -49,9 +49,12 @@ public class PendingServiceImpl implements PendingService{
         if(pendingRepository.existsByMemberAndHobby(member, hobby) || hobbyMemberRepository.existsByMemberAndHobby(member, hobby))
             throw new DuplicatedPendingException();
 
+        hobby.isCheckOverCapacity();
+
         if(hobby.getFree().equals(HobbyFree.FREE)){
             HobbyMember hobbyMember = new HobbyMember().ofGeneral(member, hobby);
             hobbyMemberRepository.save(hobbyMember);
+            hobby.updateCnt();
             return;
         }
 
@@ -76,42 +79,32 @@ public class PendingServiceImpl implements PendingService{
 
         return responses;
     }
-    /*
-    # 23 가입 신청 검증
-    해당 비즈니스 로직이 수행되면 pending entity가 소멸되고 hobby member에 데이터가 추가된다.
-    고로 해당 비즈니스 로직은 hobby member로 부터 만들어져야 한다.
-    ------
-    여기서 처리해도 될 것 같다.
-     */
     @Transactional
     @Override
     public void allowPending(String memberId, final Long hobbyId, PendingAllowRequest request) {
        checkPrivilege(hobbyId, memberId);
+       Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
+
+       hobby.checkMemberCount();
 
         Pending pending = pendingRepository
                 .findById(request.getWaitId())
                 .orElseThrow(NoSuchElementException::new);
 
-        pending
-                .updatePendingAllow(request.getIsAllowed());
+        pending.updatePendingAllow(request.getIsAllowed());
         if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
 
-        Hobby findHobby = hobbyRepository
-                .findById(hobbyId)
-                .orElseThrow(NoSuchHobbyException::new);
-
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)
-                .hobby(findHobby)
+                .hobby(hobby)
                 .state(HobbyMemberState.ACTIVE)
                 .privilege(HobbyMemberPrivilege.GENERAL)
                 .build();
 
         hobbyMemberRepository.save(hobbyMember);
-
-        findHobby.updateCnt();
+        hobby.updateCnt();
     }
 
     @Override

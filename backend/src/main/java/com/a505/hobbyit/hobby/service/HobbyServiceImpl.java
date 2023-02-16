@@ -14,6 +14,7 @@ import com.a505.hobbyit.hobbymember.exception.NoSuchHobbyMemberException;
 import com.a505.hobbyit.member.domain.Member;
 import com.a505.hobbyit.member.domain.MemberRepository;
 import com.a505.hobbyit.member.exception.InvalidedRefreshTokenException;
+import com.a505.hobbyit.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +49,7 @@ public class HobbyServiceImpl implements HobbyService{
         Hobby hobby = requestDto.toEntity(fileUrl);
         hobbyRepository.save(hobby);
 
-        Member member = memberRepository.findById(Long.parseLong(memberId))
-                .orElseThrow(InvalidedRefreshTokenException::new);
+        Member member = readMember(memberId);
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(member)
@@ -63,11 +63,8 @@ public class HobbyServiceImpl implements HobbyService{
 
     @Override
     public HobbyAndMemberResponse findById(String memberId, Long hobbyId) {
-        Member member = memberRepository.findById(Long.parseLong(memberId))
-                .orElseThrow(InvalidedRefreshTokenException::new);
-        Hobby hobby = hobbyRepository
-                .findById(hobbyId)
-                .orElseThrow(()-> new NoSuchHobbyException("요청하신 hobby를 찾을 수 없습니다."));
+        Member member = readMember(memberId);
+        Hobby hobby = readHobby(hobbyId);
 
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findByMemberAndHobby(member,hobby)
@@ -129,9 +126,9 @@ public class HobbyServiceImpl implements HobbyService{
 
     @Override
     public List<HobbyMemberResponse> findHobbyMembers(Long hobbyId) {
-        Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
+        Hobby hobby = readHobby(hobbyId);
         List<HobbyMemberResponse> responses = new ArrayList<>();
-        List<HobbyMember> members = hobby.getHobbyMembers();
+        List<HobbyMember> members = hobbyMemberRepository.findByHobbyId(hobby);
 
         for (HobbyMember member : members) {
             responses.add(new HobbyMemberResponse().toEntity(member));
@@ -152,6 +149,7 @@ public class HobbyServiceImpl implements HobbyService{
             log.info("==========파일 저장==========");
             fileUrl = fileUploader.upload(multipartFile, domain);
         }
+        log.info(request.getIntro() + " & "+ request.getName() + " & " + request.getMax_participants_num());
         hobby.updateHobby(request, fileUrl);
     }
     @Transactional
@@ -174,5 +172,12 @@ public class HobbyServiceImpl implements HobbyService{
 
     void checkDuplicatedHobby(String name){
         if(hobbyRepository.existsByName(name)) throw new DuplicatedHobbyException("중복된 Hobby 이름입니다.");
+    }
+
+    Member readMember(String memberId){
+        return memberRepository.findById(Long.parseLong(memberId)).orElseThrow(()->new NoSuchMemberException("요청하신 회원을 찾을 수 없습니다."));
+    }
+    Hobby readHobby(Long hobbyId){
+        return hobbyRepository.findById(hobbyId).orElseThrow(()-> new NoSuchHobbyException("요청하신 소모임을 찾을 수 없습니다."));
     }
 }

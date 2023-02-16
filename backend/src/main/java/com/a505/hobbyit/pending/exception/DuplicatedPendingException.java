@@ -1,4 +1,4 @@
-package com.a505.hobbyit.pending;
+package com.a505.hobbyit.pending.exception;
 
 public class DuplicatedPendingException extends RuntimeException{
     public DuplicatedPendingException() {

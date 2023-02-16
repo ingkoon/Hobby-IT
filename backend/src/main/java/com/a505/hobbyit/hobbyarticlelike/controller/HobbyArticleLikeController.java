@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class HobbyArticleLikeController {
     private final HobbyArticleLikeService hobbyArticleLikeService;
-
     @PostMapping(value = "/{hobby-id}/article/{article-id}")
     public ResponseEntity<Void> checkHobbyArticleLike(
             @AuthenticationPrincipal UserDetails userDetails,

@@ -6,11 +6,16 @@ import com.a505.hobbyit.member.dto.response.MemberPendingResponse;
 import com.a505.hobbyit.member.dto.response.MemberResponse;
 import com.a505.hobbyit.member.dto.response.MypageResponse;
 import jakarta.mail.MessagingException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface MemberService {
     void signUp(MemberSignupRequest request);
+
+    boolean isSns(String email);
+
+    void updateSnsMember(String email, String imgUrl);
 
     MemberResponse login(MemberLoginRequest request);
 
@@ -22,11 +27,17 @@ public interface MemberService {
 
     MypageResponse findMypage(final String token, final String nickname);
 
-    void update(final String token, MemberMypageRequest request);
+    void update(final String token, MemberMypageRequest request, MultipartFile multipartFile);
 
     void delete(final String token);
-    
+
     List<MemberHobbyResponse> getHobbyList(final String token, String nickname);
 
     List<MemberPendingResponse> getPendingList(final String token);
+
+    String redirectKakao();
+
+    String getKakaoToken(String code);
+
+    List<String> getKakaoMember(String token);
 }
