@@ -43,13 +43,13 @@
                   </div> 
                   <div v-else-if="row.privilege === 'GENERAL'" style="margin: auto 0;"> 회원 </div> 
                   <div v-else style="margin: auto 0;"> 매니저 </div>
-                  <v-btn @click="setcombo(row.privilege)" style="margin-left:10px; background-color: #00000000; color:grey">변경</v-btn>
+                  <v-btn v-if="privi === 'OWNER' && row.privilege !== 'OWNER'" @click="openprimodal(row.id, row.privilege)" style="margin-left:10px; background-color: #00000000; color:grey">변경</v-btn>
                 </div>
               </td>
               <td> {{ row.reg_dt }} </td>
               <td>
                 
-                <v-btn @click="openbanmem(`${row.id}`, `${row.nickName}`)" style="background-color: #FF052370; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
+                <v-btn v-if="privi !== 'GENERAL' && row.privilege !== 'OWNER'" @click="openbanmem(`${row.id}`, `${row.nickName}`)" style="background-color: #FF052370; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin:0 auto">
                   <v-icon icon="mdi-exit-to-app" color="white"></v-icon>
                 </v-btn>
               </td>
@@ -66,22 +66,31 @@
     <v-dialog v-model="banmodal">
       <ben-member :memberName="[banmemName,banmemId,groupid]" @close="closebanmem"/>
     </v-dialog>
+
+    <v-dialog v-model="privmodal">
+      <modi-mem @close="closeprimodal" :data="[groupid, rowid, privilige]"/>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { getGroupMemberList } from '@/api/hobby';
 import benMember from '@/components/modals/BanMem.vue'
+import ModiMem from '@/components/modals/ModiMember.vue'
 
 export default {
   components :{
-    benMember
+    benMember,
+    ModiMem
   },  
   props : {
-    groupid : Number,
+    propdata : Object
   },
   data() {
     return {
+      groupid : this.propdata[0],
+      privi : this.propdata[1],
+      privilige : '',
       list: [],
       tmplist: [
         
@@ -95,6 +104,8 @@ export default {
         {state : '회원', abbr:'GENERAL'},
       ],
       select : {state : '소유자', abbr:'OWNER'},
+      privmodal : false,
+      rowid : '',
     };
   },
   created() {
@@ -102,7 +113,6 @@ export default {
   },
   methods: {
     async getlist(id) {
-
       try {
         const { data } = await getGroupMemberList(id);
         this.tmplist = data
@@ -124,6 +134,15 @@ export default {
     },
     goprofile(nickName){
       this.$router.push({ name: 'MyPage', params: {nickname : nickName } });
+    },
+    openprimodal(id, pri){
+      this.rowid = id
+      this.privilige = pri
+      this.privmodal = true
+    },
+    closeprimodal() {
+      this.privmodal = false
+      this.getlist(this.groupid)
     }
   },
 };

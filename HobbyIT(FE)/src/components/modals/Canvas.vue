@@ -6,8 +6,8 @@
         <span>방명록</span>
         <v-icon icon='mdi-close' size='small' @click='closemodal'></v-icon>
       </div>
-
-      <v-row style='width:100%; height: 90%; margin : auto; overflow-y:auto ;'>
+      
+      <v-row v-if="canvaslist.length > 0" style="width:100%; height: 90%; margin : auto; overflow-y:auto ;">
         <v-col
           v-for='n in canvaslist.length'
           :key='n'
