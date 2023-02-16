@@ -44,6 +44,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
         hobbyMemberRepository.deleteHobbyMember(targetId);
         hobby.updateCnt();
+        log.info("===== Member count is " + hobby.getHobbyMembers().size()+"=====");
     }
 
     @Transactional
