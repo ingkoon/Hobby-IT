@@ -267,25 +267,24 @@ Repository
   - 일주일 단위로 프로젝트 일정 관리
   - 23.01.10 ~ 23.02.17 기간의 일정 관리
   - 기획, 설계, 개발, 발표, 회의, 내부 행사 등
-  - 
-    <details>
-    <summary>번다운 차트</summary>
-    <div markdown="1">
+  - <details>
+        <summary>번다운 차트</summary>
+        <div markdown="1">
   
       - 1주차 (23.01.09 ~ 23.01.13)
-    ![week1](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week1.png)
+        ![week1](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week1.png)
       - 2주차 (23.01.16 ~ 23.01.20)
-    ![week2](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week2.png)
+        ![week2](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week2.png)
       - 3주차 (23.01.25 ~ 23.01.27)
-    ![week3](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week3.png)
+        ![week3](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week3.png)
       - 4주차 (23.01.30 ~ 23.02.03)
-    ![week4](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week4.png)
+        ![week4](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week4.png)
       - 5주차 (23.02.06 ~ 23.02.10)
-    ![week5](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week5.png)
+        ![week5](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week5.png)
       - 6주차 (23.02.13 ~ 23.02.17)
   
-    </div>
-    </details>
+        </div>
+        </details>
 
 ## ✔️ 프로젝트 산출물
 [유쾌한 반란의 Google Docs - 요구사항 정의서, 기능 정의서, API 명세서](https://docs.google.com/spreadsheets/d/1xG0EUURGoz_C6ZEwFpiaMvZAMSl8EonA/edit?usp=sharing&ouid=102396324034139789583&rtpof=true&sd=true)
