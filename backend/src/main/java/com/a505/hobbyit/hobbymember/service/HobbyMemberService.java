@@ -8,4 +8,5 @@ public interface HobbyMemberService {
     public void kickHobbyMember(String memberId, final Long hobbyId, final Long targetId);
     public void resignHobbyMember(String memberId, Long hobbyId);
     public Hobby checkPrivilege(Long hobbyId, String memberId);
+    void checkHobbyMember(Long hobbyId, Long memberId);
 }

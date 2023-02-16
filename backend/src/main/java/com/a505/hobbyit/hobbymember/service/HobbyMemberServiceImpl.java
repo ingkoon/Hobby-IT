@@ -80,4 +80,17 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .checkPrivilege();
         return hobby;
     }
+
+    @Override
+    public void checkHobbyMember(Long memberId, Long hobbyId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchElementException::new);
+        Hobby hobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
+        hobbyMemberRepository
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new);
+    }
 }
