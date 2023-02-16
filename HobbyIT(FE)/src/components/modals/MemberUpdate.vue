@@ -84,7 +84,7 @@
         </div>
         <div>
           <v-text-field
-            :model-value='password'
+            v-model='password'
             color='white'
             label='비밀번호'
             style='margin:0 10px; width:350px;'
