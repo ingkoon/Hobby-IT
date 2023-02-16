@@ -269,22 +269,22 @@ Repository
   - 기획, 설계, 개발, 발표, 회의, 내부 행사 등
 
   <details>
-    <summary>번다운 차트</summary>
-    <div markdown="1">
+  <summary>번다운 차트</summary>
+  <div markdown="1">
   
-      - 1주차 (23.01.09 ~ 23.01.13)
-        ![week1](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week1.png)
-      - 2주차 (23.01.16 ~ 23.01.20)
-        ![week2](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week2.png)
-      - 3주차 (23.01.25 ~ 23.01.27)
-        ![week3](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week3.png)
-      - 4주차 (23.01.30 ~ 23.02.03)
-        ![week4](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week4.png)
-      - 5주차 (23.02.06 ~ 23.02.10)
-        ![week5](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week5.png)
-      - 6주차 (23.02.13 ~ 23.02.17)
+    - 1주차 (23.01.09 ~ 23.01.13)
+      ![week1](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week1.png)
+    - 2주차 (23.01.16 ~ 23.01.20)
+      ![week2](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week2.png)
+    - 3주차 (23.01.25 ~ 23.01.27)
+      ![week3](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week3.png)
+    - 4주차 (23.01.30 ~ 23.02.03)
+      ![week4](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week4.png)
+    - 5주차 (23.02.06 ~ 23.02.10)
+      ![week5](/docs/Jira/%EB%B2%88%EB%8B%A4%EC%9A%B4_%EC%B0%A8%ED%8A%B8_week5.png)
+    - 6주차 (23.02.13 ~ 23.02.17)
   
-    </div>
+  </div>
   </details>
 
 ## ✔️ 프로젝트 산출물
