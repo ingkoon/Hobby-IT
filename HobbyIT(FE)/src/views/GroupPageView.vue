@@ -195,7 +195,7 @@ v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
         </div>
       </div>    
       <v-dialog v-model="getcanvasmodal">
-        <get-canvas @close="closecanvasmodal" :data="[date, groupid]"/>
+        <get-canvas @close="closecanvasmodal" :data="[date, groupid, groupinfo.name]"/>
       </v-dialog>
       
     </v-navigation-drawer>
@@ -372,14 +372,6 @@ export default {
     },
     // only for test
     async initArticles() {
-      // const data = {
-      //   title: '제목',
-      //   content: '사람이 살고있다',
-      //   author: '사람',
-      // };
-      // for (let i = 0; i < 10; i++) {
-      //   this.articles.push(data);
-      // }
   
       try {
         console.log(this.lastnum)
@@ -529,8 +521,8 @@ export default {
       this.getcanvasmodal = false
     },
 
+    //방명록 날짜 받기
     async getcanvasdate(date){
-      console.log("DDDDDDDDDDDDD")
       try {
         // this.attrs = []
         let year = date.getFullYear()
@@ -545,11 +537,12 @@ export default {
         const inputdate = year + '-' + month + "-" + day
         const { data } = await getGroupVisitorBookCreatedDate(this.groupid, inputdate)
         console.log(data);
-        for(let i=0;i<data.days.length;i++){
+        for(let i=0;i<data.regDtList.length;i++){
+          const tmpdate = data.regDtList[i].split('-')
           const tmp = {
             key : 'visit',
             dot : true,
-            dates: new Date(year, parseInt(month)-1, data.days[i])
+            dates: new Date(tmpdate[0], parseInt(tmpdate[1])-1, tmpdate[2])
           }
           this.attrs.push(tmp)
         }
