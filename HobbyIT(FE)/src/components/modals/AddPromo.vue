@@ -46,6 +46,8 @@
       variant="outlined"
     ></v-textarea>
 
+    <div id='checkpromo'>! 제목과 본문은 필수 입력 내용입니다.</div>
+
     <div style="display: flex; align-items: center;">
       <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right; cursor: pointer;" @click="doneaddpromo">
         작성하기
@@ -86,17 +88,23 @@ export default {
       this.$emit('closeaddpromo')
     },
     doneaddpromo() {
+      const checkpromo = document.getElementById('checkpromo')
       const promodata = {
         title: this.promotitle,
         header: this.getseltype(),
         content: this.promocontent,
       };
-      console.log('방장배열길이'+this.masterlist.length);
-      console.log(this.gethobbyid());
-      // console.log(this.getseltype());
-      console.log(promodata);
-      this.$emit('doneaddpromo', promodata, this.gethobbyid());
-      this.$emit('closeaddpromo');
+      if(this.promotitle == '' || this.promocontent == ''){
+        checkpromo.style.visibility = 'visible'
+      } else {
+        checkpromo.style.visibility = 'hidden'
+        console.log('방장배열길이'+this.masterlist.length);
+        console.log(this.gethobbyid());
+        // console.log(this.getseltype());
+        console.log(promodata);
+        this.$emit('doneaddpromo', promodata, this.gethobbyid());
+        this.$emit('closeaddpromo');
+      }
     },
     gethobbyid(){
       for (let index = 0; index < this.masterlist.length; index++) {
@@ -154,6 +162,15 @@ v-textarea::-webkit-scrollbar-track {
 v-textarea::-webkit-scrollbar-thumb {
     background-color: #FA8EB6;
     border-radius: 100px;
+}
+
+#checkpromo {
+  font-size: 12px;
+  color: red;
+  visibility:hidden;
+  margin: -15px;
+  width: 100%;
+  text-align: left;
 }
 
 </style>
