@@ -9,7 +9,7 @@
         <v-icon icon="mdi-close" size="small" @click="closemodal"></v-icon>
       </div>
       <div style="display: flex">
-        <canvas id="canvas" class="new-cursor" height="500" style="" width="500"> </canvas>
+        <canvas id="canvas" class="new-cursor"  style="" height="500" width="500"> </canvas>
         <div style="margin-left: 20px; display: flex">
           <div style="display: flex; flex-direction: column">
             <div style="color: white; margin-bottom: 5px">
@@ -91,7 +91,7 @@
         </div>
 
         <div id="tri1"></div>
-        <div id="tri2"></div>
+        <!-- <div id="tri2"></div> -->
       </div>
     </v-card>
   </div>
@@ -108,8 +108,9 @@ export default {
       date: '',
       senddate : '',
       background: '',
-      bglist: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
+      bglist1: ['#F7FDB0', '#ABFAB3', '#BFE0FE', '#FECDCD'],
       bglist2: ['#D3D98F', '#63D382', '#AC94F1', '#DAA6A6'],
+      bglist : ["/assets/postit/yellow.png","/assets/postit/green.png","/assets/postit/blue.png","/assets/postit/red.png"]
     };
   },
   props : {
@@ -125,15 +126,23 @@ export default {
 
     var canvas = document.getElementById('canvas');
     var randomnum = Math.floor(Math.random() * 4);
-    this.background = this.bglist[randomnum];
+    this.background = this.bglist1[randomnum];
 
     var triangle = document.getElementById('tri1');
-    triangle.style.borderColor = this.bglist2[randomnum];
+    triangle.style.borderTopColor = this.bglist2[randomnum];
+    triangle.style.borderLeftColor = this.bglist2[randomnum];
     // canvas.style.backgroundColor = this.background
     var background = this.background;
     var ctx = canvas.getContext('2d');
-    ctx.fillStyle = this.background
-    ctx.fillRect(0,0,500,500)
+
+    var img = new Image();
+    img.src = this.bglist[randomnum]
+    
+    img.onload = function() {
+      ctx.drawImage(img, 0, -20, 500, 500)
+    }
+    // ctx.fillStyle = this.background
+    // ctx.fillRect(0,0,500,500)
     this.ctx = ctx;
     this.canvas = canvas;
     var rect = canvas.getBoundingClientRect(); // 터치 스크린
@@ -218,12 +227,13 @@ export default {
       ctx.strokeStyle = background;
       canvas.setAttribute(
         'style',
-        'cursor : url("../src/assets/eraser.png"), auto; background-color:' + background + ';',
+        'cursor : url("../src/assets/eraser.png"), auto;',
       );
     }
 
     function mousedouble() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 499, 480)
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   },
 
@@ -244,9 +254,7 @@ export default {
       this.ctx.strokeStyle = color;
       this.canvas.setAttribute(
         'style',
-        'cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; background-color:' +
-          this.background +
-          ';',
+        'cursor : url("data:image/svg+xml;urf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100"><text y="50%">✏️</text></svg>") 0 25 , auto; ',
       );
     },
     clearAll() {
@@ -277,6 +285,7 @@ export default {
       try {
         const { data } = await postGroupVisitorBook(this.groupid, this.senddate, file)
         console.log(data)
+        this.closemodal()
       }
       catch(e){
         console.log(e)
@@ -309,27 +318,27 @@ export default {
   /* cursor : url("../src/assets/eraser.png"), auto; */
 }
 
-#tri2 {
+/* #tri2 {
   width: 0;
   height: 0;
-  border-bottom: 50px solid #0e0f28;
-  border-top: 50px solid transparent;
-  border-left: 50px solid transparent;
-  border-right: 50px solid #0e0f28;
+  border-bottom: 43.5px solid #0e0f28;
+  border-top: 43.5px solid transparent;
+  border-left: 43.5px solid transparent;
+  border-right: 43.5px solid #0e0f28;
   position: absolute;
   left: 401px;
   bottom: 0;
-}
+} */
 
 #tri1 {
   width: 0;
   height: 0;
-  border-bottom: 50px solid transparent;
-  border-top: 50px solid white;
-  border-left: 50px solid white;
-  border-right: 50px solid transparent;
+  border-bottom: 44px solid transparent;
+  border-top: 44px solid white;
+  border-left: 44px solid white;
+  border-right: 44px solid transparent;
   position: absolute;
-  left: 400px;
+  left: 410px;
   bottom: 0;
 }
 </style>

@@ -1,6 +1,58 @@
 <template>
-  <h3 style='font-size: 36px'>관심 <span>#카테고리</span>를 선택해보세요.</h3>
+  <v-carousel id='main-carousel' hide-delimiter-background style='width: 100%; height: 450px'>
+    <v-carousel-item cover src='assets/gif/main1.gif' style='font-size: 48px; color: white'>
+      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
+        <div style='align-self: center; width: 100%'>
+          <div>
+            부캐 전성시대,<br />
+            그 시작은 HOBBY'IT에서
+          </div>
 
+          <div style='float: right'>지금이 바로 시작할 때!</div>
+        </div>
+      </div>
+    </v-carousel-item>
+    <v-carousel-item cover src='assets/people.gif' style='font-size: 48px; color: white'>
+      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
+        <div style='align-self: center; width: 100%'>
+          <div>
+            관심사는 같은<br />
+            다양한 사람들을
+          </div>
+
+          <div style='float: right'>HOBBY'IT 에서 만나봐요!</div>
+        </div>
+      </div>
+    </v-carousel-item>
+    <v-carousel-item cover src='assets/home1.gif' style='font-size: 48px; color: white'>
+      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
+        <div style='align-self: center; width: 100%'>
+          <div>
+            모임을 통해<br />
+            매일 쌓이는 추억들을
+          </div>
+
+          <div style='float: right'>HOBBY'IT 에서 기록하세요!</div>
+        </div>
+      </div>
+    </v-carousel-item>
+  </v-carousel>
+
+  <h3 id='search'>
+    관심 <p>#카테고리</p>를 선택해보세요.
+    <span>
+      <v-text-field
+      clearable
+      placeholder='어떤 취미를 찾으시나요?'
+      prepend-inner-icon='mdi-magnify'
+      style='color: white; width: 334px; height: 44px;'
+      variant='outlined'
+      @keyup.enter="searchName"
+      v-model="keyword"
+      ></v-text-field>
+    </span>
+  </h3>
+  
   <v-slide-group mandatory='force' selected-class='font-family:linefontbold' v-model='selectCate' show-arrows style='margin: 1% 0;'>
     <v-slide-group-item v-slot='{ isSelected, toggle }'>
       <v-btn
@@ -30,40 +82,20 @@
         rounded='pill'
         @click='toggle'
       >
-        <span style='margin: 10px'>#{{ category[n] }}</span>
+        <span style='margin: 10px;'>#{{ category[n] }}</span>
       </v-btn>
     </v-slide-group-item>
   </v-slide-group>
-
-  <v-carousel id='main-carousel' hide-delimiter-background style='width: 100%; height: 450px'>
-    <v-carousel-item cover src='assets/gif/main1.gif' style='font-size: 48px; color: white'>
-      <div style='background-color: #1d1e4480; width: 100%; height: 100%; padding: 0 8%; display: flex'>
-        <div style='align-self: center; width: 100%'>
-          <div>
-            부캐 전성시대,<br />
-            그 시작은 Hobby'IT에서
-          </div>
-
-          <div style='float: right'>지금이 바로 시작할 때!</div>
-        </div>
-      </div>
-    </v-carousel-item>
-  </v-carousel>
   
-  <h3 id='search'>
-    당신이 참여중인 HOBBY
-    <span>
-      <v-text-field
-      clearable
-      placeholder='어떤 취미를 찾으시나요?'
-      prepend-inner-icon='mdi-magnify'
-      style='color: white; width: 334px; height: 44px;'
-      variant='outlined'
-      @keyup.enter="searchName"
-      v-model="keyword"
-      ></v-text-field>
-    </span>
-  </h3>
+  <div v-if="searchlist.length > 0 ">
+    <h3>검색 결과</h3>
+    <participate-group :hobbylist="searchlist"/>
+  </div>
+  <main4 v-if="searchFlag && searchlist.length == 0 "/>
+  
+  <div style="height: 30px;"></div>
+
+  <h3>당신이 참여중인 HOBBY</h3>
   
   <!-- <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/> -->
   <participate-group v-if="catelist.length > 0" :hobbylist="catelist"/>
@@ -71,19 +103,13 @@
   <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
   <main1 v-else/>
 
-  <div v-if="searchlist.length < 1 ">
-    <h3>오늘의 HOBBY 추천</h3>
-    <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
-    <main2 v-else/>
+  <h3>오늘의 HOBBY 추천</h3>
+  <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
+  <main2 v-else/>
 
-    <h3>당신만 오면 GO!</h3>
-    <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
-    <main3 v-else/>
-  </div>
-  <div v-else>
-    <h3>검색 결과</h3>
-    <participate-group :hobbylist="searchlist"/>
-  </div>
+  <h3>당신만 오면 GO!</h3>
+  <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
+  <main3 v-else/>
 </template>
 
 <script>
@@ -91,13 +117,14 @@ import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import Main1 from '@/components/no-content/Main1.vue';
 import Main2 from '@/components/no-content/Main2.vue';
 import Main3 from '@/components/no-content/Main3.vue';
+import Main4 from '@/components/no-content/Main4.vue';
 
 import { getHobbyList } from '@/api/hobby';
 import { getPopularHobbyList } from '@/api/hobby';
 import { getFreshHobbyList, searchHobby, searchNameHobby } from '@/api/hobby';
 
 export default {
-  components: { ParticipateGroup, Main1, Main2, Main3},
+  components: { ParticipateGroup, Main1, Main2, Main3, Main4},
   data() {
     return {
       model: '전체',
@@ -124,6 +151,7 @@ export default {
       selectCate : '',
       searchlist : [],
       tmp : -1,
+      searchFlag : false,
     };
   },
   methods : {
@@ -157,6 +185,7 @@ export default {
       try {
         const { data } = await searchHobby(keyword)
         this.searchlist = data
+        this.searchFlag = true;
       }
       catch(e) {
         console.log(e)
@@ -167,6 +196,7 @@ export default {
       try {
         const { data } = await searchNameHobby(keyword)
         this.searchlist = data
+        this.searchFlag = true;
         console.log(this.searchlist)
       }
       catch(e) {
@@ -198,7 +228,7 @@ export default {
 h3 {
   color: #ffffff;
   margin: 1% 0;
-  font-size: 48px;
+  font-size: 37px;
 }
 
 #search {
@@ -207,8 +237,9 @@ h3 {
   margin-top: 40px;
 }
 
-h3 span {
+h3 p {
   color: #642efe;
+  display: contents;
 }
 
 #categorybtn {
