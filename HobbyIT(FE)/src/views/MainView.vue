@@ -67,7 +67,7 @@
     <h3>검색 결과</h3>
     <participate-group :hobbylist="searchlist"/>
   </div>
-  <main3 v-else/>
+  <main4 v-else/>
   
   <h3>당신이 참여중인 HOBBY</h3>
   
@@ -91,13 +91,14 @@ import ParticipateGroup from '@/components/ParticipateGroup.vue';
 import Main1 from '@/components/no-content/Main1.vue';
 import Main2 from '@/components/no-content/Main2.vue';
 import Main3 from '@/components/no-content/Main3.vue';
+import Main4 from '@/components/no-content/Main4.vue';
 
 import { getHobbyList } from '@/api/hobby';
 import { getPopularHobbyList } from '@/api/hobby';
 import { getFreshHobbyList, searchHobby, searchNameHobby } from '@/api/hobby';
 
 export default {
-  components: { ParticipateGroup, Main1, Main2, Main3},
+  components: { ParticipateGroup, Main1, Main2, Main3, Main4},
   data() {
     return {
       model: '전체',
