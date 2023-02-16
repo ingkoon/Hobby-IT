@@ -47,7 +47,7 @@
     ></v-textarea>
 
     <div style="display: flex; align-items: center;">
-      <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right;">
+      <div style="font-size: 14px; margin: 0px 0px 0px 520px; text-align: right; cursor: pointer;" @click="doneaddpromo">
         작성하기
       </div>
       <v-btn
