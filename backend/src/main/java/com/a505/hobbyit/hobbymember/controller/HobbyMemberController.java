@@ -23,11 +23,12 @@ public class HobbyMemberController {
     @PutMapping("/{hobby-id}/member/{member-id}")
     public ResponseEntity<Void> updateHobbyMember(
             @Parameter(description = "사용자 정보 갱신 API")
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("hobby-id") final Long hobbyId,
             @PathVariable("member-id") final Long targetId,
             @RequestBody HobbyMemberUpdateRequest request){
 
-        hobbyMemberService.updatePrivilege(hobbyId, targetId, request);
+        hobbyMemberService.updatePrivilege(userDetails.getUsername(), hobbyId, targetId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
