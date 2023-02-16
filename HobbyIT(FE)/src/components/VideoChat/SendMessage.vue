@@ -25,6 +25,7 @@ export default {
     height: 0;
     border-top: 15px solid transparent;
     border-right : 15px solid transparent;
+    margin-bottom: 10px;
   }
 
   #text {
@@ -34,6 +35,7 @@ export default {
     width: 70%;
     font-size: 20px;
     margin-left: 28px;
+    margin-bottom: 10px;
     padding: 8px;
     word-break: break-all;
     vertical-align: middle;
