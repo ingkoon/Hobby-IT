@@ -137,10 +137,10 @@ export default {
       this.getlist()
     },
     async getlist() {
-      console.log(this.groupid)
+      
       try {
        const { data } = await getGroupNoticeList(this.groupid)
-       this.tmplist = data.content
+       this.tmplist = data.content.reverse()
 
        const paging = {
          totalCount: data.totalElements,

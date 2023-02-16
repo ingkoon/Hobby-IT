@@ -174,7 +174,7 @@ export function deleteGroupNotice(hobby_id, notice_id) {
 
 // 42.모임 방명록 등록
 export function postGroupVisitorBook(hobby_id, date, data) {
-  return multipartInstance.post(`/${hobby_id}/postit/${date}`, data);
+  return multipartInstance.post(`/${hobby_id}/postit/2023-02-15`, data);
 }
 
 
