@@ -63,6 +63,12 @@
     </v-slide-group-item>
   </v-slide-group>
   
+  <div v-if="searchlist.length > 0 ">
+    <h3>검색 결과</h3>
+    <participate-group :hobbylist="searchlist"/>
+  </div>
+  <main3 v-else/>
+  
   <h3>당신이 참여중인 HOBBY</h3>
   
   <!-- <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/> -->
@@ -71,19 +77,13 @@
   <participate-group v-if="hobbylist.length > 0" :hobbylist="hobbylist"/>
   <main1 v-else/>
 
-  <div v-if="searchlist.length < 1 ">
-    <h3>오늘의 HOBBY 추천</h3>
-    <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
-    <main2 v-else/>
+  <h3>오늘의 HOBBY 추천</h3>
+  <participate-group v-if="popularlist.length > 0" :hobbylist="popularlist"/>
+  <main2 v-else/>
 
-    <h3>당신만 오면 GO!</h3>
-    <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
-    <main3 v-else/>
-  </div>
-  <div v-else>
-    <h3>검색 결과</h3>
-    <participate-group :hobbylist="searchlist"/>
-  </div>
+  <h3>당신만 오면 GO!</h3>
+  <participate-group v-if="newlist.length > 0" :hobbylist="newlist"/>
+  <main3 v-else/>
 </template>
 
 <script>
@@ -167,7 +167,13 @@ export default {
       try {
         const { data } = await searchNameHobby(keyword)
         this.searchlist = data
+        console.log("22222222");
         console.log(this.searchlist)
+        console.log("22222222");
+        if(this.searchlist.length==0) {
+          console.log("213123");
+        }
+        console.log(this.searchlist.length)
       }
       catch(e) {
         console.log(e)
