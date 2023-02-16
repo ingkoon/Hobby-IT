@@ -120,6 +120,7 @@ export default {
     },
     closebanmem() {
       this.banmodal = false
+      this.getlist(this.groupid)
     },
     goprofile(nickName){
       this.$router.push({ name: 'MyPage', params: {nickname : nickName } });

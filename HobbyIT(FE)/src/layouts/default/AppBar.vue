@@ -1,7 +1,7 @@
 <template>
   <v-app-bar flat style='background-color: #0e0f28'>
     <v-app-bar-title>
-      <router-link style='display: flex; align-content: center' to='/'>
+      <router-link style='display: flex; align-content: center; width:10px;' to='/'>
         <img src='/assets/HBLOGO.svg' style='width: 30px; margin-right: 10px' />
         <span class='lo' style='font-family: logofont'>HOBBY'</span>
         <span class='go' style='color: #8947e2; font-family: logofont'>IT</span>
@@ -132,6 +132,10 @@ button {
   height: 50px;
   /*margin-left:10px; */
   margin: 5px;
+}
+
+.v-toolbar-title__placeholder {
+  width : 150px;
 }
 </style>
 

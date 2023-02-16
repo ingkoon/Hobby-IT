@@ -29,6 +29,7 @@ export default {
       try {
         const { data } = await deleteGroupMember(this.memberName[2],this.memberName[1])
         console.log(data)
+        this.close()
       }
       catch(e) {
         console.log(e)
