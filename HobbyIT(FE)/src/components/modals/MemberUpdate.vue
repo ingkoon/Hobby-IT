@@ -86,7 +86,7 @@
           <v-text-field
             v-model='password'
             color='white'
-            label='비밀번호'
+            label='변경할 비밀번호'
             style='margin:0 10px; width:350px;'
             type='password'
             variant='underlined'
@@ -94,14 +94,15 @@
         </div>
         <div>
           <v-text-field
+            v-model='checkpassword'
             color='white'
-            label='비밀번호 확인'
-
+            label='변경할 비밀번호 확인'
             style='margin:0 10px; width:350px;'
             type='password'
             variant='underlined'
           ></v-text-field>
         </div>
+        <div id='checkpwd' style='font-size: 12px; color: red; visibility:hidden'>! 입력한 비밀번호가 일치하지 않습니다.</div>
         <div
           style='display: flex; justify-content: center; align-items: center; text-align: center; margin-left: 270px;'>
           <div style='font-size: 16px; margin: 0px 0px 0px 0px; text-align: right;'>
@@ -144,31 +145,38 @@ export default {
       intro: this.propIntro,
       username: this.propUsername,
       password: '',
+      checkpassword: '',
       isImage: false,
       file: null,
     };
   },
   methods: {
     async handleSubmit() {
-      const data = {
-        nickname: this.nickname,
-        intro: this.intro,
-        password: this.password,
-      };
-      const formData = new FormData();
-      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-      if (this.file) {
-        formData.append('multipartFile', this.file);
+      const checkpwd = document.getElementById('checkpwd')
+      if (this.password !== this.checkpassword) {
+        checkpwd.style.visibility = 'visible'
       } else {
-        const emptyFile = new Blob([], { type: 'image/png' });
-        formData.append('multipartFile', emptyFile);
-      }
-      try {
-        const res = await updateMyPage(formData);
-        this.$emit('updateUserInfo', data);
-        this.$emit('afterUpdateSuccess')
-      } catch (e) {
-        console.error(e);
+        checkpwd.style.visibility = 'hidden'
+        const data = {
+          nickname: this.nickname,
+          intro: this.intro,
+          password: this.password,
+        };
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        if (this.file) {
+          formData.append('multipartFile', this.file);
+        } else {
+          const emptyFile = new Blob([], { type: 'image/png' });
+          formData.append('multipartFile', emptyFile);
+        }
+        try {
+          const res = await updateMyPage(formData);
+          this.$emit('updateUserInfo', data);
+          this.$emit('afterUpdateSuccess')
+        } catch (e) {
+          console.error(e);
+        }
       }
     },
     async uploadImage() {
