@@ -37,7 +37,6 @@ public class HobbyPostit {
     @Column(nullable = false)
     private String imgUrl;
 
-    @CreatedDate
     @Column(name = "reg_dt", nullable = false, updatable = false)
     private LocalDateTime regDt;
 }
