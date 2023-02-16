@@ -292,6 +292,7 @@ Repository
 - 요구사항 정의서
 - 기능 정의서
 - API 명세서
+  ![logo](docs/img/API_LIST.png)
 - [와이어 프레임](https://www.figma.com/file/mKMpSGZU6zQK7NP3aRWG8O/%EC%9C%A0%EC%BE%8C%ED%95%9C%EB%B0%98%EB%9E%80-Hobby'It?node-id=0%3A1&t=WKgF5Q8oLOynJk9c-1)
 - [ER-Diagram](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A505/-/blob/docs/readme/docs/img/ER-Diagram.png)
 
