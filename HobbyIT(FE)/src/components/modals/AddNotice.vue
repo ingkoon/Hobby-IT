@@ -35,6 +35,7 @@
 
 <script>
 import {postGroupNotice, updateGroupNotice } from '@/api/hobby'
+
 export default {
   data(){
     return {
@@ -59,6 +60,7 @@ export default {
         
         const { data } = await postGroupNotice(this.groupid, JSON.stringify(inputdata))
         console.log(data)
+
         this.close()
       }
       catch (e){
