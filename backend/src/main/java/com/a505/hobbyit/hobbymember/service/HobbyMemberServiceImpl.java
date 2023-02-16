@@ -28,11 +28,11 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
 
     @Transactional
     @Override
-    public void updatePrivilege(Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
+    public void updatePrivilege(final String memberId, Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findById(targetId)
                 .orElseThrow(NoSuchHobbyMemberException::new);
-
+        checkPrivilege(hobbyId, memberId);
         hobbyMember.updatePrivilege(request.getPrivilege());
     }
 

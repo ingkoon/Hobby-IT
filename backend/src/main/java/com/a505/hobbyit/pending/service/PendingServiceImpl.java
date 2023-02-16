@@ -77,13 +77,6 @@ public class PendingServiceImpl implements PendingService{
 
         return responses;
     }
-    /*
-    # 23 가입 신청 검증
-    해당 비즈니스 로직이 수행되면 pending entity가 소멸되고 hobby member에 데이터가 추가된다.
-    고로 해당 비즈니스 로직은 hobby member로 부터 만들어져야 한다.
-    ------
-    여기서 처리해도 될 것 같다.
-     */
     @Transactional
     @Override
     public void allowPending(String memberId, final Long hobbyId, PendingAllowRequest request) {
@@ -100,7 +93,6 @@ public class PendingServiceImpl implements PendingService{
         if(request.getIsAllowed().equals(PendingAllow.REJECTED)) return;
 
         Member findMember = pending.getMember();
-
 
         HobbyMember hobbyMember = HobbyMember.builder()
                 .member(findMember)
