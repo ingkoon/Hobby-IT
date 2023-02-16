@@ -112,7 +112,7 @@ export default {
         checkpwd.style.visibility = 'hidden'
       }
 
-      if(this.userEmail !== '' && this.userPassword !== '') {
+      if(this.userEmail !== null && this.userEmail !== '' && this.userPassword !== null && this.userPassword !== '') {
 
         try {
           const loginData = {

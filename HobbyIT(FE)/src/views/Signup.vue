@@ -137,7 +137,8 @@ export default {
         checknickname.style.visibility = 'hidden'
       }
 
-      if(this.userEmail !== '' && this.userPassword !== '' && this.userName !== '' && this.userNickname !== ''){
+      if(this.userEmail !== '' && this.userPassword !== '' && this.username !== '' && this.userNickname !== ''){
+        
         try {
           const signupData = {
             email: this.userEmail,

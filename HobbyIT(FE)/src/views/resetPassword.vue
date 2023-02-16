@@ -90,7 +90,7 @@ export default {
         checkname.style.visibility = 'hidden'
       }
 
-      if(this.userEmail !== '' && this.userName !== ''){
+      if(this.userEmail !== '' && this.username !== ''){
         try {
           const resetPasswordData = {
             email: this.userEmail,
