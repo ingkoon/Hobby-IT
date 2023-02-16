@@ -58,7 +58,7 @@
         rounded='pill'
         @click='toggle'
       >
-        <span style='margin: 10px'>#{{ category[n] }}</span>
+        <span style='margin: 10px;'>#{{ category[n] }}</span>
       </v-btn>
     </v-slide-group-item>
   </v-slide-group>
@@ -67,8 +67,10 @@
     <h3>검색 결과</h3>
     <participate-group :hobbylist="searchlist"/>
   </div>
-  <main4 v-else/>
+  <main4 v-if="searchFlag && searchlist.length == 0 "/>
   
+  <div style="height: 30px;"></div>
+
   <h3>당신이 참여중인 HOBBY</h3>
   
   <!-- <participate-group v-if="searchlist.length > 0" :hobbylist="searchlist"/> -->
@@ -125,6 +127,7 @@ export default {
       selectCate : '',
       searchlist : [],
       tmp : -1,
+      searchFlag : false,
     };
   },
   methods : {
@@ -158,6 +161,7 @@ export default {
       try {
         const { data } = await searchHobby(keyword)
         this.searchlist = data
+        this.searchFlag = true;
       }
       catch(e) {
         console.log(e)
@@ -168,13 +172,8 @@ export default {
       try {
         const { data } = await searchNameHobby(keyword)
         this.searchlist = data
-        console.log("22222222");
+        this.searchFlag = true;
         console.log(this.searchlist)
-        console.log("22222222");
-        if(this.searchlist.length==0) {
-          console.log("213123");
-        }
-        console.log(this.searchlist.length)
       }
       catch(e) {
         console.log(e)
