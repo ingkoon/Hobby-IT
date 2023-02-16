@@ -1,18 +1,19 @@
 import { useUserStore } from '@/store/user';
 import axios from 'axios';
 
-// function getRefreshToken() {
-//   try {
-//     const {}
-//   } catch (e) {
-//
-//   }
-// };
 const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
 
 async function reissueRefreshToken(data) {
-  const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
-  return res;
+  try {
+    const res = await axios.post(API_SERVER_URL + '/member/reissue', data);
+    return res;
+  }catch (e) {
+    console.error(e);
+    throw e
+  }
+
+
+
 }
 
 function setInterceptors(instance) {
@@ -32,7 +33,7 @@ function setInterceptors(instance) {
   // 응답 인터셉터 추가하기
   instance.interceptors.response.use(
     function (response) {
-      console.log(response, 'fulfilled');
+      // console.log(response, 'fulfilled');
       return response;
     },
     async function (error) {
@@ -42,7 +43,7 @@ function setInterceptors(instance) {
       } = error;
       const originalRequest = config;
 
-      if (status === 401 && !!userStore.getRefreshToken) {
+      if (status === 401 && userStore.getRefreshToken) {
         const data = {
           refreshToken: userStore.getRefreshToken,
         };

@@ -59,8 +59,7 @@ export default {
     async handleLogout() {
       try {
         const res = await memberLogout();
-        this.userStore.accessToken = null;
-        localStorage.clear();
+        this.userStore.clearUserInfo()
       } catch (e) {
         console.error(e);
       }

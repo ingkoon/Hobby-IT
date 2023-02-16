@@ -11,6 +11,6 @@ import router from '../router';
 import { createPinia } from 'pinia';
 
 export function registerPlugins(app) {
-  loadFonts();
+  // loadFonts();
   app.use(vuetify);
 }
