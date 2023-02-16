@@ -1,7 +1,6 @@
 <!--suppress ALL -->
 <template>
   <div id='mypage'>
-    <!-- 왼쪽 정보 탭 -->
     <div id='mypageinfo'>
       <div id='profileimg'>
         <img id='img' :src='myinfo.imgUrl' cover>
@@ -43,10 +42,13 @@
           <v-dialog v-if='isFetched' v-model='updateInfoModal'>
             <member-update
               :prop-intro='myinfo.intro'
-              :prop-nickname='myinfo.nickname'
+              :prop-nickname='userStore.getUserNickname'
+              :prop-username='myinfo.name'
               @close='closeUpdateInfoModal'
               @update-user-info='updateUserInfo'
-              @close-modal='closeUpdateInfoModal'>
+              @close-modal='closeUpdateInfoModal'
+              @after-update-success='afterUpdateSuccess'
+            >
             </member-update>
           </v-dialog>
         </span>
@@ -121,7 +123,6 @@ export default {
       waitgroup: [], // 승인 대기 그룹 리스트
       deleteinfomodal: false, // 회원 탈퇴 모달
       updateInfoModal: false, // 회원 정보 수정 모달
-      nickname: '',
       isFetched: false,
     };
   },
@@ -139,11 +140,13 @@ export default {
     await this.getLoadGroup();
   },
   async mounted() {
-    this.nickname = this.$route.params.nickname;
-    // await this.setModify(this.$route.params.nickname);
 
   },
   methods: {
+    afterUpdateSuccess(){
+      this.closeUpdateInfoModal()
+      this.$router.push({name: 'MyPage', params:{nickname : this.userStore.getUserNickname}})
+    },
     openUpdateInfoModal() {
       this.updateInfoModal = true;
     },

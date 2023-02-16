@@ -45,7 +45,7 @@
             color='white'
             label='이름'
             v-model='username'
-            readonly='true'
+            :readonly='true'
             style='margin: 20px 10px 0px 0px; width:200px; color: white; background-color: #0e0f28;'
             variant='outlined'
           ></v-text-field>
@@ -70,12 +70,12 @@
         <div>
           <v-textarea
             v-model='intro'
-            auto-grow='false'
+            :auto-grow='false'
             color='white'
             counter
             label='Who am I?'
             max-rows='4'
-            no-resize='true'
+            :no-resize='true'
             placeholder='자기소개 (4줄까지 보여집니다)'
             rows='4'
             style='margin:0 10px; width:350px;'
@@ -133,11 +133,16 @@ export default {
       type: String,
       default: '',
     },
+    propUsername:{
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       nickname: this.propNickname,
       intro: this.propIntro,
+      username: this.propUsername,
       password: '',
       isImage: false,
       file: null,
@@ -161,7 +166,7 @@ export default {
       try {
         const res = await updateMyPage(formData);
         this.$emit('updateUserInfo', data);
-        await this.closeModal();
+        this.$emit('afterUpdateSuccess')
       } catch (e) {
         console.error(e);
       }
@@ -169,7 +174,6 @@ export default {
     async uploadImage() {
       const upload = document.getElementById('uploadimg');
       this.isImage = true;
-
       upload.click();
       upload.addEventListener('change', this.getImageFiles);
     },
@@ -179,7 +183,6 @@ export default {
     getImageFiles(e) {
       const files = e.currentTarget.files;
       this.file = files[0];
-      console.log(typeof files, files);
       const file = files[0];
       // if (!file.type.match("image/.*")) {
       //     alert('이미지 파일만 업로드가 가능합니다.');

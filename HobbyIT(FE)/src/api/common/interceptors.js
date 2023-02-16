@@ -43,7 +43,7 @@ function setInterceptors(instance) {
       } = error;
       const originalRequest = config;
 
-      if (status === 401 && !!userStore.getRefreshToken) {
+      if (status === 401 && userStore.getRefreshToken) {
         const data = {
           refreshToken: userStore.getRefreshToken,
         };
