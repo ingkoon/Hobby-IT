@@ -28,11 +28,11 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
 
     @Transactional
     @Override
-    public void updatePrivilege(Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
+    public void updatePrivilege(final String memberId, Long hobbyId, Long targetId, HobbyMemberUpdateRequest request) {
         HobbyMember hobbyMember = hobbyMemberRepository
                 .findById(targetId)
                 .orElseThrow(NoSuchHobbyMemberException::new);
-
+        checkPrivilege(hobbyId, memberId);
         hobbyMember.updatePrivilege(request.getPrivilege());
     }
 
@@ -42,12 +42,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
         checkPrivilege(hobbyId, memberId);
 
         Hobby hobby = hobbyRepository.findById(hobbyId).orElseThrow(NoSuchHobbyException::new);
-        HobbyMember hobbyMember = hobbyMemberRepository
-                .findById(targetId)
-                .orElseThrow(NoSuchHobbyMemberException::new);
-
-        hobbyMemberRepository.delete(hobbyMember);
-
+        hobbyMemberRepository.deleteHobbyMember(targetId);
         hobby.updateCnt();
         log.info("===== Member count is " + hobby.getHobbyMembers().size()+"=====");
     }
@@ -68,7 +63,7 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .findByMemberAndHobby(member, hobby)
                 .orElseThrow(NoSuchHobbyMemberException::new);
 
-        hobbyMemberRepository.delete(hobbyMember);
+        hobbyMemberRepository.deleteHobbyMember(hobbyMember.getId());
         hobby.updateCnt();
     }
 
@@ -85,5 +80,18 @@ public class HobbyMemberServiceImpl implements HobbyMemberService{
                 .orElseThrow(NoSuchHobbyMemberException::new)
                 .checkPrivilege();
         return hobby;
+    }
+
+    @Override
+    public void checkHobbyMember(Long memberId, Long hobbyId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(NoSuchElementException::new);
+        Hobby hobby = hobbyRepository
+                .findById(hobbyId)
+                .orElseThrow(NoSuchHobbyException::new);
+        hobbyMemberRepository
+                .findByMemberAndHobby(member, hobby)
+                .orElseThrow(NoSuchHobbyMemberException::new);
     }
 }
