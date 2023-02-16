@@ -87,6 +87,46 @@
       <MyPage2 v-else />
     </div>
   </div>
+
+  <v-footer
+    style="
+    margin-top:200px;
+    margin-bottom:50px;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    "
+  >
+    <div style="background-color: #9078B8; width:1400px; height: 1px; margin-bottom: 30px;"></div>
+    <div
+      style="
+      background: linear-gradient(180deg, #FFFFFF 0%, #642EFE 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      font-size: 90px;
+      text-align: left;
+      margin-left: -400px;
+    ">
+      Just Hobby'It!<br />
+      <span style="font-size: 60px;">이 세상에 즐겁지 않은 취미는 없습니다.</span>
+    </div>
+    <div style="text-align: right; margin-left: 900px; margin-right: -200px; margin-top: -105px; color: #9078B8;">
+      <br />
+      <span style="font-size: 40px; color: white;">by_유쾌한반란</span>
+      <br />
+      <br />
+      서울시 강남구 역삼2동 멀티캠퍼스 12층 A505
+      <br />
+      COMMON PROJ.
+      <br />
+      <span>Copyright </span><span><v-icon icon="mdi-copyright" color="#9078B8" size="15"></v-icon></span> All Rights Reserved
+    </div>
+
+  </v-footer>
 </template>
 
 <script>
