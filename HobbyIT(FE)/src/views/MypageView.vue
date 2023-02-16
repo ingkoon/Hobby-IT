@@ -181,7 +181,7 @@ export default {
       try {
         const { data } = await getWaitingGroup();
         this.waitgroup = data;
-      } catch {
+      } catch (err) {
         console.log(err);
       }
     },
