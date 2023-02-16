@@ -63,6 +63,7 @@ const routes = [
   {
     path: '/main',
     component: () => import('@/layouts/default/MainPage.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -74,6 +75,7 @@ const routes = [
   {
     path: '/promo',
     component: () => import('@/layouts/default/MainPage.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -106,7 +108,7 @@ const routes = [
             path: ':id/videochat',
             component: () => import('@/views/VideoChat.vue'),
             name: 'VideoChat',
-            meta: { isGroupUser: true}
+            meta: { isGroupUser: true },
           },
           {
             path: ':id',
@@ -134,12 +136,15 @@ const router = createRouter({
   routes,
 });
 router.beforeEach((to, from) => {
-
+  const userStore = useUserStore();
   document.documentElement.scrollTop = 0;
-  if(to.name !== 'Home' && !from.name){
-    return {name:'Home'}
+  if (to.name !== 'Home' && !from.name) {
+    return { name: 'Home' };
   }
-  return true
+  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+    return { name: 'login' };
+  }
+  return true;
 });
 
 export default router;
