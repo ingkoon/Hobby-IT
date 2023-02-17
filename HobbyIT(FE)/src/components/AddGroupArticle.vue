@@ -41,10 +41,10 @@
         <input id="uploadimg" accept="image/*" multiple required style="display: none" type="file" />
 
         <div style="background-color: #0e0f28; flex-grow: 1; color: white">
-          <div style="margin: 5px 10px">
+          <!-- <div style="margin: 5px 10px">
             <v-icon color="blue-lighten-2" icon="mdi-account-circle" style="margin-right: 10px"></v-icon>
             다나카
-          </div>
+          </div> -->
 
           <v-text-field v-model="title" color="white" placeholder="제목" style="margin: 15px 10px"></v-text-field>
 

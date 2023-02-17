@@ -20,8 +20,8 @@
           {{ articleData.author }}
         </div>
         <div>
-          <v-icon color='#000000' icon='mdi-thumb-up' size='small'></v-icon>
-          {{ articleData.likes }}
+          <!-- <v-icon color='#000000' icon='mdi-thumb-up' size='small'></v-icon>
+          {{ articleData.likes }} -->
           <v-icon color='#000000' icon='mdi-message-bulleted' size='small'></v-icon>
           {{ articleData.commentCount }}
         </div>

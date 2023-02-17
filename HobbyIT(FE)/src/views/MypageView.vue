@@ -26,8 +26,8 @@
         </v-progress-linear>
 
         <div style="display: flex; justify-content: space-between; margin: 5px 5% 0">
-          <span>{{ myinfo.pointLevel }}</span>
-          <span>{{ myinfo.pointLevel + 1 }}</span>
+          <span>Lv. {{ myinfo.pointLevel }}</span>
+          <span>Lv. {{ myinfo.pointLevel + 1 }}</span>
         </div>
       </div>
     </div>

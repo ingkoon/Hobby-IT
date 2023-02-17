@@ -330,7 +330,7 @@ export default {
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
       // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
-      this.$router.push({ name: 'VideoChat', params: { id: this.groupid } });
+      this.$router.push({ name: 'VideoChat', params: { id: this.groupid, name : this.groupinfo.name } });
     },
     async closeAddedModal() {
       this.canvasmodal = false;

@@ -19,7 +19,7 @@
       </div>
       <div style="display: flex">
         <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630" @click="uploadimg">
-          <v-carousel hide-delimiter-background hide-delimiters show-arrows="hover" style="width: 500px">
+          <v-carousel hide-delimiter-background show-arrows="hover" style="width: 500px">
             <v-carousel-item v-for="(item, i) in imgurl" :key="i" :src="item.src" cover></v-carousel-item>
           </v-carousel>
         </div>
@@ -98,7 +98,6 @@
                   <span> {{ lst.author }} </span>
                   <div>{{ lst.updateAt.substring(0,10) }}</div>
                 </div>
-  
 
                 <div :name="`${lst.commentId}`" >{{ lst.content }}</div>
                 <input v-model="inputreply" type="text" :name="`${lst.commentId}`+'input'" style="display:none; border:1px solid white; color:white; width: 100%;"/>
@@ -140,8 +139,6 @@ export default {
     return {
       article : [],
       imgurl: [
-        "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-        "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
       ],
       createAt : '',
       changemode : false,
@@ -165,11 +162,11 @@ export default {
         this.article = data
         this.title = data.title
         this.content = data.content
-        // this.imgurl = []
+        this.imgurl = []
         for (let i=0;i<data.images.length;i++){
           this.imgurl.push({src : data.images[i]})
         }
-        console.log(data)
+        
         this.createAt = data.createdAt.substring(0,10)
       }
       catch(e) {
