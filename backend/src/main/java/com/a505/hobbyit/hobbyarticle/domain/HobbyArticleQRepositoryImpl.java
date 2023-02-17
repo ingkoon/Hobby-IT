@@ -130,7 +130,6 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
-
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
