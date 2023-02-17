@@ -330,7 +330,7 @@ export default {
     onclickVideoChat() {
       const domain_url = import.meta.env.VITE_DOMAIN_URL;
       // window.open(`${domain_url}/group/${this.$route.params.id}/videochat`, '_blank');
-      this.$router.push({ name: 'VideoChat', params: { id: this.groupid, name : this.groupinfo.name } });
+      this.$router.push({ name: 'VideoChat', params: { id: this.groupid, groupname : this.groupinfo.name } });
     },
     async closeAddedModal() {
       this.canvasmodal = false;
@@ -517,6 +517,7 @@ export default {
     async exitgroup() {
       try {
         const { data } = await resignGroup(this.groupid);
+        console.log("data!!!!!!!!!!!" , data)
         this.exitgroupmodal = false;
         this.$router.push({ name: 'Main' });
       } catch (e) {

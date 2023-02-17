@@ -83,7 +83,7 @@
       <MyPage1 v-else />
 
       <div style="font-size: 36px; margin-top: 20px">가입 대기중인 HOBBY...</div>
-      <ParticipateGroup v-if="waitgroup.length > 0" :hobbylist="waitgroup" />
+      <MyPageGroup2 v-if="waitgroup.length > 0" :hobbylist="waitgroup" />
       <MyPage2 v-else />
     </div>
   </div>

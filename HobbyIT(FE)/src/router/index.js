@@ -120,6 +120,7 @@ const routes = [
             component: () => import('@/views/VideoChat.vue'),
             name: 'VideoChat',
             meta: { isGroupUser: true },
+            props : true
           },
           {
             path: ':id',
