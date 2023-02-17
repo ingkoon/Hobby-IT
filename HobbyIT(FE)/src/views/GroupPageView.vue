@@ -58,19 +58,22 @@
             공지 작성
           </v-btn>
         </div>
-
+        
         <!-- 그룹나가기 -->
         <div
-          v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
-          style="text-align: right; font-family: linefont; margin-top: 20px"
+        v-if="groupinfo.privilege !== 'OWNER' && groupinfo.hobbyMemberId !== null"
+        style="text-align: right; font-family: linefont; margin-top: 20px"
         >
-          <v-btn style="background-color: #00000000; color: white" @click="openexitgroup">모임 탈퇴</v-btn>
-        </div>
-        <!-- 그룹삭제 -->
-        <div v-if="groupinfo.privilege === 'OWNER'" style="text-align: right; font-family: linefont; margin-top: 20px">
-          <v-btn style="background-color: #00000000; color: white" @click="opendeletegroup">모임 삭제</v-btn>
-        </div>
-
+        <v-btn style="background-color: #00000000; color: white" @click="openexitgroup">모임 탈퇴</v-btn>
+      </div>
+      <!-- 그룹삭제 -->
+      <div v-if="groupinfo.privilege === 'OWNER'" style="text-align: right; font-family: linefont; margin-top: 20px">
+        <v-btn style="background-color: #00000000; color: white" @click="opendeletegroup">모임 삭제</v-btn>
+      </div>
+      
+        <v-dialog v-model="canvasmodal">
+          <CanvasAdd :groupid="groupid" :groupname="groupinfo.name" @close="closeAddedModal" />
+        </v-dialog>
         <v-dialog v-model="addnoticemodal">
           <add-notice :groupid="groupid" @close="closeaddnotice" />
         </v-dialog>
@@ -163,6 +166,12 @@
       <v-dialog v-model="articlemodal">
         <article-modal :info="[groupid, clickid, groupinfo.name]" @closearticle="closearticle" />
       </v-dialog>
+      <v-dialog v-model="waitmodal">
+        <wait-group @close="closewaitmodal"/>
+      </v-dialog>
+      <v-dialog v-model="postwrittenmodal">
+        <post-written @close="closepostwritten"/>
+      </v-dialog>
     </div>
 
     <!-- 방명록 사이드바 -->
@@ -189,15 +198,11 @@
         </div>
 
         <div id="canvasdialog" style="text-align: center">
-          <v-btn color="white" style="margin-top: 40px">
+          <v-btn color="white" style="margin-top: 40px" @click="candraw">
             <div style="display: flex; flex-direction: column; align-items: center">
               <v-icon color="white" icon="mdi-calendar-plus-outline"></v-icon>
               <span style="color: white; margin-top: 10px">방명록<br />작성하기</span>
             </div>
-
-            <v-dialog v-model="canvasmodal" activator="parent">
-              <CanvasAdd :groupid="groupid" :groupname="groupinfo.name" @close="closeAddedModal" />
-            </v-dialog>
           </v-btn>
         </div>
       </div>
@@ -224,6 +229,8 @@ import addNotice from '@/components/modals/AddNotice';
 import exitGroup from '@/components/modals/GroupResign.vue';
 import delGroup from '@/components/modals/DelGroup.vue';
 import getCanvas from '@/components/modals/Canvas.vue';
+import WaitGroup from '@/components/modals/WaitGroup.vue';
+import PostWritten from '@/components/modals/PostWritten.vue';
 
 import { useUserStore } from '@/store/user';
 import {
@@ -234,6 +241,7 @@ import {
   deleteGroup,
   getGroupArticleList,
   getGroupVisitorBookCreatedDate,
+  getCanVisitorBook
 } from '@/api/hobby';
 
 export default {
@@ -252,6 +260,8 @@ export default {
     exitGroup,
     delGroup,
     getCanvas,
+    WaitGroup,
+    PostWritten
   },
   setup() {
     const userStore = useUserStore();
@@ -292,6 +302,8 @@ export default {
       morearticle: true,
       clickid: 0,
       getcanvasmodal: false,
+      waitmodal : false,
+      postwrittenmodal : false
     };
   },
   computed: {
@@ -307,6 +319,10 @@ export default {
       const currentParticipants = this.groupinfo.participantsNum;
       return maxParticipants === currentParticipants;
     },
+    isWaiting() {
+
+      return 
+    }
   },
 
   watch: {
@@ -430,7 +446,7 @@ export default {
         this.freeRegister();
       } else {
         this.unfreemodal = true;
-        this.unfreeRegister();
+        // this.unfreeRegister();
       }
     },
     closeFreeModal() {
@@ -460,6 +476,8 @@ export default {
         const { data } = await requestGroupJoin(this.groupid, inputdata);
         this.closeunfreemodal();
       } catch (e) {
+        this.openwaitmodal();
+        this.closeunfreemodal()
         console.error(e);
       }
     },
@@ -569,6 +587,32 @@ export default {
         console.log(e);
       }
     },
+
+    openwaitmodal(){
+      this.waitmodal = true
+    },
+    closewaitmodal(){
+      this.waitmodal = false
+    },
+
+    async candraw(){
+      try {
+        const { data } = await getCanVisitorBook(this.groupid)
+        console.log(data)
+        this.canvasmodal = true
+        
+      }
+      catch(e){
+        this.openwrittenmodal()
+      }
+    },
+
+    openwrittenmodal() {
+      this.postwrittenmodal = true
+    },
+    closepostwritten(){
+      this.postwrittenmodal = false
+    }
   },
 };
 </script>
