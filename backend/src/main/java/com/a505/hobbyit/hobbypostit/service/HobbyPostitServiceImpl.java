@@ -44,6 +44,7 @@ public class HobbyPostitServiceImpl implements HobbyPostitService {
     @Override
     public void save(Long memberId, Long hobbyId, LocalDate date, MultipartFile multipartFile) {
         LocalDateTime curDateTime = LocalDateTime.now();      // for real service
+//        LocalDateTime curDateTime = LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), 0, 0, 0);  // for demonstrate
 
         if (!date.isEqual(curDateTime.toLocalDate())
                 || (curDateTime.getHour() == 23 && 55 < curDateTime.getMinute())) {
