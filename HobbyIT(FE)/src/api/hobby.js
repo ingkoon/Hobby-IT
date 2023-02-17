@@ -192,3 +192,8 @@ export function getGroupVisitorBookCreatedDate(hobby_id, date) {
 export function getGroupUserPrivilege(hobby_id){
   return instance.get(`/${hobby_id}/check`)
 }
+
+// 방명록 작성 가능 여부 체크
+export function getCanVisitorBook(hobby_id){
+  return instance.get(`/${hobby_id}/postit/writable`)
+}
