@@ -19,7 +19,7 @@
       </div>
       <div style="display: flex">
         <div id="realimg" style="width: 500px; height: 500px; background-color: #fa8eb630" @click="uploadimg">
-          <v-carousel hide-delimiter-background show-arrows="hover" style="width: 500px">
+          <v-carousel hide-delimiter-background style="width: 500px">
             <v-carousel-item v-for="(item, i) in imgurl" :key="i" :src="item.src" cover></v-carousel-item>
           </v-carousel>
         </div>
@@ -139,6 +139,7 @@ export default {
     return {
       article : [],
       imgurl: [
+        {src : ''}
       ],
       createAt : '',
       changemode : false,
@@ -151,6 +152,8 @@ export default {
     };
   },
   mounted() {
+    document.getElementsByClassName('v-btn v-btn--elevated v-btn--icon v-theme--light v-btn--density-default v-btn--size-default v-btn--variant-elevated v-window__right')[0].click()
+
   },
   methods: {
     closemodal() {
@@ -168,6 +171,8 @@ export default {
         }
         
         this.createAt = data.createdAt.substring(0,10)
+
+        
       }
       catch(e) {
         console.log(e)
