@@ -79,6 +79,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
         List<HobbyArticle> result = queryFactory
                 .selectFrom(hobbyArticle)
                 .where(
+                        hobbyArticle.hobby.eq(hobby),
                         hobbyArticle.category.eq(HobbyArticleCategory.NOTICE)
                 ).orderBy(hobbyArticle.id.desc())
                 .limit(pageable.getPageSize()+1)
@@ -96,6 +97,7 @@ public class HobbyArticleQRepositoryImpl implements HobbyArticleQRepository{
         Page<HobbyArticle> result = new PageImpl<>(queryFactory
                 .selectFrom(hobbyArticle)
                 .where(
+                        hobbyArticle.hobby.eq(hobby),
                         hobbyArticle.category.eq(HobbyArticleCategory.NOTICE),
                         hobbyArticle.title.contains(keyword)
                 ).orderBy(hobbyArticle.id.desc())
