@@ -96,7 +96,7 @@
   <div style="height: 30px;"></div>
 
   <h3>당신이 참여중인 HOBBY</h3>
-  <participate-group v-if="participatinglist.length > 0" :hobbylist="participatinglist"/>
+  <mypage v-if="participatinglist.length > 0" :hobbylist="participatinglist"/>
   <main1 v-else/>
 
   <h3>오늘의 HOBBY 추천</h3>
@@ -154,6 +154,7 @@ import Main1 from '@/components/no-content/Main1.vue';
 import Main2 from '@/components/no-content/Main2.vue';
 import Main3 from '@/components/no-content/Main3.vue';
 import Main4 from '@/components/no-content/Main4.vue';
+import Mypage from '@/components/MyPage2Group.vue'
 
 import { useUserStore } from '@/store/user';
 import { getParticipatingGroup } from '@/api/member';
@@ -161,7 +162,7 @@ import { getPopularHobbyList } from '@/api/hobby';
 import { getFreshHobbyList, searchHobby, searchNameHobby } from '@/api/hobby';
 
 export default {
-  components: { ParticipateGroup, Main1, Main2, Main3, Main4},
+  components: { ParticipateGroup, Main1, Main2, Main3, Main4, Mypage},
   setup() {
     const userStore = useUserStore();
     return { userStore };
@@ -200,6 +201,7 @@ export default {
       try {
         const { data } = await getParticipatingGroup(this.userStore.getUserNickname);
         this.participatinglist = data
+        console.log(data)
       } catch (e) {
         console.log("내 리스트 가져오기 실패 : ", e.message);
       }

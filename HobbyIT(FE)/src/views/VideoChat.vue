@@ -27,7 +27,7 @@
         <v-row id="circle2" />
         <v-col id="videoList" :style="{ height: computedHeight + 'px' }" style="width: 900px">
           <v-row style="margin: 0; height: 126px">
-            <h1 id="title" @click="myCustomMethod">John, 나 여행가고 싶어</h1>
+            <h1 id="title" @click="myCustomMethod">{{ groupname }}</h1>
           </v-row>
           <v-row
             id="video-container"
@@ -87,6 +87,7 @@ export default {
   },
   async beforeRouteEnter(to, from) {
     const groupId = to.params.id;
+    this.groupname = to.params.name
     try {
       const res = await getGroupUserPrivilege(groupId);
     } catch (e) {
@@ -120,6 +121,7 @@ export default {
       // for canvas
       paint: false,
       canvasData: undefined,
+      groupname : '',
     };
   },
   computed: {
