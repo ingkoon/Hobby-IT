@@ -22,8 +22,8 @@ public class MemberHobbyResponse {
     HobbyMemberPrivilege privilege;
     LocalDateTime regDt;
 
-    private int participantsNum;
-    private int maxParticipantsNum;
+    int participantsNum;
+    int maxParticipantsNum;
 
 
     public MemberHobbyResponse of(Hobby hobby, HobbyMember hobbyMember){

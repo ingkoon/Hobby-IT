@@ -36,7 +36,8 @@ public class HobbyMemberQRepositoryImpl implements HobbyMemberQRepository {
     @Override
     public void deleteHobbyMember(Long hobbyMemberId) {
         queryFactory.delete(hobbyMember)
-                .where(hobbyMember.id.gt(hobbyMemberId)).execute();
+                .where(hobbyMember.id.eq(hobbyMemberId))
+                .execute();
         em.flush();
     }
 
